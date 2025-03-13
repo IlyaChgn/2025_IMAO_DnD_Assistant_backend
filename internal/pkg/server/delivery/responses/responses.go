@@ -21,9 +21,9 @@ const (
 	ErrInternalServer = "Server error"
 )
 
-func newErrResponse(errors string) *models.ErrResponse {
+func newErrResponse(status string) *models.ErrResponse {
 	return &models.ErrResponse{
-		Errors: errors,
+		Status: status,
 	}
 }
 
@@ -52,11 +52,11 @@ func SendOkResponse(writer http.ResponseWriter, body any) {
 	sendResponse(writer, body)
 }
 
-func SendErrResponse(writer http.ResponseWriter, code int, errors string) {
+func SendErrResponse(writer http.ResponseWriter, code int, status string) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(code)
 
-	response := newErrResponse(errors)
+	response := newErrResponse(status)
 
 	sendResponse(writer, response)
 }

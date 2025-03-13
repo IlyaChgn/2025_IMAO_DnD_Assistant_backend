@@ -22,11 +22,12 @@ type MongoConfig struct {
 	Password string `env:"MONGO_INITDB_ROOT_PASSWORD"`
 	Host     string `env:"MONGO_HOST"`
 	Port     string `env:"MONGO_PORT"`
+	DBName   string `env:"MONGO_DB"`
 }
 
 type Config struct {
-	Server   ServerConfig `yaml:"server"`
-	Postgres MongoConfig
+	Server ServerConfig `yaml:"server"`
+	Mongo  MongoConfig
 }
 
 func ReadConfig(cfgPath string) *Config {

@@ -46,6 +46,10 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
+	// mongoURI := repository.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
+
+	// mongoDatabase := repository.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
