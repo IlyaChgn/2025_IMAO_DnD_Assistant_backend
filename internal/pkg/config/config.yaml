@@ -1,0 +1,16 @@
+server:
+  host:
+  port: 8080
+  timeout: 5
+  origins:
+    - http://localhost:3000
+  headers:
+    - X-Requested-With
+    - Content-Type
+  methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    - HEAD
+    - OPTIONS
