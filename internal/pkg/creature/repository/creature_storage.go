@@ -21,13 +21,13 @@ func NewMongoDBCreatureRepository(db *mongo.Database) creatureinterfaces.Creatur
 	return &mongoCreatureRepository{db: db}
 }
 
-// GetCreatureByEngName возвращает существо по полю name.eng
-func (r *mongoCreatureRepository) GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error) {
+// GetCreatureByEngName возвращает существо по полю url
+func (r *mongoCreatureRepository) GetCreatureByEngName(ctx context.Context, url string) (*models.Creature, error) {
 	// Выбираем коллекцию "creatures"
 	collection := r.db.Collection("creatures")
 
-	// Создаем фильтр для поиска по полю "name.eng"
-	filter := bson.M{"name.eng": engName}
+	// Создаем фильтр для поиска по полю "url"
+	filter := bson.M{"url": "/bestiary/" + url}
 
 	// Выполняем запрос
 	var creature models.Creature
@@ -35,7 +35,7 @@ func (r *mongoCreatureRepository) GetCreatureByEngName(ctx context.Context, engN
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			// Если существо не найдено, возвращаем nil и ошибку
-			return nil, fmt.Errorf("creature with eng name '%s' not found", engName)
+			return nil, fmt.Errorf("creature with url '/bestiary/%s' not found", url)
 		}
 		// В случае других ошибок возвращаем их
 		return nil, fmt.Errorf("mongo db error: %v", err)
