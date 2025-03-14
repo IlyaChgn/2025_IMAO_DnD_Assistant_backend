@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 	"fmt"
-	"go.mongodb.org/mongo-driver/v2/mongo"
-	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"log"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func NewMongoConnectionURI(user, password, host, port string) string {
@@ -19,7 +20,9 @@ func ConnectToMongoDatabase(ctx context.Context, uri string, dnName string) *mon
 }
 
 func newMongoClient(ctx context.Context, uri string) *mongo.Client {
-	client, err := mongo.Connect(options.Client().ApplyURI(uri))
+	clientOptions := options.Client().ApplyURI(uri)
+
+	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatalf("Cannot connect to MongoDB client %v", err)
 	}

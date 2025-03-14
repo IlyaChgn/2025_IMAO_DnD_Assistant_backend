@@ -1,14 +1,20 @@
 package server
 
 import (
+	"context"
 	"fmt"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
-	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
-	"github.com/gorilla/handlers"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
+	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
+	"github.com/gorilla/handlers"
+
+	creaturerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/repository"
+	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
+	serverrepository "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
 type Server struct {
@@ -46,16 +52,20 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
-	// mongoURI := repository.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
+	mongoURI := serverrepository.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
 
-	// mongoDatabase := repository.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	mongoDatabase := serverrepository.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+
+	creatureRepository := creaturerepo.NewMongoDBCreatureRepository(mongoDatabase)
+
+	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter()
+	router := myrouter.NewRouter(creatureUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
