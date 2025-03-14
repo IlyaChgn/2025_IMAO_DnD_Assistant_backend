@@ -4,10 +4,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ID struct {
-	OID primitive.ObjectID `json:"$oid" bson:"_id"`
-}
-
 type Name struct {
 	Rus string `json:"rus" bson:"rus"`
 	Eng string `json:"eng" bson:"eng"`

@@ -1,6 +1,8 @@
 package delivery
 
 import (
+	"errors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -9,26 +11,29 @@ import (
 	responses "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
 
-// CreatureHandler обрабатывает HTTP-запросы, связанные с существами
 type CreatureHandler struct {
-	creatureUsecases creatureinterfaces.CreatureUsecases
+	usecases creatureinterfaces.CreatureUsecases
 }
 
-// NewCreatureHandler создает новый экземпляр CreatureHandler
-func NewCreatureHandler(creatureUsecases creatureinterfaces.CreatureUsecases) *CreatureHandler {
-	return &CreatureHandler{creatureUsecases: creatureUsecases}
+func NewCreatureHandler(usecases creatureinterfaces.CreatureUsecases) *CreatureHandler {
+	return &CreatureHandler{
+		usecases: usecases,
+	}
 }
 
-// GetCreatureByName обрабатывает HTTP-запрос для получения существа по имени
 func (h *CreatureHandler) GetCreatureByName(w http.ResponseWriter, r *http.Request) {
-	// Извлекаем параметр имени из URL
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
 
-	// Вызываем usecase для получения существа
-	creature, err := h.creatureUsecases.GetCreatureByEngName(r.Context(), creatureName)
+	creature, err := h.usecases.GetCreatureByEngName(r.Context(), creatureName)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		switch {
+		case errors.Is(err, apperrors.NoDocsErr):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
+		default:
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
 		return
 	}
 

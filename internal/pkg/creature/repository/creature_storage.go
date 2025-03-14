@@ -2,7 +2,10 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,34 +14,32 @@ import (
 	creatureinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature"
 )
 
-// Структура репозитория для работы с существами в MongoDB
-type mongoCreatureRepository struct {
+type creatureStorage struct {
 	db *mongo.Database
 }
 
-// NewMongoDBCreatureRepository создает новый репозиторий для работы с существами
-func NewMongoDBCreatureRepository(db *mongo.Database) creatureinterfaces.CreatureRepository {
-	return &mongoCreatureRepository{db: db}
+func NewCreatureStorage(db *mongo.Database) creatureinterfaces.CreatureRepository {
+	return &creatureStorage{
+		db: db,
+	}
 }
 
-// GetCreatureByEngName возвращает существо по полю url
-func (r *mongoCreatureRepository) GetCreatureByEngName(ctx context.Context, url string) (*models.Creature, error) {
-	// Выбираем коллекцию "creatures"
-	collection := r.db.Collection("creatures")
+func (s *creatureStorage) GetCreatureByEngName(ctx context.Context, url string) (*models.Creature, error) {
+	collection := s.db.Collection("creatures")
 
-	// Создаем фильтр для поиска по полю "url"
-	filter := bson.M{"url": "/bestiary/" + url}
+	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
 
-	// Выполняем запрос
 	var creature models.Creature
+
 	err := collection.FindOne(ctx, filter).Decode(&creature)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			// Если существо не найдено, возвращаем nil и ошибку
-			return nil, fmt.Errorf("creature with url '/bestiary/%s' not found", url)
+		log.Println(err)
+
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, apperrors.NoDocsErr
 		}
-		// В случае других ошибок возвращаем их
-		return nil, fmt.Errorf("mongo db error: %v", err)
+
+		return nil, apperrors.FindMongoDataErr
 	}
 
 	return &creature, nil

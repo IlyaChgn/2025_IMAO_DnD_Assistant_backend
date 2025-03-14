@@ -12,9 +12,11 @@ import (
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
+	bestiaryrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/repository"
+	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	creaturerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/repository"
 	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
-	serverrepository "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
+	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
 type Server struct {
@@ -52,20 +54,22 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
-	mongoURI := serverrepository.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
+	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
 
-	mongoDatabase := serverrepository.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
-	creatureRepository := creaturerepo.NewMongoDBCreatureRepository(mongoDatabase)
+	creatureRepository := creaturerepo.NewCreatureStorage(mongoDatabase)
+	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 
 	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
+	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(creatureUsecases)
+	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
