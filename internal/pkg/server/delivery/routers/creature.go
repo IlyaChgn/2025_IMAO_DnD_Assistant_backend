@@ -10,6 +10,6 @@ func ServeBestiaryRouter(router *mux.Router, creatureHandler *creaturedel.Creatu
 	bestiaryHandler *bestiarydel.BestiaryHandler) {
 	subrouter := router.PathPrefix("/bestiary").Subrouter()
 
-	subrouter.HandleFunc("/list", bestiaryHandler.GetCreaturesList).Methods("GET")
+	subrouter.HandleFunc("/list", bestiaryHandler.GetCreaturesList).Methods("POST")
 	subrouter.HandleFunc("/{name}", creatureHandler.GetCreatureByName).Methods("GET")
 }
