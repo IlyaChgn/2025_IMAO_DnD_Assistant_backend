@@ -16,6 +16,7 @@ type BestiaryCreature struct {
 	ChallengeRating string             `bson:"challengeRating" json:"challengeRating"`
 	URL             string             `bson:"url" json:"url"`
 	Source          Source             `bson:"source" json:"source"`
+	Images          []string           `bson:"images" json:"images"`
 }
 
 type TypeName struct {
