@@ -8,6 +8,9 @@ import (
 	"os"
 	"time"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
@@ -16,6 +19,8 @@ import (
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	creaturerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/repository"
 	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
+	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
+	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
@@ -54,6 +59,23 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
+	authAddr := "localhost:50051" // ИЛЬЯ ПЕРЕПИШИ ЭТО ЧЕРЕЗ КОНФИГ
+
+	grpcConnDescription, err := grpc.Dial(
+		authAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+
+	if err != nil {
+		log.Println("Error occurred while starting grpc connection on description service", err)
+
+		return err
+	}
+
+	defer grpcConnDescription.Close()
+
+	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
+
 	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
@@ -63,13 +85,14 @@ func (srv *Server) Run() error {
 
 	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
+	descriptionUsecases := descriptionuc.NewDescriptionUseCase(descriptionClient)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases)
+	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
