@@ -24,3 +24,5 @@ go.work
 .idea
 
 /vendor
+prod.env
+internal/pkg/bestiary/repository/filter.json

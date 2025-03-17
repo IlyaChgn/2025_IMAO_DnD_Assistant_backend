@@ -3,11 +3,12 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
-	"net/http"
 )
 
 type BestiaryHandler struct {
@@ -31,7 +32,7 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	list, err := h.usecases.GetCreaturesList(ctx, reqData.Size, reqData.Start)
+	list, err := h.usecases.GetCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter, reqData.Search)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
