@@ -53,6 +53,43 @@ func excludeBooks(defaultBooks, requestedBooks []string) []string {
 	return result
 }
 
+func createMovingFilter(moving []string) bson.E {
+	// Маппинг для соответствия значений
+	mapping := map[string]string{
+		"летает":  "летая",
+		"парит":   "парит", // Теперь "парит" остается как есть
+		"лазает":  "лазая",
+		"плавает": "плавая",
+		"копает":  "копая",
+	}
+
+	// Преобразуем значения из moving в соответствующие значения из mapping
+	var mappedValues []string
+	for _, move := range moving {
+		if mappedValue, ok := mapping[move]; ok {
+			mappedValues = append(mappedValues, mappedValue)
+		}
+	}
+
+	// Создаем фильтр для MongoDB
+	if len(mappedValues) > 0 {
+		return bson.E{
+			Key: "speed",
+			Value: bson.M{
+				"$elemMatch": bson.M{
+					"$or": []bson.M{
+						{"name": bson.M{"$in": mappedValues}},       // Фильтр по полю name
+						{"additional": bson.M{"$in": mappedValues}}, // Фильтр по полю additional
+					},
+				},
+			},
+		}
+	}
+
+	// Если mappedValues пуст, возвращаем пустой фильтр
+	return bson.E{}
+}
+
 func buildMongoFilter(filter models.FilterParams) bson.D {
 	mongoFilter := bson.D{}
 
@@ -81,7 +118,7 @@ func buildMongoFilter(filter models.FilterParams) bson.D {
 
 	// Фильтр по размеру (size.eng)
 	if len(filter.Size) > 0 {
-		mongoFilter = append(mongoFilter, bson.E{Key: "size.eng", Value: bson.M{"$in": filter.Size}})
+		mongoFilter = append(mongoFilter, bson.E{Key: "size.rus", Value: bson.M{"$in": filter.Size}})
 	}
 
 	// Фильтр по тегам (если есть поле, связанное с тегами)
@@ -91,7 +128,10 @@ func buildMongoFilter(filter models.FilterParams) bson.D {
 
 	// Фильтр по движению (если есть поле, связанное с движением)
 	if len(filter.Moving) > 0 {
-		mongoFilter = append(mongoFilter, bson.E{Key: "speed.value", Value: bson.M{"$in": filter.Moving}})
+		movingFilter := createMovingFilter(filter.Moving)
+		if movingFilter.Key != "" { // Проверяем, что фильтр не пустой
+			mongoFilter = append(mongoFilter, movingFilter)
+		}
 	}
 
 	// Фильтр по чувствам (senses.senses.name)
@@ -101,22 +141,22 @@ func buildMongoFilter(filter models.FilterParams) bson.D {
 
 	// Фильтр по уязвимостям (если есть поле, связанное с уязвимостями)
 	if len(filter.VulnerabilityDamage) > 0 {
-		mongoFilter = append(mongoFilter, bson.E{Key: "vulnerabilities", Value: bson.M{"$in": filter.VulnerabilityDamage}})
+		mongoFilter = append(mongoFilter, bson.E{Key: "damageVulnerabilities", Value: bson.M{"$in": filter.VulnerabilityDamage}})
 	}
 
 	// Фильтр по сопротивлениям (если есть поле, связанное с сопротивлениями)
 	if len(filter.ResistanceDamage) > 0 {
-		mongoFilter = append(mongoFilter, bson.E{Key: "resistances", Value: bson.M{"$in": filter.ResistanceDamage}})
+		mongoFilter = append(mongoFilter, bson.E{Key: "damageResistances", Value: bson.M{"$in": filter.ResistanceDamage}})
 	}
 
 	// Фильтр по иммунитетам к урону (если есть поле, связанное с иммунитетами)
 	if len(filter.ImmunityDamage) > 0 {
-		mongoFilter = append(mongoFilter, bson.E{Key: "immunities.damage", Value: bson.M{"$in": filter.ImmunityDamage}})
+		mongoFilter = append(mongoFilter, bson.E{Key: "damageImmunities", Value: bson.M{"$in": filter.ImmunityDamage}})
 	}
 
 	// Фильтр по иммунитетам к состояниям (если есть поле, связанное с иммунитетами)
 	if len(filter.ImmunityCondition) > 0 {
-		mongoFilter = append(mongoFilter, bson.E{Key: "immunities.condition", Value: bson.M{"$in": filter.ImmunityCondition}})
+		mongoFilter = append(mongoFilter, bson.E{Key: "conditionImmunities", Value: bson.M{"$in": filter.ImmunityCondition}})
 	}
 
 	// Фильтр по особенностям (feats.name)
