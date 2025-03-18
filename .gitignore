@@ -26,3 +26,4 @@ go.work
 /vendor
 prod.env
 internal/pkg/bestiary/repository/filter.json
+/test_scripts

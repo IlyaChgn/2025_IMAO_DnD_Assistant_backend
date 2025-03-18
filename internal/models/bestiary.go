@@ -12,16 +12,6 @@ type BestiaryReq struct {
 	Filter FilterParams `json:"filter"`
 }
 
-type SearchParams struct {
-	Value string `json:"value"`
-	Exact bool   `json:"exact"`
-}
-
-type Order struct {
-	Field     string `json:"field"`
-	Direction string `json:"direction"`
-}
-
 type FilterParams struct {
 	Book                []string `json:"book"`
 	Npc                 []string `json:"npc"`

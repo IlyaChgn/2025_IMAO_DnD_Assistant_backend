@@ -3,7 +3,6 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -33,9 +32,6 @@ func (h *DescriptionHandler) GenerateDescription(w http.ResponseWriter, r *http.
 	}
 
 	resp, err := h.descriptionUseCase.GenerateDescription(ctx, reqData)
-
-	log.Println(resp)
-	log.Println(err)
 
 	if err != nil {
 		switch {

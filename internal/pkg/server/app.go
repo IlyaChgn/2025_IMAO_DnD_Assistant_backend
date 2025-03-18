@@ -17,6 +17,8 @@ import (
 
 	bestiaryrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/repository"
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
+	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
+	characteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/usecases"
 	creaturerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/repository"
 	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
 	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
@@ -82,17 +84,19 @@ func (srv *Server) Run() error {
 
 	creatureRepository := creaturerepo.NewCreatureStorage(mongoDatabase)
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
+	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 
 	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 	descriptionUsecases := descriptionuc.NewDescriptionUseCase(descriptionClient)
+	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases)
+	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases, characterUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
