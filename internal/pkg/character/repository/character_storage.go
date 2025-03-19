@@ -103,7 +103,8 @@ func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string)
 
 	primitiveId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil, apperrors.InvalidIDErr
 	}
 
 	filter := bson.M{"_id": primitiveId}

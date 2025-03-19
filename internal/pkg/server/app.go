@@ -23,6 +23,8 @@ import (
 	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
 	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
+	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
+	encounteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/usecases"
 	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
@@ -85,18 +87,21 @@ func (srv *Server) Run() error {
 	creatureRepository := creaturerepo.NewCreatureStorage(mongoDatabase)
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
+	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
 
 	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 	descriptionUsecases := descriptionuc.NewDescriptionUseCase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
+	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases, characterUsecases)
+	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases,
+		characterUsecases, encounterUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
