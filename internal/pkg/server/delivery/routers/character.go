@@ -10,4 +10,5 @@ func ServeCharacterRouter(router *mux.Router, characterHandler *characterdel.Cha
 
 	subrouter.HandleFunc("/list", characterHandler.GetCharactersList).Methods("POST")
 	subrouter.HandleFunc("/add_character", characterHandler.AddCharacter).Methods("POST")
+	subrouter.HandleFunc("/{id}", characterHandler.GetCharacterByMongoId).Methods("GET")
 }

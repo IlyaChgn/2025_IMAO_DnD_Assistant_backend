@@ -12,6 +12,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -83,9 +84,11 @@ func (s *characterStorage) GetCharactersList(ctx context.Context, size, start in
 			return nil, apperrors.DecodeMongoDataErr
 		}
 		characterShort := models.CharacterShort{
+			ID:             character.ID,
 			CharClass:      character.Data.Info.CharClass,
 			CharacterLevel: character.Data.Info.Level,
 			CharacterName:  character.Data.Name,
+			CharacterRace:  character.Data.Info.Race,
 			Avatar:         character.Data.Avatar,
 		}
 
@@ -96,7 +99,29 @@ func (s *characterStorage) GetCharactersList(ctx context.Context, size, start in
 }
 
 func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string) (*models.Character, error) {
-	return nil, nil
+	collection := s.db.Collection("characters")
+
+	primitiveId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	filter := bson.M{"_id": primitiveId}
+
+	var character models.Character
+
+	err = collection.FindOne(ctx, filter).Decode(&character)
+	if err != nil {
+		log.Println(err)
+
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, apperrors.NoDocsErr
+		}
+
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return &character, nil
 }
 
 func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.CharacterRaw) error {

@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gorilla/mux"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
@@ -110,12 +112,15 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	id := r.URL.Query().Get("id")
-	if id == "" {
+	// Извлечение id из Path-параметра
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok || id == "" {
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrDataNotValid)
 		return
 	}
 
+	// Получение персонажа по id
 	character, err := h.usecases.GetCharacterByMongoId(ctx, id)
 	if err != nil {
 		switch {
@@ -129,5 +134,6 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 		return
 	}
 
+	// Отправка успешного ответа
 	responses.SendOkResponse(w, character)
 }

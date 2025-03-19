@@ -1,5 +1,9 @@
 package models
 
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 type CharacterFilterParams struct{}
 
 type CharacterName struct {
@@ -61,34 +65,34 @@ type CharacterData struct {
 	} `json:"info" bson:"info"`
 	SubInfo struct {
 		Age struct {
-			Name  string `json:"name" bson:"name"`
-			Label string `json:"label" bson:"label"`
-			Value string `json:"value" bson:"value"`
+			Name  string      `json:"name" bson:"name"`
+			Label string      `json:"label" bson:"label"`
+			Value interface{} `json:"value" bson:"value"`
 		} `json:"age" bson:"age"`
 		Height struct {
-			Name  string `json:"name" bson:"name"`
-			Label string `json:"label" bson:"label"`
-			Value string `json:"value" bson:"value"`
+			Name  string      `json:"name" bson:"name"`
+			Label string      `json:"label" bson:"label"`
+			Value interface{} `json:"value" bson:"value"`
 		} `json:"height" bson:"height"`
 		Weight struct {
-			Name  string `json:"name" bson:"name"`
-			Label string `json:"label" bson:"label"`
-			Value string `json:"value" bson:"value"`
+			Name  string      `json:"name" bson:"name"`
+			Label string      `json:"label" bson:"label"`
+			Value interface{} `json:"value" bson:"value"`
 		} `json:"weight" bson:"weight"`
 		Eyes struct {
-			Name  string `json:"name" bson:"name"`
-			Label string `json:"label" bson:"label"`
-			Value string `json:"value" bson:"value"`
+			Name  string      `json:"name" bson:"name"`
+			Label string      `json:"label" bson:"label"`
+			Value interface{} `json:"value" bson:"value"`
 		} `json:"eyes" bson:"eyes"`
 		Skin struct {
-			Name  string `json:"name" bson:"name"`
-			Label string `json:"label" bson:"label"`
-			Value string `json:"value" bson:"value"`
+			Name  string      `json:"name" bson:"name"`
+			Label string      `json:"label" bson:"label"`
+			Value interface{} `json:"value" bson:"value"`
 		} `json:"skin" bson:"skin"`
 		Hair struct {
-			Name  string `json:"name" bson:"name"`
-			Label string `json:"label" bson:"label"`
-			Value string `json:"value" bson:"value"`
+			Name  string      `json:"name" bson:"name"`
+			Label string      `json:"label" bson:"label"`
+			Value interface{} `json:"value" bson:"value"`
 		} `json:"hair" bson:"hair"`
 	} `json:"subInfo" bson:"subInfo"`
 	SpellsInfo struct {
@@ -260,7 +264,7 @@ type CharacterData struct {
 	Text struct {
 		Attacks struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"attacks" bson:"attacks"`
 		Equipment struct {
@@ -375,34 +379,54 @@ type CharacterData struct {
 		} `json:"quests" bson:"quests"`
 		SpellsLevel0 struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"spells-level-0" bson:"spells-level-0"`
 		SpellsLevel1 struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"spells-level-1" bson:"spells-level-1"`
 		SpellsLevel2 struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"spells-level-2" bson:"spells-level-2"`
 		SpellsLevel3 struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"spells-level-3" bson:"spells-level-3"`
 		SpellsLevel4 struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"spells-level-4" bson:"spells-level-4"`
 		SpellsLevel5 struct {
 			Value struct {
-				Data string `json:"data" bson:"data"`
+				Data interface{} `json:"data" bson:"data"`
 			} `json:"value" bson:"value"`
 		} `json:"spells-level-5" bson:"spells-level-5"`
+		SpellsLevel6 struct {
+			Value struct {
+				Data interface{} `json:"data" bson:"data"`
+			} `json:"value" bson:"value"`
+		} `json:"spells-level-6" bson:"spells-level-6"`
+		SpellsLevel7 struct {
+			Value struct {
+				Data interface{} `json:"data" bson:"data"`
+			} `json:"value" bson:"value"`
+		} `json:"spells-level-7" bson:"spells-level-7"`
+		SpellsLevel8 struct {
+			Value struct {
+				Data interface{} `json:"data" bson:"data"`
+			} `json:"value" bson:"value"`
+		} `json:"spells-level-8" bson:"spells-level-8"`
+		SpellsLevel9 struct {
+			Value struct {
+				Data interface{} `json:"data" bson:"data"`
+			} `json:"value" bson:"value"`
+		} `json:"spells-level-9" bson:"spells-level-9"`
 	} `json:"text" bson:"text"`
 	Coins struct {
 		Gp struct {
@@ -450,6 +474,7 @@ type CharacterRaw struct {
 }
 
 type Character struct {
+	ID             primitive.ObjectID     `bson:"_id" json:"id"`
 	Tags           []string               `json:"tags" bson:"tags"`
 	DisabledBlocks map[string]interface{} `json:"disabledBlocks" bson:"disabledBlocks"`
 	Spells         struct {
@@ -463,10 +488,12 @@ type Character struct {
 }
 
 type CharacterShort struct {
-	CharClass      CharClass       `json:"charClass" bson:"charClass"`
-	CharacterLevel CharacterLevel  `json:"level" bson:"level"`
-	CharacterName  CharacterName   `json:"race" bson:"race"`
-	Avatar         CharacterAvatar `json:"avatar" bson:"avatar"`
+	ID             primitive.ObjectID `bson:"_id" json:"id"`
+	CharClass      CharClass          `json:"charClass" bson:"charClass"`
+	CharacterLevel CharacterLevel     `json:"level" bson:"level"`
+	CharacterName  CharacterName      `json:"name" bson:"name"`
+	CharacterRace  CharacterRace      `json:"race" bson:"race"`
+	Avatar         CharacterAvatar    `json:"avatar" bson:"avatar"`
 }
 
 type CharacterReq struct {
