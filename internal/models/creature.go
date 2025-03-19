@@ -37,7 +37,7 @@ type Hits struct {
 }
 
 type Speed struct {
-	Value int `json:"value" bson:"value"`
+	Value interface{} `json:"value" bson:"value"`
 }
 
 type Ability struct {
