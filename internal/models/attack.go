@@ -55,7 +55,20 @@ func (at AttackType) String(lang string) string {
 type TargetType int
 
 const (
-	SingleTarget TargetType = iota // Пока что только одна цель
+	SingleTarget        TargetType = iota // Одна цель
+	Cone                                  // Конус
+	Cube                                  // Куб
+	Sphere                                // Сфера
+	Cylinder                              // Цилиндр
+	Line                                  // Линия
+	Self                                  // Сам на себя
+	Touch                                 // Касание
+	MultipleTargets                       // Несколько целей
+	Object                                // Объект
+	Point                                 // Точка в пространстве
+	AllCreaturesInRange                   // Все существа в радиусе
+	AllEnemiesInRange                     // Все враги в радиусе
+	AllAlliesInRange                      // Все союзники в радиусе
 )
 
 // String возвращает строковое представление типа цели
@@ -66,11 +79,76 @@ func (tt TargetType) String(lang string) string {
 			return "одна цель"
 		}
 		return "single target"
+	case Cone:
+		if lang == "ru" {
+			return "конус"
+		}
+		return "cone"
+	case Cube:
+		if lang == "ru" {
+			return "куб"
+		}
+		return "cube"
+	case Sphere:
+		if lang == "ru" {
+			return "сфера"
+		}
+		return "sphere"
+	case Cylinder:
+		if lang == "ru" {
+			return "цилиндр"
+		}
+		return "cylinder"
+	case Line:
+		if lang == "ru" {
+			return "линия"
+		}
+		return "line"
+	case Self:
+		if lang == "ru" {
+			return "сам на себя"
+		}
+		return "self"
+	case Touch:
+		if lang == "ru" {
+			return "касание"
+		}
+		return "touch"
+	case MultipleTargets:
+		if lang == "ru" {
+			return "несколько целей"
+		}
+		return "multiple targets"
+	case Object:
+		if lang == "ru" {
+			return "объект"
+		}
+		return "object"
+	case Point:
+		if lang == "ru" {
+			return "точка в пространстве"
+		}
+		return "point"
+	case AllCreaturesInRange:
+		if lang == "ru" {
+			return "все существа в радиусе"
+		}
+		return "all creatures in range"
+	case AllEnemiesInRange:
+		if lang == "ru" {
+			return "все враги в радиусе"
+		}
+		return "all enemies in range"
+	case AllAlliesInRange:
+		if lang == "ru" {
+			return "все союзники в радиусе"
+		}
+		return "all allies in range"
 	default:
 		if lang == "ru" {
-			return "Неизвестная цель"
+			return "неизвестная цель"
 		}
-		return "Unknown target"
+		return "unknown target"
 	}
 }
 
@@ -191,6 +269,7 @@ type Damage struct {
 
 // Attack - структура для описания атаки
 type Attack struct {
+	Name           string     `json:"name" bson:"name"`
 	Type           AttackType `json:"type" bson:"type"`                                           // Тип атаки
 	ToHitBonus     int        `json:"to_hit_bonus" bson:"to_hit_bonus"`                           // Бонус на попадание (например, +4)
 	Reach          string     `json:"reach,omitempty" bson:"reach,omitempty"`                     // Досягаемость (например, "5 фт.")
@@ -198,5 +277,6 @@ type Attack struct {
 	MaxRange       string     `json:"max_range,omitempty" bson:"max_range,omitempty"`             // Максимальная дальность (например, "120 фт.")
 	Target         TargetType `json:"target" bson:"target"`                                       // Тип цели
 	Damage         []Damage   `json:"damage" bson:"damage"`                                       // Урон (может быть несколько костей)
+	DamageBonus    int        `json:"damage_bonus" bson:"damage_bonus"`                           // Бонус к урону
 	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                       // Боеприпасы (например, "10 болтов для арбалета")
 }
