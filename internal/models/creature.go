@@ -73,28 +73,65 @@ type Tag struct {
 	Description string `json:"description" bson:"description"`
 }
 
+type SavingThrow struct {
+	Name      string      `json:"name" bson:"name"`
+	ShortName string      `json:"shortName" bson:"shortName"`
+	Value     interface{} `json:"value" bson:"value"`
+}
+
+type Feat struct {
+	Name  string      `json:"name" bson:"name"`
+	Value interface{} `json:"value" bson:"value"`
+}
+
+type Legendary struct {
+	List  []LegendaryAction `json:"list" bson:"list"`
+	Count interface{}       `json:"count" bson:"count"`
+}
+
+type LegendaryAction struct {
+	Name  string      `json:"name" bson:"name"`
+	Value interface{} `json:"value" bson:"value"`
+}
+
+type Armor struct {
+	Name string      `json:"name" bson:"name"`
+	Type string      `json:"type" bson:"type"`
+	Url  interface{} `json:"url" bson:"url"`
+}
+
 type Creature struct {
-	ID               primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Name             Name               `json:"name" bson:"name"`
-	Size             Size               `json:"size" bson:"size"`
-	Type             Type               `json:"type" bson:"type"`
-	ChallengeRating  string             `json:"challengeRating" bson:"challengeRating"`
-	URL              string             `json:"url" bson:"url"`
-	Source           Source             `json:"source" bson:"source"`
-	IDNum            int                `json:"id" bson:"id"`
-	ProficiencyBonus string             `json:"proficiencyBonus" bson:"proficiencyBonus"`
-	Alignment        string             `json:"alignment" bson:"alignment"`
-	ArmorClass       int                `json:"armorClass" bson:"armorClass"`
-	Hits             Hits               `json:"hits" bson:"hits"`
-	Speed            []Speed            `json:"speed" bson:"speed"`
-	Ability          Ability            `json:"ability" bson:"ability"`
-	Skills           []Skill            `json:"skills" bson:"skills"`
-	Senses           Senses             `json:"senses" bson:"senses"`
-	Languages        []string           `json:"languages" bson:"languages"`
-	Actions          []Action           `json:"actions" bson:"actions"`
-	Reactions        []Reaction         `json:"reactions" bson:"reactions"`
-	Description      string             `json:"description" bson:"description"`
-	Tags             []Tag              `json:"tags" bson:"tags"`
-	Images           []string           `json:"images" bson:"images"`
-	Attacks          []Attack           `json:"attacks,omitempty" bson:"attacks"`
+	ID                    primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Name                  Name               `json:"name" bson:"name"`
+	Size                  Size               `json:"size" bson:"size"`
+	Type                  Type               `json:"type" bson:"type"`
+	ChallengeRating       string             `json:"challengeRating" bson:"challengeRating"`
+	URL                   string             `json:"url" bson:"url"`
+	Source                Source             `json:"source" bson:"source"`
+	IDNum                 int                `json:"id" bson:"id"`
+	Experience            int                `json:"experience,omitempty" bson:"experience,omitempty"`
+	ProficiencyBonus      string             `json:"proficiencyBonus" bson:"proficiencyBonus"`
+	Alignment             string             `json:"alignment" bson:"alignment"`
+	ArmorClass            int                `json:"armorClass" bson:"armorClass"`
+	Armors                []Armor            `json:"armors,omitempty" bson:"armors,omitempty"`
+	Hits                  Hits               `json:"hits" bson:"hits"`
+	Speed                 []Speed            `json:"speed" bson:"speed"`
+	Ability               Ability            `json:"ability" bson:"ability"`
+	SavingThrows          []SavingThrow      `json:"savingThrows,omitempty" bson:"savingThrows,omitempty"`
+	Skills                []Skill            `json:"skills" bson:"skills"`
+	DamageVulnerabilities []string           `json:"damageVulnerabilities,omitempty" bson:"damageVulnerabilities,omitempty"`
+	DamageResistances     []string           `json:"damageResistances,omitempty" bson:"damageResistances,omitempty"`
+	ConditionImmunities   []string           `json:"conditionImmunities,omitempty" bson:"conditionImmunities,omitempty"`
+	DamageImmunities      []string           `json:"damageImmunities,omitempty" bson:"damageImmunities,omitempty"`
+	Senses                Senses             `json:"senses" bson:"senses"`
+	Languages             []string           `json:"languages" bson:"languages"`
+	Feats                 []Feat             `json:"feats,omitempty" bson:"feats,omitempty"`
+	Actions               []Action           `json:"actions" bson:"actions"`
+	Legendary             []Legendary        `json:"legendary,omitempty" bson:"legendary,omitempty"`
+	Reactions             []Reaction         `json:"reactions" bson:"reactions"`
+	Description           string             `json:"description" bson:"description"`
+	Tags                  []Tag              `json:"tags" bson:"tags"`
+	Images                []string           `json:"images" bson:"images"`
+	Attacks               []Attack           `json:"attacks,omitempty" bson:"attacks"`
+	Environment           []string           `json:"environment,omitempty" bson:"environment,omitempty"`
 }

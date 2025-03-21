@@ -101,7 +101,6 @@ func parseAttack(attackName, text string) (*models.Attack, error) {
 	reDamage := regexp.MustCompile(`<dice-roller[^>]+formula="(\d+)к(\d+) \+ (\d+)"`)
 	damageMatches := reDamage.FindStringSubmatch(text)
 	if len(damageMatches) > 3 {
-		fmt.Println("aboba")
 
 		count, err := strconv.Atoi(damageMatches[1])
 		if err != nil {
