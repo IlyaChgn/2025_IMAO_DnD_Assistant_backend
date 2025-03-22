@@ -262,21 +262,21 @@ const (
 
 // Damage описывает одну кость урона
 type Damage struct {
-	Dice       DiceType   `json:"dice" bson:"dice"`               // Тип кости (например, "d10")
-	Count      int        `json:"count" bson:"count"`             // Количество костей (например, 1)
-	DamageType DamageType `json:"damage_type" bson:"damage_type"` // Тип урона (например, "дробящий")
+	Dice       DiceType   `json:"dice" bson:"dice"`             // Тип кости (например, "d10")
+	Count      int        `json:"count" bson:"count"`           // Количество костей (например, 1)
+	DamageType DamageType `json:"damageType" bson:"damageType"` // Тип урона (например, "дробящий")
 }
 
 // Attack - структура для описания атаки
 type Attack struct {
 	Name           string     `json:"name" bson:"name"`
-	Type           AttackType `json:"type" bson:"type"`                                           // Тип атаки
-	ToHitBonus     int        `json:"to_hit_bonus" bson:"to_hit_bonus"`                           // Бонус на попадание (например, +4)
-	Reach          string     `json:"reach,omitempty" bson:"reach,omitempty"`                     // Досягаемость (например, "5 фт.")
-	EffectiveRange string     `json:"effective_range,omitempty" bson:"effective_range,omitempty"` // Эффективная дальность (например, "30 фт.")
-	MaxRange       string     `json:"max_range,omitempty" bson:"max_range,omitempty"`             // Максимальная дальность (например, "120 фт.")
-	Target         TargetType `json:"target" bson:"target"`                                       // Тип цели
-	Damage         []Damage   `json:"damage" bson:"damage"`                                       // Урон (может быть несколько костей)
-	DamageBonus    int        `json:"damage_bonus" bson:"damage_bonus"`                           // Бонус к урону
-	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                       // Боеприпасы (например, "10 болтов для арбалета")
+	Type           AttackType `json:"type" bson:"type"`                                         // Тип атаки
+	ToHitBonus     int        `json:"toHitBonus" bson:"toHitBonus"`                             // Бонус на попадание (например, +4)
+	Reach          string     `json:"reach,omitempty" bson:"reach,omitempty"`                   // Досягаемость (например, "5 фт.")
+	EffectiveRange string     `json:"effectiveRange,omitempty" bson:"effectiveRange,omitempty"` // Эффективная дальность (например, "30 фт.")
+	MaxRange       string     `json:"maxRange,omitempty" bson:"maxRange,omitempty"`             // Максимальная дальность (например, "120 фт.")
+	Target         TargetType `json:"target" bson:"target"`                                     // Тип цели
+	Damage         []Damage   `json:"damage" bson:"damage"`                                     // Урон (может быть несколько костей)
+	DamageBonus    int        `json:"damageBonus" bson:"damageBonus"`                           // Бонус к урону
+	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                     // Боеприпасы (например, "10 болтов для арбалета")
 }
