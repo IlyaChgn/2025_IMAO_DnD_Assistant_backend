@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -219,4 +220,25 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 	}
 
 	return creatures, nil
+}
+
+func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string) (*models.Creature, error) {
+	collection := s.db.Collection("creatures")
+
+	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
+
+	var creature models.Creature
+
+	err := collection.FindOne(ctx, filter).Decode(&creature)
+	if err != nil {
+		log.Println(err)
+
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, apperrors.NoDocsErr
+		}
+
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return &creature, nil
 }

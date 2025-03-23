@@ -19,8 +19,6 @@ import (
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
 	characteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/usecases"
-	creaturerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/repository"
-	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
 	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
@@ -84,12 +82,10 @@ func (srv *Server) Run() error {
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
-	creatureRepository := creaturerepo.NewCreatureStorage(mongoDatabase)
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
 
-	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 	descriptionUsecases := descriptionuc.NewDescriptionUseCase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
@@ -100,7 +96,7 @@ func (srv *Server) Run() error {
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases,
+	router := myrouter.NewRouter(bestiaryUsecases, descriptionUsecases,
 		characterUsecases, encounterUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
