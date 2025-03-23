@@ -61,17 +61,15 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
-	authAddr := "localhost:50051" // ИЛЬЯ ПЕРЕПИШИ ЭТО ЧЕРЕЗ КОНФИГ
+	descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
 
-	grpcConnDescription, err := grpc.Dial(
-		authAddr,
+	grpcConnDescription, err := grpc.NewClient(
+		descriptionAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 
 	if err != nil {
-		log.Println("Error occurred while starting grpc connection on description service", err)
-
-		return err
+		log.Fatalf("Error occurred while starting grpc connection on description service, %v", err)
 	}
 
 	defer grpcConnDescription.Close()
