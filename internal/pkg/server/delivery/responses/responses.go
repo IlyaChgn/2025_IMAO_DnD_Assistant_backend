@@ -19,6 +19,12 @@ const (
 
 const (
 	ErrInternalServer = "Server error"
+	ErrBadJSON        = "Wrong JSON format"
+
+	ErrCreatureNotFound = "Creature with same URL not found"
+	ErrSizeOrPosition   = "Size and position cannot be less than zero"
+
+	ErrDataNotValid = "The sent data is not valid for processing"
 )
 
 func newErrResponse(status string) *models.ErrResponse {

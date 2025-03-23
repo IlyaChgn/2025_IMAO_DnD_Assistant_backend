@@ -7,32 +7,32 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
+	descriptioninterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
 
-type BestiaryHandler struct {
-	usecases bestiaryinterface.BestiaryUsecases
+type DescriptionHandler struct {
+	descriptionUseCase descriptioninterfaces.DescriptionUsecases
 }
 
-func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases) *BestiaryHandler {
-	return &BestiaryHandler{
-		usecases: usecases,
+func NewDescriptionHandler(descriptionUseCase descriptioninterfaces.DescriptionUsecases) *DescriptionHandler {
+	return &DescriptionHandler{
+		descriptionUseCase: descriptionUseCase,
 	}
 }
 
-func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Request) {
+func (h *DescriptionHandler) GenerateDescription(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	var reqData models.BestiaryReq
+	var reqData models.DescriptionGenerationRequest
 	err := json.NewDecoder(r.Body).Decode(&reqData)
 	if err != nil {
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
-
 		return
 	}
 
-	list, err := h.usecases.GetCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter, reqData.Search)
+	resp, err := h.descriptionUseCase.GenerateDescription(ctx, reqData)
+
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
@@ -42,9 +42,8 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 		default:
 			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 		}
-
 		return
 	}
 
-	responses.SendOkResponse(w, list)
+	responses.SendOkResponse(w, resp)
 }

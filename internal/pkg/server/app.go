@@ -1,14 +1,31 @@
 package server
 
 import (
+	"context"
 	"fmt"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
-	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
-	"github.com/gorilla/handlers"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
+	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
+	"github.com/gorilla/handlers"
+
+	bestiaryrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/repository"
+	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
+	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
+	characteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/usecases"
+	creaturerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/repository"
+	creatureuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/creature/usecases"
+	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
+	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
+	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
+	encounteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/usecases"
+	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
 type Server struct {
@@ -46,16 +63,45 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
-	// mongoURI := repository.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
+	authAddr := "localhost:50051" // ИЛЬЯ ПЕРЕПИШИ ЭТО ЧЕРЕЗ КОНФИГ
 
-	// mongoDatabase := repository.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	grpcConnDescription, err := grpc.Dial(
+		authAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+
+	if err != nil {
+		log.Println("Error occurred while starting grpc connection on description service", err)
+
+		return err
+	}
+
+	defer grpcConnDescription.Close()
+
+	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
+
+	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
+
+	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+
+	creatureRepository := creaturerepo.NewCreatureStorage(mongoDatabase)
+	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
+	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
+	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
+
+	creatureUsecases := creatureuc.NewCreatureUsecases(creatureRepository)
+	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
+	descriptionUsecases := descriptionuc.NewDescriptionUseCase(descriptionClient)
+	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
+	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter()
+	router := myrouter.NewRouter(creatureUsecases, bestiaryUsecases, descriptionUsecases,
+		characterUsecases, encounterUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
