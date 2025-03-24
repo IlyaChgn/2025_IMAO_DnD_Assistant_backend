@@ -291,9 +291,9 @@ type DamageLLM struct {
 }
 
 type AdditionalEffectLLM struct {
-	Damage    *Damage `bson:"damage,omitempty" json:"damage,omitempty"`
-	Condition string  `bson:"condition,omitempty" json:"condition,omitempty"`
-	EscapeDC  int     `bson:"escape_dc,omitempty" json:"escape_dc,omitempty"`
+	Damage    *DamageLLM `bson:"damage,omitempty" json:"damage,omitempty"`
+	Condition string     `bson:"condition,omitempty" json:"condition,omitempty"`
+	EscapeDC  int        `bson:"escape_dc,omitempty" json:"escapeDc,omitempty"`
 }
 
 type MultiAttackLLM struct {
@@ -304,27 +304,27 @@ type MultiAttackLLM struct {
 type AreaAttackLLM struct {
 	Shape     string `bson:"shape,omitempty" json:"shape,omitempty"`
 	Recharge  string `bson:"recharge,omitempty" json:"recharge,omitempty"`
-	SaveDC    int    `bson:"save_dc,omitempty" json:"save_dc,omitempty"`
-	SaveType  string `bson:"save_type,omitempty" json:"save_type,omitempty"`
-	OnFail    string `bson:"on_fail,omitempty" json:"on_fail,omitempty"`
-	OnSuccess string `bson:"on_success,omitempty" json:"on_success,omitempty"`
+	SaveDC    int    `bson:"save_dc,omitempty" json:"saveDc,omitempty"`
+	SaveType  string `bson:"save_type,omitempty" json:"saveType,omitempty"`
+	OnFail    string `bson:"on_fail,omitempty" json:"onSail,omitempty"`
+	OnSuccess string `bson:"on_success,omitempty" json:"onSuccess,omitempty"`
 }
 
 type AttackLLM struct {
 	Name              string                `bson:"name" json:"name"`
 	Type              string                `bson:"type,omitempty" json:"type,omitempty"` // melee, ranged, area и т.д.
-	AttackBonus       string                `bson:"attack_bonus,omitempty" json:"attack_bonus,omitempty"`
+	AttackBonus       string                `bson:"attack_bonus,omitempty" json:"attackBonus,omitempty"`
 	Reach             string                `bson:"reach,omitempty" json:"reach,omitempty"` // для ближних атак
 	Range             string                `bson:"range,omitempty" json:"range,omitempty"` // для дальних атак
 	Target            string                `bson:"target,omitempty" json:"target,omitempty"`
 	Damage            *DamageLLM            `bson:"damage,omitempty" json:"damage,omitempty"`
 	Attacks           []MultiAttackLLM      `bson:"attacks,omitempty" json:"attacks,omitempty"` // для мультиатак
-	AdditionalEffects []AdditionalEffectLLM `bson:"additional_effects,omitempty" json:"additional_effects,omitempty"`
+	AdditionalEffects []AdditionalEffectLLM `bson:"additional_effects,omitempty" json:"additionalEffects,omitempty"`
 	Area              *AreaAttackLLM        `bson:"area,omitempty" json:"area,omitempty"`   // для зональных атак
 	Shape             string                `bson:"shape,omitempty" json:"shape,omitempty"` // альтернативный вариант для area (можно использовать Area.Shape)
 	Recharge          string                `bson:"recharge,omitempty" json:"recharge,omitempty"`
-	SaveDC            int                   `bson:"save_dc,omitempty" json:"save_dc,omitempty"`
-	SaveType          string                `bson:"save_type,omitempty" json:"save_type,omitempty"`
-	OnFail            string                `bson:"on_fail,omitempty" json:"on_fail,omitempty"`
-	OnSuccess         string                `bson:"on_success,omitempty" json:"on_success,omitempty"`
+	SaveDC            int                   `bson:"save_dc,omitempty" json:"saveDc,omitempty"`
+	SaveType          string                `bson:"save_type,omitempty" json:"saveType,omitempty"`
+	OnFail            string                `bson:"on_fail,omitempty" json:"onFail,omitempty"`
+	OnSuccess         string                `bson:"on_success,omitempty" json:"onSuccess,omitempty"`
 }
