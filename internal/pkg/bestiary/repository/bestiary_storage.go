@@ -182,7 +182,27 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 
 	// Добавляем поиск по имени (если указан)
 	if search.Value != "" {
-		mongoFilter = append(mongoFilter, bson.E{Key: "name.rus", Value: bson.M{"$regex": search.Value, "$options": "i"}})
+		hasRussian := false
+		hasEnglish := false
+
+		for _, r := range search.Value {
+			if (r >= 'а' && r <= 'я') || (r >= 'А' && r <= 'Я') || r == 'ё' || r == 'Ё' {
+				hasRussian = true
+			} else if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				hasEnglish = true
+			}
+
+			if hasRussian && hasEnglish {
+				return nil, apperrors.FindMongoDataErr
+			}
+		}
+
+		field := "name.rus"
+		if hasEnglish {
+			field = "name.eng"
+		}
+
+		mongoFilter = append(mongoFilter, bson.E{Key: field, Value: bson.M{"$regex": search.Value, "$options": "i"}})
 	}
 
 	findOptions := options.Find()

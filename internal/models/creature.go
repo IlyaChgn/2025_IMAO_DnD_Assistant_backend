@@ -63,6 +63,11 @@ type Action struct {
 	Value string `json:"value" bson:"value"`
 }
 
+type BonusAction struct {
+	Name  string `json:"name" bson:"name"`
+	Value string `json:"value" bson:"value"`
+}
+
 type Reaction struct {
 	Name  string `json:"name" bson:"name"`
 	Value string `json:"value" bson:"value"`
@@ -127,6 +132,7 @@ type Creature struct {
 	Languages             []string           `json:"languages" bson:"languages"`
 	Feats                 []Feat             `json:"feats,omitempty" bson:"feats,omitempty"`
 	Actions               []Action           `json:"actions" bson:"actions"`
+	BonusActions          []BonusAction      `json:"bonusActions" bson:"bonusActions"`
 	Legendary             []Legendary        `json:"legendary,omitempty" bson:"legendary,omitempty"`
 	Reactions             []Reaction         `json:"reactions" bson:"reactions"`
 	Description           string             `json:"description" bson:"description"`
