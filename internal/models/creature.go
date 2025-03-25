@@ -63,6 +63,11 @@ type Action struct {
 	Value string `json:"value" bson:"value"`
 }
 
+type BonusAction struct {
+	Name  string `json:"name" bson:"name"`
+	Value string `json:"value" bson:"value"`
+}
+
 type Reaction struct {
 	Name  string `json:"name" bson:"name"`
 	Value string `json:"value" bson:"value"`
@@ -127,11 +132,13 @@ type Creature struct {
 	Languages             []string           `json:"languages" bson:"languages"`
 	Feats                 []Feat             `json:"feats,omitempty" bson:"feats,omitempty"`
 	Actions               []Action           `json:"actions" bson:"actions"`
-	Legendary             []Legendary        `json:"legendary,omitempty" bson:"legendary,omitempty"`
-	Reactions             []Reaction         `json:"reactions" bson:"reactions"`
+	BonusActions          []BonusAction      `json:"bonusActions,omitempty" bson:"bonusActions,omitempty"`
+	Legendary             Legendary          `json:"legendary,omitempty" bson:"legendary,omitempty"`
+	Reactions             []Reaction         `json:"reactions,omitempty" bson:"reactions,omitempty"`
 	Description           string             `json:"description" bson:"description"`
 	Tags                  []Tag              `json:"tags" bson:"tags"`
 	Images                []string           `json:"images" bson:"images"`
 	Attacks               []Attack           `json:"attacks,omitempty" bson:"attacks"`
 	Environment           []string           `json:"environment,omitempty" bson:"environment,omitempty"`
+	LLMParsedAttack       []AttackLLM        `bson:"llm_parsed_attack,omitempty" json:"attacksLLM,omitempty"`
 }

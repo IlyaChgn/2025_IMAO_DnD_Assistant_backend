@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -181,7 +182,27 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 
 	// Добавляем поиск по имени (если указан)
 	if search.Value != "" {
-		mongoFilter = append(mongoFilter, bson.E{Key: "name.rus", Value: bson.M{"$regex": search.Value, "$options": "i"}})
+		hasRussian := false
+		hasEnglish := false
+
+		for _, r := range search.Value {
+			if (r >= 'а' && r <= 'я') || (r >= 'А' && r <= 'Я') || r == 'ё' || r == 'Ё' {
+				hasRussian = true
+			} else if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				hasEnglish = true
+			}
+
+			if hasRussian && hasEnglish {
+				return nil, apperrors.FindMongoDataErr
+			}
+		}
+
+		field := "name.rus"
+		if hasEnglish {
+			field = "name.eng"
+		}
+
+		mongoFilter = append(mongoFilter, bson.E{Key: field, Value: bson.M{"$regex": search.Value, "$options": "i"}})
 	}
 
 	findOptions := options.Find()
@@ -219,4 +240,25 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 	}
 
 	return creatures, nil
+}
+
+func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string) (*models.Creature, error) {
+	collection := s.db.Collection("creatures")
+
+	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
+
+	var creature models.Creature
+
+	err := collection.FindOne(ctx, filter).Decode(&creature)
+	if err != nil {
+		log.Println(err)
+
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, apperrors.NoDocsErr
+		}
+
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return &creature, nil
 }

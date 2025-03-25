@@ -25,9 +25,19 @@ type MongoConfig struct {
 	DBName   string `env:"MONGO_DB"`
 }
 
+type ServiceConfig struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+}
+
+type ServicesConfig struct {
+	Description ServerConfig `yaml:"description"`
+}
+
 type Config struct {
-	Server ServerConfig `yaml:"server"`
-	Mongo  MongoConfig
+	Server   ServerConfig `yaml:"server"`
+	Mongo    MongoConfig
+	Services ServicesConfig `yaml:"services"`
 }
 
 func ReadConfig(cfgPath string) *Config {

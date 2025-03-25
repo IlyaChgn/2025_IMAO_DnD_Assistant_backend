@@ -9,9 +9,11 @@ import (
 type BestiaryRepository interface {
 	GetCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
 		search models.SearchParams) ([]*models.BestiaryCreature, error)
+	GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error)
 }
 
 type BestiaryUsecases interface {
 	GetCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
 		search models.SearchParams) ([]*models.BestiaryCreature, error)
+	GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error)
 }

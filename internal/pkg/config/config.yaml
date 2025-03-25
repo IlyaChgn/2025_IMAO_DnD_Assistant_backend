@@ -14,3 +14,8 @@ server:
     - PUT
     - HEAD
     - OPTIONS
+
+services:
+  description:
+    host:
+    port: 50051
