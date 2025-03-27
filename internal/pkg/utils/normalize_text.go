@@ -5,7 +5,7 @@ import (
 	"unicode"
 )
 
-// normalizeText удаляет специальные символы и приводит текст к нижнему регистру
+// NormalizeText удаляет специальные символы и приводит текст к нижнему регистру
 func NormalizeText(text string) string {
 	// Удаляем специальные символы
 	var normalized strings.Builder
