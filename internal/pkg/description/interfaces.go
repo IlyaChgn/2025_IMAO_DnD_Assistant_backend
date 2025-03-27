@@ -6,9 +6,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 )
 
-type DescriptionRepository interface {
-}
-
 type DescriptionUsecases interface {
-	GenerateDescription(ctx context.Context, req models.DescriptionGenerationRequest) (models.DescriptionGenerationResponse, error)
+	GenerateDescription(ctx context.Context,
+		req models.DescriptionGenerationRequest) (models.DescriptionGenerationResponse, error)
 }

@@ -81,6 +81,11 @@ type Attack struct {
 	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                     // Боеприпасы
 }
 
+type DeterminedAttack struct {
+	Type        AttackType
+	Description string
+}
+
 /////////////////////////// LLM PARSED ATTACK ////////////////////////////////////////
 
 type DamageLLM struct {

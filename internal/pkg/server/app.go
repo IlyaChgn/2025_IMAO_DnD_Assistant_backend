@@ -85,7 +85,7 @@ func (srv *Server) Run() error {
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
-	descriptionUsecases := descriptionuc.NewDescriptionUseCase(descriptionClient)
+	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 
