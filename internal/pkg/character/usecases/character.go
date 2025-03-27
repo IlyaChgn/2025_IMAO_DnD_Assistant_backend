@@ -2,6 +2,9 @@ package usecases
 
 import (
 	"context"
+	"encoding/json"
+	"io"
+	"mime/multipart"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -27,7 +30,19 @@ func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start 
 	return uc.repo.GetCharactersList(ctx, size, start, order, filter, search)
 }
 
-func (uc *characterUsecases) AddCharacter(ctx context.Context, rawChar models.CharacterRaw) error {
+func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.File) error {
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		return apperrors.ReadFileError
+	}
+
+	var rawChar models.CharacterRaw
+
+	err = json.Unmarshal(fileBytes, &rawChar)
+	if err != nil {
+		return apperrors.InvalidJSONError
+	}
+
 	if rawChar.Data == "" {
 		return apperrors.InvalidInputError
 	}

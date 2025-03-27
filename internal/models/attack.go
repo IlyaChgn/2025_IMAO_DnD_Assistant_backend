@@ -11,7 +11,129 @@ const (
 	MeleeOrRangedSpellAttack
 )
 
-// String возвращает строковое представление типа атаки на указанном языке
+type TargetType int
+
+const (
+	SingleTarget        TargetType = iota // Одна цель
+	Cone                                  // Конус
+	Cube                                  // Куб
+	Sphere                                // Сфера
+	Cylinder                              // Цилиндр
+	Line                                  // Линия
+	Self                                  // Сам на себя
+	Touch                                 // Касание
+	MultipleTargets                       // Несколько целей
+	Object                                // Объект
+	Point                                 // Точка в пространстве
+	AllCreaturesInRange                   // Все существа в радиусе
+	AllEnemiesInRange                     // Все враги в радиусе
+	AllAlliesInRange                      // Все союзники в радиусе
+)
+
+type DamageType int
+
+const (
+	Acid DamageType = iota
+	Bludgeoning
+	Cold
+	Fire
+	Force
+	Lightning
+	Necrotic
+	Piercing
+	Poison
+	Psychic
+	Radiant
+	Slashing
+	Thunder
+)
+
+type DiceType string
+
+const (
+	D4   DiceType = "d4"
+	D6   DiceType = "d6"
+	D8   DiceType = "d8"
+	D10  DiceType = "d10"
+	D12  DiceType = "d12"
+	D20  DiceType = "d20"
+	D100 DiceType = "d100"
+)
+
+// Damage описывает одну кость урона
+type Damage struct {
+	Dice       DiceType   `json:"dice" bson:"dice"`             // Тип кости
+	Count      int        `json:"count" bson:"count"`           // Количество костей
+	DamageType DamageType `json:"damageType" bson:"damageType"` // Тип урона
+}
+
+// Attack - структура для описания атаки
+type Attack struct {
+	Name           string     `json:"name" bson:"name"`
+	Type           AttackType `json:"type" bson:"type"`                                         // Тип атаки
+	ToHitBonus     int        `json:"toHitBonus" bson:"toHitBonus"`                             // Бонус на попадание
+	Reach          string     `json:"reach,omitempty" bson:"reach,omitempty"`                   // Досягаемость
+	EffectiveRange string     `json:"effectiveRange,omitempty" bson:"effectiveRange,omitempty"` // Эффективная дальность
+	MaxRange       string     `json:"maxRange,omitempty" bson:"maxRange,omitempty"`             // Макс. дальность
+	Target         TargetType `json:"target" bson:"target"`                                     // Тип цели
+	Damage         []Damage   `json:"damage" bson:"damage"`                                     // Урон
+	DamageBonus    int        `json:"damageBonus" bson:"damageBonus"`                           // Бонус к урону
+	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                     // Боеприпасы
+}
+
+type DeterminedAttack struct {
+	Type        AttackType
+	Description string
+}
+
+/////////////////////////// LLM PARSED ATTACK ////////////////////////////////////////
+
+type DamageLLM struct {
+	Dice  string `bson:"dice" json:"dice"`
+	Count int    `bson:"count" json:"count"`
+	Type  string `bson:"type" json:"type"`
+	Bonus int    `bson:"bonus" json:"bonus"`
+}
+
+type AdditionalEffectLLM struct {
+	Damage    *DamageLLM `bson:"damage,omitempty" json:"damage,omitempty"`
+	Condition string     `bson:"condition,omitempty" json:"condition,omitempty"`
+	EscapeDC  int        `bson:"escape_dc,omitempty" json:"escapeDc,omitempty"`
+}
+
+type MultiAttackLLM struct {
+	Type  string `bson:"type" json:"type"`
+	Count int    `bson:"count" json:"count"`
+}
+
+type AreaAttackLLM struct {
+	Shape     string `bson:"shape,omitempty" json:"shape,omitempty"`
+	Recharge  string `bson:"recharge,omitempty" json:"recharge,omitempty"`
+	SaveDC    int    `bson:"save_dc,omitempty" json:"saveDc,omitempty"`
+	SaveType  string `bson:"save_type,omitempty" json:"saveType,omitempty"`
+	OnFail    string `bson:"on_fail,omitempty" json:"onSail,omitempty"`
+	OnSuccess string `bson:"on_success,omitempty" json:"onSuccess,omitempty"`
+}
+
+type AttackLLM struct {
+	Name              string                `bson:"name" json:"name"`
+	Type              string                `bson:"type,omitempty" json:"type,omitempty"` // melee, ranged, area и т.д.
+	AttackBonus       string                `bson:"attack_bonus,omitempty" json:"attackBonus,omitempty"`
+	Reach             string                `bson:"reach,omitempty" json:"reach,omitempty"` // для ближних атак
+	Range             string                `bson:"range,omitempty" json:"range,omitempty"` // для дальних атак
+	Target            string                `bson:"target,omitempty" json:"target,omitempty"`
+	Damage            *DamageLLM            `bson:"damage,omitempty" json:"damage,omitempty"`
+	Attacks           []MultiAttackLLM      `bson:"attacks,omitempty" json:"attacks,omitempty"` // для мультиатак
+	AdditionalEffects []AdditionalEffectLLM `bson:"additional_effects,omitempty" json:"additionalEffects,omitempty"`
+	Area              *AreaAttackLLM        `bson:"area,omitempty" json:"area,omitempty"`   // для зональных атак
+	Shape             string                `bson:"shape,omitempty" json:"shape,omitempty"` // альт. вариант для area
+	Recharge          string                `bson:"recharge,omitempty" json:"recharge,omitempty"`
+	SaveDC            int                   `bson:"save_dc,omitempty" json:"saveDc,omitempty"`
+	SaveType          string                `bson:"save_type,omitempty" json:"saveType,omitempty"`
+	OnFail            string                `bson:"on_fail,omitempty" json:"onFail,omitempty"`
+	OnSuccess         string                `bson:"on_success,omitempty" json:"onSuccess,omitempty"`
+}
+
 func (at AttackType) String(lang string) string {
 	switch at {
 	case MeleeWeaponAttack:
@@ -52,26 +174,6 @@ func (at AttackType) String(lang string) string {
 	}
 }
 
-type TargetType int
-
-const (
-	SingleTarget        TargetType = iota // Одна цель
-	Cone                                  // Конус
-	Cube                                  // Куб
-	Sphere                                // Сфера
-	Cylinder                              // Цилиндр
-	Line                                  // Линия
-	Self                                  // Сам на себя
-	Touch                                 // Касание
-	MultipleTargets                       // Несколько целей
-	Object                                // Объект
-	Point                                 // Точка в пространстве
-	AllCreaturesInRange                   // Все существа в радиусе
-	AllEnemiesInRange                     // Все враги в радиусе
-	AllAlliesInRange                      // Все союзники в радиусе
-)
-
-// String возвращает строковое представление типа цели
 func (tt TargetType) String(lang string) string {
 	switch tt {
 	case SingleTarget:
@@ -152,26 +254,6 @@ func (tt TargetType) String(lang string) string {
 	}
 }
 
-// DamageType - перечисление типов урона
-type DamageType int
-
-const (
-	Acid DamageType = iota
-	Bludgeoning
-	Cold
-	Fire
-	Force
-	Lightning
-	Necrotic
-	Piercing
-	Poison
-	Psychic
-	Radiant
-	Slashing
-	Thunder
-)
-
-// String возвращает строковое представление типа урона
 func (dt DamageType) String(lang string) string {
 	switch dt {
 	case Acid:
@@ -245,86 +327,4 @@ func (dt DamageType) String(lang string) string {
 		}
 		return "unknown damage type"
 	}
-}
-
-// DiceType - перечисление типов костей
-type DiceType string
-
-const (
-	D4   DiceType = "d4"
-	D6   DiceType = "d6"
-	D8   DiceType = "d8"
-	D10  DiceType = "d10"
-	D12  DiceType = "d12"
-	D20  DiceType = "d20"
-	D100 DiceType = "d100"
-)
-
-// Damage описывает одну кость урона
-type Damage struct {
-	Dice       DiceType   `json:"dice" bson:"dice"`             // Тип кости (например, "d10")
-	Count      int        `json:"count" bson:"count"`           // Количество костей (например, 1)
-	DamageType DamageType `json:"damageType" bson:"damageType"` // Тип урона (например, "дробящий")
-}
-
-// Attack - структура для описания атаки
-type Attack struct {
-	Name           string     `json:"name" bson:"name"`
-	Type           AttackType `json:"type" bson:"type"`                                         // Тип атаки
-	ToHitBonus     int        `json:"toHitBonus" bson:"toHitBonus"`                             // Бонус на попадание (например, +4)
-	Reach          string     `json:"reach,omitempty" bson:"reach,omitempty"`                   // Досягаемость (например, "5 фт.")
-	EffectiveRange string     `json:"effectiveRange,omitempty" bson:"effectiveRange,omitempty"` // Эффективная дальность (например, "30 фт.")
-	MaxRange       string     `json:"maxRange,omitempty" bson:"maxRange,omitempty"`             // Максимальная дальность (например, "120 фт.")
-	Target         TargetType `json:"target" bson:"target"`                                     // Тип цели
-	Damage         []Damage   `json:"damage" bson:"damage"`                                     // Урон (может быть несколько костей)
-	DamageBonus    int        `json:"damageBonus" bson:"damageBonus"`                           // Бонус к урону
-	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                     // Боеприпасы (например, "10 болтов для арбалета")
-}
-
-/////////////////////////// LLM PARSED ATTACK ////////////////////////////////////////
-
-type DamageLLM struct {
-	Dice  string `bson:"dice" json:"dice"`
-	Count int    `bson:"count" json:"count"`
-	Type  string `bson:"type" json:"type"`
-	Bonus int    `bson:"bonus" json:"bonus"`
-}
-
-type AdditionalEffectLLM struct {
-	Damage    *DamageLLM `bson:"damage,omitempty" json:"damage,omitempty"`
-	Condition string     `bson:"condition,omitempty" json:"condition,omitempty"`
-	EscapeDC  int        `bson:"escape_dc,omitempty" json:"escapeDc,omitempty"`
-}
-
-type MultiAttackLLM struct {
-	Type  string `bson:"type" json:"type"`
-	Count int    `bson:"count" json:"count"`
-}
-
-type AreaAttackLLM struct {
-	Shape     string `bson:"shape,omitempty" json:"shape,omitempty"`
-	Recharge  string `bson:"recharge,omitempty" json:"recharge,omitempty"`
-	SaveDC    int    `bson:"save_dc,omitempty" json:"saveDc,omitempty"`
-	SaveType  string `bson:"save_type,omitempty" json:"saveType,omitempty"`
-	OnFail    string `bson:"on_fail,omitempty" json:"onSail,omitempty"`
-	OnSuccess string `bson:"on_success,omitempty" json:"onSuccess,omitempty"`
-}
-
-type AttackLLM struct {
-	Name              string                `bson:"name" json:"name"`
-	Type              string                `bson:"type,omitempty" json:"type,omitempty"` // melee, ranged, area и т.д.
-	AttackBonus       string                `bson:"attack_bonus,omitempty" json:"attackBonus,omitempty"`
-	Reach             string                `bson:"reach,omitempty" json:"reach,omitempty"` // для ближних атак
-	Range             string                `bson:"range,omitempty" json:"range,omitempty"` // для дальних атак
-	Target            string                `bson:"target,omitempty" json:"target,omitempty"`
-	Damage            *DamageLLM            `bson:"damage,omitempty" json:"damage,omitempty"`
-	Attacks           []MultiAttackLLM      `bson:"attacks,omitempty" json:"attacks,omitempty"` // для мультиатак
-	AdditionalEffects []AdditionalEffectLLM `bson:"additional_effects,omitempty" json:"additionalEffects,omitempty"`
-	Area              *AreaAttackLLM        `bson:"area,omitempty" json:"area,omitempty"`   // для зональных атак
-	Shape             string                `bson:"shape,omitempty" json:"shape,omitempty"` // альтернативный вариант для area (можно использовать Area.Shape)
-	Recharge          string                `bson:"recharge,omitempty" json:"recharge,omitempty"`
-	SaveDC            int                   `bson:"save_dc,omitempty" json:"saveDc,omitempty"`
-	SaveType          string                `bson:"save_type,omitempty" json:"saveType,omitempty"`
-	OnFail            string                `bson:"on_fail,omitempty" json:"onFail,omitempty"`
-	OnSuccess         string                `bson:"on_success,omitempty" json:"onSuccess,omitempty"`
 }

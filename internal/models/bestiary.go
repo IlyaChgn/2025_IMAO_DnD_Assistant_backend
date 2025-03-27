@@ -12,23 +12,6 @@ type BestiaryReq struct {
 	Filter FilterParams `json:"filter"`
 }
 
-type FilterParams struct {
-	Book                []string `json:"book"`
-	Npc                 []string `json:"npc"`
-	ChallengeRating     []string `json:"challengeRating"`
-	Type                []string `json:"type"`
-	Size                []string `json:"size"`
-	Tag                 []string `json:"tag"`
-	Moving              []string `json:"moving"`
-	Senses              []string `json:"senses"`
-	VulnerabilityDamage []string `json:"vulnerabilityDamage"`
-	ResistanceDamage    []string `json:"resistanceDamage"`
-	ImmunityDamage      []string `json:"immunityDamage"`
-	ImmunityCondition   []string `json:"immunityCondition"`
-	Features            []string `json:"features"`
-	Environment         []string `json:"environment"`
-}
-
 type BestiaryCreature struct {
 	ID              primitive.ObjectID `bson:"_id" json:"id"`
 	Name            Name               `bson:"name" json:"name"`

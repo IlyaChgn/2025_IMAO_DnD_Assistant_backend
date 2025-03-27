@@ -24,7 +24,13 @@ const (
 	ErrCreatureNotFound = "Creature with same URL not found"
 	ErrSizeOrPosition   = "Size and position cannot be less than zero"
 
-	ErrDataNotValid = "The sent data is not valid for processing"
+	ErrEmptyCharacterData = "Empty character data"
+
+	ErrWrongFileSize = "File is too large"
+	ErrWrongFileType = "Invalid file type. Only JSON files are allowed"
+
+	ErrEmptyEncounterName = "Encounter name is empty"
+	ErrInvalidID          = "Invalid ID"
 )
 
 func newErrResponse(status string) *models.ErrResponse {
