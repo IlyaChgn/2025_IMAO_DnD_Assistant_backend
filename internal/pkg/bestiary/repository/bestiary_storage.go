@@ -51,14 +51,26 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 	findOptions.SetLimit(int64(size))
 	findOptions.SetSkip(int64(start))
 
-	if len(order) > 0 {
-		sort := bson.D{}
-		for _, o := range order {
-			sort = append(sort, bson.E{Key: o.Field, Value: 1}) // 1 для asc, -1 для desc
+	if len(order) <= 0 {
+		return s.getCreaturesList(ctx, filters, findOptions)
+	}
+
+	sort := bson.D{}
+	for _, o := range order {
+		var direction int
+
+		if o.Direction == "asc" {
+			direction = 1
+		} else if o.Direction == "desc" {
+			direction = -1
+		} else {
+			return nil, apperrors.UnknownDirectionError
 		}
 
-		findOptions.SetSort(sort)
+		sort = append(sort, bson.E{Key: o.Field, Value: direction}) // 1 для asc, -1 для desc
 	}
+
+	findOptions.SetSort(sort)
 
 	return s.getCreaturesList(ctx, filters, findOptions)
 }
