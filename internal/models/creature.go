@@ -138,7 +138,6 @@ type Creature struct {
 	Description           string             `json:"description" bson:"description"`
 	Tags                  []Tag              `json:"tags" bson:"tags"`
 	Images                []string           `json:"images" bson:"images"`
-	Attacks               []Attack           `json:"attacks,omitempty" bson:"attacks"`
 	Environment           []string           `json:"environment,omitempty" bson:"environment,omitempty"`
 	LLMParsedAttack       []AttackLLM        `bson:"llm_parsed_attack,omitempty" json:"attacksLLM,omitempty"`
 }

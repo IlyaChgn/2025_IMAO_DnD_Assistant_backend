@@ -67,20 +67,6 @@ type Damage struct {
 	DamageType DamageType `json:"damageType" bson:"damageType"` // Тип урона
 }
 
-// Attack - структура для описания атаки
-type Attack struct {
-	Name           string     `json:"name" bson:"name"`
-	Type           AttackType `json:"type" bson:"type"`                                         // Тип атаки
-	ToHitBonus     int        `json:"toHitBonus" bson:"toHitBonus"`                             // Бонус на попадание
-	Reach          string     `json:"reach,omitempty" bson:"reach,omitempty"`                   // Досягаемость
-	EffectiveRange string     `json:"effectiveRange,omitempty" bson:"effectiveRange,omitempty"` // Эффективная дальность
-	MaxRange       string     `json:"maxRange,omitempty" bson:"maxRange,omitempty"`             // Макс. дальность
-	Target         TargetType `json:"target" bson:"target"`                                     // Тип цели
-	Damage         []Damage   `json:"damage" bson:"damage"`                                     // Урон
-	DamageBonus    int        `json:"damageBonus" bson:"damageBonus"`                           // Бонус к урону
-	Ammo           string     `json:"ammo,omitempty" bson:"ammo,omitempty"`                     // Боеприпасы
-}
-
 type DeterminedAttack struct {
 	Type        AttackType
 	Description string

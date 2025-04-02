@@ -33,9 +33,5 @@ func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName st
 		return nil, err
 	}
 
-	attacks := uc.parseAttackList(creature.Actions)
-
-	creature.Attacks = *attacks
-
 	return creature, nil
 }
