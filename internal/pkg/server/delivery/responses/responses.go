@@ -23,6 +23,7 @@ const (
 
 	ErrCreatureNotFound = "Creature with same URL not found"
 	ErrSizeOrPosition   = "Size and position cannot be less than zero"
+	ErrWrongDirection   = "Wrong direction type in order"
 
 	ErrEmptyCharacterData = "Empty character data"
 

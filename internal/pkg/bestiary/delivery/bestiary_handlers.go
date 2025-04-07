@@ -43,6 +43,8 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 			responses.SendOkResponse(w, nil)
 		case errors.Is(err, apperrors.StartPosSizeError):
 			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
+		case errors.Is(err, apperrors.UnknownDirectionError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongDirection)
 		default:
 			log.Println(err)
 
