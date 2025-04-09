@@ -55,7 +55,13 @@ type Skill struct {
 }
 
 type Senses struct {
-	PassivePerception string `json:"passivePerception" bson:"passivePerception"`
+	PassivePerception string  `json:"passivePerception" bson:"passivePerception"`
+	Sense             []Sense `json:"senses" bson:"senses, omitempty"`
+}
+
+type Sense struct {
+	Name  string `json:"name" bson:"name"`
+	Value int    `json:"value" bson:"value"`
 }
 
 type Action struct {
@@ -118,6 +124,7 @@ type Creature struct {
 	ProficiencyBonus      string             `json:"proficiencyBonus" bson:"proficiencyBonus"`
 	Alignment             string             `json:"alignment" bson:"alignment"`
 	ArmorClass            int                `json:"armorClass" bson:"armorClass"`
+	ArmorText             string             `json:"armorText" bson:"armorText, omitempty"`
 	Armors                []Armor            `json:"armors,omitempty" bson:"armors,omitempty"`
 	Hits                  Hits               `json:"hits" bson:"hits"`
 	Speed                 []Speed            `json:"speed" bson:"speed"`
