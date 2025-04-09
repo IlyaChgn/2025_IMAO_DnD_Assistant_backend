@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
@@ -12,7 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 )
 
 type characterStorage struct {
@@ -91,6 +92,7 @@ func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.Char
 	}
 
 	character := models.Character{
+		ID:             primitive.NewObjectID(),
 		Tags:           rawChar.Tags,
 		DisabledBlocks: rawChar.DisabledBlocks,
 		Spells:         rawChar.Spells,
