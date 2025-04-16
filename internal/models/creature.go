@@ -45,7 +45,7 @@ type Ability struct {
 	Dex int `json:"dex" bson:"dex"`
 	Con int `json:"con" bson:"con"`
 	Int int `json:"int" bson:"int"`
-	Wiz int `json:"wiz" bson:"wiz"`
+	Wiz int `json:"wis" bson:"wiz"`
 	Cha int `json:"cha" bson:"cha"`
 }
 
