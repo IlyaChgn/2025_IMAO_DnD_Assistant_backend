@@ -30,6 +30,20 @@ type ServiceConfig struct {
 	Port string `yaml:"port"`
 }
 
+type VKMethodConfig struct {
+	URL    string `yaml:"url"`
+	Method string `yaml:"method"`
+}
+
+type VKApiConfig struct {
+	RedirectURI string         `env:"REDIRECT_URI"`
+	ClientID    string         `env:"CLIENT_ID"`
+	SecretKey   string         `env:"SECRET_KEY"`
+	ServiceKey  string         `env:"SERVICE_KEY"`
+	Exchange    VKMethodConfig `yaml:"exchange"`
+	PublicInfo  VKMethodConfig `yaml:"public_info"`
+}
+
 type ServicesConfig struct {
 	Description ServerConfig `yaml:"description"`
 }
@@ -38,6 +52,7 @@ type Config struct {
 	Server   ServerConfig `yaml:"server"`
 	Mongo    MongoConfig
 	Services ServicesConfig `yaml:"services"`
+	VKApi    VKApiConfig    `yaml:"vk_api"`
 }
 
 func ReadConfig(cfgPath string) *Config {

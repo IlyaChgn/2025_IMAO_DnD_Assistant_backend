@@ -1,10 +1,13 @@
 package router
 
 import (
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
+	authdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	bestiarydel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	characterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/delivery"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
 	descriptioninterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
@@ -13,15 +16,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter(bestiaryInterface bestiaryinterfaces.BestiaryUsecases,
+func NewRouter(cfg *config.Config,
+	bestiaryInterface bestiaryinterfaces.BestiaryUsecases,
 	descriptionInterface descriptioninterfaces.DescriptionUsecases,
 	characterInterface characterinterfaces.CharacterUsecases,
-	encounterInterface encounterinterfaces.EncounterUsecases) *mux.Router {
+	encounterInterface encounterinterfaces.EncounterUsecases,
+	authInterface authinterface.AuthUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface)
+	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
 
 	router := mux.NewRouter()
 
@@ -33,6 +39,7 @@ func NewRouter(bestiaryInterface bestiaryinterfaces.BestiaryUsecases,
 	ServeBattleRouter(rootRouter, descriptionHandler)
 	ServeCharacterRouter(rootRouter, characterHandler)
 	ServeEncounteRouter(rootRouter, encounterHandler)
+	ServeAuthRouter(rootRouter, authHandler)
 
 	return router
 }

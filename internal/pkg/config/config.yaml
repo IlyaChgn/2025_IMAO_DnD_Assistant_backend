@@ -19,3 +19,11 @@ services:
   description:
     host:
     port: 50051
+
+vk_api:
+  exchange:
+    url: https://id.vk.com/oauth2/auth
+    method: POST
+  public_info:
+    url: https://id.vk.com/oauth2/public_info
+    method: POST

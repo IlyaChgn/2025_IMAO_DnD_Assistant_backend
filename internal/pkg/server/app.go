@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	authrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/repository"
+	authuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/usecases"
 	"log"
 	"net/http"
 	"os"
@@ -83,19 +85,21 @@ func (srv *Server) Run() error {
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
+	authRepository := authrepo.NewAuthStorage()
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
+	authUsecases := authuc.NewAuthUsecases(authRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(bestiaryUsecases, descriptionUsecases,
-		characterUsecases, encounterUsecases)
+	router := myrouter.NewRouter(cfg, bestiaryUsecases, descriptionUsecases, characterUsecases, encounterUsecases,
+		authUsecases)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
