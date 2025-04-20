@@ -25,6 +25,14 @@ type MongoConfig struct {
 	DBName   string `env:"MONGO_DB"`
 }
 
+type PostgresConfig struct {
+	Username string `env:"POSTGRES_USERNAME"`
+	Password string `env:"POSTGRES_PASSWORD"`
+	Host     string `env:"POSTGRES_HOST"`
+	Port     string `env:"POSTGRES_PORT"`
+	DBName   string `env:"POSTGRES_DB"`
+}
+
 type ServiceConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
@@ -51,6 +59,7 @@ type ServicesConfig struct {
 type Config struct {
 	Server   ServerConfig `yaml:"server"`
 	Mongo    MongoConfig
+	Postgres PostgresConfig
 	Services ServicesConfig `yaml:"services"`
 	VKApi    VKApiConfig    `yaml:"vk_api"`
 }

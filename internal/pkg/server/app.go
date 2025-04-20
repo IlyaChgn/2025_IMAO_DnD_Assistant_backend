@@ -82,6 +82,19 @@ func (srv *Server) Run() error {
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
+	postgresURL := serverrepo.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
+		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
+
+	postgresPool, err := serverrepo.NewPostgresPool(postgresURL)
+	if err != nil {
+		log.Fatal("Something went wrong while creating postgres pool ", err)
+	}
+
+	err = postgresPool.Ping(context.Background())
+	if err != nil {
+		log.Fatal("Cannot ping postgres database ", err)
+	}
+
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
