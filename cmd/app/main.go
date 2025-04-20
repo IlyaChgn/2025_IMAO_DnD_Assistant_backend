@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	migrator "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/db"
 	"github.com/joho/godotenv"
 	"log"
 
@@ -9,11 +10,13 @@ import (
 )
 
 var productionFlag = flag.Bool("prod", false, "Run in production mode")
+var migrationsFlag = flag.String("migrate", "latest", "Run in migrations mode")
 
 func main() {
 	var err error
 
 	flag.Parse()
+
 	if *productionFlag {
 		log.Println("Running in production mode")
 		err = godotenv.Load("prod.env")
@@ -21,6 +24,8 @@ func main() {
 		log.Println("Running in development mode")
 		err = godotenv.Load(".env")
 	}
+
+	migrator.ApplyMigrations(*migrationsFlag)
 
 	if err != nil {
 		log.Fatal("Error loading env file ", err)
