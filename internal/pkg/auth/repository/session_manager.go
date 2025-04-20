@@ -11,17 +11,17 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type SessionManager struct {
+type sessionManager struct {
 	client *redis.Client
 }
 
 func NewSessionManager(client *redis.Client) authinterface.SessionManager {
-	return &SessionManager{
+	return &sessionManager{
 		client: client,
 	}
 }
 
-func (manager *SessionManager) CreateSession(ctx context.Context, sessionID string, session *models.FullSessionData,
+func (manager *sessionManager) CreateSession(ctx context.Context, sessionID string, session *models.FullSessionData,
 	sessionDuration time.Duration) error {
 	rawSession, err := json.Marshal(session)
 	if err != nil {
@@ -36,7 +36,7 @@ func (manager *SessionManager) CreateSession(ctx context.Context, sessionID stri
 	return nil
 }
 
-func (manager *SessionManager) RemoveSession(ctx context.Context, sessionID string) error {
+func (manager *sessionManager) RemoveSession(ctx context.Context, sessionID string) error {
 	if _, exists := manager.GetSession(ctx, sessionID); !exists {
 		return apperrors.SessionNotExistsError
 	}
@@ -49,7 +49,7 @@ func (manager *SessionManager) RemoveSession(ctx context.Context, sessionID stri
 	return nil
 }
 
-func (manager *SessionManager) GetSession(ctx context.Context, sessionID string) (*models.FullSessionData, bool) {
+func (manager *sessionManager) GetSession(ctx context.Context, sessionID string) (*models.FullSessionData, bool) {
 
 	rawSession, _ := manager.client.Get(ctx, sessionID).Result()
 
