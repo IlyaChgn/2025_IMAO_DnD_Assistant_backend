@@ -106,12 +106,13 @@ func (srv *Server) Run() error {
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
 	authRepository := authrepo.NewAuthStorage()
+	sessionManager := authrepo.NewSessionManager(redisClient)
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
-	authUsecases := authuc.NewAuthUsecases(authRepository)
+	authUsecases := authuc.NewAuthUsecases(authRepository, sessionManager)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
