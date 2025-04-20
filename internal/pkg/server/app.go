@@ -95,6 +95,13 @@ func (srv *Server) Run() error {
 		log.Fatal("Cannot ping postgres database ", err)
 	}
 
+	redisClient := serverrepo.NewRedisClient(cfg.Redis.Host, cfg.Redis.Port, cfg.Redis.Password, cfg.Redis.DB)
+
+	err = redisClient.Ping(context.Background()).Err()
+	if err != nil {
+		log.Fatalf("Cannot ping Redis: %v", err)
+	}
+
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
@@ -111,8 +118,14 @@ func (srv *Server) Run() error {
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(cfg, bestiaryUsecases, descriptionUsecases, characterUsecases, encounterUsecases,
-		authUsecases)
+	router := myrouter.NewRouter(
+		cfg,
+		bestiaryUsecases,
+		descriptionUsecases,
+		characterUsecases,
+		encounterUsecases,
+		authUsecases,
+	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)

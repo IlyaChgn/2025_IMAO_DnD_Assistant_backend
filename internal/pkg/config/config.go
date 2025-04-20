@@ -33,6 +33,13 @@ type PostgresConfig struct {
 	DBName   string `env:"POSTGRES_DB"`
 }
 
+type RedisConfig struct {
+	Password string `env:"REDIS_PASSWORD"`
+	Host     string `env:"REDIS_HOST"`
+	Port     string `env:"REDIS_PORT"`
+	DB       int    `env:"REDIS_DB"`
+}
+
 type ServiceConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
@@ -60,6 +67,7 @@ type Config struct {
 	Server   ServerConfig `yaml:"server"`
 	Mongo    MongoConfig
 	Postgres PostgresConfig
+	Redis    RedisConfig
 	Services ServicesConfig `yaml:"services"`
 	VKApi    VKApiConfig    `yaml:"vk_api"`
 }
