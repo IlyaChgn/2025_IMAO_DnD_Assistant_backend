@@ -12,6 +12,7 @@ import (
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
+	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
 	"github.com/gorilla/mux"
 )
@@ -29,6 +30,8 @@ func NewRouter(cfg *config.Config,
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface)
 	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
 
+	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface)
+
 	router := mux.NewRouter()
 
 	router.Use(myrecovery.RecoveryMiddleware)
@@ -39,7 +42,7 @@ func NewRouter(cfg *config.Config,
 	ServeBattleRouter(rootRouter, descriptionHandler)
 	ServeCharacterRouter(rootRouter, characterHandler)
 	ServeEncounteRouter(rootRouter, encounterHandler)
-	ServeAuthRouter(rootRouter, authHandler)
+	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
 
 	return router
 }

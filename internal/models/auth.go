@@ -1,6 +1,6 @@
 package models
 
-type CodeExchangeRequest struct {
+type LoginRequest struct {
 	Code         string `json:"code"`
 	State        string `json:"state"`
 	CodeVerifier string `json:"codeVerifier"`
@@ -15,7 +15,7 @@ type TokensData struct {
 
 type User struct {
 	ID     int    `json:"id"`
-	VKID   int    `json:"vkID"`
+	VKID   string `json:"vkID"`
 	Name   string `json:"name"`
 	Avatar string `json:"avatar"`
 }
@@ -23,4 +23,9 @@ type User struct {
 type FullSessionData struct {
 	Tokens TokensData `json:"tokens"`
 	User   User       `json:"user"`
+}
+
+type AuthResponse struct {
+	IsAuth bool `json:"isAuth"`
+	User   User `json:"user"`
 }

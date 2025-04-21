@@ -20,6 +20,7 @@ const (
 const (
 	ErrInternalServer = "Server error"
 	ErrBadJSON        = "Wrong JSON format"
+	ErrNotAuthorized  = "User not authorized"
 
 	ErrCreatureNotFound = "Creature with same URL not found"
 	ErrSizeOrPosition   = "Size and position cannot be less than zero"
@@ -32,6 +33,8 @@ const (
 
 	ErrEmptyEncounterName = "Encounter name is empty"
 	ErrInvalidID          = "Invalid ID"
+
+	ErrVKServer = "VK server error"
 )
 
 func newErrResponse(status string) *models.ErrResponse {

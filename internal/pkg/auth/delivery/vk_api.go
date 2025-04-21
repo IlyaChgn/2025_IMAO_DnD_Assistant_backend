@@ -1,16 +1,18 @@
 package delivery
 
 import (
+	"encoding/json"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
 // exchangeCode возвращает access token, refresh token и ID token в обмен на код верификации с клиента
-func (h *AuthHandler) exchangeCode(data *models.CodeExchangeRequest) ([]byte, error) {
+func (h *AuthHandler) exchangeCode(w http.ResponseWriter, data *models.LoginRequest) ([]byte, error) {
 	urlParams := url.Values{}
 
 	urlParams.Set("grant_type", "authorization_code")
@@ -24,30 +26,52 @@ func (h *AuthHandler) exchangeCode(data *models.CodeExchangeRequest) ([]byte, er
 	req, err := http.NewRequest(h.vkApiCfg.Exchange.Method, h.vkApiCfg.Exchange.URL,
 		strings.NewReader(urlParams.Encode()))
 	if err != nil {
-		return nil, apperrors.CreatingVKReqError
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, apperrors.VKResponseError
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrVKServer)
+
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	vkApiData, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, apperrors.ReadingVKResponseError
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return vkApiData, apperrors.VKIncorrectResponse
+		var vkErrData models.VKExchangeError
+
+		err = json.Unmarshal(vkApiData, &vkErrData)
+		if err != nil {
+			log.Println(err)
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+			return nil, err
+		}
+
+		log.Println(vkErrData.Error, vkErrData.ErrorDescription)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrVKServer)
+
+		return nil, err
 	}
 
 	return vkApiData, nil
 }
 
-func (h *AuthHandler) getPublicInfo(idToken string) ([]byte, error) {
+func (h *AuthHandler) getPublicInfo(w http.ResponseWriter, idToken string) ([]byte, error) {
 	urlParams := url.Values{}
 
 	urlParams.Set("id_token", idToken)
@@ -56,24 +80,46 @@ func (h *AuthHandler) getPublicInfo(idToken string) ([]byte, error) {
 	req, err := http.NewRequest(h.vkApiCfg.PublicInfo.Method, h.vkApiCfg.PublicInfo.URL,
 		strings.NewReader(urlParams.Encode()))
 	if err != nil {
-		return nil, apperrors.CreatingVKReqError
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, apperrors.VKResponseError
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	vkApiData, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, apperrors.ReadingVKResponseError
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return vkApiData, apperrors.VKIncorrectResponse
+		var vkErrData models.VKInfoError
+
+		err = json.Unmarshal(vkApiData, &vkErrData)
+		if err != nil {
+			log.Println(err)
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+			return nil, err
+		}
+
+		log.Println(vkErrData.Error, vkErrData.ErrorDescription)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrVKServer)
+
+		return nil, err
 	}
 
 	return vkApiData, nil

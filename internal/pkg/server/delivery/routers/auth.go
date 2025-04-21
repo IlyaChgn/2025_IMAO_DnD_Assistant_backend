@@ -5,8 +5,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func ServeAuthRouter(router *mux.Router, authHandler *authdel.AuthHandler) {
+func ServeAuthRouter(router *mux.Router, authHandler *authdel.AuthHandler, loginRequiredMiddleware mux.MiddlewareFunc) {
 	subrouter := router.PathPrefix("/auth").Subrouter()
 
-	subrouter.HandleFunc("/exchange", authHandler.Exchange).Methods("POST")
+	subrouterLoginRequired := subrouter.PathPrefix("").Subrouter()
+	subrouterLoginRequired.Use(loginRequiredMiddleware)
+	subrouterLoginRequired.HandleFunc("/logout", authHandler.Logout).Methods("POST")
+
+	subrouter.HandleFunc("/login", authHandler.Login).Methods("POST")
+	subrouter.HandleFunc("/check", authHandler.CheckAuth).Methods("GET")
 }
