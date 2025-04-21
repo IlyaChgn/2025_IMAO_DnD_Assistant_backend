@@ -98,6 +98,9 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session.Expires = time.Now().AddDate(0, 0, -1)
+	http.SetCookie(w, session)
+
 	responses.SendOkResponse(w, &models.AuthResponse{IsAuth: false})
 }
 
