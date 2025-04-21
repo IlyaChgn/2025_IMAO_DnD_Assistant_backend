@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	authrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/repository"
+	authuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/usecases"
 	"log"
 	"net/http"
 	"os"
@@ -80,22 +82,51 @@ func (srv *Server) Run() error {
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
+	postgresURL := serverrepo.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
+		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
+
+	postgresPool, err := serverrepo.NewPostgresPool(postgresURL)
+	if err != nil {
+		log.Fatal("Something went wrong while creating postgres pool ", err)
+	}
+
+	err = postgresPool.Ping(context.Background())
+	if err != nil {
+		log.Fatal("Cannot ping postgres database ", err)
+	}
+
+	redisClient := serverrepo.NewRedisClient(cfg.Redis.Host, cfg.Redis.Port, cfg.Redis.Password, cfg.Redis.DB)
+
+	err = redisClient.Ping(context.Background()).Err()
+	if err != nil {
+		log.Fatalf("Cannot ping Redis: %v", err)
+	}
+
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
+	authRepository := authrepo.NewAuthStorage(postgresPool)
+	sessionManager := authrepo.NewSessionManager(redisClient)
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
+	authUsecases := authuc.NewAuthUsecases(authRepository, sessionManager)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
 	methodsOk := handlers.AllowedMethods(cfg.Server.Methods)
 
-	router := myrouter.NewRouter(bestiaryUsecases, descriptionUsecases,
-		characterUsecases, encounterUsecases)
+	router := myrouter.NewRouter(
+		cfg,
+		bestiaryUsecases,
+		descriptionUsecases,
+		characterUsecases,
+		encounterUsecases,
+		authUsecases,
+	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
 	serverURL := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)

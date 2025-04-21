@@ -25,9 +25,38 @@ type MongoConfig struct {
 	DBName   string `env:"MONGO_DB"`
 }
 
+type PostgresConfig struct {
+	Username string `env:"POSTGRES_USERNAME"`
+	Password string `env:"POSTGRES_PASSWORD"`
+	Host     string `env:"POSTGRES_HOST"`
+	Port     string `env:"POSTGRES_PORT"`
+	DBName   string `env:"POSTGRES_DB"`
+}
+
+type RedisConfig struct {
+	Password string `env:"REDIS_PASSWORD"`
+	Host     string `env:"REDIS_HOST"`
+	Port     string `env:"REDIS_PORT"`
+	DB       int    `env:"REDIS_DB"`
+}
+
 type ServiceConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
+}
+
+type VKMethodConfig struct {
+	URL    string `yaml:"url"`
+	Method string `yaml:"method"`
+}
+
+type VKApiConfig struct {
+	RedirectURI string         `env:"REDIRECT_URI"`
+	ClientID    string         `env:"CLIENT_ID"`
+	SecretKey   string         `env:"SECRET_KEY"`
+	ServiceKey  string         `env:"SERVICE_KEY"`
+	Exchange    VKMethodConfig `yaml:"exchange"`
+	PublicInfo  VKMethodConfig `yaml:"public_info"`
 }
 
 type ServicesConfig struct {
@@ -37,7 +66,10 @@ type ServicesConfig struct {
 type Config struct {
 	Server   ServerConfig `yaml:"server"`
 	Mongo    MongoConfig
+	Postgres PostgresConfig
+	Redis    RedisConfig
 	Services ServicesConfig `yaml:"services"`
+	VKApi    VKApiConfig    `yaml:"vk_api"`
 }
 
 func ReadConfig(cfgPath string) *Config {
