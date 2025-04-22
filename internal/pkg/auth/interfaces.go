@@ -17,6 +17,8 @@ type AuthUsecases interface {
 		tokens *models.VKTokensData, sessionDuration time.Duration) (*models.User, error)
 	Logout(ctx context.Context, sessionID string) error
 	CheckAuth(ctx context.Context, sessionID string) (*models.User, bool)
+	// GetUserIDBySessionID следует использовать только если точно понятно, что пользователь авторизован и данные корректны
+	GetUserIDBySessionID(ctx context.Context, sessionID string) int
 }
 
 type SessionManager interface {

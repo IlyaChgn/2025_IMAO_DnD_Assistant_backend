@@ -104,7 +104,7 @@ func (srv *Server) Run() error {
 
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
-	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
+	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool)
 	authRepository := authrepo.NewAuthStorage(postgresPool)
 	sessionManager := authrepo.NewSessionManager(redisClient)
 

@@ -5,11 +5,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func ServeEncounteRouter(router *mux.Router, encounterHandler *encounterdel.EncounterHandler) {
+func ServeEncounteRouter(router *mux.Router, encounterHandler *encounterdel.EncounterHandler,
+	loginRequiredMiddleware mux.MiddlewareFunc) {
 	subrouter := router.PathPrefix("/encounter").Subrouter()
+	subrouter.Use(loginRequiredMiddleware)
 
+	subrouter.HandleFunc("", encounterHandler.SaveEncounter).Methods("POST")
 	subrouter.HandleFunc("/list", encounterHandler.GetEncountersList).Methods("POST")
-	subrouter.HandleFunc("/add_encounter", encounterHandler.AddEncounter).Methods("POST")
-	subrouter.HandleFunc("/{id}", encounterHandler.GetEncounterByMongoId).Methods("GET")
-
+	subrouter.HandleFunc("/{id}", encounterHandler.GetEncounterByID).Methods("GET")
+	subrouter.HandleFunc("/{id}", encounterHandler.UpdateEncounter).Methods("POST")
+	subrouter.HandleFunc("/{id}", encounterHandler.RemoveEncounter).Methods("DELETE")
 }
