@@ -13,6 +13,7 @@ const (
 
 	StatusBadRequest   = 400
 	StatusUnauthorized = 401
+	StatusForbidden    = 403
 
 	StatusInternalServerError = 500
 )
@@ -21,6 +22,7 @@ const (
 	ErrInternalServer = "Server error"
 	ErrBadJSON        = "Wrong JSON format"
 	ErrNotAuthorized  = "User not authorized"
+	ErrForbidden      = "User have no access to this content"
 
 	ErrCreatureNotFound = "Creature with same URL not found"
 	ErrSizeOrPosition   = "Size and position cannot be less than zero"
@@ -31,7 +33,7 @@ const (
 	ErrWrongFileSize = "File is too large"
 	ErrWrongFileType = "Invalid file type. Only JSON files are allowed"
 
-	ErrEmptyEncounterName = "Encounter name is empty"
+	ErrWrongEncounterName = "Encounter name must not be empty and more than 60 characters"
 	ErrInvalidID          = "Invalid ID"
 
 	ErrVKServer = "VK server error"

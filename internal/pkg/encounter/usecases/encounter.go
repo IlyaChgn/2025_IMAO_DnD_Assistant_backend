@@ -18,27 +18,50 @@ func NewEncounterUsecases(repo encounterinterfaces.EncounterRepository) encounte
 	}
 }
 
-func (uc *encounterUsecases) GetEncountersList(ctx context.Context, size, start int, order []models.Order,
-	filter models.EncounterFilterParams, search models.SearchParams) ([]*models.EncounterShort, error) {
+func (uc *encounterUsecases) GetEncountersList(ctx context.Context, size, start, userID int,
+	search *models.SearchParams) (*models.EncountersList, error) {
 	if start < 0 || size <= 0 {
 		return nil, apperrors.StartPosSizeError
 	}
 
-	return uc.repo.GetEncountersList(ctx, size, start, order, filter, search)
+	if search.Value == "" {
+		return uc.repo.GetEncountersList(ctx, size, start, userID)
+	} else {
+		return uc.repo.GetEncountersListWithSearch(ctx, size, start, userID, search)
+	}
 }
 
-func (uc *encounterUsecases) AddEncounter(ctx context.Context, encounter models.EncounterRaw) error {
-	if encounter.EncounterName == "" {
+func (uc *encounterUsecases) GetEncounterByID(ctx context.Context, id, userID int) (*models.Encounter, error) {
+	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
+	if !hasPermission {
+		return nil, apperrors.PermissionDeniedError
+	}
+
+	return uc.repo.GetEncounterByID(ctx, id)
+}
+
+func (uc *encounterUsecases) SaveEncounter(ctx context.Context, encounter *models.SaveEncounterReq, userID int) error {
+	if encounter.Name == "" || len(encounter.Name) > 60 {
 		return apperrors.InvalidInputError
 	}
 
-	return uc.repo.AddEncounter(ctx, encounter)
+	return uc.repo.SaveEncounter(ctx, encounter, userID)
 }
 
-func (uc *encounterUsecases) GetEncounterByMongoId(ctx context.Context, id string) (*models.Encounter, error) {
-	if id == "" {
-		return nil, apperrors.InvalidInputError
+func (uc *encounterUsecases) UpdateEncounter(ctx context.Context, data []byte, id, userID int) error {
+	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
+	if !hasPermission {
+		return apperrors.PermissionDeniedError
 	}
 
-	return uc.repo.GetEncounterByMongoId(ctx, id)
+	return uc.repo.UpdateEncounter(ctx, data, id)
+}
+
+func (uc *encounterUsecases) RemoveEncounter(ctx context.Context, id, userID int) error {
+	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
+	if !hasPermission {
+		return apperrors.PermissionDeniedError
+	}
+
+	return uc.repo.RemoveEncounter(ctx, id)
 }

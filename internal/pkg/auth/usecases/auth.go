@@ -75,3 +75,9 @@ func (uc *authUsecases) CheckAuth(ctx context.Context, sessionID string) (*model
 
 	return &data.User, true
 }
+
+func (uc *authUsecases) GetUserIDBySessionID(ctx context.Context, sessionID string) int {
+	data, _ := uc.sessionManager.GetSession(ctx, sessionID)
+
+	return data.User.ID
+}

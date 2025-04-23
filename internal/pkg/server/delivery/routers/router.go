@@ -27,7 +27,7 @@ func NewRouter(cfg *config.Config,
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface)
-	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface)
+	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, authInterface)
 	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface)
@@ -41,7 +41,7 @@ func NewRouter(cfg *config.Config,
 	ServeBestiaryRouter(rootRouter, bestiaryHandler)
 	ServeBattleRouter(rootRouter, descriptionHandler)
 	ServeCharacterRouter(rootRouter, characterHandler)
-	ServeEncounteRouter(rootRouter, encounterHandler)
+	ServeEncounteRouter(rootRouter, encounterHandler, loginRequiredMiddleware)
 	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
 
 	return router
