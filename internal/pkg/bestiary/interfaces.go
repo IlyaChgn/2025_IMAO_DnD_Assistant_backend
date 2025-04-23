@@ -8,8 +8,8 @@ import (
 
 type BestiaryRepository interface {
 	GetCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
-		search models.SearchParams) ([]*models.BestiaryCreature, error)
-	GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error)
+		search models.SearchParams, searchInSecondCollection bool) ([]*models.BestiaryCreature, error)
+	GetCreatureByEngName(ctx context.Context, engName string, searchInSecondCollection bool) (*models.Creature, error)
 	AddGeneratedCreature(ctx context.Context, generatedCreature models.Creature) error
 }
 

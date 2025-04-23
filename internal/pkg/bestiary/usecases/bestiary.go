@@ -29,12 +29,12 @@ func (uc *bestiaryUsecases) GetCreaturesList(ctx context.Context, size, start in
 		return nil, apperrors.StartPosSizeError
 	}
 
-	return uc.repo.GetCreaturesList(ctx, size, start, order, filter, search)
+	return uc.repo.GetCreaturesList(ctx, size, start, order, filter, search, true)
 }
 
 func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error) {
 
-	creature, err := uc.repo.GetCreatureByEngName(ctx, engName)
+	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, true)
 	if err != nil {
 		return nil, err
 	}
