@@ -3,9 +3,10 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -76,4 +77,30 @@ func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Reque
 	}
 
 	responses.SendOkResponse(w, creature)
+}
+
+func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var creatureInput models.CreatureInput
+
+	err := json.NewDecoder(r.Body).Decode(&creatureInput)
+	if err != nil {
+		log.Println("JSON decode error:", err)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+		return
+	}
+
+	err = h.usecases.AddGeneratedCreature(ctx, creatureInput)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.InvalidInputError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrEmptyEncounterName) // NEED TO WRITE APROPRIATE ERROR
+		default:
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+		return
+	}
+
+	responses.SendOkResponse(w, nil)
 }

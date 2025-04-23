@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 )
 
 var defaultBooks = []string{
@@ -123,4 +124,15 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 	}
 
 	return creatures, nil
+}
+
+func (s *bestiaryStorage) AddGeneratedCreature(ctx context.Context, creature models.Creature) error {
+	creaturesCollection := s.db.Collection("generated_creatures")
+
+	_, err := creaturesCollection.InsertOne(ctx, creature)
+	if err != nil {
+		return apperrors.InsertMongoDataErr
+	}
+
+	return nil
 }

@@ -10,4 +10,5 @@ func ServeBestiaryRouter(router *mux.Router, bestiaryHandler *bestiarydel.Bestia
 
 	subrouter.HandleFunc("/list", bestiaryHandler.GetCreaturesList).Methods("POST")
 	subrouter.HandleFunc("/{name}", bestiaryHandler.GetCreatureByName).Methods("GET")
+	subrouter.HandleFunc("/generated_creature", bestiaryHandler.AddGeneratedCreature).Methods("POST")
 }
