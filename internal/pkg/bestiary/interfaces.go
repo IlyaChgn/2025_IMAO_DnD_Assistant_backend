@@ -19,3 +19,7 @@ type BestiaryUsecases interface {
 	GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error)
 	AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput) error
 }
+
+type BestiaryS3Manager interface {
+	UploadImage(base64Data string, objectName string) (string, error)
+}

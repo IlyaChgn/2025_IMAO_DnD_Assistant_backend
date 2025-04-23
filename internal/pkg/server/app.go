@@ -3,12 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
-	authrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/repository"
-	authuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/usecases"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	authrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/repository"
+	authuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/usecases"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -82,6 +83,11 @@ func (srv *Server) Run() error {
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
+	minioURI := serverrepo.NewMinioEndpoint("localhost", cfg.Minio.Port)
+
+	minioClient := serverrepo.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
+		cfg.Minio.SecretKey, false)
+
 	postgresURL := serverrepo.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
 		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
 
@@ -103,12 +109,13 @@ func (srv *Server) Run() error {
 	}
 
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
+	bestiaryS3Manager := bestiaryrepo.NewMinioManager(minioClient, "creature-images")
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(mongoDatabase)
 	authRepository := authrepo.NewAuthStorage(postgresPool)
 	sessionManager := authrepo.NewSessionManager(redisClient)
 
-	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository)
+	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)

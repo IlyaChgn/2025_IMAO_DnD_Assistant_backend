@@ -153,6 +153,7 @@ type Creature struct {
 }
 
 type CreatureInput struct {
-	ID string `json:"_id"`
+	ID          string `json:"_id"`
+	ImageBase64 string `json:"imageBase64"`
 	Creature
 }
