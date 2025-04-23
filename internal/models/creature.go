@@ -37,7 +37,9 @@ type Hits struct {
 }
 
 type Speed struct {
-	Value interface{} `json:"value" bson:"value"`
+	Value      interface{} `json:"value" bson:"value"`
+	Name       string      `json:"name,omitempty" bson:"name,omitempty"`
+	Additional string      `json:"additional,omitempty" bson:"additional,omitempty"`
 }
 
 type Ability struct {
@@ -56,12 +58,13 @@ type Skill struct {
 
 type Senses struct {
 	PassivePerception string  `json:"passivePerception" bson:"passivePerception"`
-	Sense             []Sense `json:"senses" bson:"senses, omitempty"`
+	Sense             []Sense `json:"senses,omitempty" bson:"senses,omitempty"`
 }
 
 type Sense struct {
-	Name  string `json:"name" bson:"name"`
-	Value int    `json:"value" bson:"value"`
+	Name       string `json:"name" bson:"name"`
+	Value      int    `json:"value" bson:"value"`
+	Additional string `json:"additional,omitempty" bson:"additional,omitempty"`
 }
 
 type Action struct {
@@ -124,7 +127,7 @@ type Creature struct {
 	ProficiencyBonus      string             `json:"proficiencyBonus" bson:"proficiencyBonus"`
 	Alignment             string             `json:"alignment" bson:"alignment"`
 	ArmorClass            int                `json:"armorClass" bson:"armorClass"`
-	ArmorText             string             `json:"armorText" bson:"armorText, omitempty"`
+	ArmorText             string             `json:"armorText,omitempty" bson:"armorText,omitempty"`
 	Armors                []Armor            `json:"armors,omitempty" bson:"armors,omitempty"`
 	Hits                  Hits               `json:"hits" bson:"hits"`
 	Speed                 []Speed            `json:"speed" bson:"speed"`
@@ -147,4 +150,10 @@ type Creature struct {
 	Images                []string           `json:"images" bson:"images"`
 	Environment           []string           `json:"environment,omitempty" bson:"environment,omitempty"`
 	LLMParsedAttack       []AttackLLM        `bson:"llm_parsed_attack,omitempty" json:"attacksLLM,omitempty"`
+}
+
+type CreatureInput struct {
+	ID          string `json:"_id"`
+	ImageBase64 string `json:"imageBase64"`
+	Creature
 }

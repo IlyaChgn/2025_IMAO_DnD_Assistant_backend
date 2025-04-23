@@ -40,6 +40,15 @@ type RedisConfig struct {
 	DB       int    `env:"REDIS_DB"`
 }
 
+type MinioConfig struct {
+	EndpointUser     string `env:"MINIO_ROOT_USER"`
+	EndpointPassword string `env:"MINIO_ROOT_PASSWORD"`
+	Port             string `env:"MINIO_API_PORT"`
+
+	AccessKey string `env:"S3_ACCESS_KEY"`
+	SecretKey string `env:"S3_SECRET_KEY"`
+}
+
 type ServiceConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
@@ -68,6 +77,7 @@ type Config struct {
 	Mongo    MongoConfig
 	Postgres PostgresConfig
 	Redis    RedisConfig
+	Minio    MinioConfig
 	Services ServicesConfig `yaml:"services"`
 	VKApi    VKApiConfig    `yaml:"vk_api"`
 }
