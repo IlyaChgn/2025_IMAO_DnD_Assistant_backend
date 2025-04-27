@@ -83,7 +83,7 @@ func (srv *Server) Run() error {
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
-	minioURI := serverrepo.NewMinioEndpoint("localhost", cfg.Minio.Port)
+	minioURI := serverrepo.NewMinioEndpoint(cfg.Minio.Host, cfg.Minio.Port)
 
 	minioClient := serverrepo.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
 		cfg.Minio.SecretKey, false)
