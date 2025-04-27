@@ -9,8 +9,11 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
-func NewMinioEndpoint(host, port string) string {
-	return fmt.Sprintf("%s:%s", host, port)
+func NewMinioEndpoint(host string, port ...string) string {
+	if len(port) > 0 {
+		return fmt.Sprintf("%s:%s", host, port[0])
+	}
+	return host
 }
 
 func ConnectToMinio(ctx context.Context, endpoint, accessKey, secretKey string, useSSL bool) *minio.Client {

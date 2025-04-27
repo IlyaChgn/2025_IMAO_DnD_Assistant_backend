@@ -41,6 +41,7 @@ type RedisConfig struct {
 }
 
 type MinioConfig struct {
+	Host             string `env:"MINIO_HOST"`
 	EndpointUser     string `env:"MINIO_ROOT_USER"`
 	EndpointPassword string `env:"MINIO_ROOT_PASSWORD"`
 	Port             string `env:"MINIO_API_PORT"`
