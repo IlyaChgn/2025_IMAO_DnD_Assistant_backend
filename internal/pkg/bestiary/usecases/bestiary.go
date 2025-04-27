@@ -64,14 +64,23 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context, creatureIn
 
 	generatedCreature.URL = fmt.Sprintf("/bestiary/%s", stringCreatureId)
 
-	var creatureImage = creatureInput.ImageBase64
+	var creatureImageRect = creatureInput.ImageBase64
+	objectNameRect := "generated-creature-images/processed/" + stringCreatureId + ".webp"
 
-	url, err := uc.s3.UploadImage(creatureImage, "generated-creature-images/"+stringCreatureId+".webp")
+	urlRect, err := uc.s3.UploadImage(creatureImageRect, objectNameRect)
 	if err != nil {
 		return err
 	}
 
-	generatedCreature.Images = append(generatedCreature.Images, url, url, url)
+	var creatureImageToken = creatureInput.ImageBase64Circle
+	objectNameToken := "generated-creature-images/tokens/" + stringCreatureId + ".webp"
+
+	urlToken, err := uc.s3.UploadImage(creatureImageToken, objectNameToken)
+	if err != nil {
+		return err
+	}
+
+	generatedCreature.Images = append(generatedCreature.Images, urlToken, urlRect, urlRect)
 
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	// NEED TO WRITE SOME BETTER CHECKS LATER

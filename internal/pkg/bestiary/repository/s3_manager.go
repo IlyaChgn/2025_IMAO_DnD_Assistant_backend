@@ -36,6 +36,7 @@ func (m *minioManager) UploadImage(base64Data string, objectName string) (string
 	}
 
 	reader := bytes.NewReader(data)
+
 	_, err = m.client.PutObject(context.Background(), m.bucketName, objectName, reader, int64(len(data)), minio.PutObjectOptions{
 		ContentType: "image/webp", // TODO: auto detect
 	})

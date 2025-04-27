@@ -3,9 +3,10 @@ package usecases
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
-	"time"
 )
 
 type authUsecases struct {
