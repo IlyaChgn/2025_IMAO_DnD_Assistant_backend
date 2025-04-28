@@ -10,7 +10,7 @@ import (
 )
 
 func NewMongoConnectionURI(user, password, host, port string) string {
-	return fmt.Sprintf("mongodb://%s:%s@%s:%s", user, password, host, port)
+	return fmt.Sprintf("mongodb://%s:%s@%s:%s/?tls=true", user, password, host, port)
 }
 
 func ConnectToMongoDatabase(ctx context.Context, uri string, dnName string) *mongo.Database {

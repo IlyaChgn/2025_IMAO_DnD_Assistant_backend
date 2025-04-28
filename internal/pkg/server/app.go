@@ -83,10 +83,10 @@ func (srv *Server) Run() error {
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 
-	minioURI := serverrepo.NewMinioEndpoint(cfg.Minio.Host, cfg.Minio.Port)
+	minioURI := serverrepo.NewMinioEndpoint(cfg.Minio.Host)
 
 	minioClient := serverrepo.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
-		cfg.Minio.SecretKey, false)
+		cfg.Minio.SecretKey, true)
 
 	postgresURL := serverrepo.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
 		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
