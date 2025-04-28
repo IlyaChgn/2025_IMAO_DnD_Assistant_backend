@@ -16,7 +16,7 @@ func NewEncounterStorage(pool serverrepo.PostgresPool) encounterinterfaces.Encou
 	}
 }
 
-func (s *encounterStorage) CheckPermission(ctx context.Context, id, userID int) bool {
+func (s *encounterStorage) CheckPermission(ctx context.Context, id string, userID int) bool {
 	var hasPermission bool
 
 	line := s.pool.QueryRow(ctx, CheckPermissionQuery, id, userID)

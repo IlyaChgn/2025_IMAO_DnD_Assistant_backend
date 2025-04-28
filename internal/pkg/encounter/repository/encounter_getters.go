@@ -23,7 +23,7 @@ func (s *encounterStorage) GetEncountersList(ctx context.Context,
 	for rows.Next() {
 		var encounter models.EncounterInList
 
-		if err := rows.Scan(&encounter.ID, &encounter.UserID, &encounter.Name); err != nil {
+		if err := rows.Scan(&encounter.ID, &encounter.UserID, &encounter.Name, &encounter.UUID); err != nil {
 			return nil, apperrors.ScanError
 		}
 
@@ -49,7 +49,7 @@ func (s *encounterStorage) GetEncountersListWithSearch(ctx context.Context, size
 	for rows.Next() {
 		var encounter models.EncounterInList
 
-		if err := rows.Scan(&encounter.ID, &encounter.UserID, &encounter.Name); err != nil {
+		if err := rows.Scan(&encounter.ID, &encounter.UserID, &encounter.Name, &encounter.UUID); err != nil {
 			return nil, apperrors.ScanError
 		}
 
@@ -59,11 +59,12 @@ func (s *encounterStorage) GetEncountersListWithSearch(ctx context.Context, size
 	return &list, nil
 }
 
-func (s *encounterStorage) GetEncounterByID(ctx context.Context, id int) (*models.Encounter, error) {
+func (s *encounterStorage) GetEncounterByID(ctx context.Context, id string) (*models.Encounter, error) {
 	line := s.pool.QueryRow(ctx, GetEncounterByIDQuery, id)
 	var encounter models.Encounter
 
-	if err := line.Scan(&encounter.ID, &encounter.UserID, &encounter.Name, &encounter.Data); err != nil {
+	if err := line.Scan(&encounter.ID, &encounter.UserID, &encounter.Name, &encounter.Data,
+		&encounter.UUID); err != nil {
 		return nil, apperrors.ScanError
 	}
 

@@ -6,14 +6,15 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 )
 
-func (s *encounterStorage) SaveEncounter(ctx context.Context, encounter *models.SaveEncounterReq, userID int) error {
+func (s *encounterStorage) SaveEncounter(ctx context.Context, encounter *models.SaveEncounterReq, id string,
+	userID int) error {
 	tx, err := s.pool.Begin(ctx)
 	if err != nil {
 		return apperrors.TxStartError
 	}
 	defer tx.Rollback(ctx)
 
-	_, err = tx.Exec(ctx, SaveEncounterQuery, userID, encounter.Name, encounter.Data)
+	_, err = tx.Exec(ctx, SaveEncounterQuery, userID, encounter.Name, encounter.Data, id)
 	if err != nil {
 		return apperrors.TxError
 	}
@@ -25,7 +26,7 @@ func (s *encounterStorage) SaveEncounter(ctx context.Context, encounter *models.
 	return nil
 }
 
-func (s *encounterStorage) UpdateEncounter(ctx context.Context, data []byte, id int) error {
+func (s *encounterStorage) UpdateEncounter(ctx context.Context, data []byte, id string) error {
 	tx, err := s.pool.Begin(ctx)
 	if err != nil {
 		return apperrors.TxStartError
@@ -44,7 +45,7 @@ func (s *encounterStorage) UpdateEncounter(ctx context.Context, data []byte, id 
 	return nil
 }
 
-func (s *encounterStorage) RemoveEncounter(ctx context.Context, id int) error {
+func (s *encounterStorage) RemoveEncounter(ctx context.Context, id string) error {
 	tx, err := s.pool.Begin(ctx)
 	if err != nil {
 		return apperrors.TxStartError

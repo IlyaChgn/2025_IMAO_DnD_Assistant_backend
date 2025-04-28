@@ -7,12 +7,14 @@ type Encounter struct {
 	UserID int             `json:"userID"`
 	Name   string          `json:"name"`
 	Data   json.RawMessage `json:"data"`
+	UUID   string          `json:"encounterUUID"`
 }
 
 type EncounterInList struct {
 	ID     int    `json:"id"`
 	UserID int    `json:"userID"`
 	Name   string `json:"name"`
+	UUID   string `json:"encounterUUID"`
 }
 
 type EncountersList []*EncounterInList
@@ -26,8 +28,4 @@ type GetEncountersListReq struct {
 	Start  int          `json:"start"`
 	Size   int          `json:"size"`
 	Search SearchParams `json:"search"`
-}
-
-type GetEncounterReq struct {
-	ID int `json:"id"`
 }
