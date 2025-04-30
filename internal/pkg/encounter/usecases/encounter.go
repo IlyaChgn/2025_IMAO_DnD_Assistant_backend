@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"github.com/google/uuid"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -31,7 +32,7 @@ func (uc *encounterUsecases) GetEncountersList(ctx context.Context, size, start,
 	}
 }
 
-func (uc *encounterUsecases) GetEncounterByID(ctx context.Context, id, userID int) (*models.Encounter, error) {
+func (uc *encounterUsecases) GetEncounterByID(ctx context.Context, id string, userID int) (*models.Encounter, error) {
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
 		return nil, apperrors.PermissionDeniedError
@@ -45,10 +46,12 @@ func (uc *encounterUsecases) SaveEncounter(ctx context.Context, encounter *model
 		return apperrors.InvalidInputError
 	}
 
-	return uc.repo.SaveEncounter(ctx, encounter, userID)
+	id := uuid.NewString()
+
+	return uc.repo.SaveEncounter(ctx, encounter, id, userID)
 }
 
-func (uc *encounterUsecases) UpdateEncounter(ctx context.Context, data []byte, id, userID int) error {
+func (uc *encounterUsecases) UpdateEncounter(ctx context.Context, data []byte, id string, userID int) error {
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
 		return apperrors.PermissionDeniedError
@@ -57,7 +60,7 @@ func (uc *encounterUsecases) UpdateEncounter(ctx context.Context, data []byte, i
 	return uc.repo.UpdateEncounter(ctx, data, id)
 }
 
-func (uc *encounterUsecases) RemoveEncounter(ctx context.Context, id, userID int) error {
+func (uc *encounterUsecases) RemoveEncounter(ctx context.Context, id string, userID int) error {
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
 		return apperrors.PermissionDeniedError

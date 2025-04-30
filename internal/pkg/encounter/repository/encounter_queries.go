@@ -5,25 +5,25 @@ const (
 		SELECT EXISTS(
 		    SELECT 1
 			FROM public.encounter_store
-			WHERE id = $1 AND user_id = $2 AND NOT(is_deleted)
+			WHERE uuid = $1 AND user_id = $2 AND NOT(is_deleted)
 		);
 	`
 
 	GetEncounterByIDQuery = `
-		SELECT id, user_id, name, data
+		SELECT user_id, name, data, uuid
 		FROM public.encounter_store
-		WHERE id = $1 AND NOT(is_deleted);
+		WHERE uuid = $1 AND NOT(is_deleted);
 	`
 
 	GetEncountersListQuery = `
-		SELECT id, user_id, name
+		SELECT user_id, name, uuid
 		FROM public.encounter_store
 		WHERE user_id = $1 AND NOT(is_deleted)
 		LIMIT $2 OFFSET $3;
 	`
 
 	GetEncountersListWithSearchQuery = `
-		SELECT id, user_id, name
+		SELECT user_id, name, uuid
 		FROM public.encounter_store
 		WHERE user_id = $1
 			AND NOT is_deleted
@@ -36,20 +36,19 @@ const (
 	`
 
 	SaveEncounterQuery = `
-		INSERT INTO public.encounter_store (user_id, name, data) 
-		VALUES ($1, $2, $3)
-		RETURNING id, user_id, name, data;
+		INSERT INTO public.encounter_store (user_id, name, data, uuid) 
+		VALUES ($1, $2, $3, $4);
 	`
 
 	UpdateEncounterQuery = `
 		UPDATE public.encounter_store
 		SET data = $2
-		WHERE id = $1;
+		WHERE uuid = $1;
 	`
 
 	DeleteEncounterQuery = `
 		UPDATE public.encounter_store
 		SET is_deleted = TRUE
-		WHERE id = $1;
+		WHERE uuid = $1;
 	`
 )

@@ -3,16 +3,16 @@ package models
 import "encoding/json"
 
 type Encounter struct {
-	ID     int             `json:"id"`
 	UserID int             `json:"userID"`
 	Name   string          `json:"name"`
 	Data   json.RawMessage `json:"data"`
+	UUID   string          `json:"id"`
 }
 
 type EncounterInList struct {
-	ID     int    `json:"id"`
 	UserID int    `json:"userID"`
 	Name   string `json:"name"`
+	UUID   string `json:"id"`
 }
 
 type EncountersList []*EncounterInList
@@ -26,8 +26,4 @@ type GetEncountersListReq struct {
 	Start  int          `json:"start"`
 	Size   int          `json:"size"`
 	Search SearchParams `json:"search"`
-}
-
-type GetEncounterReq struct {
-	ID int `json:"id"`
 }

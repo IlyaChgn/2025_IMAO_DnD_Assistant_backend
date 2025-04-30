@@ -12,7 +12,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 type EncounterHandler struct {
@@ -65,15 +64,8 @@ func (h *EncounterHandler) GetEncounterByID(w http.ResponseWriter, r *http.Reque
 
 	vars := mux.Vars(r)
 
-	idStr, ok := vars["id"]
-	if !ok || idStr == "" {
-		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
-
-		return
-	}
-
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id, ok := vars["id"]
+	if !ok || id == "" {
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
 
 		return
@@ -135,15 +127,8 @@ func (h *EncounterHandler) UpdateEncounter(w http.ResponseWriter, r *http.Reques
 	ctx := r.Context()
 	vars := mux.Vars(r)
 
-	idStr, ok := vars["id"]
-	if !ok || idStr == "" {
-		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
-
-		return
-	}
-
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id, ok := vars["id"]
+	if !ok || id == "" {
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
 
 		return
@@ -180,15 +165,8 @@ func (h *EncounterHandler) RemoveEncounter(w http.ResponseWriter, r *http.Reques
 	ctx := r.Context()
 	vars := mux.Vars(r)
 
-	idStr, ok := vars["id"]
-	if !ok || idStr == "" {
-		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
-
-		return
-	}
-
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id, ok := vars["id"]
+	if !ok || id == "" {
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
 
 		return
@@ -197,7 +175,7 @@ func (h *EncounterHandler) RemoveEncounter(w http.ResponseWriter, r *http.Reques
 	session, _ := r.Cookie("session_id")
 	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
 
-	err = h.usecases.RemoveEncounter(ctx, id, userID)
+	err := h.usecases.RemoveEncounter(ctx, id, userID)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.PermissionDeniedError):
