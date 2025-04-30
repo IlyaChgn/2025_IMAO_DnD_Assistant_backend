@@ -10,20 +10,20 @@ const (
 	`
 
 	GetEncounterByIDQuery = `
-		SELECT id, user_id, name, data, uuid
+		SELECT user_id, name, data, uuid
 		FROM public.encounter_store
 		WHERE uuid = $1 AND NOT(is_deleted);
 	`
 
 	GetEncountersListQuery = `
-		SELECT id, user_id, name, uuid
+		SELECT user_id, name, uuid
 		FROM public.encounter_store
 		WHERE user_id = $1 AND NOT(is_deleted)
 		LIMIT $2 OFFSET $3;
 	`
 
 	GetEncountersListWithSearchQuery = `
-		SELECT id, user_id, name, uuid
+		SELECT user_id, name, uuid
 		FROM public.encounter_store
 		WHERE user_id = $1
 			AND NOT is_deleted
