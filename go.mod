@@ -7,10 +7,12 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
+	github.com/gorilla/websocket v1.5.3
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/joho/godotenv v1.5.1
 	github.com/minio/minio-go/v7 v7.0.91
+	github.com/qjebbs/go-jsons v0.0.0-20221222033332-a534c5fc1c4c
 	github.com/redis/go-redis/v9 v9.7.3
 	go.mongodb.org/mongo-driver v1.17.3
 	google.golang.org/grpc v1.71.0

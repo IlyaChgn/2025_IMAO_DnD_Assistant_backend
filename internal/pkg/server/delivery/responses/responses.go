@@ -37,6 +37,9 @@ const (
 	ErrInvalidID          = "Invalid ID"
 
 	ErrVKServer = "VK server error"
+
+	ErrWrongTableID = "Wrong table ID"
+	ErrWSUpgrade    = "Websocket upgrade error"
 )
 
 func newErrResponse(status string) *models.ErrResponse {
