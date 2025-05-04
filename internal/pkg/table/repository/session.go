@@ -110,6 +110,7 @@ func (s *session) GetTableData() *models.TableData {
 
 	data.EncounterName = s.encounterName
 	data.AdminName = s.adminName
+	data.EncounterData = s.encounterData
 
 	return data
 }
