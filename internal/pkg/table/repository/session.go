@@ -97,9 +97,25 @@ func (s *session) RemoveParticipant(userID int) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	if s.participants[userID].Role != Admin {
+		s.playersNum--
+	}
+
 	s.participants[userID].Conn.Close()
 
 	delete(s.participants, userID)
+}
+
+func (s *session) WriteFirstMsg(userID int) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	err := s.participants[userID].Conn.WriteMessage(websocket.TextMessage, s.encounterData)
+	if err != nil {
+		s.participants[userID].Conn.Close()
+
+		delete(s.participants, userID)
+	}
 }
 
 func (s *session) GetTableData() *models.TableData {
@@ -136,4 +152,11 @@ func (s *session) CheckUser(userID int) bool {
 	_, ok := s.participants[userID]
 
 	return ok
+}
+
+func (s *session) hasActiveUsers() bool {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return len(s.participants) > 0
 }

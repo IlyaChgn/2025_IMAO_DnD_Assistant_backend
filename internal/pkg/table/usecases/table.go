@@ -14,23 +14,23 @@ import (
 
 const (
 	sessionStringLen = 32
-	sessionDuration  = 20 * time.Second
+	sessionDuration  = 15 * time.Minute
 )
 
 type tableUsecases struct {
 	tableManager  tableinterfaces.TableManager
 	encounterRepo encounterinterfaces.EncounterRepository
 
-	watcher map[string]*time.Timer
-	mu      sync.RWMutex
+	sessionWatcher map[string]*time.Timer
+	mu             sync.RWMutex
 }
 
 func NewTableUsecases(encounterRepo encounterinterfaces.EncounterRepository,
 	manager tableinterfaces.TableManager) tableinterfaces.TableUsecases {
 	return &tableUsecases{
-		tableManager:  manager,
-		encounterRepo: encounterRepo,
-		watcher:       make(map[string]*time.Timer),
+		tableManager:   manager,
+		encounterRepo:  encounterRepo,
+		sessionWatcher: make(map[string]*time.Timer),
 	}
 }
 
@@ -49,12 +49,11 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 	uc.tableManager.CreateSession(admin, encounterData, sessionID, uc.refreshSession)
 
 	uc.mu.Lock()
-	uc.watcher[sessionID] = time.AfterFunc(sessionDuration, func() {
-		data, _ := uc.tableManager.GetEncounterData(sessionID)
 
-		uc.encounterRepo.UpdateEncounter(context.Background(), data, encounterID)
-		uc.tableManager.RemoveSession(sessionID)
+	uc.sessionWatcher[sessionID] = time.AfterFunc(sessionDuration, func() {
+		uc.stopTimer(sessionID, encounterID)
 	})
+
 	uc.mu.Unlock()
 
 	return sessionID, nil
@@ -72,6 +71,18 @@ func (uc *tableUsecases) refreshSession(sessionID string) {
 	uc.mu.Lock()
 	defer uc.mu.Unlock()
 
-	uc.watcher[sessionID].Stop()
-	uc.watcher[sessionID].Reset(sessionDuration)
+	uc.sessionWatcher[sessionID].Stop()
+	uc.sessionWatcher[sessionID].Reset(sessionDuration)
+}
+
+func (uc *tableUsecases) stopTimer(sessionID, encounterID string) {
+	data, _ := uc.tableManager.GetEncounterData(sessionID)
+
+	uc.mu.Lock()
+	uc.sessionWatcher[sessionID].Stop()
+	delete(uc.sessionWatcher, sessionID)
+	uc.mu.Unlock()
+
+	uc.encounterRepo.UpdateEncounter(context.Background(), data, encounterID)
+	uc.tableManager.RemoveSession(sessionID)
 }

@@ -122,6 +122,7 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 	}
 
 	activeSession.refreshCallback(sessionID)
+	activeSession.WriteFirstMsg(user.ID)
 
 	go func() {
 		defer func() {
@@ -140,4 +141,18 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 			activeSession.broadcast <- msg
 		}
 	}()
+}
+
+func (tm *tableManager) HasActiveUsers(sessionID string) bool {
+	tm.mu.RLock()
+	activeSession, ok := tm.sessions[sessionID]
+	tm.mu.RUnlock()
+
+	if !ok {
+		log.Println(apperrors.TableNotFoundErr)
+
+		return false
+	}
+
+	return activeSession.hasActiveUsers()
 }

@@ -12,6 +12,7 @@ type TableManager interface {
 	GetTableData(sessionID string) (*models.TableData, error)
 	GetEncounterData(sessionID string) ([]byte, error)
 	AddNewConnection(user *models.User, sessionID string, conn *websocket.Conn)
+	HasActiveUsers(sessionID string) bool
 }
 
 type TableUsecases interface {
