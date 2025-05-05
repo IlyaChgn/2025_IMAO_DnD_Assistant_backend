@@ -14,6 +14,8 @@ import (
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
 	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
+	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
+	tabledel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/delivery"
 	"github.com/gorilla/mux"
 )
 
@@ -22,13 +24,15 @@ func NewRouter(cfg *config.Config,
 	descriptionInterface descriptioninterfaces.DescriptionUsecases,
 	characterInterface characterinterfaces.CharacterUsecases,
 	encounterInterface encounterinterfaces.EncounterUsecases,
-	authInterface authinterface.AuthUsecases) *mux.Router {
+	authInterface authinterface.AuthUsecases,
+	tableInterface tableinterfaces.TableUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, authInterface)
 	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
+	tableHandler := tabledel.NewTableHandler(tableInterface, authInterface)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface)
 
@@ -43,6 +47,7 @@ func NewRouter(cfg *config.Config,
 	ServeCharacterRouter(rootRouter, characterHandler)
 	ServeEncounteRouter(rootRouter, encounterHandler, loginRequiredMiddleware)
 	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
+	ServeTableRouter(rootRouter, tableHandler, loginRequiredMiddleware)
 
 	return router
 }

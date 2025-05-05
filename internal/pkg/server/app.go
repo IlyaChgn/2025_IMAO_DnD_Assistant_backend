@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	tablerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/repository"
+	tableuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/usecases"
 	"log"
 	"net/http"
 	"os"
@@ -114,12 +116,14 @@ func (srv *Server) Run() error {
 	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool)
 	authRepository := authrepo.NewAuthStorage(postgresPool)
 	sessionManager := authrepo.NewSessionManager(redisClient)
+	tableManager := tablerepo.NewTableManager()
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 	authUsecases := authuc.NewAuthUsecases(authRepository, sessionManager)
+	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
@@ -133,6 +137,7 @@ func (srv *Server) Run() error {
 		characterUsecases,
 		encounterUsecases,
 		authUsecases,
+		tableUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
