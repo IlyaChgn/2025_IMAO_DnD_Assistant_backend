@@ -66,7 +66,6 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 
 	err := r.ParseMultipartForm(2 << 20)
 	if err != nil {
-		log.Println(err)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileSize)
 
 		return
