@@ -3,6 +3,7 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"log"
 	"net/http"
 
@@ -15,12 +16,15 @@ import (
 )
 
 type CharacterHandler struct {
-	usecases characterinterfaces.CharacterUsecases
+	usecases     characterinterfaces.CharacterUsecases
+	authUsecases authinterface.AuthUsecases
 }
 
-func NewCharacterHandler(usecases characterinterfaces.CharacterUsecases) *CharacterHandler {
+func NewCharacterHandler(usecases characterinterfaces.CharacterUsecases,
+	authUsecases authinterface.AuthUsecases) *CharacterHandler {
 	return &CharacterHandler{
-		usecases: usecases,
+		usecases:     usecases,
+		authUsecases: authUsecases,
 	}
 }
 
@@ -36,7 +40,10 @@ func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	list, err := h.usecases.GetCharactersList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	list, err := h.usecases.GetCharactersList(ctx, reqData.Size, reqData.Start, userID, reqData.Order, reqData.Filter,
 		reqData.Search)
 	if err != nil {
 		switch {
@@ -57,8 +64,9 @@ func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Requ
 func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	err := r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(2 << 20)
 	if err != nil {
+		log.Println(err)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileSize)
 
 		return
@@ -79,7 +87,10 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	err = h.usecases.AddCharacter(ctx, file)
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	err = h.usecases.AddCharacter(ctx, file, userID)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.InvalidInputError):
@@ -108,13 +119,18 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 		return
 	}
 
-	character, err := h.usecases.GetCharacterByMongoId(ctx, id)
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	character, err := h.usecases.GetCharacterByMongoId(ctx, id, userID)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.InvalidInputError):
 			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
 		case errors.Is(err, apperrors.NoDocsErr):
 			responses.SendOkResponse(w, nil)
+		case errors.Is(err, apperrors.PermissionDeniedError):
+			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
 		default:
 			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 		}

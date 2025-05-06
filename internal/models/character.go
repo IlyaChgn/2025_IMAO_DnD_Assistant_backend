@@ -475,6 +475,7 @@ type CharacterRaw struct {
 
 type Character struct {
 	ID             primitive.ObjectID     `bson:"_id" json:"id"`
+	UserID         string                 `bson:"userID" json:"userID"`
 	Tags           []string               `json:"tags" bson:"tags"`
 	DisabledBlocks map[string]interface{} `json:"disabledBlocks" bson:"disabledBlocks"`
 	Spells         struct {

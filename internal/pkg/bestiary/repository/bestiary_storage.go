@@ -34,7 +34,8 @@ func NewBestiaryStorage(db *mongo.Database) bestiaryinterfaces.BestiaryRepositor
 }
 
 func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
-	filter models.FilterParams, search models.SearchParams, searchInSecondCollection bool) ([]*models.BestiaryCreature, error) {
+	filter models.FilterParams, search models.SearchParams,
+	searchInSecondCollection bool) ([]*models.BestiaryCreature, error) {
 
 	filters := buildTypesFilters(filter)
 

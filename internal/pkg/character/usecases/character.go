@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"mime/multipart"
+	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -21,16 +22,16 @@ func NewCharacterUsecases(repo characterinterfaces.CharacterRepository) characte
 	}
 }
 
-func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start int, order []models.Order,
+func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start, userID int, order []models.Order,
 	filter models.CharacterFilterParams, search models.SearchParams) ([]*models.CharacterShort, error) {
 	if start < 0 || size <= 0 {
 		return nil, apperrors.StartPosSizeError
 	}
 
-	return uc.repo.GetCharactersList(ctx, size, start, order, filter, search)
+	return uc.repo.GetCharactersList(ctx, size, start, userID, order, filter, search)
 }
 
-func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.File) error {
+func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.File, userID int) error {
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
 		return apperrors.ReadFileError
@@ -47,13 +48,23 @@ func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.Fi
 		return apperrors.InvalidInputError
 	}
 
-	return uc.repo.AddCharacter(ctx, rawChar)
+	return uc.repo.AddCharacter(ctx, rawChar, userID)
 }
 
-func (uc *characterUsecases) GetCharacterByMongoId(ctx context.Context, id string) (*models.Character, error) {
+func (uc *characterUsecases) GetCharacterByMongoId(ctx context.Context, id string,
+	userID int) (*models.Character, error) {
 	if id == "" {
 		return nil, apperrors.InvalidInputError
 	}
 
-	return uc.repo.GetCharacterByMongoId(ctx, id)
+	character, err := uc.repo.GetCharacterByMongoId(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	if character.UserID != "*" && character.UserID != strconv.Itoa(userID) {
+		return nil, apperrors.PermissionDeniedError
+	}
+
+	return character, nil
 }
