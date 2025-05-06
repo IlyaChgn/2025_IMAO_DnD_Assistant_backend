@@ -27,14 +27,14 @@ func NewCharacterStorage(db *mongo.Database) characterinterfaces.CharacterReposi
 	}
 }
 
-func (s *characterStorage) GetCharactersList(ctx context.Context, size, start, userID int, order []models.Order,
-	filter models.CharacterFilterParams, search models.SearchParams) ([]*models.CharacterShort, error) {
+func (s *characterStorage) GetCharactersList(ctx context.Context, size, start, userID int,
+	search models.SearchParams) ([]*models.CharacterShort, error) {
 
-	filters := buildFilters(filter)
+	filters := bson.D{}
 
 	if search.Value != "" {
 		filters = append(filters,
-			bson.E{Key: "data.name", Value: bson.M{"$regex": search.Value, "$options": "i"}})
+			bson.E{Key: "data.name.value", Value: bson.M{"$regex": search.Value, "$options": "i"}})
 	}
 
 	possibleIds := []string{"*", strconv.Itoa(userID)}
@@ -43,16 +43,6 @@ func (s *characterStorage) GetCharactersList(ctx context.Context, size, start, u
 	findOptions := options.Find()
 	findOptions.SetLimit(int64(size))
 	findOptions.SetSkip(int64(start))
-
-	if len(order) > 0 {
-		sort := bson.D{}
-
-		for _, o := range order {
-			sort = append(sort, bson.E{Key: o.Field, Value: 1}) // 1 для asc, -1 для desc
-		}
-
-		findOptions.SetSort(sort)
-	}
 
 	return s.getCharactersList(ctx, filters, findOptions)
 }

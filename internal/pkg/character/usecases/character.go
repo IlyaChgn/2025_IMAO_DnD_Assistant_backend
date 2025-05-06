@@ -22,13 +22,13 @@ func NewCharacterUsecases(repo characterinterfaces.CharacterRepository) characte
 	}
 }
 
-func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start, userID int, order []models.Order,
-	filter models.CharacterFilterParams, search models.SearchParams) ([]*models.CharacterShort, error) {
+func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start, userID int,
+	search models.SearchParams) ([]*models.CharacterShort, error) {
 	if start < 0 || size <= 0 {
 		return nil, apperrors.StartPosSizeError
 	}
 
-	return uc.repo.GetCharactersList(ctx, size, start, userID, order, filter, search)
+	return uc.repo.GetCharactersList(ctx, size, start, userID, search)
 }
 
 func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.File, userID int) error {

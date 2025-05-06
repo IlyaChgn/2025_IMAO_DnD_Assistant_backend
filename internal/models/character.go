@@ -498,9 +498,7 @@ type CharacterShort struct {
 }
 
 type CharacterReq struct {
-	Start  int                   `json:"start"`
-	Size   int                   `json:"size"`
-	Search SearchParams          `json:"search"`
-	Order  []Order               `json:"order"`
-	Filter CharacterFilterParams `json:"filter"`
+	Start  int          `json:"start"`
+	Size   int          `json:"size"`
+	Search SearchParams `json:"search"`
 }

@@ -43,8 +43,7 @@ func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Requ
 	session, _ := r.Cookie("session_id")
 	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
 
-	list, err := h.usecases.GetCharactersList(ctx, reqData.Size, reqData.Start, userID, reqData.Order, reqData.Filter,
-		reqData.Search)
+	list, err := h.usecases.GetCharactersList(ctx, reqData.Size, reqData.Start, userID, reqData.Search)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
