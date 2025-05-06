@@ -8,15 +8,15 @@ import (
 )
 
 type CharacterRepository interface {
-	GetCharactersList(ctx context.Context, size, start int, order []models.Order, filter models.CharacterFilterParams,
+	GetCharactersList(ctx context.Context, size, start, userID int,
 		search models.SearchParams) ([]*models.CharacterShort, error)
 	GetCharacterByMongoId(ctx context.Context, id string) (*models.Character, error)
-	AddCharacter(ctx context.Context, rawChar models.CharacterRaw) error
+	AddCharacter(ctx context.Context, rawChar models.CharacterRaw, userID int) error
 }
 
 type CharacterUsecases interface {
-	GetCharactersList(ctx context.Context, size, start int, order []models.Order, filter models.CharacterFilterParams,
+	GetCharactersList(ctx context.Context, size, start, userID int,
 		search models.SearchParams) ([]*models.CharacterShort, error)
-	GetCharacterByMongoId(ctx context.Context, id string) (*models.Character, error)
-	AddCharacter(ctx context.Context, file multipart.File) error
+	GetCharacterByMongoId(ctx context.Context, id string, userID int) (*models.Character, error)
+	AddCharacter(ctx context.Context, file multipart.File, userID int) error
 }

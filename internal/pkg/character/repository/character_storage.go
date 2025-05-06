@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -26,29 +27,22 @@ func NewCharacterStorage(db *mongo.Database) characterinterfaces.CharacterReposi
 	}
 }
 
-func (s *characterStorage) GetCharactersList(ctx context.Context, size, start int, order []models.Order,
-	filter models.CharacterFilterParams, search models.SearchParams) ([]*models.CharacterShort, error) {
+func (s *characterStorage) GetCharactersList(ctx context.Context, size, start, userID int,
+	search models.SearchParams) ([]*models.CharacterShort, error) {
 
-	filters := buildFilters(filter)
+	filters := bson.D{}
 
 	if search.Value != "" {
 		filters = append(filters,
-			bson.E{Key: "data.name", Value: bson.M{"$regex": search.Value, "$options": "i"}})
+			bson.E{Key: "data.name.value", Value: bson.M{"$regex": search.Value, "$options": "i"}})
 	}
+
+	possibleIds := []string{"*", strconv.Itoa(userID)}
+	filters = append(filters, bson.E{Key: "userID", Value: bson.M{"$in": possibleIds}})
 
 	findOptions := options.Find()
 	findOptions.SetLimit(int64(size))
 	findOptions.SetSkip(int64(start))
-
-	if len(order) > 0 {
-		sort := bson.D{}
-
-		for _, o := range order {
-			sort = append(sort, bson.E{Key: o.Field, Value: 1}) // 1 для asc, -1 для desc
-		}
-
-		findOptions.SetSort(sort)
-	}
 
 	return s.getCharactersList(ctx, filters, findOptions)
 }
@@ -79,7 +73,7 @@ func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string)
 	return &character, nil
 }
 
-func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.CharacterRaw) error {
+func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.CharacterRaw, userID int) error {
 	creaturesCollection := s.db.Collection("characters")
 
 	cleanedData := utils.RemoveBackslashes(rawChar.Data)
@@ -93,6 +87,7 @@ func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.Char
 
 	character := models.Character{
 		ID:             primitive.NewObjectID(),
+		UserID:         strconv.Itoa(userID),
 		Tags:           rawChar.Tags,
 		DisabledBlocks: rawChar.DisabledBlocks,
 		Spells:         rawChar.Spells,
@@ -131,6 +126,7 @@ func (s *characterStorage) getCharactersList(ctx context.Context, filters bson.D
 			log.Println(err)
 			return nil, apperrors.DecodeMongoDataErr
 		}
+
 		characterShort := models.CharacterShort{
 			ID:             character.ID,
 			CharClass:      character.Data.Info.CharClass,

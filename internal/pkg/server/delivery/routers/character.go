@@ -5,8 +5,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func ServeCharacterRouter(router *mux.Router, characterHandler *characterdel.CharacterHandler) {
+func ServeCharacterRouter(router *mux.Router, characterHandler *characterdel.CharacterHandler,
+	loginRequiredMiddleware mux.MiddlewareFunc) {
 	subrouter := router.PathPrefix("/character").Subrouter()
+	subrouter.Use(loginRequiredMiddleware)
 
 	subrouter.HandleFunc("/list", characterHandler.GetCharactersList).Methods("POST")
 	subrouter.HandleFunc("/add_character", characterHandler.AddCharacter).Methods("POST")

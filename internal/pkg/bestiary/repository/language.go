@@ -1,9 +1,7 @@
 package repository
 
-import "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-
-func detectLanguageField(value string) (string, error) {
-	hasRussian, hasEnglish := false, false
+func detectLanguageField(value string) (string, bool) {
+	var hasRussian, hasEnglish bool
 
 	for _, r := range value {
 		switch {
@@ -14,13 +12,13 @@ func detectLanguageField(value string) (string, error) {
 		}
 
 		if hasRussian && hasEnglish {
-			return "", apperrors.MixedLangsError
+			return "", false
 		}
 	}
 
 	if hasEnglish {
-		return "name.eng", nil
+		return "name.eng", true
 	}
 
-	return "name.rus", nil
+	return "name.rus", true
 }

@@ -475,6 +475,7 @@ type CharacterRaw struct {
 
 type Character struct {
 	ID             primitive.ObjectID     `bson:"_id" json:"id"`
+	UserID         string                 `bson:"userID" json:"userID"`
 	Tags           []string               `json:"tags" bson:"tags"`
 	DisabledBlocks map[string]interface{} `json:"disabledBlocks" bson:"disabledBlocks"`
 	Spells         struct {
@@ -497,9 +498,7 @@ type CharacterShort struct {
 }
 
 type CharacterReq struct {
-	Start  int                   `json:"start"`
-	Size   int                   `json:"size"`
-	Search SearchParams          `json:"search"`
-	Order  []Order               `json:"order"`
-	Filter CharacterFilterParams `json:"filter"`
+	Start  int          `json:"start"`
+	Size   int          `json:"size"`
+	Search SearchParams `json:"search"`
 }

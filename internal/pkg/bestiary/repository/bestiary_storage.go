@@ -34,14 +34,15 @@ func NewBestiaryStorage(db *mongo.Database) bestiaryinterfaces.BestiaryRepositor
 }
 
 func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
-	filter models.FilterParams, search models.SearchParams, searchInSecondCollection bool) ([]*models.BestiaryCreature, error) {
+	filter models.FilterParams, search models.SearchParams,
+	searchInSecondCollection bool) ([]*models.BestiaryCreature, error) {
 
 	filters := buildTypesFilters(filter)
 
 	if search.Value != "" {
-		field, err := detectLanguageField(search.Value)
-		if err != nil {
-			return nil, err
+		field, isCorrect := detectLanguageField(search.Value)
+		if !isCorrect {
+			return nil, nil
 		}
 
 		filters = append(filters, bson.E{Key: field, Value: bson.M{"$regex": search.Value, "$options": "i"}})
