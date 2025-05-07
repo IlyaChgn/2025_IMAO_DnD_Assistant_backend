@@ -11,4 +11,5 @@ var (
 	ParseHitBonusError    = errors.New("error while parsing hit bonus")
 	ParseDiceError        = errors.New("error while parsing dice count")
 	ParseDamageBonusError = errors.New("error while parsing damage bonus")
+	NotFoundError         = errors.New("error job not found")
 )

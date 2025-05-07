@@ -18,13 +18,27 @@ type BestiaryUsecases interface {
 		search models.SearchParams) ([]*models.BestiaryCreature, error)
 	GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error)
 	AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput) error
+	ParseCreatureFromImage(ctx context.Context, image []byte) (*models.Creature, error)
+	GenerateCreatureFromDescription(ctx context.Context, description string) (*models.Creature, error)
 }
 
 type BestiaryS3Manager interface {
 	UploadImage(base64Data string, objectName string) (string, error)
 }
 
-type GeminiService interface {
+type GeminiAPI interface {
+	GenerateFromImage(image []byte) (map[string]interface{}, error)
 	GenerateFromDescription(desc string) (map[string]interface{}, error)
-	GenerateFromImage(imagePath string) (map[string]interface{}, error)
+}
+
+type LLMJobRepository interface {
+	Create(ctx context.Context, job *models.LLMJob) error
+	Get(ctx context.Context, id string) (*models.LLMJob, error)
+	Update(ctx context.Context, job *models.LLMJob) error
+}
+
+type GenerationUsecases interface {
+	SubmitText(ctx context.Context, desc string) (string, error)
+	SubmitImage(ctx context.Context, img []byte) (string, error)
+	GetJob(ctx context.Context, id string) (*models.LLMJob, error)
 }

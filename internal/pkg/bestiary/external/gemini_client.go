@@ -8,24 +8,25 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"os"
-	"path/filepath"
+	"time"
+
+	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 )
 
-type GeminiClient struct {
-	BaseURL string
-	Client  *http.Client
+type geminiClient struct {
+	baseURL string
+	client  *http.Client
 }
 
-func NewGeminiClient(baseURL string) *GeminiClient {
-	return &GeminiClient{
-		BaseURL: baseURL,
-		Client:  &http.Client{},
+func NewGeminiClient(baseURL string) bestiaryinterfaces.GeminiAPI {
+	return &geminiClient{
+		baseURL: baseURL,
+		client:  &http.Client{Timeout: 20 * time.Second},
 	}
 }
 
-func (g *GeminiClient) GenerateFromDescription(desc string) (map[string]interface{}, error) {
-	url := fmt.Sprintf("%s/create_struct_from_desc/", g.BaseURL)
+func (g *geminiClient) GenerateFromDescription(desc string) (map[string]interface{}, error) {
+	url := fmt.Sprintf("%s/create_struct_from_desc/", g.baseURL)
 
 	payload := map[string]string{"desc": desc}
 	body, _ := json.Marshal(payload)
@@ -36,7 +37,7 @@ func (g *GeminiClient) GenerateFromDescription(desc string) (map[string]interfac
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := g.Client.Do(req)
+	resp, err := g.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -45,23 +46,17 @@ func (g *GeminiClient) GenerateFromDescription(desc string) (map[string]interfac
 	return parseJSONResponse(resp)
 }
 
-func (g *GeminiClient) GenerateFromImage(imagePath string) (map[string]interface{}, error) {
-	url := fmt.Sprintf("%s/parse_card_from_img/", g.BaseURL)
-
-	file, err := os.Open(imagePath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
+func (g *geminiClient) GenerateFromImage(image []byte) (map[string]interface{}, error) {
+	url := fmt.Sprintf("%s/parse_card_from_img/", g.baseURL)
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
-	part, err := writer.CreateFormFile("file", filepath.Base(imagePath))
+	part, err := writer.CreateFormFile("file", "creature.jpg")
 	if err != nil {
 		return nil, err
 	}
-	if _, err = io.Copy(part, file); err != nil {
+	if _, err := part.Write(image); err != nil {
 		return nil, err
 	}
 	writer.Close()
@@ -72,7 +67,7 @@ func (g *GeminiClient) GenerateFromImage(imagePath string) (map[string]interface
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	resp, err := g.Client.Do(req)
+	resp, err := g.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
