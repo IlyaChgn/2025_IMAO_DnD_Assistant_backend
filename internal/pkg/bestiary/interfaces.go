@@ -23,3 +23,8 @@ type BestiaryUsecases interface {
 type BestiaryS3Manager interface {
 	UploadImage(base64Data string, objectName string) (string, error)
 }
+
+type GeminiService interface {
+	GenerateFromDescription(desc string) (map[string]interface{}, error)
+	GenerateFromImage(imagePath string) (map[string]interface{}, error)
+}

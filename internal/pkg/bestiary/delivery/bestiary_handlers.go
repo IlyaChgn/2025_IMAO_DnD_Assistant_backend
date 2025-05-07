@@ -104,3 +104,43 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 
 	responses.SendOkResponse(w, nil)
 }
+
+func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(10 << 20) // до 10 МБ
+	if err != nil {
+		log.Println("Ошибка при парсинге формы:", err)
+		responses.SendErrResponse(w, responses.StatusBadRequest, "Invalid form data")
+		return
+	}
+
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		log.Println("Ошибка получения файла:", err)
+		responses.SendErrResponse(w, responses.StatusBadRequest, "Image not provided")
+		return
+	}
+	defer file.Close()
+
+	log.Printf("Загружено изображение: %s (%d байт)\n", handler.Filename, handler.Size)
+
+	// Здесь можно будет сохранить файл, пока просто заглушка
+
+	responses.SendOkResponse(w, map[string]string{"status": "image received"})
+}
+
+func (h *BestiaryHandler) SubmitCreatureGenerationPrompt(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Description string `json:"description"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		log.Println("Ошибка декодирования JSON:", err)
+		responses.SendErrResponse(w, responses.StatusBadRequest, "Invalid JSON")
+		return
+	}
+
+	log.Println("Получено описание существа:", input.Description)
+
+	responses.SendOkResponse(w, map[string]string{"status": "description received"})
+}
