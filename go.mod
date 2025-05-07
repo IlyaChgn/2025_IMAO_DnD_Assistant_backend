@@ -3,6 +3,7 @@ module github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend
 go 1.23.4
 
 require (
+	github.com/RaveNoX/go-jsonmerge v1.0.0
 	github.com/golang-migrate/migrate/v4 v4.18.2
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/handlers v1.5.2
@@ -12,7 +13,6 @@ require (
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/joho/godotenv v1.5.1
 	github.com/minio/minio-go/v7 v7.0.91
-	github.com/qjebbs/go-jsons v0.0.0-20221222033332-a534c5fc1c4c
 	github.com/redis/go-redis/v9 v9.7.3
 	go.mongodb.org/mongo-driver v1.17.3
 	google.golang.org/grpc v1.71.0
