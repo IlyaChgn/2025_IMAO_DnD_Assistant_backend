@@ -21,3 +21,10 @@ All migrations have been applied
 2. Откатиться к предыдущей миграции с помощью команды `go run cmd/app/main.go -migrate <Номер предыдущей версии>`. Например, если поломалась миграция под номером 3, нужно будет откатиться ко второй.
 3. Исправить ошибки синтаксиса в новой миграции. 
 4. Применить миграцию.
+
+## Для любителей PGAdmin
+
+``` bash
+docker-compose -f docker compose.yml -f docker-compose.pgadmin.yml up -d
+
+```
