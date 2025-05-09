@@ -3,7 +3,6 @@ module github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend
 go 1.23.4
 
 require (
-	github.com/RaveNoX/go-jsonmerge v1.0.0
 	github.com/golang-migrate/migrate/v4 v4.18.2
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/handlers v1.5.2

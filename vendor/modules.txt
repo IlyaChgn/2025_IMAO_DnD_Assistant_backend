@@ -2,9 +2,6 @@
 ## explicit; go 1.16
 github.com/BurntSushi/toml
 github.com/BurntSushi/toml/internal
-# github.com/RaveNoX/go-jsonmerge v1.0.0
-## explicit; go 1.12
-github.com/RaveNoX/go-jsonmerge
 # github.com/cespare/xxhash/v2 v2.3.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
