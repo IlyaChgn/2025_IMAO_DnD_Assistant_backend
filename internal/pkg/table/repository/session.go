@@ -3,8 +3,9 @@ package repository
 import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	"github.com/RaveNoX/go-jsonmerge"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils/merger"
 	"github.com/gorilla/websocket"
+	"log"
 	"sync"
 )
 
@@ -44,8 +45,14 @@ func (s *session) run() {
 		case msg := <-s.broadcast:
 			s.mu.Lock()
 
-			rawData, _ := jsonmerge.Merge(s.encounterData, msg)
-			s.encounterData = rawData.([]byte)
+			var err error
+
+			s.encounterData, err = merger.Merge(s.encounterData, msg)
+			if err != nil {
+				log.Println("merge error:", err)
+
+				return
+			}
 
 			for id, p := range s.participants {
 				err := p.Conn.WriteMessage(websocket.TextMessage, s.encounterData)
