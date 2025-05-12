@@ -52,13 +52,15 @@ func (h *TableHandler) CreateSession(w http.ResponseWriter, r *http.Request) {
 	id, err := h.usecases.CreateSession(ctx, user, reqData.EncounterID)
 	if err != nil {
 		switch {
-		case errors.Is(err, apperrors.PermissionDeniedError):
-			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
+		case errors.Is(err, apperrors.PermissionDeniedError) || errors.Is(err, apperrors.ScanError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
 		default:
 			log.Println(err)
 
 			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 		}
+
+		return
 	}
 
 	responses.SendOkResponse(w, models.CreateTableResponse{SessionID: id})

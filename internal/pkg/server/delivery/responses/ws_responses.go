@@ -26,6 +26,13 @@ func newWsErrResponse(err string) *models.WSErrResponse {
 	}
 }
 
+func newWSOkResponse(msgType models.WSMsgType, msgContent any) *models.WSResponse {
+	return &models.WSResponse{
+		Type: msgType,
+		Data: msgContent,
+	}
+}
+
 func SendWSErrResponse(conn *websocket.Conn, code int, message string) {
 	msg := newWsErrResponse(message)
 
@@ -38,4 +45,17 @@ func SendWSErrResponse(conn *websocket.Conn, code int, message string) {
 
 	conn.WriteMessage(websocket.TextMessage, serverResponse)
 	conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(code, message))
+}
+
+func SendWSOkResponse(conn *websocket.Conn, msgType models.WSMsgType, msgContent any) error {
+	msg := newWSOkResponse(msgType, msgContent)
+
+	serverResponse, err := json.Marshal(msg)
+	if err != nil {
+		log.Println("Something went wrong while marshalling JSON", err)
+
+		return nil
+	}
+
+	return conn.WriteMessage(websocket.TextMessage, serverResponse)
 }
