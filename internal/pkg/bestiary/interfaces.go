@@ -42,3 +42,7 @@ type GenerationUsecases interface {
 	SubmitImage(ctx context.Context, img []byte) (string, error)
 	GetJob(ctx context.Context, id string) (*models.LLMJob, error)
 }
+
+type GeneratedCreatureProcessorUsecases interface {
+	ValidateAndProcessGeneratedCreature(*models.Creature) (*models.Creature, error)
+}

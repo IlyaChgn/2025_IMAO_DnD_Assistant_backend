@@ -124,7 +124,8 @@ func (srv *Server) Run() error {
 	tableManager := tablerepo.NewTableManager()
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
-	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient)
+	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor()
+	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)

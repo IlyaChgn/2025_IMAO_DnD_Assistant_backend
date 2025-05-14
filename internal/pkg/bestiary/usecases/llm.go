@@ -10,12 +10,15 @@ import (
 )
 
 type LLMUsecase struct {
-	storage   bestiaryinterface.LLMJobRepository
-	geminiAPI bestiaryinterface.GeminiAPI
+	storage                    bestiaryinterface.LLMJobRepository
+	geminiAPI                  bestiaryinterface.GeminiAPI
+	generatedCreatureProcessor bestiaryinterface.GeneratedCreatureProcessorUsecases
 }
 
-func NewLLMUsecase(store bestiaryinterface.LLMJobRepository, cli bestiaryinterface.GeminiAPI) *LLMUsecase {
-	return &LLMUsecase{storage: store, geminiAPI: cli}
+func NewLLMUsecase(storage bestiaryinterface.LLMJobRepository,
+	geminiAPI bestiaryinterface.GeminiAPI,
+	generatedCreatureProcessor bestiaryinterface.GeneratedCreatureProcessorUsecases) *LLMUsecase {
+	return &LLMUsecase{storage: storage, geminiAPI: geminiAPI, generatedCreatureProcessor: generatedCreatureProcessor}
 }
 
 func (uc *LLMUsecase) SubmitText(ctx context.Context, desc string) (string, error) {
@@ -56,14 +59,15 @@ func (uc *LLMUsecase) process(ctx context.Context, id string) {
 	if err != nil {
 		return
 	}
+
 	job.Status = "processing"
-	uc.storage.Update(ctx, job)
+	if err := uc.storage.Update(ctx, job); err != nil {
+		return
+	}
 
-	var (
-		raw map[string]interface{}
-		cr  models.Creature
-	)
+	var raw map[string]interface{}
 
+	// Генерация сущности из описания или изображения
 	if job.Description != nil {
 		raw, err = uc.geminiAPI.GenerateFromDescription(*job.Description)
 	} else {
@@ -72,16 +76,34 @@ func (uc *LLMUsecase) process(ctx context.Context, id string) {
 
 	if err != nil {
 		job.Status = "error"
-	} else {
-		// маршалим map → JSON → твой Creature
-		b, _ := json.Marshal(raw)
-		if uerr := json.Unmarshal(b, &cr); uerr != nil {
-			job.Status = "error"
-		} else {
-			job.Status = "done"
-			job.Result = &cr
-		}
+		_ = uc.storage.Update(ctx, job)
+		return
 	}
 
-	uc.storage.Update(ctx, job)
+	// Преобразуем map → JSON → Creature
+	var cr models.Creature
+	b, err := json.Marshal(raw)
+	if err != nil {
+		job.Status = "error"
+		_ = uc.storage.Update(ctx, job)
+		return
+	}
+
+	if err := json.Unmarshal(b, &cr); err != nil {
+		job.Status = "error"
+		_ = uc.storage.Update(ctx, job)
+		return
+	}
+
+	// Обработка/валидация через Processor
+	processed, err := uc.generatedCreatureProcessor.ValidateAndProcessGeneratedCreature(&cr)
+	if err != nil {
+		job.Status = "error"
+		_ = uc.storage.Update(ctx, job)
+		return
+	}
+
+	job.Status = "done"
+	job.Result = processed
+	_ = uc.storage.Update(ctx, job)
 }
