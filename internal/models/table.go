@@ -15,3 +15,34 @@ type TableData struct {
 	EncounterName string          `json:"encounterName"`
 	EncounterData json.RawMessage `json:"encounterData"`
 }
+
+type Role string
+
+const (
+	Admin  Role = "admin"
+	Player Role = "player"
+)
+
+type Participant struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Role Role   `json:"role"`
+}
+
+type ParticipantStatus string
+
+const (
+	Connected    ParticipantStatus = "connected"
+	Disconnected ParticipantStatus = "disconnected"
+)
+
+type ParticipantsInfoMsg struct {
+	Status ParticipantStatus `json:"status"`
+	ID     int               `json:"id"`
+
+	Participants []Participant `json:"participants"`
+}
+
+type EncounterData struct {
+	EncounterData json.RawMessage `json:"encounterData"`
+}

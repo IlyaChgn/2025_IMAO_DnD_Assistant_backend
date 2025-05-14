@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -117,6 +118,7 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 			if errors.Is(err, mongo.ErrNoDocuments) {
 				return nil
 			}
+			log.Println(err)
 			return apperrors.FindMongoDataErr
 		}
 		defer cursor.Close(ctx)
