@@ -3,6 +3,7 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	"io"
 	"log"
 	"net/http"
 
@@ -106,14 +107,14 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 }
 
 func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseMultipartForm(10 << 20) // до 10 МБ
+	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		log.Println("Ошибка при парсинге формы:", err)
 		responses.SendErrResponse(w, responses.StatusBadRequest, "Invalid form data")
 		return
 	}
 
-	file, handler, err := r.FormFile("image")
+	file, _, err := r.FormFile("image")
 	if err != nil {
 		log.Println("Ошибка получения файла:", err)
 		responses.SendErrResponse(w, responses.StatusBadRequest, "Image not provided")
@@ -121,11 +122,21 @@ func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r 
 	}
 	defer file.Close()
 
-	log.Printf("Загружено изображение: %s (%d байт)\n", handler.Filename, handler.Size)
+	imageBytes, err := io.ReadAll(file)
+	if err != nil {
+		log.Println("Ошибка чтения файла:", err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, "Failed to read image")
+		return
+	}
 
-	// Здесь можно будет сохранить файл, пока просто заглушка
+	creature, err := h.usecases.ParseCreatureFromImage(r.Context(), imageBytes)
+	if err != nil {
+		log.Println("Ошибка при вызове AI:", err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, "AI error")
+		return
+	}
 
-	responses.SendOkResponse(w, map[string]string{"status": "image received"})
+	responses.SendOkResponse(w, creature)
 }
 
 func (h *BestiaryHandler) SubmitCreatureGenerationPrompt(w http.ResponseWriter, r *http.Request) {
@@ -142,5 +153,12 @@ func (h *BestiaryHandler) SubmitCreatureGenerationPrompt(w http.ResponseWriter, 
 
 	log.Println("Получено описание существа:", input.Description)
 
-	responses.SendOkResponse(w, map[string]string{"status": "description received"})
+	creature, err := h.usecases.GenerateCreatureFromDescription(r.Context(), input.Description)
+	if err != nil {
+		log.Println("Ошибка генерации существа:", err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, "AI generation failed")
+		return
+	}
+
+	responses.SendOkResponse(w, creature)
 }

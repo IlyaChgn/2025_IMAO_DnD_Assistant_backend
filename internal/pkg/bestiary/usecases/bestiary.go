@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -11,15 +12,20 @@ import (
 )
 
 type bestiaryUsecases struct {
-	repo bestiaryinterface.BestiaryRepository
-	s3   bestiaryinterface.BestiaryS3Manager
+	repo      bestiaryinterface.BestiaryRepository
+	s3        bestiaryinterface.BestiaryS3Manager
+	geminiAPI bestiaryinterface.GeminiAPI
 }
 
-func NewBestiaryUsecases(repo bestiaryinterface.BestiaryRepository,
-	s3 bestiaryinterface.BestiaryS3Manager) bestiaryinterface.BestiaryUsecases {
+func NewBestiaryUsecases(
+	repo bestiaryinterface.BestiaryRepository,
+	s3 bestiaryinterface.BestiaryS3Manager,
+	geminiAPI bestiaryinterface.GeminiAPI,
+) bestiaryinterface.BestiaryUsecases {
 	return &bestiaryUsecases{
-		repo: repo,
-		s3:   s3,
+		repo:      repo,
+		s3:        s3,
+		geminiAPI: geminiAPI,
 	}
 }
 
@@ -87,4 +93,43 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context, creatureIn
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	return uc.repo.AddGeneratedCreature(ctx, generatedCreature)
+}
+
+func (uc *bestiaryUsecases) ParseCreatureFromImage(ctx context.Context, image []byte) (*models.Creature, error) {
+	parsedJSON, err := uc.geminiAPI.GenerateFromImage(image)
+	if err != nil {
+		return nil, err
+	}
+
+	parsedBytes, err := json.Marshal(parsedJSON)
+	if err != nil {
+		return nil, err
+	}
+
+	var creature models.Creature
+	if err := json.Unmarshal(parsedBytes, &creature); err != nil {
+		return nil, err
+	}
+
+	return &creature, nil
+}
+
+func (uc *bestiaryUsecases) GenerateCreatureFromDescription(ctx context.Context, description string) (*models.Creature, error) {
+	parsedJSON, err := uc.geminiAPI.GenerateFromDescription(description)
+	if err != nil {
+		return nil, err
+	}
+
+	parsedBytes, err := json.Marshal(parsedJSON)
+	if err != nil {
+		return nil, err
+	}
+
+	var creature models.Creature
+	err = json.Unmarshal(parsedBytes, &creature)
+	if err != nil {
+		return nil, err
+	}
+
+	return &creature, nil
 }

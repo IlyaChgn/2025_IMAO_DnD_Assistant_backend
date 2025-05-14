@@ -3,12 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
-	tablerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/repository"
-	tableuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/usecases"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	tablerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/repository"
+	tableuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/usecases"
 
 	authrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/repository"
 	authuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/usecases"
@@ -20,6 +21,7 @@ import (
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
+	bestiaryext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/external"
 	bestiaryrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/repository"
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
@@ -81,6 +83,8 @@ func (srv *Server) Run() error {
 
 	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
 
+	geminiClient := bestiaryext.NewGeminiClient("http://136.243.118.143:5000")
+
 	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
@@ -112,13 +116,16 @@ func (srv *Server) Run() error {
 
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
 	bestiaryS3Manager := bestiaryrepo.NewMinioManager(minioClient, "creature-images")
+	llmInmemoryStorage := bestiaryrepo.NewInMemoryLLMRepo()
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
 	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool)
 	authRepository := authrepo.NewAuthStorage(postgresPool)
 	sessionManager := authrepo.NewSessionManager(redisClient)
 	tableManager := tablerepo.NewTableManager()
 
-	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager)
+	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
+	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor()
+	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
@@ -138,6 +145,7 @@ func (srv *Server) Run() error {
 		encounterUsecases,
 		authUsecases,
 		tableUsecases,
+		llmUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
