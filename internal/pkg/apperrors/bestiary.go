@@ -8,8 +8,9 @@ var (
 	MixedLangsError        = errors.New("mixed languages")
 	UnknownDirectionError  = errors.New("unknown direction type")
 
-	ParseHitBonusError    = errors.New("error while parsing hit bonus")
-	ParseDiceError        = errors.New("error while parsing dice count")
-	ParseDamageBonusError = errors.New("error while parsing damage bonus")
-	NotFoundError         = errors.New("error job not found")
+	ParseHitBonusError            = errors.New("error while parsing hit bonus")
+	ParseDiceError                = errors.New("error while parsing dice count")
+	ParseDamageBonusError         = errors.New("error while parsing damage bonus")
+	NotFoundError                 = errors.New("error job not found")
+	ReceivedActionProcessingError = errors.New("error while actions processing in external gRPC service")
 )

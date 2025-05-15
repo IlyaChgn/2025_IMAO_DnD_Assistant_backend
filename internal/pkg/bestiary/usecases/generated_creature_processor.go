@@ -1,7 +1,9 @@
 package usecases
 
 import (
+	"context"
 	"errors"
+	"log"
 	"regexp"
 	"strings"
 
@@ -10,11 +12,15 @@ import (
 )
 
 type GeneratedCreatureProcessor struct {
-	// PLACE FOR FUTURE DEPENDENCIES
+	actionProcessor bestiaryinterfaces.ActionProcessorUsecases
 }
 
-func NewGeneratedCreatureProcessor() bestiaryinterfaces.GeneratedCreatureProcessorUsecases {
-	return &GeneratedCreatureProcessor{}
+func NewGeneratedCreatureProcessor(
+	actionProcessor bestiaryinterfaces.ActionProcessorUsecases,
+) bestiaryinterfaces.GeneratedCreatureProcessorUsecases {
+	return &GeneratedCreatureProcessor{
+		actionProcessor: actionProcessor,
+	}
 }
 
 func (processor *GeneratedCreatureProcessor) ValidateAndProcessGeneratedCreature(c *models.Creature) (*models.Creature, error) {
@@ -24,6 +30,15 @@ func (processor *GeneratedCreatureProcessor) ValidateAndProcessGeneratedCreature
 
 	// Создаем копию, чтобы избежать мутаций оригинального объекта
 	updated := *c
+
+	// 🧠 Попробуем получить LLM-атаки
+	attacksLLM, err := processor.actionProcessor.ProcessActions(context.Background(), updated.Actions)
+	if err != nil {
+		log.Printf("[GeneratedCreatureProcessor] failed to parse LLM actions: %v", err)
+		// Ошибка — пропускаем
+	} else {
+		updated.LLMParsedAttack = attacksLLM
+	}
 
 	// Обработка действий
 	for i, action := range updated.Actions {
