@@ -46,3 +46,7 @@ type GenerationUsecases interface {
 type GeneratedCreatureProcessorUsecases interface {
 	ValidateAndProcessGeneratedCreature(*models.Creature) (*models.Creature, error)
 }
+
+type ActionProcessorUsecases interface {
+	ProcessActions(ctx context.Context, actions []models.Action) ([]models.AttackLLM, error)
+}

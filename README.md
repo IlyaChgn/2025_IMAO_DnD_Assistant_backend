@@ -28,3 +28,10 @@ All migrations have been applied
 docker-compose -f docker compose.yml -f docker-compose.pgadmin.yml up -d
 
 ```
+
+## Для запуска minio и mongodb
+
+``` bash
+docker-compose -f docker compose.yml -f docker-compose.mongo_and_minio.yml up -d
+
+```

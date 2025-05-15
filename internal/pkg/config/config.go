@@ -70,7 +70,8 @@ type VKApiConfig struct {
 }
 
 type ServicesConfig struct {
-	Description ServerConfig `yaml:"description"`
+	Description     ServerConfig `yaml:"description"`
+	ActionProcessor ServerConfig `yaml:"action_processor"`
 }
 
 type Config struct {

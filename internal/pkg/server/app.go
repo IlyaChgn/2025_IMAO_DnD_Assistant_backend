@@ -21,6 +21,7 @@ import (
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
+	bestiaryproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery/protobuf"
 	bestiaryext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/external"
 	bestiaryrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/repository"
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
@@ -83,6 +84,21 @@ func (srv *Server) Run() error {
 
 	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
 
+	actionAddr := fmt.Sprintf("%s:%s", cfg.Services.ActionProcessor.Host, cfg.Services.ActionProcessor.Port)
+
+	grpcConnActionProcessor, err := grpc.Dial(
+		actionAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+
+	if err != nil {
+		log.Fatalf("Error occurred while starting grpc connection to ActionProcessorService: %v", err)
+	}
+
+	defer grpcConnActionProcessor.Close()
+
+	actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
+
 	geminiClient := bestiaryext.NewGeminiClient("http://136.243.118.143:5000")
 
 	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
@@ -124,7 +140,8 @@ func (srv *Server) Run() error {
 	tableManager := tablerepo.NewTableManager()
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
-	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor()
+	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorClient)
+	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor(actionProcessorUsecase)
 	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
