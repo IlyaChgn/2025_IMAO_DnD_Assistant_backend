@@ -70,18 +70,19 @@ type VKApiConfig struct {
 }
 
 type ServicesConfig struct {
-	Description     ServerConfig `yaml:"description"`
-	ActionProcessor ServerConfig `yaml:"action_processor"`
+	Description     ServiceConfig `yaml:"description"`
+	ActionProcessor ServiceConfig `yaml:"action_processor"`
 }
 
 type Config struct {
-	Server   ServerConfig `yaml:"server"`
-	Mongo    MongoConfig
-	Postgres PostgresConfig
-	Redis    RedisConfig
-	Minio    MinioConfig
-	Services ServicesConfig `yaml:"services"`
-	VKApi    VKApiConfig    `yaml:"vk_api"`
+	Server       ServerConfig `yaml:"server"`
+	Mongo        MongoConfig
+	Postgres     PostgresConfig
+	Redis        RedisConfig
+	Minio        MinioConfig
+	Services     ServicesConfig `yaml:"services"`
+	VKApi        VKApiConfig    `yaml:"vk_api"`
+	GeminiClient ServiceConfig  `yaml:"gemini_client"`
 }
 
 func ReadConfig(cfgPath string) *Config {
