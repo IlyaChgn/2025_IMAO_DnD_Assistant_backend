@@ -18,6 +18,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/grpcconnection"
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
@@ -84,22 +85,18 @@ func (srv *Server) Run() error {
 
 	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
 
-	actionAddr := fmt.Sprintf("%s:%s", cfg.Services.ActionProcessor.Host, cfg.Services.ActionProcessor.Port)
-
-	grpcConnActionProcessor, err := grpc.Dial(
-		actionAddr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	grpcConnActionProcessor, err := grpcconnection.CreateGRPCConn(
+		cfg.Services.ActionProcessor.Host,
+		cfg.Services.ActionProcessor.Port,
 	)
-
 	if err != nil {
-		log.Fatalf("Error occurred while starting grpc connection to ActionProcessorService: %v", err)
+		log.Fatalf("Failed to connect to ActionProcessorService: %v", err)
 	}
-
 	defer grpcConnActionProcessor.Close()
 
 	actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
 
-	geminiClient := bestiaryext.NewGeminiClient("http://136.243.118.143:5000")
+	geminiClient := bestiaryext.NewGeminiClient("http://136.243.118.143:5000", cfg.ExternalAPIKeys.ExternalVM1)
 
 	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
 
