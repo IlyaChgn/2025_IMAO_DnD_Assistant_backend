@@ -15,13 +15,15 @@ import (
 
 type geminiClient struct {
 	baseURL string
+	apiKey  string
 	client  *http.Client
 }
 
-func NewGeminiClient(baseURL string) bestiaryinterfaces.GeminiAPI {
+func NewGeminiClient(baseURL, apiKey string) bestiaryinterfaces.GeminiAPI {
 	return &geminiClient{
 		baseURL: baseURL,
-		client:  &http.Client{Timeout: 20 * time.Second},
+		apiKey:  apiKey,
+		client:  &http.Client{Timeout: 30 * time.Second},
 	}
 }
 
@@ -36,6 +38,7 @@ func (g *geminiClient) GenerateFromDescription(desc string) (map[string]interfac
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	g.addHeaders(req)
 
 	resp, err := g.client.Do(req)
 	if err != nil {
@@ -66,6 +69,7 @@ func (g *geminiClient) GenerateFromImage(image []byte) (map[string]interface{}, 
 		return nil, err
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
+	g.addHeaders(req)
 
 	resp, err := g.client.Do(req)
 	if err != nil {
@@ -89,4 +93,8 @@ func parseJSONResponse(resp *http.Response) (map[string]interface{}, error) {
 	}
 
 	return result, nil
+}
+
+func (g *geminiClient) addHeaders(req *http.Request) {
+	req.Header.Set("X-API-Key", g.apiKey)
 }

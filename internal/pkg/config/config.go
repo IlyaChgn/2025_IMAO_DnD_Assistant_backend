@@ -69,19 +69,24 @@ type VKApiConfig struct {
 	PublicInfo  VKMethodConfig `yaml:"public_info"`
 }
 
+type ExternalAPIKeys struct {
+	ExternalVM1 string `env:"EXTERNAL_VM_1_API_KEY"`
+}
+
 type ServicesConfig struct {
 	Description     ServerConfig `yaml:"description"`
 	ActionProcessor ServerConfig `yaml:"action_processor"`
 }
 
 type Config struct {
-	Server   ServerConfig `yaml:"server"`
-	Mongo    MongoConfig
-	Postgres PostgresConfig
-	Redis    RedisConfig
-	Minio    MinioConfig
-	Services ServicesConfig `yaml:"services"`
-	VKApi    VKApiConfig    `yaml:"vk_api"`
+	Server          ServerConfig `yaml:"server"`
+	Mongo           MongoConfig
+	Postgres        PostgresConfig
+	Redis           RedisConfig
+	Minio           MinioConfig
+	Services        ServicesConfig `yaml:"services"`
+	VKApi           VKApiConfig    `yaml:"vk_api"`
+	ExternalAPIKeys ExternalAPIKeys
 }
 
 func ReadConfig(cfgPath string) *Config {
