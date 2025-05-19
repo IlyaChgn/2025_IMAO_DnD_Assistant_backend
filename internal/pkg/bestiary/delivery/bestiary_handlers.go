@@ -3,6 +3,7 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"io"
 	"log"
 	"net/http"
@@ -16,12 +17,15 @@ import (
 )
 
 type BestiaryHandler struct {
-	usecases bestiaryinterface.BestiaryUsecases
+	usecases     bestiaryinterface.BestiaryUsecases
+	authUsecases authinterface.AuthUsecases
 }
 
-func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases) *BestiaryHandler {
+func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases,
+	authUsecases authinterface.AuthUsecases) *BestiaryHandler {
 	return &BestiaryHandler{
-		usecases: usecases,
+		usecases:     usecases,
+		authUsecases: authUsecases,
 	}
 }
 
@@ -37,22 +41,8 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	colName := r.URL.Query().Get("cn")
-
-	var isUserCollection bool
-
-	if colName == "user" {
-		isUserCollection = true
-	} else if colName == "common" || colName == "" {
-		isUserCollection = false
-	} else {
-		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongQueryParams)
-
-		return
-	}
-
 	list, err := h.usecases.GetCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
-		reqData.Search, isUserCollection)
+		reqData.Search)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
@@ -78,25 +68,77 @@ func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Reque
 
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
-	colName := r.URL.Query().Get("cn")
 
-	var isUserCollection bool
-
-	if colName == "user" {
-		isUserCollection = true
-	} else if colName == "common" || colName == "" {
-		isUserCollection = false
-	} else {
-		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongQueryParams)
-
-		return
-	}
-
-	creature, err := h.usecases.GetCreatureByEngName(ctx, creatureName, isUserCollection)
+	creature, err := h.usecases.GetCreatureByEngName(ctx, creatureName)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
 			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
+		default:
+			log.Println(err)
+
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
+		return
+	}
+
+	responses.SendOkResponse(w, creature)
+}
+
+func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var reqData models.BestiaryReq
+
+	err := json.NewDecoder(r.Body).Decode(&reqData)
+	if err != nil {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+
+		return
+	}
+
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	list, err := h.usecases.GetUserCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
+		reqData.Search, userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.NoDocsErr):
+			responses.SendOkResponse(w, nil)
+		case errors.Is(err, apperrors.StartPosSizeError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
+		case errors.Is(err, apperrors.UnknownDirectionError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongDirection)
+		default:
+			log.Println(err)
+
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
+		return
+	}
+
+	responses.SendOkResponse(w, list)
+}
+
+func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	vars := mux.Vars(r)
+	creatureName := vars["name"]
+
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	creature, err := h.usecases.GetUserCreatureByEngName(ctx, creatureName, userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.NoDocsErr):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
+		case errors.Is(err, apperrors.PermissionDeniedError):
+			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
 		default:
 			log.Println(err)
 

@@ -28,7 +28,7 @@ func NewRouter(cfg *config.Config,
 	tableInterface tableinterfaces.TableUsecases,
 	llmInterface bestiaryinterfaces.GenerationUsecases) *mux.Router {
 
-	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface)
+	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, authInterface)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface, authInterface)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, authInterface)
@@ -44,7 +44,7 @@ func NewRouter(cfg *config.Config,
 
 	rootRouter := router.PathPrefix("/api").Subrouter()
 
-	ServeBestiaryRouter(rootRouter, bestiaryHandler)
+	ServeBestiaryRouter(rootRouter, bestiaryHandler, loginRequiredMiddleware)
 	ServeBattleRouter(rootRouter, descriptionHandler)
 	ServeCharacterRouter(rootRouter, characterHandler, loginRequiredMiddleware)
 	ServeEncounteRouter(rootRouter, encounterHandler, loginRequiredMiddleware)

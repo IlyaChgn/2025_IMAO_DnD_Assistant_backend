@@ -2,7 +2,9 @@ package repository
 
 import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func createMovingFilter(moving []string) bson.E {
@@ -133,4 +135,29 @@ func excludeBooks(defaultBooks, requestedBooks []string) []string {
 	}
 
 	return result
+}
+
+func buildFindOptions(start, size int, order []models.Order) (*options.FindOptions, error) {
+	findOptions := options.Find()
+	findOptions.SetLimit(int64(size))
+	findOptions.SetSkip(int64(start))
+
+	sort := bson.D{}
+	for _, o := range order {
+		var direction int
+
+		if o.Direction == "asc" {
+			direction = 1
+		} else if o.Direction == "desc" {
+			direction = -1
+		} else {
+			return nil, apperrors.UnknownDirectionError
+		}
+
+		sort = append(sort, bson.E{Key: o.Field, Value: direction}) // 1 для asc, -1 для desc
+	}
+
+	findOptions.SetSort(sort)
+
+	return findOptions, nil
 }

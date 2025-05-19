@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -35,8 +36,7 @@ func NewBestiaryStorage(db *mongo.Database) bestiaryinterfaces.BestiaryRepositor
 }
 
 func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
-	filter models.FilterParams, search models.SearchParams, isUserCollection bool) ([]*models.BestiaryCreature, error) {
-
+	filter models.FilterParams, search models.SearchParams) ([]*models.BestiaryCreature, error) {
 	filters := buildTypesFilters(filter)
 
 	if search.Value != "" {
@@ -48,28 +48,35 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 		filters = append(filters, bson.E{Key: field, Value: bson.M{"$regex": search.Value, "$options": "i"}})
 	}
 
-	findOptions := options.Find()
-	findOptions.SetLimit(int64(size))
-	findOptions.SetSkip(int64(start))
-
-	sort := bson.D{}
-	for _, o := range order {
-		var direction int
-
-		if o.Direction == "asc" {
-			direction = 1
-		} else if o.Direction == "desc" {
-			direction = -1
-		} else {
-			return nil, apperrors.UnknownDirectionError
-		}
-
-		sort = append(sort, bson.E{Key: o.Field, Value: direction}) // 1 для asc, -1 для desc
+	findOptions, err := buildFindOptions(start, size, order)
+	if err != nil {
+		return nil, err
 	}
 
-	findOptions.SetSort(sort)
+	return s.getCreaturesList(ctx, filters, findOptions, false)
+}
 
-	return s.getCreaturesList(ctx, filters, findOptions, isUserCollection)
+func (s *bestiaryStorage) GetUserCreaturesList(ctx context.Context, size, start int, order []models.Order,
+	filter models.FilterParams, search models.SearchParams, userID int) ([]*models.BestiaryCreature, error) {
+	filters := buildTypesFilters(filter)
+
+	if search.Value != "" {
+		field, isCorrect := detectLanguageField(search.Value)
+		if !isCorrect {
+			return nil, nil
+		}
+
+		filters = append(filters, bson.E{Key: field, Value: bson.M{"$regex": search.Value, "$options": "i"}})
+	}
+
+	filters = append(filters, bson.E{Key: "userID", Value: strconv.Itoa(userID)})
+
+	findOptions, err := buildFindOptions(start, size, order)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.getCreaturesList(ctx, filters, findOptions, true)
 }
 
 func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
