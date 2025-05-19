@@ -150,6 +150,7 @@ type Creature struct {
 	Images                []string           `json:"images" bson:"images"`
 	Environment           []string           `json:"environment,omitempty" bson:"environment,omitempty"`
 	LLMParsedAttack       []AttackLLM        `bson:"llm_parsed_attack,omitempty" json:"attacksLLM,omitempty"`
+	UserID                string             `bson:"userID,omitempty" json:"userID,omitempty"`
 }
 
 type CreatureInput struct {

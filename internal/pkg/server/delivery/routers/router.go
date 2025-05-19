@@ -28,13 +28,13 @@ func NewRouter(cfg *config.Config,
 	tableInterface tableinterfaces.TableUsecases,
 	llmInterface bestiaryinterfaces.GenerationUsecases) *mux.Router {
 
-	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface)
+	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, authInterface)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface, authInterface)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, authInterface)
 	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
 	tableHandler := tabledel.NewTableHandler(tableInterface, authInterface)
-	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
+	llmHandler := bestiarydel.NewLLMHandler(llmInterface, authInterface)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface)
 
@@ -44,13 +44,13 @@ func NewRouter(cfg *config.Config,
 
 	rootRouter := router.PathPrefix("/api").Subrouter()
 
-	ServeBestiaryRouter(rootRouter, bestiaryHandler)
+	ServeBestiaryRouter(rootRouter, bestiaryHandler, loginRequiredMiddleware)
 	ServeBattleRouter(rootRouter, descriptionHandler)
 	ServeCharacterRouter(rootRouter, characterHandler, loginRequiredMiddleware)
 	ServeEncounteRouter(rootRouter, encounterHandler, loginRequiredMiddleware)
 	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
 	ServeTableRouter(rootRouter, tableHandler, loginRequiredMiddleware)
-	ServeLLMRouter(rootRouter, llmHandler)
+	ServeLLMRouter(rootRouter, llmHandler, loginRequiredMiddleware)
 
 	return router
 }
