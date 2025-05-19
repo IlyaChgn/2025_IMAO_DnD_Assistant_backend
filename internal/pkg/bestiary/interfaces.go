@@ -26,7 +26,7 @@ type BestiaryUsecases interface {
 		search models.SearchParams, userID int) ([]*models.BestiaryCreature, error)
 	GetUserCreatureByEngName(ctx context.Context, engName string, userID int) (*models.Creature, error)
 
-	AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput) error
+	AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput, userID int) error
 	ParseCreatureFromImage(ctx context.Context, image []byte) (*models.Creature, error)
 	GenerateCreatureFromDescription(ctx context.Context, description string) (*models.Creature, error)
 }

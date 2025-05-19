@@ -3,7 +3,6 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
-	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"io"
 	"log"
 	"net/http"

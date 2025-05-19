@@ -79,14 +79,14 @@ type ServicesConfig struct {
 }
 
 type Config struct {
-	Server       ServerConfig `yaml:"server"`
-	Mongo        MongoConfig
-	Postgres     PostgresConfig
-	Redis        RedisConfig
-	Minio        MinioConfig
-	Services     ServicesConfig `yaml:"services"`
-	VKApi        VKApiConfig    `yaml:"vk_api"`
-	GeminiClient ServiceConfig  `yaml:"gemini_client"`
+	Server          ServerConfig `yaml:"server"`
+	Mongo           MongoConfig
+	Postgres        PostgresConfig
+	Redis           RedisConfig
+	Minio           MinioConfig
+	Services        ServicesConfig `yaml:"services"`
+	VKApi           VKApiConfig    `yaml:"vk_api"`
+	ExternalAPIKeys ExternalAPIKeys
 }
 
 func ReadConfig(cfgPath string) *Config {
