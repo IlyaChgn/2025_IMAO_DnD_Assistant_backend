@@ -37,8 +37,22 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	colName := r.URL.Query().Get("cn")
+
+	var isUserCollection bool
+
+	if colName == "user" {
+		isUserCollection = true
+	} else if colName == "common" || colName == "" {
+		isUserCollection = false
+	} else {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongQueryParams)
+
+		return
+	}
+
 	list, err := h.usecases.GetCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
-		reqData.Search)
+		reqData.Search, isUserCollection)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
@@ -60,10 +74,25 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 }
 
 func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
+	colName := r.URL.Query().Get("cn")
 
-	creature, err := h.usecases.GetCreatureByEngName(r.Context(), creatureName)
+	var isUserCollection bool
+
+	if colName == "user" {
+		isUserCollection = true
+	} else if colName == "common" || colName == "" {
+		isUserCollection = false
+	} else {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongQueryParams)
+
+		return
+	}
+
+	creature, err := h.usecases.GetCreatureByEngName(ctx, creatureName, isUserCollection)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):

@@ -30,17 +30,17 @@ func NewBestiaryUsecases(
 }
 
 func (uc *bestiaryUsecases) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
-	filter models.FilterParams, search models.SearchParams) ([]*models.BestiaryCreature, error) {
+	filter models.FilterParams, search models.SearchParams, isUserCollection bool) ([]*models.BestiaryCreature, error) {
 	if start < 0 || size <= 0 {
 		return nil, apperrors.StartPosSizeError
 	}
 
-	return uc.repo.GetCreaturesList(ctx, size, start, order, filter, search, true)
+	return uc.repo.GetCreaturesList(ctx, size, start, order, filter, search, isUserCollection)
 }
 
-func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error) {
-
-	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, true)
+func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName string,
+	isUserCollection bool) (*models.Creature, error) {
+	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, isUserCollection)
 	if err != nil {
 		return nil, err
 	}

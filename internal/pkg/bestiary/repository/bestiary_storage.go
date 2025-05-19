@@ -35,8 +35,7 @@ func NewBestiaryStorage(db *mongo.Database) bestiaryinterfaces.BestiaryRepositor
 }
 
 func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
-	filter models.FilterParams, search models.SearchParams,
-	searchInSecondCollection bool) ([]*models.BestiaryCreature, error) {
+	filter models.FilterParams, search models.SearchParams, isUserCollection bool) ([]*models.BestiaryCreature, error) {
 
 	filters := buildTypesFilters(filter)
 
@@ -52,10 +51,6 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 	findOptions := options.Find()
 	findOptions.SetLimit(int64(size))
 	findOptions.SetSkip(int64(start))
-
-	if len(order) <= 0 {
-		return s.getCreaturesList(ctx, filters, findOptions, searchInSecondCollection)
-	}
 
 	sort := bson.D{}
 	for _, o := range order {
@@ -74,73 +69,66 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 
 	findOptions.SetSort(sort)
 
-	return s.getCreaturesList(ctx, filters, findOptions, searchInSecondCollection)
+	return s.getCreaturesList(ctx, filters, findOptions, isUserCollection)
 }
 
 func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
-	searchInSecondCollection bool) (*models.Creature, error) {
-	primaryCollection := s.db.Collection("creatures")
-	secondaryCollection := s.db.Collection("generated_creatures")
+	isUserCollection bool) (*models.Creature, error) {
+	var collection *mongo.Collection
+
+	if isUserCollection {
+		collection = s.db.Collection("generated_creatures")
+	} else {
+		collection = s.db.Collection("creatures")
+	}
 
 	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
 
 	var creature models.Creature
 
-	err := primaryCollection.FindOne(ctx, filter).Decode(&creature)
+	err := collection.FindOne(ctx, filter).Decode(&creature)
 	if err == nil {
 		return &creature, nil
-	}
-
-	if errors.Is(err, mongo.ErrNoDocuments) && searchInSecondCollection {
-		err = secondaryCollection.FindOne(ctx, filter).Decode(&creature)
-		if err == nil {
-			return &creature, nil
-		}
 	}
 
 	if errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, apperrors.NoDocsErr
 	}
+
 	return nil, apperrors.FindMongoDataErr
 }
 
 func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
-	findOptions *options.FindOptions, includeSecondCollection bool) ([]*models.BestiaryCreature, error) {
+	findOptions *options.FindOptions, isUserCollection bool) ([]*models.BestiaryCreature, error) {
+	var collection *mongo.Collection
 
-	creaturesCollection := s.db.Collection("creatures")
-	additionalCollection := s.db.Collection("generated_creatures")
+	if isUserCollection {
+		collection = s.db.Collection("generated_creatures")
+	} else {
+		collection = s.db.Collection("creatures")
+	}
 
 	var allCreatures []*models.BestiaryCreature
 
-	findAndAppend := func(collection *mongo.Collection) error {
-		cursor, err := collection.Find(ctx, filters, findOptions)
-		if err != nil {
-			if errors.Is(err, mongo.ErrNoDocuments) {
-				return nil
-			}
-			log.Println(err)
-			return apperrors.FindMongoDataErr
+	cursor, err := collection.Find(ctx, filters, findOptions)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
 		}
-		defer cursor.Close(ctx)
+		log.Println(err)
 
-		for cursor.Next(ctx) {
-			var creature models.BestiaryCreature
-			if err := cursor.Decode(&creature); err != nil {
-				return apperrors.DecodeMongoDataErr
-			}
-			allCreatures = append(allCreatures, &creature)
-		}
-		return nil
+		return nil, apperrors.FindMongoDataErr
 	}
+	defer cursor.Close(ctx)
 
-	if err := findAndAppend(creaturesCollection); err != nil {
-		return nil, err
-	}
+	for cursor.Next(ctx) {
+		var creature models.BestiaryCreature
 
-	if includeSecondCollection {
-		if err := findAndAppend(additionalCollection); err != nil {
-			return nil, err
+		if err := cursor.Decode(&creature); err != nil {
+			return nil, apperrors.DecodeMongoDataErr
 		}
+
+		allCreatures = append(allCreatures, &creature)
 	}
 
 	return allCreatures, nil
