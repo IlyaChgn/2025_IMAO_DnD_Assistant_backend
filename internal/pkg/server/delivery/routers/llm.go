@@ -5,8 +5,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func ServeLLMRouter(router *mux.Router, llmHandler *bestiarydel.LLMHandler) {
+func ServeLLMRouter(router *mux.Router, llmHandler *bestiarydel.LLMHandler,
+	loginRequiredMiddleware mux.MiddlewareFunc) {
 	subrouter := router.PathPrefix("/llm").Subrouter()
+	subrouter.Use(loginRequiredMiddleware)
 
 	subrouter.HandleFunc("/text", llmHandler.SubmitGenerationPrompt).Methods("POST")
 	subrouter.HandleFunc("/image", llmHandler.SubmitGenerationImage).Methods("POST")

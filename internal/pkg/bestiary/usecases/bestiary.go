@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -48,11 +49,13 @@ func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName st
 	return creature, nil
 }
 
-func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput) error {
+func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
+	creatureInput models.CreatureInput, userID int) error {
 	var generatedCreature = creatureInput.Creature // скопировали всё, кроме ID
 
 	if creatureInput.ID == "current" || creatureInput.ID == "" {
 		generatedCreature.ID = primitive.NewObjectID()
+		generatedCreature.UserID = strconv.Itoa(userID)
 	} else {
 		objectID, err := primitive.ObjectIDFromHex(creatureInput.ID)
 		if err != nil {
