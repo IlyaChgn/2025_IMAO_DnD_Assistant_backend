@@ -12,6 +12,7 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
@@ -163,7 +164,10 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	err = h.usecases.AddGeneratedCreature(ctx, creatureInput)
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	err = h.usecases.AddGeneratedCreature(ctx, creatureInput, userID)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.InvalidInputError):

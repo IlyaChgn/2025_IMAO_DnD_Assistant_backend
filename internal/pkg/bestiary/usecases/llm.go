@@ -60,7 +60,7 @@ func (uc *LLMUsecase) process(ctx context.Context, id string) {
 		return
 	}
 
-	job.Status = "processing"
+	job.Status = "processing_step_1"
 	if err := uc.storage.Update(ctx, job); err != nil {
 		return
 	}
@@ -92,6 +92,11 @@ func (uc *LLMUsecase) process(ctx context.Context, id string) {
 	if err := json.Unmarshal(b, &cr); err != nil {
 		job.Status = "error"
 		_ = uc.storage.Update(ctx, job)
+		return
+	}
+
+	job.Status = "processing_step_2"
+	if err := uc.storage.Update(ctx, job); err != nil {
 		return
 	}
 

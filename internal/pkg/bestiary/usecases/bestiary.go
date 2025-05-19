@@ -71,11 +71,13 @@ func (uc *bestiaryUsecases) GetUserCreatureByEngName(ctx context.Context, engNam
 	return creature, nil
 }
 
-func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput) error {
+func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
+	creatureInput models.CreatureInput, userID int) error {
 	var generatedCreature = creatureInput.Creature // скопировали всё, кроме ID
 
 	if creatureInput.ID == "current" || creatureInput.ID == "" {
 		generatedCreature.ID = primitive.NewObjectID()
+		generatedCreature.UserID = strconv.Itoa(userID)
 	} else {
 		objectID, err := primitive.ObjectIDFromHex(creatureInput.ID)
 		if err != nil {

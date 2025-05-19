@@ -10,16 +10,22 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
 
 type LLMHandler struct {
-	usecases bestiaryinterface.GenerationUsecases
+	usecases     bestiaryinterface.GenerationUsecases
+	authUsecases authinterface.AuthUsecases
 }
 
-func NewLLMHandler(usecases bestiaryinterface.GenerationUsecases) *LLMHandler {
-	return &LLMHandler{usecases: usecases}
+func NewLLMHandler(usecases bestiaryinterface.GenerationUsecases,
+	authUsecases authinterface.AuthUsecases) *LLMHandler {
+	return &LLMHandler{
+		usecases:     usecases,
+		authUsecases: authUsecases,
+	}
 }
 
 // POST /api/llm/text
@@ -52,7 +58,6 @@ func (h *LLMHandler) SubmitGenerationPrompt(w http.ResponseWriter, r *http.Reque
 // ответ: { "job_id": "<uuid>" }
 func (h *LLMHandler) SubmitGenerationImage(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	// поддержим и raw-body, и multipart
 	var imgBytes []byte
 	if r.Header.Get("Content-Type") == "application/octet-stream" {
@@ -96,7 +101,7 @@ func (h *LLMHandler) SubmitGenerationImage(w http.ResponseWriter, r *http.Reques
 }
 
 // GET /api/llm/{id}
-// ответ до готовности: { "status": "processing" }
+// ответ до готовности: { "status": "processing_step_1" } or { "status": "processing_step_2" }
 // когда done:             { "status": "done", "result": <models.Creature> }
 func (h *LLMHandler) GetGenerationStatus(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

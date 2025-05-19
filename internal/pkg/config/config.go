@@ -69,6 +69,10 @@ type VKApiConfig struct {
 	PublicInfo  VKMethodConfig `yaml:"public_info"`
 }
 
+type ExternalAPIKeys struct {
+	ExternalVM1 string `env:"EXTERNAL_VM_1_API_KEY"`
+}
+
 type ServicesConfig struct {
 	Description     ServiceConfig `yaml:"description"`
 	ActionProcessor ServiceConfig `yaml:"action_processor"`

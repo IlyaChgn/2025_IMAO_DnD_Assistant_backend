@@ -34,7 +34,7 @@ func NewRouter(cfg *config.Config,
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, authInterface)
 	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
 	tableHandler := tabledel.NewTableHandler(tableInterface, authInterface)
-	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
+	llmHandler := bestiarydel.NewLLMHandler(llmInterface, authInterface)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface)
 
@@ -50,7 +50,7 @@ func NewRouter(cfg *config.Config,
 	ServeEncounteRouter(rootRouter, encounterHandler, loginRequiredMiddleware)
 	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
 	ServeTableRouter(rootRouter, tableHandler, loginRequiredMiddleware)
-	ServeLLMRouter(rootRouter, llmHandler)
+	ServeLLMRouter(rootRouter, llmHandler, loginRequiredMiddleware)
 
 	return router
 }
