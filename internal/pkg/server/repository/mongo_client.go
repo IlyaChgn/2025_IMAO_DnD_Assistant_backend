@@ -9,8 +9,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func NewMongoConnectionURI(user, password, host, port string) string {
-	return fmt.Sprintf("mongodb://%s:%s@%s:%s/?tls=true", user, password, host, port)
+func NewMongoConnectionURI(user, password, host, port string, isSecure bool) string {
+	if isSecure {
+		return fmt.Sprintf("mongodb://%s:%s@%s:%s/?tls=true", user, password, host, port)
+	} else {
+		return fmt.Sprintf("mongodb://%s:%s@%s:%s", user, password, host, port)
+	}
 }
 
 func ConnectToMongoDatabase(ctx context.Context, uri string, dnName string) *mongo.Database {

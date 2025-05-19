@@ -65,6 +65,12 @@ func createServer(config serverConfig) *http.Server {
 func (srv *Server) Run() error {
 	cfgPath := os.Getenv("CONFIG_PATH")
 
+	var isProduction bool
+
+	if os.Getenv("SERVER_MODE") == "production" {
+		isProduction = true
+	}
+
 	cfg := config.ReadConfig(cfgPath)
 	if cfg == nil {
 		log.Fatal("The config wasn`t opened")
@@ -98,7 +104,8 @@ func (srv *Server) Run() error {
 
 	geminiClient := bestiaryext.NewGeminiClient("http://136.243.118.143:5000", cfg.ExternalAPIKeys.ExternalVM1)
 
-	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host, cfg.Mongo.Port)
+	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
+		cfg.Mongo.Port, !isProduction)
 
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 

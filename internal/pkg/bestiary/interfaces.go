@@ -8,8 +8,12 @@ import (
 
 type BestiaryRepository interface {
 	GetCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
-		search models.SearchParams, searchInSecondCollection bool) ([]*models.BestiaryCreature, error)
-	GetCreatureByEngName(ctx context.Context, engName string, searchInSecondCollection bool) (*models.Creature, error)
+		search models.SearchParams) ([]*models.BestiaryCreature, error)
+	GetCreatureByEngName(ctx context.Context, engName string, isUserCollection bool) (*models.Creature, error)
+
+	GetUserCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
+		search models.SearchParams, userID int) ([]*models.BestiaryCreature, error)
+
 	AddGeneratedCreature(ctx context.Context, generatedCreature models.Creature) error
 }
 
@@ -17,6 +21,11 @@ type BestiaryUsecases interface {
 	GetCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
 		search models.SearchParams) ([]*models.BestiaryCreature, error)
 	GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error)
+
+	GetUserCreaturesList(ctx context.Context, size, start int, order []models.Order, filter models.FilterParams,
+		search models.SearchParams, userID int) ([]*models.BestiaryCreature, error)
+	GetUserCreatureByEngName(ctx context.Context, engName string, userID int) (*models.Creature, error)
+
 	AddGeneratedCreature(ctx context.Context, creatureInput models.CreatureInput, userID int) error
 	ParseCreatureFromImage(ctx context.Context, image []byte) (*models.Creature, error)
 	GenerateCreatureFromDescription(ctx context.Context, description string) (*models.Creature, error)

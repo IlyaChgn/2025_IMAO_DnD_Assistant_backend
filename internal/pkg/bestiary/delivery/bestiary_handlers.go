@@ -64,14 +64,81 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 }
 
 func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
 
-	creature, err := h.usecases.GetCreatureByEngName(r.Context(), creatureName)
+	creature, err := h.usecases.GetCreatureByEngName(ctx, creatureName)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
 			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
+		default:
+			log.Println(err)
+
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
+		return
+	}
+
+	responses.SendOkResponse(w, creature)
+}
+
+func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var reqData models.BestiaryReq
+
+	err := json.NewDecoder(r.Body).Decode(&reqData)
+	if err != nil {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+
+		return
+	}
+
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	list, err := h.usecases.GetUserCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
+		reqData.Search, userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.NoDocsErr):
+			responses.SendOkResponse(w, nil)
+		case errors.Is(err, apperrors.StartPosSizeError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
+		case errors.Is(err, apperrors.UnknownDirectionError):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongDirection)
+		default:
+			log.Println(err)
+
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
+		return
+	}
+
+	responses.SendOkResponse(w, list)
+}
+
+func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	vars := mux.Vars(r)
+	creatureName := vars["name"]
+
+	session, _ := r.Cookie("session_id")
+	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+
+	creature, err := h.usecases.GetUserCreatureByEngName(ctx, creatureName, userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.NoDocsErr):
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
+		case errors.Is(err, apperrors.PermissionDeniedError):
+			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
 		default:
 			log.Println(err)
 

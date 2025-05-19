@@ -74,8 +74,8 @@ type ExternalAPIKeys struct {
 }
 
 type ServicesConfig struct {
-	Description     ServerConfig `yaml:"description"`
-	ActionProcessor ServerConfig `yaml:"action_processor"`
+	Description     ServiceConfig `yaml:"description"`
+	ActionProcessor ServiceConfig `yaml:"action_processor"`
 }
 
 type Config struct {

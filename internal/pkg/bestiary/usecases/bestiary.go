@@ -36,14 +36,36 @@ func (uc *bestiaryUsecases) GetCreaturesList(ctx context.Context, size, start in
 		return nil, apperrors.StartPosSizeError
 	}
 
-	return uc.repo.GetCreaturesList(ctx, size, start, order, filter, search, true)
+	return uc.repo.GetCreaturesList(ctx, size, start, order, filter, search)
 }
 
 func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error) {
+	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, false)
+	if err != nil {
+		return nil, err
+	}
 
+	return creature, nil
+}
+
+func (uc *bestiaryUsecases) GetUserCreaturesList(ctx context.Context, size, start int, order []models.Order,
+	filter models.FilterParams, search models.SearchParams, userID int) ([]*models.BestiaryCreature, error) {
+	if start < 0 || size <= 0 {
+		return nil, apperrors.StartPosSizeError
+	}
+
+	return uc.repo.GetUserCreaturesList(ctx, size, start, order, filter, search, userID)
+}
+
+func (uc *bestiaryUsecases) GetUserCreatureByEngName(ctx context.Context, engName string,
+	userID int) (*models.Creature, error) {
 	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, true)
 	if err != nil {
 		return nil, err
+	}
+
+	if creature.UserID != strconv.Itoa(userID) {
+		return nil, apperrors.PermissionDeniedError
 	}
 
 	return creature, nil

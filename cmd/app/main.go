@@ -5,6 +5,7 @@ import (
 	migrator "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/db"
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 
 	app "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server"
 )
@@ -20,9 +21,11 @@ func main() {
 	if *productionFlag {
 		log.Println("Running in production mode")
 		err = godotenv.Load("prod.env")
+		os.Setenv("SERVER_MODE", "production")
 	} else {
 		log.Println("Running in development mode")
 		err = godotenv.Load(".env")
+		os.Setenv("SERVER_MODE", "development")
 	}
 
 	migrator.ApplyMigrations(*migrationsFlag)

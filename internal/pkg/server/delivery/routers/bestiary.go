@@ -1,8 +1,6 @@
 package router
 
 import (
-	"net/http"
-
 	bestiarydel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
 	"github.com/gorilla/mux"
 )
@@ -14,15 +12,18 @@ func ServeBestiaryRouter(router *mux.Router, bestiaryHandler *bestiarydel.Bestia
 	subrouter.HandleFunc("/list", bestiaryHandler.GetCreaturesList).Methods("POST")
 	subrouter.HandleFunc("/{name}", bestiaryHandler.GetCreatureByName).Methods("GET")
 
-	subrouter.Handle("/generated_creature",
-		loginRequiredMiddleware(http.HandlerFunc(bestiaryHandler.AddGeneratedCreature)),
-	).Methods("POST")
+	subrouterLoginRequired := subrouter.PathPrefix("").Subrouter()
+	subrouterLoginRequired.Use(loginRequiredMiddleware)
 
-	subrouter.Handle("/statblock-image",
-		loginRequiredMiddleware(http.HandlerFunc(bestiaryHandler.UploadCreatureStatblockImage)),
-	).Methods("POST")
+	subrouterLoginRequired.HandleFunc("/generated_creature", bestiaryHandler.AddGeneratedCreature).
+		Methods("POST")
+	subrouterLoginRequired.HandleFunc("/statblock-image", bestiaryHandler.UploadCreatureStatblockImage).
+		Methods("POST")
+	subrouterLoginRequired.HandleFunc("/creature-generation-prompt", bestiaryHandler.SubmitCreatureGenerationPrompt).
+		Methods("POST")
 
-	subrouter.Handle("/creature-generation-prompt",
-		loginRequiredMiddleware(http.HandlerFunc(bestiaryHandler.SubmitCreatureGenerationPrompt)),
-	).Methods("POST")
+	subrouterLoginRequired.HandleFunc("/usr_content/list", bestiaryHandler.GetUserCreaturesList).
+		Methods("POST")
+	subrouterLoginRequired.HandleFunc("/usr_content/{name}", bestiaryHandler.GetUserCreatureByName).
+		Methods("GET")
 }
