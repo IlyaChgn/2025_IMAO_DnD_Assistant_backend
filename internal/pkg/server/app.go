@@ -102,7 +102,8 @@ func (srv *Server) Run() error {
 
 	actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
 
-	geminiClient := bestiaryext.NewGeminiClient("http://136.243.118.143:5000", cfg.ExternalAPIKeys.ExternalVM1)
+	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
+	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1)
 
 	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
