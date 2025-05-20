@@ -27,7 +27,3 @@ vk_api:
   public_info:
     url: https://id.vk.com/oauth2/public_info
     method: POST
-
-gemini_api:
-  host: http://136.243.118.143
-  port: 5000

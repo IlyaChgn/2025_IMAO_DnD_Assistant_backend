@@ -69,7 +69,9 @@ type VKApiConfig struct {
 	PublicInfo  VKMethodConfig `yaml:"public_info"`
 }
 
-type ExternalAPIKeys struct {
+type GeminiConfig struct {
+	Host        string `env:"GEMINI_HOST"`
+	Port        string `env:"GEMINI_PORT"`
 	ExternalVM1 string `env:"EXTERNAL_VM_1_API_KEY"`
 }
 
@@ -79,14 +81,14 @@ type ServicesConfig struct {
 }
 
 type Config struct {
-	Server          ServerConfig `yaml:"server"`
-	Mongo           MongoConfig
-	Postgres        PostgresConfig
-	Redis           RedisConfig
-	Minio           MinioConfig
-	Services        ServicesConfig `yaml:"services"`
-	VKApi           VKApiConfig    `yaml:"vk_api"`
-	ExternalAPIKeys ExternalAPIKeys
+	Server   ServerConfig `yaml:"server"`
+	Mongo    MongoConfig
+	Postgres PostgresConfig
+	Redis    RedisConfig
+	Minio    MinioConfig
+	Services ServicesConfig `yaml:"services"`
+	VKApi    VKApiConfig    `yaml:"vk_api"`
+	Gemini   GeminiConfig
 }
 
 func ReadConfig(cfgPath string) *Config {
