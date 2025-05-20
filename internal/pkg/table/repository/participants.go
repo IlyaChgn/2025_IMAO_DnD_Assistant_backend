@@ -5,6 +5,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/gorilla/websocket"
+	"log"
 )
 
 func (s *session) AddParticipant(userID int, name string, conn *websocket.Conn) error {
@@ -51,6 +52,13 @@ func (s *session) AddAdmin(userID int, name string, conn *websocket.Conn) {
 }
 
 func (s *session) RemoveParticipant(userID int) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("Recovered from panic in deleting participants:", err)
+			log.Println("userID = ", userID)
+		}
+	}()
+
 	s.mu.Lock()
 
 	if s.participants[userID].Participant.Role != models.Admin {
