@@ -98,7 +98,7 @@ func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
 	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
 	var creature models.Creature
 
-	return dbcall.MongoCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
+	return dbcall.DBCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
 		err := collection.FindOne(ctx, filter).Decode(&creature)
 		if err == nil {
 			return &creature, nil
@@ -126,7 +126,7 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 
 	var allCreatures []*models.BestiaryCreature
 
-	cursor, err := dbcall.MongoCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
+	cursor, err := dbcall.DBCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
 		cursor, err := collection.Find(ctx, filters, findOptions)
 		if err != nil {
 			if errors.Is(err, mongo.ErrNoDocuments) {
@@ -161,7 +161,7 @@ func (s *bestiaryStorage) AddGeneratedCreature(ctx context.Context, creature mod
 	creaturesCollection := s.db.Collection("generated_creatures")
 	fnName := utils.GetFunctionName()
 
-	_, err := dbcall.MongoCall[any](fnName, s.metrics, func() (any, error) {
+	_, err := dbcall.DBCall[any](fnName, s.metrics, func() (any, error) {
 		_, err := creaturesCollection.InsertOne(ctx, creature)
 		if err != nil {
 			return nil, apperrors.InsertMongoDataErr
