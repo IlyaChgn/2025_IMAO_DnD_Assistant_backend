@@ -3,16 +3,19 @@ package repository
 import (
 	"context"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
-	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 )
 
 type encounterStorage struct {
-	pool serverrepo.PostgresPool
+	pool    serverrepo.PostgresPool
+	metrics *mymetrics.DBMetrics
 }
 
-func NewEncounterStorage(pool serverrepo.PostgresPool) encounterinterfaces.EncounterRepository {
+func NewEncounterStorage(pool serverrepo.PostgresPool, metrics *mymetrics.DBMetrics) encounterinterfaces.EncounterRepository {
 	return &encounterStorage{
-		pool: pool,
+		pool:    pool,
+		metrics: metrics,
 	}
 }
 

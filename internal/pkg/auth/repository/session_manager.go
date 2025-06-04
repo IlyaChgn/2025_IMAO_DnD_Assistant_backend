@@ -6,18 +6,21 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
 type sessionManager struct {
-	client *redis.Client
+	client  *redis.Client
+	metrics *mymetrics.DBMetrics
 }
 
-func NewSessionManager(client *redis.Client) authinterface.SessionManager {
+func NewSessionManager(client *redis.Client, metrics *mymetrics.DBMetrics) authinterface.SessionManager {
 	return &sessionManager{
-		client: client,
+		client:  client,
+		metrics: metrics,
 	}
 }
 

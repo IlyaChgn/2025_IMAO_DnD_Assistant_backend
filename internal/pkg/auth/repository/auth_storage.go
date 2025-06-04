@@ -5,16 +5,19 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
-	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 )
 
 type authStorage struct {
-	pool serverrepo.PostgresPool
+	pool    serverrepo.PostgresPool
+	metrics *mymetrics.DBMetrics
 }
 
-func NewAuthStorage(pool serverrepo.PostgresPool) authinterface.AuthRepository {
+func NewAuthStorage(pool serverrepo.PostgresPool, metrics *mymetrics.DBMetrics) authinterface.AuthRepository {
 	return &authStorage{
-		pool: pool,
+		pool:    pool,
+		metrics: metrics,
 	}
 }
 

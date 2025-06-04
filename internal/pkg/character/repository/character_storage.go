@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
 	"log"
 	"strconv"
 
@@ -18,12 +20,14 @@ import (
 )
 
 type characterStorage struct {
-	db *mongo.Database
+	db      *mongo.Database
+	metrics *mymetrics.DBMetrics
 }
 
-func NewCharacterStorage(db *mongo.Database) characterinterfaces.CharacterRepository {
+func NewCharacterStorage(db *mongo.Database, metrics *mymetrics.DBMetrics) characterinterfaces.CharacterRepository {
 	return &characterStorage{
-		db: db,
+		db:      db,
+		metrics: metrics,
 	}
 }
 
@@ -48,6 +52,8 @@ func (s *characterStorage) GetCharactersList(ctx context.Context, size, start, u
 }
 
 func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string) (*models.Character, error) {
+	fnName := utils.GetFunctionName()
+
 	collection := s.db.Collection("characters")
 
 	primitiveId, err := primitive.ObjectIDFromHex(id)
@@ -59,21 +65,23 @@ func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string)
 
 	var character models.Character
 
-	err = collection.FindOne(ctx, filter).Decode(&character)
-	if err != nil {
-		log.Println(err)
+	return dbcall.MongoCall[*models.Character](fnName, s.metrics, func() (*models.Character, error) {
+		err = collection.FindOne(ctx, filter).Decode(&character)
+		if err != nil {
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return nil, nil
+			}
 
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, apperrors.NoDocsErr
+			return nil, apperrors.FindMongoDataErr
 		}
 
-		return nil, apperrors.FindMongoDataErr
-	}
-
-	return &character, nil
+		return &character, nil
+	})
 }
 
 func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.CharacterRaw, userID int) error {
+	fnName := utils.GetFunctionName()
+
 	creaturesCollection := s.db.Collection("characters")
 
 	cleanedData := utils.RemoveBackslashes(rawChar.Data)
@@ -96,26 +104,40 @@ func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.Char
 		Version:        rawChar.Version,
 	}
 
-	_, err = creaturesCollection.InsertOne(ctx, character)
-	if err != nil {
-		return apperrors.InsertMongoDataErr
-	}
+	_, err = dbcall.MongoCall[any](fnName, s.metrics, func() (any, error) {
+		_, err = creaturesCollection.InsertOne(ctx, character)
+		if err != nil {
+			return nil, apperrors.InsertMongoDataErr
+		}
 
-	return nil
+		return nil, nil
+	})
+
+	return err
 }
 
 func (s *characterStorage) getCharactersList(ctx context.Context, filters bson.D,
 	findOptions *options.FindOptions) ([]*models.CharacterShort, error) {
+	fnName := utils.GetFunctionName()
+
 	creaturesCollection := s.db.Collection("characters")
 
-	cursor, err := creaturesCollection.Find(ctx, filters, findOptions)
-	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, apperrors.NoDocsErr
+	cursor, err := dbcall.MongoCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
+		cursor, err := creaturesCollection.Find(ctx, filters, findOptions)
+		if err != nil {
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return nil, apperrors.NoDocsErr
+			}
+
+			return nil, apperrors.FindMongoDataErr
 		}
 
-		return nil, apperrors.FindMongoDataErr
+		return cursor, nil
+	})
+	if err != nil {
+		return nil, err
 	}
+
 	defer cursor.Close(ctx)
 
 	var charactersShort []*models.CharacterShort

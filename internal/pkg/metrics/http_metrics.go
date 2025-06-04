@@ -26,8 +26,9 @@ func NewHTTPMetrics() (*HTTPMetrics, error) {
 
 	metrics.duration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name: "code",
-			Help: "Request time",
+			Name:    "code",
+			Help:    "Request time",
+			Buckets: []float64{0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5},
 		},
 		[]string{"path", "code"})
 	if err := prometheus.Register(metrics.duration); err != nil {

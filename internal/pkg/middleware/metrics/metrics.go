@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/metrics"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/gorilla/mux"
 	"net/http"
 	"time"
