@@ -107,8 +107,11 @@ func (srv *Server) Run() error {
 
 	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
-
 	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	//mongoMetrics, err := metrics.NewDBMetrics("mongo")
+	//if err != nil {
+	//	log.Fatal("Something went wrong initializing prometheus mongo metrics, ", err)
+	//}
 
 	minioURI := serverrepo.NewMinioEndpoint(cfg.Minio.Host)
 
