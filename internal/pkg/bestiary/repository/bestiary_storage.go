@@ -161,14 +161,12 @@ func (s *bestiaryStorage) AddGeneratedCreature(ctx context.Context, creature mod
 	creaturesCollection := s.db.Collection("generated_creatures")
 	fnName := utils.GetFunctionName()
 
-	_, err := dbcall.DBCall[any](fnName, s.metrics, func() (any, error) {
+	return dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
 		_, err := creaturesCollection.InsertOne(ctx, creature)
 		if err != nil {
-			return nil, apperrors.InsertMongoDataErr
+			return apperrors.InsertMongoDataErr
 		}
 
-		return nil, nil
+		return nil
 	})
-
-	return err
 }

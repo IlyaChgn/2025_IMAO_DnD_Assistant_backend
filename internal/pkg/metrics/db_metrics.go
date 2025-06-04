@@ -42,7 +42,7 @@ func NewDBMetrics(dbName string) (*DBMetrics, error) {
 		prometheus.HistogramOpts{
 			Name:    fmt.Sprintf("%s_duration", dbName),
 			Help:    fmt.Sprintf("Request time in %s DB", dbName),
-			Buckets: []float64{0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1},
+			Buckets: []float64{0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1},
 		},
 		[]string{"dbName", "function"})
 	if err := prometheus.Register(metrics.duration); err != nil {

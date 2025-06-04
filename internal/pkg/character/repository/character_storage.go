@@ -104,16 +104,14 @@ func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.Char
 		Version:        rawChar.Version,
 	}
 
-	_, err = dbcall.DBCall[any](fnName, s.metrics, func() (any, error) {
+	return dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
 		_, err = creaturesCollection.InsertOne(ctx, character)
 		if err != nil {
-			return nil, apperrors.InsertMongoDataErr
+			return apperrors.InsertMongoDataErr
 		}
 
-		return nil, nil
+		return nil
 	})
-
-	return err
 }
 
 func (s *characterStorage) getCharactersList(ctx context.Context, filters bson.D,
