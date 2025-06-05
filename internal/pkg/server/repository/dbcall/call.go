@@ -7,10 +7,11 @@ import (
 
 func DBCall[T any](fnName string, m *metrics.DBMetrics, dbFn func() (T, error)) (T, error) {
 	m.IncreaseHits(fnName)
+
 	start := time.Now()
+	defer m.IncreaseDuration(fnName, time.Since(start))
 
 	result, err := dbFn()
-	m.IncreaseDuration(fnName, time.Since(start))
 
 	if err != nil {
 		m.IncreaseErrs(fnName)
