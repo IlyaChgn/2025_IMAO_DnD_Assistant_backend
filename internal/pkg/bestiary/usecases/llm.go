@@ -3,6 +3,7 @@ package usecases
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
@@ -76,6 +77,7 @@ func (uc *LLMUsecase) process(ctx context.Context, id string) {
 
 	if err != nil {
 		job.Status = "error"
+		log.Println(err)
 		_ = uc.storage.Update(ctx, job)
 		return
 	}

@@ -8,7 +8,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"time"
 
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 )
@@ -19,11 +18,11 @@ type geminiClient struct {
 	client  *http.Client
 }
 
-func NewGeminiClient(baseURL, apiKey string) bestiaryinterfaces.GeminiAPI {
+func NewGeminiClient(baseURL, apiKey string, client *http.Client) bestiaryinterfaces.GeminiAPI {
 	return &geminiClient{
 		baseURL: baseURL,
 		apiKey:  apiKey,
-		client:  &http.Client{Timeout: 30 * time.Second},
+		client:  client,
 	}
 }
 
