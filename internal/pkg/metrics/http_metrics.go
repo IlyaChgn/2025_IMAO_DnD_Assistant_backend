@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-type HTTPMetrics struct {
+type httpMetrics struct {
 	totalHits *prometheus.CounterVec
 	duration  *prometheus.HistogramVec
 }
 
-func NewHTTPMetrics() (*HTTPMetrics, error) {
-	var metrics HTTPMetrics
+func NewHTTPMetrics() (HTTPMetrics, error) {
+	var metrics httpMetrics
 
 	metrics.totalHits = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
@@ -26,7 +26,7 @@ func NewHTTPMetrics() (*HTTPMetrics, error) {
 
 	metrics.duration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "code",
+			Name:    "request_time",
 			Help:    "Request time",
 			Buckets: []float64{0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5},
 		},
@@ -38,10 +38,10 @@ func NewHTTPMetrics() (*HTTPMetrics, error) {
 	return &metrics, nil
 }
 
-func (m *HTTPMetrics) IncreaseHits(path string, code int) {
+func (m *httpMetrics) IncreaseHits(path string, code int) {
 	m.totalHits.WithLabelValues(path, strconv.Itoa(code)).Inc()
 }
 
-func (m *HTTPMetrics) IncreaseDuration(path string, code int, duration time.Duration) {
+func (m *httpMetrics) IncreaseDuration(path string, code int, duration time.Duration) {
 	m.duration.WithLabelValues(path, strconv.Itoa(code)).Observe(duration.Seconds())
 }

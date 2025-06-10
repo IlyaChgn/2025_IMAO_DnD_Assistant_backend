@@ -16,10 +16,10 @@ import (
 
 type sessionManager struct {
 	client  *redis.Client
-	metrics *mymetrics.DBMetrics
+	metrics mymetrics.DBMetrics
 }
 
-func NewSessionManager(client *redis.Client, metrics *mymetrics.DBMetrics) authinterface.SessionManager {
+func NewSessionManager(client *redis.Client, metrics mymetrics.DBMetrics) authinterface.SessionManager {
 	return &sessionManager{
 		client:  client,
 		metrics: metrics,

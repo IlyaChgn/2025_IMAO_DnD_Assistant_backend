@@ -13,10 +13,10 @@ import (
 
 type authStorage struct {
 	pool    serverrepo.PostgresPool
-	metrics *mymetrics.DBMetrics
+	metrics mymetrics.DBMetrics
 }
 
-func NewAuthStorage(pool serverrepo.PostgresPool, metrics *mymetrics.DBMetrics) authinterface.AuthRepository {
+func NewAuthStorage(pool serverrepo.PostgresPool, metrics mymetrics.DBMetrics) authinterface.AuthRepository {
 	return &authStorage{
 		pool:    pool,
 		metrics: metrics,

@@ -29,10 +29,10 @@ var defaultBooks = []string{
 
 type bestiaryStorage struct {
 	db      *mongo.Database
-	metrics *mymetrics.DBMetrics
+	metrics mymetrics.DBMetrics
 }
 
-func NewBestiaryStorage(db *mongo.Database, metrics *mymetrics.DBMetrics) bestiaryinterfaces.BestiaryRepository {
+func NewBestiaryStorage(db *mongo.Database, metrics mymetrics.DBMetrics) bestiaryinterfaces.BestiaryRepository {
 	return &bestiaryStorage{
 		db:      db,
 		metrics: metrics,

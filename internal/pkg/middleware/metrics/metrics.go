@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func CreateMetricsMiddleware(m *metrics.HTTPMetrics) mux.MiddlewareFunc {
+func CreateMetricsMiddleware(m metrics.HTTPMetrics) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			fw := &fakeResponseWriter{

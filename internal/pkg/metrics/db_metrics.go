@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-type DBMetrics struct {
+type dbMetrics struct {
 	dbName    string
 	totalHits *prometheus.CounterVec
 	totalErrs *prometheus.CounterVec
 	duration  *prometheus.HistogramVec
 }
 
-func NewDBMetrics(dbName string) (*DBMetrics, error) {
-	var metrics DBMetrics
+func NewDBMetrics(dbName string) (DBMetrics, error) {
+	var metrics dbMetrics
 
 	metrics.dbName = dbName
 
@@ -52,14 +52,14 @@ func NewDBMetrics(dbName string) (*DBMetrics, error) {
 	return &metrics, nil
 }
 
-func (m *DBMetrics) IncreaseHits(function string) {
+func (m *dbMetrics) IncreaseHits(function string) {
 	m.totalHits.WithLabelValues(m.dbName, function).Inc()
 }
 
-func (m *DBMetrics) IncreaseErrs(function string) {
+func (m *dbMetrics) IncreaseErrs(function string) {
 	m.totalErrs.WithLabelValues(m.dbName, function).Inc()
 }
 
-func (m *DBMetrics) IncreaseDuration(function string, duration time.Duration) {
+func (m *dbMetrics) IncreaseDuration(function string, duration time.Duration) {
 	m.duration.WithLabelValues(m.dbName, function).Observe(duration.Seconds())
 }

@@ -21,10 +21,10 @@ import (
 
 type characterStorage struct {
 	db      *mongo.Database
-	metrics *mymetrics.DBMetrics
+	metrics mymetrics.DBMetrics
 }
 
-func NewCharacterStorage(db *mongo.Database, metrics *mymetrics.DBMetrics) characterinterfaces.CharacterRepository {
+func NewCharacterStorage(db *mongo.Database, metrics mymetrics.DBMetrics) characterinterfaces.CharacterRepository {
 	return &characterStorage{
 		db:      db,
 		metrics: metrics,

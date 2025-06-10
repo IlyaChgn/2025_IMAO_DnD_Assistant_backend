@@ -11,10 +11,10 @@ import (
 
 type encounterStorage struct {
 	pool    serverrepo.PostgresPool
-	metrics *mymetrics.DBMetrics
+	metrics mymetrics.DBMetrics
 }
 
-func NewEncounterStorage(pool serverrepo.PostgresPool, metrics *mymetrics.DBMetrics) encounterinterfaces.EncounterRepository {
+func NewEncounterStorage(pool serverrepo.PostgresPool, metrics mymetrics.DBMetrics) encounterinterfaces.EncounterRepository {
 	return &encounterStorage{
 		pool:    pool,
 		metrics: metrics,
