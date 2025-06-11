@@ -4,15 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
-	"strconv"
-
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	"strconv"
 )
 
 var defaultBooks = []string{
@@ -26,12 +28,14 @@ var defaultBooks = []string{
 }
 
 type bestiaryStorage struct {
-	db *mongo.Database
+	db      *mongo.Database
+	metrics mymetrics.DBMetrics
 }
 
-func NewBestiaryStorage(db *mongo.Database) bestiaryinterfaces.BestiaryRepository {
+func NewBestiaryStorage(db *mongo.Database, metrics mymetrics.DBMetrics) bestiaryinterfaces.BestiaryRepository {
 	return &bestiaryStorage{
-		db: db,
+		db:      db,
+		metrics: metrics,
 	}
 }
 
@@ -81,6 +85,8 @@ func (s *bestiaryStorage) GetUserCreaturesList(ctx context.Context, size, start 
 
 func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
 	isUserCollection bool) (*models.Creature, error) {
+	fnName := utils.GetFunctionName()
+
 	var collection *mongo.Collection
 
 	if isUserCollection {
@@ -90,23 +96,26 @@ func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
 	}
 
 	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
-
 	var creature models.Creature
 
-	err := collection.FindOne(ctx, filter).Decode(&creature)
-	if err == nil {
-		return &creature, nil
-	}
+	return dbcall.DBCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
+		err := collection.FindOne(ctx, filter).Decode(&creature)
+		if err == nil {
+			return &creature, nil
+		}
 
-	if errors.Is(err, mongo.ErrNoDocuments) {
-		return nil, apperrors.NoDocsErr
-	}
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
 
-	return nil, apperrors.FindMongoDataErr
+		return nil, apperrors.FindMongoDataErr
+	})
 }
 
 func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 	findOptions *options.FindOptions, isUserCollection bool) ([]*models.BestiaryCreature, error) {
+	fnName := utils.GetFunctionName()
+
 	var collection *mongo.Collection
 
 	if isUserCollection {
@@ -117,14 +126,21 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 
 	var allCreatures []*models.BestiaryCreature
 
-	cursor, err := collection.Find(ctx, filters, findOptions)
-	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, nil
-		}
-		log.Println(err)
+	cursor, err := dbcall.DBCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
+		cursor, err := collection.Find(ctx, filters, findOptions)
+		if err != nil {
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return nil, nil
+			}
+			log.Println(err)
 
-		return nil, apperrors.FindMongoDataErr
+			return nil, apperrors.FindMongoDataErr
+		}
+
+		return cursor, nil
+	})
+	if err != nil {
+		return nil, err
 	}
 	defer cursor.Close(ctx)
 
@@ -143,11 +159,14 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 
 func (s *bestiaryStorage) AddGeneratedCreature(ctx context.Context, creature models.Creature) error {
 	creaturesCollection := s.db.Collection("generated_creatures")
+	fnName := utils.GetFunctionName()
 
-	_, err := creaturesCollection.InsertOne(ctx, creature)
-	if err != nil {
-		return apperrors.InsertMongoDataErr
-	}
+	return dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
+		_, err := creaturesCollection.InsertOne(ctx, creature)
+		if err != nil {
+			return apperrors.InsertMongoDataErr
+		}
 
-	return nil
+		return nil
+	})
 }

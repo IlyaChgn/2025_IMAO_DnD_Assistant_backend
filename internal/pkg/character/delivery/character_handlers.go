@@ -125,8 +125,6 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 		switch {
 		case errors.Is(err, apperrors.InvalidInputError):
 			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
-		case errors.Is(err, apperrors.NoDocsErr):
-			responses.SendOkResponse(w, nil)
 		case errors.Is(err, apperrors.PermissionDeniedError):
 			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
 		default:
@@ -134,6 +132,10 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 		}
 
 		return
+	}
+
+	if character == nil {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCharacterNotFound)
 	}
 
 	responses.SendOkResponse(w, character)

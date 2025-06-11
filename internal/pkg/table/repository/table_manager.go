@@ -3,23 +3,29 @@ package repository
 import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/gorilla/websocket"
 	"log"
 	"sync"
+	"time"
 )
 
 const maxPlayersNum = 4
 
 type tableManager struct {
-	sessions map[string]*session
-	mu       sync.RWMutex
+	sessions       map[string]*session
+	mu             sync.RWMutex
+	metrics        metrics.WSMetrics
+	sessionMetrics metrics.WSSessionMetrics
 }
 
-func NewTableManager() tableinterfaces.TableManager {
+func NewTableManager(metrics metrics.WSMetrics, sessionMetrics metrics.WSSessionMetrics) tableinterfaces.TableManager {
 	return &tableManager{
-		sessions: make(map[string]*session),
+		sessions:       make(map[string]*session),
+		metrics:        metrics,
+		sessionMetrics: sessionMetrics,
 	}
 }
 
@@ -34,10 +40,13 @@ func (tm *tableManager) CreateSession(admin *models.User, encounter *models.Enco
 		participants:    make(map[int]*participant),
 		broadcast:       make(chan []byte),
 		refreshCallback: callback,
+		start:           time.Now(),
+		metrics:         tm.sessionMetrics,
 	}
 
 	tm.mu.Lock()
 	tm.sessions[sessionID] = newSession
+	tm.metrics.IncSessions()
 	tm.mu.Unlock()
 
 	go newSession.run()
@@ -59,6 +68,7 @@ func (tm *tableManager) RemoveSession(sessionID string) {
 	}
 
 	tm.mu.Lock()
+	tm.metrics.IncreaseDuration(time.Since(activeSession.start))
 	delete(tm.sessions, sessionID)
 	tm.mu.Unlock()
 }
@@ -90,6 +100,7 @@ func (tm *tableManager) GetEncounterData(sessionID string) ([]byte, error) {
 func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, conn *websocket.Conn) {
 	tm.mu.RLock()
 	activeSession, ok := tm.sessions[sessionID]
+	tm.metrics.IncConns()
 	tm.mu.RUnlock()
 
 	if !ok {
@@ -139,6 +150,7 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 
 			activeSession.refreshCallback(sessionID)
 			activeSession.broadcast <- msg
+			activeSession.metrics.IncReceivedMsgs()
 		}
 	}()
 }

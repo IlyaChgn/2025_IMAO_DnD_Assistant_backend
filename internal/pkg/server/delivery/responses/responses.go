@@ -24,10 +24,10 @@ const (
 	ErrNotAuthorized  = "User not authorized"
 	ErrForbidden      = "User have no access to this content"
 
-	ErrCreatureNotFound = "Creature with same URL not found"
-	ErrSizeOrPosition   = "Size and position cannot be less than zero"
-	ErrWrongDirection   = "Wrong direction type in order"
-	ErrWrongQueryParams = "Wrong query params"
+	ErrCreatureNotFound  = "Creature with same URL not found"
+	ErrCharacterNotFound = "Character with same URL not found"
+	ErrSizeOrPosition    = "Size and position cannot be less than zero"
+	ErrWrongDirection    = "Wrong direction type in order"
 
 	ErrEmptyCharacterData = "Empty character data"
 

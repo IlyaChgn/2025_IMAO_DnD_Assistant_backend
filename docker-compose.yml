@@ -34,7 +34,37 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_DATABASES=${REDIS_DATABASES_NUM}
 
+  prometheus:
+    image: prom/prometheus:latest
+    restart: always
+    ports:
+      - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - ${GRAFANA_PORT}:${GRAFANA_PORT}
+    volumes:
+      - grafana_storage:/var/lib/grafana
+
 volumes:
   postgres:
   redis:
   redis_data:
+  prometheus:
+  prometheus_data:
+  grafana:
+  grafana_storage:

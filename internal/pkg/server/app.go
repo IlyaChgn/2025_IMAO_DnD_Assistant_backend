@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 	"log"
 	"net/http"
 	"os"
@@ -32,7 +34,6 @@ import (
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
 	encounteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/usecases"
-	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
 type Server struct {
@@ -105,20 +106,21 @@ func (srv *Server) Run() error {
 	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
 	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1)
 
-	mongoURI := serverrepo.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
+	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
+	mongoDatabase := dbinit.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	mongoMetrics, err := metrics.NewDBMetrics("mongo")
+	if err != nil {
+		log.Fatal("Something went wrong initializing prometheus mongo metrics, ", err)
+	}
 
-	mongoDatabase := serverrepo.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
-
-	minioURI := serverrepo.NewMinioEndpoint(cfg.Minio.Host)
-
-	minioClient := serverrepo.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
+	minioURI := dbinit.NewMinioEndpoint(cfg.Minio.Host)
+	minioClient := dbinit.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
 		cfg.Minio.SecretKey, true)
 
-	postgresURL := serverrepo.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
+	postgresURL := dbinit.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
 		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
-
-	postgresPool, err := serverrepo.NewPostgresPool(postgresURL)
+	postgresPool, err := dbinit.NewPostgresPool(postgresURL)
 	if err != nil {
 		log.Fatal("Something went wrong while creating postgres pool ", err)
 	}
@@ -128,21 +130,41 @@ func (srv *Server) Run() error {
 		log.Fatal("Cannot ping postgres database ", err)
 	}
 
-	redisClient := serverrepo.NewRedisClient(cfg.Redis.Host, cfg.Redis.Port, cfg.Redis.Password, cfg.Redis.DB)
+	postgresMetrics, err := metrics.NewDBMetrics("postgres")
+	if err != nil {
+		log.Fatal("Something went wrong initializing prometheus postgres metrics, ", err)
+	}
+
+	redisClient := dbinit.NewRedisClient(cfg.Redis.Host, cfg.Redis.Port, cfg.Redis.Password, cfg.Redis.DB)
 
 	err = redisClient.Ping(context.Background()).Err()
 	if err != nil {
 		log.Fatalf("Cannot ping Redis: %v", err)
 	}
 
-	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase)
+	redisMetrics, err := metrics.NewDBMetrics("redis")
+	if err != nil {
+		log.Fatal("Something went wrong initializing prometheus redis metrics, ", err)
+	}
+
+	wsMetrics, err := metrics.NewWSMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing websocket metrics, ", err)
+	}
+
+	wsSessionMetrics, err := metrics.NewWSSessionMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing websocket session metrics, ", err)
+	}
+
+	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase, mongoMetrics)
 	bestiaryS3Manager := bestiaryrepo.NewMinioManager(minioClient, "creature-images")
 	llmInmemoryStorage := bestiaryrepo.NewInMemoryLLMRepo()
-	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase)
-	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool)
-	authRepository := authrepo.NewAuthStorage(postgresPool)
-	sessionManager := authrepo.NewSessionManager(redisClient)
-	tableManager := tablerepo.NewTableManager()
+	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase, mongoMetrics)
+	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool, postgresMetrics)
+	authRepository := authrepo.NewAuthStorage(postgresPool, postgresMetrics)
+	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
+	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
 	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorClient)

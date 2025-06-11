@@ -71,14 +71,14 @@ func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Reque
 
 	creature, err := h.usecases.GetCreatureByEngName(ctx, creatureName)
 	if err != nil {
-		switch {
-		case errors.Is(err, apperrors.NoDocsErr):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
-		default:
-			log.Println(err)
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
-		}
+		return
+	}
+
+	if creature == nil {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
 
 		return
 	}
@@ -105,8 +105,6 @@ func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Re
 		reqData.Search, userID)
 	if err != nil {
 		switch {
-		case errors.Is(err, apperrors.NoDocsErr):
-			responses.SendOkResponse(w, nil)
 		case errors.Is(err, apperrors.StartPosSizeError):
 			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
 		case errors.Is(err, apperrors.UnknownDirectionError):
@@ -135,8 +133,6 @@ func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.R
 	creature, err := h.usecases.GetUserCreatureByEngName(ctx, creatureName, userID)
 	if err != nil {
 		switch {
-		case errors.Is(err, apperrors.NoDocsErr):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
 		case errors.Is(err, apperrors.PermissionDeniedError):
 			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
 		default:
@@ -144,6 +140,12 @@ func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.R
 
 			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 		}
+
+		return
+	}
+
+	if creature == nil {
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
 
 		return
 	}
