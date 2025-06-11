@@ -41,8 +41,9 @@ func NewWSMetrics() (WSMetrics, error) {
 
 	metrics.duration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name: "ws_session_duration",
-			Help: "Websocket session duration",
+			Name:    "ws_session_duration",
+			Help:    "Websocket session duration",
+			Buckets: []float64{15, 20, 25, 30, 45, 60, 90},
 		},
 		[]string{})
 	if err := prometheus.Register(metrics.duration); err != nil {
@@ -95,5 +96,5 @@ func (m *wsSessionMetrics) IncSentMsgs() {
 }
 
 func (m *wsMetrics) IncreaseDuration(duration time.Duration) {
-	m.duration.WithLabelValues().Observe(duration.Seconds())
+	m.duration.WithLabelValues().Observe(duration.Minutes())
 }
