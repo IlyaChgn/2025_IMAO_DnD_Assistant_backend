@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	authinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/gorilla/mux"
@@ -15,15 +14,14 @@ import (
 )
 
 type EncounterHandler struct {
-	usecases     encounterinterfaces.EncounterUsecases
-	authUsecases authinterfaces.AuthUsecases
+	usecases   encounterinterfaces.EncounterUsecases
+	ctxUserKey string
 }
 
-func NewEncounterHandler(usecases encounterinterfaces.EncounterUsecases,
-	authUsecases authinterfaces.AuthUsecases) *EncounterHandler {
+func NewEncounterHandler(usecases encounterinterfaces.EncounterUsecases, sessionKey string) *EncounterHandler {
 	return &EncounterHandler{
-		usecases:     usecases,
-		authUsecases: authUsecases,
+		usecases:   usecases,
+		ctxUserKey: sessionKey,
 	}
 }
 
@@ -39,8 +37,8 @@ func (h *EncounterHandler) GetEncountersList(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	list, err := h.usecases.GetEncountersList(ctx, reqData.Size, reqData.Start, userID, &reqData.Search)
 	if err != nil {
@@ -71,8 +69,8 @@ func (h *EncounterHandler) GetEncounterByID(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	encounter, err := h.usecases.GetEncounterByID(ctx, id, userID)
 	if err != nil {
@@ -103,8 +101,8 @@ func (h *EncounterHandler) SaveEncounter(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	err = h.usecases.SaveEncounter(ctx, &encounter, userID)
 	if err != nil {
@@ -141,8 +139,8 @@ func (h *EncounterHandler) UpdateEncounter(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	err = h.usecases.UpdateEncounter(ctx, data, id, userID)
 	if err != nil {
@@ -172,8 +170,8 @@ func (h *EncounterHandler) RemoveEncounter(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	err := h.usecases.RemoveEncounter(ctx, id, userID)
 	if err != nil {

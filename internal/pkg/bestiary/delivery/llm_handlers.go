@@ -10,21 +10,17 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
 
 type LLMHandler struct {
-	usecases     bestiaryinterface.GenerationUsecases
-	authUsecases authinterface.AuthUsecases
+	usecases bestiaryinterface.GenerationUsecases
 }
 
-func NewLLMHandler(usecases bestiaryinterface.GenerationUsecases,
-	authUsecases authinterface.AuthUsecases) *LLMHandler {
+func NewLLMHandler(usecases bestiaryinterface.GenerationUsecases) *LLMHandler {
 	return &LLMHandler{
-		usecases:     usecases,
-		authUsecases: authUsecases,
+		usecases: usecases,
 	}
 }
 

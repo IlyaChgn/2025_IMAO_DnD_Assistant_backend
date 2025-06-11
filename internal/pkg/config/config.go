@@ -90,15 +90,16 @@ type ProxiesConfig struct {
 }
 
 type Config struct {
-	Server   ServerConfig `yaml:"server"`
-	Mongo    MongoConfig
-	Postgres PostgresConfig
-	Redis    RedisConfig
-	Minio    MinioConfig
-	Services ServicesConfig `yaml:"services"`
-	VKApi    VKApiConfig    `yaml:"vk_api"`
-	Gemini   GeminiConfig
-	Proxies  ProxiesConfig
+	Server     ServerConfig `yaml:"server"`
+	Mongo      MongoConfig
+	Postgres   PostgresConfig
+	Redis      RedisConfig
+	Minio      MinioConfig
+	Services   ServicesConfig `yaml:"services"`
+	VKApi      VKApiConfig    `yaml:"vk_api"`
+	Gemini     GeminiConfig
+	Proxies    ProxiesConfig
+	CtxUserKey string `yaml:"user_key"`
 }
 
 func ReadConfig(cfgPath string) *Config {

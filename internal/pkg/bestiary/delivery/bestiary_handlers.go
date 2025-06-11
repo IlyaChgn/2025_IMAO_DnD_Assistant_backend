@@ -11,21 +11,19 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
 
 type BestiaryHandler struct {
-	usecases     bestiaryinterface.BestiaryUsecases
-	authUsecases authinterface.AuthUsecases
+	usecases   bestiaryinterface.BestiaryUsecases
+	ctxUserKey string
 }
 
-func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases,
-	authUsecases authinterface.AuthUsecases) *BestiaryHandler {
+func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases, ctxUserKey string) *BestiaryHandler {
 	return &BestiaryHandler{
-		usecases:     usecases,
-		authUsecases: authUsecases,
+		usecases:   usecases,
+		ctxUserKey: ctxUserKey,
 	}
 }
 
@@ -98,8 +96,8 @@ func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	list, err := h.usecases.GetUserCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
 		reqData.Search, userID)
@@ -127,8 +125,8 @@ func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.R
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	creature, err := h.usecases.GetUserCreatureByEngName(ctx, creatureName, userID)
 	if err != nil {
@@ -165,8 +163,8 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	err = h.usecases.AddGeneratedCreature(ctx, creatureInput, userID)
 	if err != nil {

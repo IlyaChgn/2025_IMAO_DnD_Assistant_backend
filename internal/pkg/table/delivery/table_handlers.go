@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	authinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/gorilla/mux"
@@ -15,15 +14,15 @@ import (
 )
 
 type TableHandler struct {
-	usecases     tableinterfaces.TableUsecases
-	authUsecases authinterfaces.AuthUsecases
-	upgrader     *websocket.Upgrader
+	usecases   tableinterfaces.TableUsecases
+	ctxUserKey string
+	upgrader   *websocket.Upgrader
 }
 
-func NewTableHandler(usecases tableinterfaces.TableUsecases, authUsecases authinterfaces.AuthUsecases) *TableHandler {
+func NewTableHandler(usecases tableinterfaces.TableUsecases, ctxUserKey string) *TableHandler {
 	return &TableHandler{
-		usecases:     usecases,
-		authUsecases: authUsecases,
+		usecases:   usecases,
+		ctxUserKey: ctxUserKey,
 		upgrader: &websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
@@ -46,8 +45,7 @@ func (h *TableHandler) CreateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	user, _ := h.authUsecases.CheckAuth(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
 
 	id, err := h.usecases.CreateSession(ctx, user, reqData.EncounterID)
 	if err != nil {
@@ -98,8 +96,7 @@ func (h *TableHandler) ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	user, _ := h.authUsecases.CheckAuth(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
 
 	conn, err := h.upgrader.Upgrade(w, r, nil)
 	if err != nil {
