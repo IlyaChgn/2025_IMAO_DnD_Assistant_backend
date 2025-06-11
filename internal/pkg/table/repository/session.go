@@ -2,11 +2,13 @@ package repository
 
 import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils/merger"
 	"github.com/gorilla/websocket"
 	"log"
 	"sync"
+	"time"
 )
 
 type participant struct {
@@ -19,16 +21,17 @@ type session struct {
 	encounterName string
 	encounterData []byte
 
-	adminID   int
-	adminName string
-
-	participants map[int]*participant // Ключ - UserID
-	playersNum   int
-	mu           sync.RWMutex
-
-	broadcast chan []byte
-
+	adminID         int
+	adminName       string
+	participants    map[int]*participant // Ключ - UserID
+	playersNum      int
+	broadcast       chan []byte
 	refreshCallback func(sessionID string) // Вызов обновления таймера
+
+	mu sync.RWMutex
+
+	start   time.Time
+	metrics metrics.WSSessionMetrics
 }
 
 func (s *session) run() {
@@ -54,6 +57,8 @@ func (s *session) run() {
 
 					delete(s.participants, id)
 				}
+
+				s.metrics.IncSentMsgs()
 			}
 
 			s.mu.Unlock()
@@ -64,6 +69,7 @@ func (s *session) run() {
 func (s *session) WriteFirstMsg(userID int) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	s.metrics.IncSentMsgs()
 
 	conn := s.participants[userID].Conn
 

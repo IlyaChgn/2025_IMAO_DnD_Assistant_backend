@@ -147,6 +147,16 @@ func (srv *Server) Run() error {
 		log.Fatal("Something went wrong initializing prometheus redis metrics, ", err)
 	}
 
+	wsMetrics, err := metrics.NewWSMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing websocket metrics, ", err)
+	}
+
+	wsSessionMetrics, err := metrics.NewWSSessionMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing websocket session metrics, ", err)
+	}
+
 	bestiaryRepository := bestiaryrepo.NewBestiaryStorage(mongoDatabase, mongoMetrics)
 	bestiaryS3Manager := bestiaryrepo.NewMinioManager(minioClient, "creature-images")
 	llmInmemoryStorage := bestiaryrepo.NewInMemoryLLMRepo()
@@ -154,7 +164,7 @@ func (srv *Server) Run() error {
 	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool, postgresMetrics)
 	authRepository := authrepo.NewAuthStorage(postgresPool, postgresMetrics)
 	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
-	tableManager := tablerepo.NewTableManager()
+	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
 	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorClient)

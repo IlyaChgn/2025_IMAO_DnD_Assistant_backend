@@ -10,6 +10,13 @@ import (
 func CreateMetricsMiddleware(m metrics.HTTPMetrics) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Если приходит запрос на установку вебсокет-соединения - игнорируем сбор метрик для него
+			if r.Header.Get("Upgrade") == "websocket" {
+				next.ServeHTTP(w, r)
+
+				return
+			}
+
 			fw := &fakeResponseWriter{
 				ResponseWriter: w,
 				code:           200,
