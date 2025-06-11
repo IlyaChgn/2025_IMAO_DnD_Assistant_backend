@@ -5,68 +5,85 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
-	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
+	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 )
 
 type authStorage struct {
-	pool serverrepo.PostgresPool
+	pool    serverrepo.PostgresPool
+	metrics mymetrics.DBMetrics
 }
 
-func NewAuthStorage(pool serverrepo.PostgresPool) authinterface.AuthRepository {
+func NewAuthStorage(pool serverrepo.PostgresPool, metrics mymetrics.DBMetrics) authinterface.AuthRepository {
 	return &authStorage{
-		pool: pool,
+		pool:    pool,
+		metrics: metrics,
 	}
 }
 
 func (s *authStorage) CheckUser(ctx context.Context, vkid string) (*models.User, error) {
+	fnName := utils.GetFunctionName()
+
 	var user models.User
 
-	line := s.pool.QueryRow(ctx, CheckUserQuery, vkid)
-	if err := line.Scan(&user.ID, &user.VKID, &user.Name, &user.Avatar); err != nil {
-		return nil, apperrors.UserDoesNotExistError
-	}
+	return dbcall.DBCall[*models.User](fnName, s.metrics, func() (*models.User, error) {
+		line := s.pool.QueryRow(ctx, CheckUserQuery, vkid)
+		if err := line.Scan(&user.ID, &user.VKID, &user.Name, &user.Avatar); err != nil {
+			return nil, apperrors.UserDoesNotExistError
+		}
 
-	return &user, nil
+		return &user, nil
+	})
 }
 
 func (s *authStorage) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
-	tx, err := s.pool.Begin(ctx)
-	if err != nil {
-		return nil, apperrors.TxStartError
-	}
-	defer tx.Rollback(ctx)
+	fnName := utils.GetFunctionName()
 
-	var dbUser models.User
+	return dbcall.DBCall[*models.User](fnName, s.metrics, func() (*models.User, error) {
+		tx, err := s.pool.Begin(ctx)
+		if err != nil {
+			return nil, apperrors.TxStartError
+		}
+		defer tx.Rollback(ctx)
 
-	line := tx.QueryRow(ctx, CreateUserQuery, user.VKID, user.Name, user.Avatar)
-	if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar); err != nil {
-		return nil, apperrors.TxError
-	}
+		var dbUser models.User
 
-	if err := tx.Commit(ctx); err != nil {
-		return nil, apperrors.TxCommitError
-	}
+		line := tx.QueryRow(ctx, CreateUserQuery, user.VKID, user.Name, user.Avatar)
+		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar); err != nil {
+			return nil, apperrors.TxError
+		}
 
-	return &dbUser, nil
+		if err := tx.Commit(ctx); err != nil {
+			return nil, apperrors.TxCommitError
+		}
+
+		return &dbUser, nil
+	})
 }
 
 func (s *authStorage) UpdateUser(ctx context.Context, user *models.User) (*models.User, error) {
-	tx, err := s.pool.Begin(ctx)
-	if err != nil {
-		return nil, apperrors.TxStartError
-	}
-	defer tx.Rollback(ctx)
+	fnName := utils.GetFunctionName()
 
-	var dbUser models.User
+	return dbcall.DBCall[*models.User](fnName, s.metrics, func() (*models.User, error) {
+		tx, err := s.pool.Begin(ctx)
+		if err != nil {
+			return nil, apperrors.TxStartError
+		}
+		defer tx.Rollback(ctx)
 
-	line := tx.QueryRow(ctx, UpdateUserQuery, user.VKID, user.Name, user.Avatar)
-	if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar); err != nil {
-		return nil, apperrors.TxError
-	}
+		var dbUser models.User
 
-	if err := tx.Commit(ctx); err != nil {
-		return nil, apperrors.TxCommitError
-	}
+		line := tx.QueryRow(ctx, UpdateUserQuery, user.VKID, user.Name, user.Avatar)
+		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar); err != nil {
+			return nil, apperrors.TxError
+		}
 
-	return &dbUser, nil
+		if err := tx.Commit(ctx); err != nil {
+			return nil, apperrors.TxCommitError
+		}
+
+		return &dbUser, nil
+	})
 }

@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"embed"
 	"fmt"
+	pool "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 	"log"
 	"os"
-
-	pool "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
 )
 
 const migrationsDir = "migrations"

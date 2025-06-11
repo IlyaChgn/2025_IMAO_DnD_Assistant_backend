@@ -12,11 +12,15 @@ import (
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/metrics"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	tabledel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/delivery"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"log"
 )
 
 func NewRouter(cfg *config.Config,
@@ -41,6 +45,17 @@ func NewRouter(cfg *config.Config,
 	router := mux.NewRouter()
 
 	router.Use(myrecovery.RecoveryMiddleware)
+
+	m, err := metrics.NewHTTPMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
+	}
+
+	metricsMiddleware := mymetrics.CreateMetricsMiddleware(m)
+
+	router.Use(metricsMiddleware)
+
+	router.PathPrefix("/metrics").Handler(promhttp.Handler())
 
 	rootRouter := router.PathPrefix("/api").Subrouter()
 

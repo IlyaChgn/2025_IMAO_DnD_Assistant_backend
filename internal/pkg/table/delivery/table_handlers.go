@@ -103,6 +103,7 @@ func (h *TableHandler) ServeWS(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := h.upgrader.Upgrade(w, r, nil)
 	if err != nil {
+		log.Println(err)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWSUpgrade)
 
 		return
