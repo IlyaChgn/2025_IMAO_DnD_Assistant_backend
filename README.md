@@ -35,3 +35,9 @@ docker-compose -f docker compose.yml -f docker-compose.pgadmin.yml up -d
 docker-compose -f docker compose.yml -f docker-compose.mongo_and_minio.yml up -d
 
 ```
+
+## Prod start
+
+``` bash
+go run cmd/app/main.go -prod
+```

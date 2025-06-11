@@ -55,6 +55,11 @@ type ServiceConfig struct {
 	Port string `yaml:"port"`
 }
 
+type Socks5ProxieConfig struct {
+	IP   string `env:"SOCKS5_PROXIE_IP"`
+	Port string `env:"SOCKS5_PROXIE_PORT"`
+}
+
 type VKMethodConfig struct {
 	URL    string `yaml:"url"`
 	Method string `yaml:"method"`
@@ -80,6 +85,10 @@ type ServicesConfig struct {
 	ActionProcessor ServiceConfig `yaml:"action_processor"`
 }
 
+type ProxiesConfig struct {
+	Socks5Proxie Socks5ProxieConfig
+}
+
 type Config struct {
 	Server   ServerConfig `yaml:"server"`
 	Mongo    MongoConfig
@@ -89,6 +98,7 @@ type Config struct {
 	Services ServicesConfig `yaml:"services"`
 	VKApi    VKApiConfig    `yaml:"vk_api"`
 	Gemini   GeminiConfig
+	Proxies  ProxiesConfig
 }
 
 func ReadConfig(cfgPath string) *Config {

@@ -34,6 +34,9 @@ import (
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
 	encounteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/usecases"
+	socks5proxy "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/socks5proxy"
+	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository"
+
 )
 
 type Server struct {
@@ -103,8 +106,15 @@ func (srv *Server) Run() error {
 
 	actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
 
+	proxieAddr := fmt.Sprintf("%s:%s", cfg.Proxies.Socks5Proxie.IP, cfg.Proxies.Socks5Proxie.Port)
+
+	proxyClient, err := socks5proxy.NewProxiedHttpClient(proxieAddr)
+	if err != nil {
+		log.Fatalf("failed to create proxy client: %v", err)
+	}
+
 	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
-	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1)
+	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 
 	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
