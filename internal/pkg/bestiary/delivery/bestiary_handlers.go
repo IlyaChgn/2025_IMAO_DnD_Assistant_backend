@@ -11,21 +11,19 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 )
 
 type BestiaryHandler struct {
-	usecases     bestiaryinterface.BestiaryUsecases
-	authUsecases authinterface.AuthUsecases
+	usecases   bestiaryinterface.BestiaryUsecases
+	ctxUserKey string
 }
 
-func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases,
-	authUsecases authinterface.AuthUsecases) *BestiaryHandler {
+func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases, ctxUserKey string) *BestiaryHandler {
 	return &BestiaryHandler{
-		usecases:     usecases,
-		authUsecases: authUsecases,
+		usecases:   usecases,
+		ctxUserKey: ctxUserKey,
 	}
 }
 
@@ -98,8 +96,8 @@ func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	list, err := h.usecases.GetUserCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
 		reqData.Search, userID)
@@ -127,8 +125,8 @@ func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.R
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	creature, err := h.usecases.GetUserCreatureByEngName(ctx, creatureName, userID)
 	if err != nil {
@@ -165,8 +163,8 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	err = h.usecases.AddGeneratedCreature(ctx, creatureInput, userID)
 	if err != nil {
@@ -185,30 +183,32 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
-		log.Println("Ошибка при парсинге формы:", err)
-		responses.SendErrResponse(w, responses.StatusBadRequest, "Invalid form data")
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileSize)
+
 		return
 	}
 
 	file, _, err := r.FormFile("image")
 	if err != nil {
-		log.Println("Ошибка получения файла:", err)
-		responses.SendErrResponse(w, responses.StatusBadRequest, "Image not provided")
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongImage)
+
 		return
 	}
 	defer file.Close()
 
 	imageBytes, err := io.ReadAll(file)
 	if err != nil {
-		log.Println("Ошибка чтения файла:", err)
-		responses.SendErrResponse(w, responses.StatusInternalServerError, "Failed to read image")
+		log.Println(err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
 		return
 	}
 
 	creature, err := h.usecases.ParseCreatureFromImage(r.Context(), imageBytes)
 	if err != nil {
-		log.Println("Ошибка при вызове AI:", err)
-		responses.SendErrResponse(w, responses.StatusInternalServerError, "AI error")
+		log.Println("AI call error, ", err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
 		return
 	}
 
@@ -216,23 +216,20 @@ func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r 
 }
 
 func (h *BestiaryHandler) SubmitCreatureGenerationPrompt(w http.ResponseWriter, r *http.Request) {
-	var input struct {
-		Description string `json:"description"`
-	}
+	var input models.DescriptionGenPrompt
 
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
-		log.Println("Ошибка декодирования JSON:", err)
 		responses.SendErrResponse(w, responses.StatusBadRequest, "Invalid JSON")
+
 		return
 	}
 
-	log.Println("Получено описание существа:", input.Description)
-
 	creature, err := h.usecases.GenerateCreatureFromDescription(r.Context(), input.Description)
 	if err != nil {
-		log.Println("Ошибка генерации существа:", err)
-		responses.SendErrResponse(w, responses.StatusInternalServerError, "AI generation failed")
+		log.Println("AI generation failed, ", err)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
 		return
 	}
 

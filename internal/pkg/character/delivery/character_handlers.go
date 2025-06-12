@@ -3,7 +3,6 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
-	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"log"
 	"net/http"
 
@@ -16,15 +15,14 @@ import (
 )
 
 type CharacterHandler struct {
-	usecases     characterinterfaces.CharacterUsecases
-	authUsecases authinterface.AuthUsecases
+	usecases   characterinterfaces.CharacterUsecases
+	ctxUserKey string
 }
 
-func NewCharacterHandler(usecases characterinterfaces.CharacterUsecases,
-	authUsecases authinterface.AuthUsecases) *CharacterHandler {
+func NewCharacterHandler(usecases characterinterfaces.CharacterUsecases, ctxUserKey string) *CharacterHandler {
 	return &CharacterHandler{
-		usecases:     usecases,
-		authUsecases: authUsecases,
+		usecases:   usecases,
+		ctxUserKey: ctxUserKey,
 	}
 }
 
@@ -40,8 +38,8 @@ func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	list, err := h.usecases.GetCharactersList(ctx, reqData.Size, reqData.Start, userID, reqData.Search)
 	if err != nil {
@@ -85,8 +83,8 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	err = h.usecases.AddCharacter(ctx, file, userID)
 	if err != nil {
@@ -117,8 +115,8 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 		return
 	}
 
-	session, _ := r.Cookie("session_id")
-	userID := h.authUsecases.GetUserIDBySessionID(ctx, session.Value)
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
 
 	character, err := h.usecases.GetCharacterByMongoId(ctx, id, userID)
 	if err != nil {

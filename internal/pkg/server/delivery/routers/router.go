@@ -32,15 +32,15 @@ func NewRouter(cfg *config.Config,
 	tableInterface tableinterfaces.TableUsecases,
 	llmInterface bestiaryinterfaces.GenerationUsecases) *mux.Router {
 
-	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, authInterface)
+	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
-	characterHandler := characterdel.NewCharacterHandler(characterInterface, authInterface)
-	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, authInterface)
+	characterHandler := characterdel.NewCharacterHandler(characterInterface, cfg.CtxUserKey)
+	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, cfg.CtxUserKey)
 	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
-	tableHandler := tabledel.NewTableHandler(tableInterface, authInterface)
-	llmHandler := bestiarydel.NewLLMHandler(llmInterface, authInterface)
+	tableHandler := tabledel.NewTableHandler(tableInterface, cfg.CtxUserKey)
+	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
 
-	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface)
+	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
 	router := mux.NewRouter()
 

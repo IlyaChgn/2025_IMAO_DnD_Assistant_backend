@@ -20,6 +20,8 @@ services:
     host:
     port: 50051
 
+user_key: "user"
+
 vk_api:
   exchange:
     url: https://id.vk.com/oauth2/auth

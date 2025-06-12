@@ -1,13 +1,14 @@
 package auth
 
 import (
+	"context"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
-func LoginRequiredMiddleware(uc authinterface.AuthUsecases) mux.MiddlewareFunc {
+func LoginRequiredMiddleware(uc authinterface.AuthUsecases, ctxUserKey string) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
@@ -19,12 +20,15 @@ func LoginRequiredMiddleware(uc authinterface.AuthUsecases) mux.MiddlewareFunc {
 				return
 			}
 
-			_, isAuth := uc.CheckAuth(ctx, session.Value)
+			user, isAuth := uc.CheckAuth(ctx, session.Value)
 			if !isAuth {
 				responses.SendErrResponse(w, responses.StatusUnauthorized, responses.ErrNotAuthorized)
 
 				return
 			}
+
+			ctx = context.WithValue(ctx, ctxUserKey, user)
+			r = r.WithContext(ctx)
 
 			next.ServeHTTP(w, r)
 		})
