@@ -1,0 +1,26 @@
+# Системные и редакторские файлы
+.git
+.vscode
+.idea
+*.swp
+
+# Документация и лишние конфиги
+*.md
+docs/
+test_scripts/
+
+# Docker и CI конфигурации, если не нужны внутри образа
+docker-compose*.yml
+prometheus.yml
+
+# Секреты и локальные переменные (если ты не хочешь тащить их в образ напрямую)
+# prod.env
+# console.prod.env
+# console.env
+
+# Билды и кеш
+build/
+vendor/
+
+# Логи
+*.log
