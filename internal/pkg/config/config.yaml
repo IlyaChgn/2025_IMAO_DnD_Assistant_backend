@@ -29,3 +29,8 @@ vk_api:
   public_info:
     url: https://id.vk.com/oauth2/public_info
     method: POST
+
+logger:
+  key: "log"
+  path: "logs.json"
+  err_path: "stdout"

@@ -11,7 +11,7 @@ import (
 )
 
 var productionFlag = flag.Bool("prod", false, "Run in production mode")
-var migrationsFlag = flag.String("migrate", "latest", "Run in migrations mode")
+var migrationsFlag = flag.String("migrate", "", "Run in migrations mode")
 
 func main() {
 	var err error
@@ -28,7 +28,9 @@ func main() {
 		os.Setenv("SERVER_MODE", "development")
 	}
 
-	migrator.ApplyMigrations(*migrationsFlag)
+	if *migrationsFlag != "" {
+		migrator.ApplyMigrations(*migrationsFlag)
+	}
 
 	if err != nil {
 		log.Fatal("Error loading env file ", err)

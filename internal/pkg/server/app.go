@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 	"log"
@@ -76,6 +77,16 @@ func (srv *Server) Run() error {
 	cfg := config.ReadConfig(cfgPath)
 	if cfg == nil {
 		log.Fatal("The config wasn`t opened")
+	}
+
+	logger, err := mylogger.New(cfg.Logger.Key, cfg.Logger.OutputPath, cfg.Logger.ErrPath)
+	if err != nil {
+		log.Fatalf("Failed to initialize log: %v", err)
+	}
+
+	m, err := metrics.NewHTTPMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
 	}
 
 	descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
@@ -191,6 +202,8 @@ func (srv *Server) Run() error {
 
 	router := myrouter.NewRouter(
 		cfg,
+		logger,
+		m,
 		bestiaryUsecases,
 		descriptionUsecases,
 		characterUsecases,

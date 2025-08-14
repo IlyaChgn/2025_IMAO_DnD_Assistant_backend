@@ -12,18 +12,21 @@ import (
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
+	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
+	mylog "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/log"
 	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/metrics"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	tabledel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/delivery"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"log"
 )
 
 func NewRouter(cfg *config.Config,
+	logger mylogger.Logger,
+	m metrics.HTTPMetrics,
 	bestiaryInterface bestiaryinterfaces.BestiaryUsecases,
 	descriptionInterface descriptioninterfaces.DescriptionUsecases,
 	characterInterface characterinterfaces.CharacterUsecases,
@@ -44,15 +47,11 @@ func NewRouter(cfg *config.Config,
 
 	router := mux.NewRouter()
 
-	router.Use(myrecovery.RecoveryMiddleware)
-
-	m, err := metrics.NewHTTPMetrics()
-	if err != nil {
-		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
-	}
-
+	logMiddleware := mylog.CreateLogMiddleware(logger)
 	metricsMiddleware := mymetrics.CreateMetricsMiddleware(m)
 
+	router.Use(myrecovery.RecoveryMiddleware)
+	router.Use(logMiddleware)
 	router.Use(metricsMiddleware)
 
 	router.PathPrefix("/metrics").Handler(promhttp.Handler())
