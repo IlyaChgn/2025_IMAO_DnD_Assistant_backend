@@ -1,44 +1,49 @@
 package logger
 
-import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-)
+import "os"
 
-var ctxKey string
-
-type logger struct {
-	zap *zap.SugaredLogger
+func (l *logger) DeliveryInfo(msg string) {
+	ln := l.with("ex", []int{1, 2, 3, 5})
+	ln.zap.Info(msg)
 }
 
-func New(key, outputPath, errPath string) (Logger, error) {
-	config := zap.NewProductionConfig()
-	config.DisableStacktrace = false
-	config.OutputPaths = []string{outputPath}
-	config.ErrorOutputPaths = []string{errPath}
-	config.EncoderConfig = zapcore.EncoderConfig{
-		TimeKey:        "ts",
-		LevelKey:       "lvl",
-		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.LowercaseLevelEncoder,
-		EncodeTime:     zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05"),
-		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.ShortCallerEncoder,
+func (l *logger) ServerInfo(host, port string, isProduction bool) {
+	mode := "development"
+	if isProduction {
+		mode = "production"
 	}
 
-	l, err := config.Build()
-	if err != nil {
-		return nil, err
-	}
-
-	ctxKey = key
-	mylogger := &logger{
-		zap: l.Sugar(),
-	}
-
-	return mylogger, nil
+	ln := l.with("layer", "server").
+		with("host", host).
+		with("port", port).
+		with("mode", mode).
+		with("msg", "server started successfully")
+	ln.zap.Info()
 }
 
-func (l *logger) Info(msg string) {
-	l.zap.Info(msg)
+func (l *logger) logDB(host, port, db string, dbName any, isSecure bool, msg string) *logger {
+	connType := "insecure"
+	if isSecure {
+		connType = "secure"
+	}
+
+	return l.with("layer", "server").
+		with("host", host).
+		with("port", port).
+		with("db", db).
+		with("db_name", dbName).
+		with("conn_type", connType).
+		with("msg", msg)
+}
+
+func (l *logger) DBInfo(host, port, db string, dbName any, isSecure bool) {
+	ln := l.logDB(host, port, db, dbName, isSecure, "db connection opened successfully")
+	ln.zap.Info()
+}
+
+func (l *logger) DBFatal(host, port, db string, dbName any, isSecure bool, msg string, err error) {
+	ln := l.logDB(host, port, db, dbName, isSecure, msg).with("err", err.Error())
+	ln.zap.Error()
+
+	os.Exit(1)
 }

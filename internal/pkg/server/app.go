@@ -83,6 +83,7 @@ func (srv *Server) Run() error {
 	if err != nil {
 		log.Fatalf("Failed to initialize log: %v", err)
 	}
+	defer logger.Sync()
 
 	m, err := metrics.NewHTTPMetrics()
 	if err != nil {
@@ -95,11 +96,9 @@ func (srv *Server) Run() error {
 		descriptionAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
-
 	if err != nil {
 		log.Fatalf("Error occurred while starting grpc connection on description service, %v", err)
 	}
-
 	defer grpcConnDescription.Close()
 
 	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
@@ -128,6 +127,8 @@ func (srv *Server) Run() error {
 	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
 	mongoDatabase := dbinit.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	logger.DBInfo(cfg.Mongo.Host, cfg.Mongo.Port, "mongodb", cfg.Mongo.DBName, !isProduction)
+
 	mongoMetrics, err := metrics.NewDBMetrics("mongo")
 	if err != nil {
 		log.Fatal("Something went wrong initializing prometheus mongo metrics, ", err)
@@ -136,17 +137,21 @@ func (srv *Server) Run() error {
 	minioURI := dbinit.NewMinioEndpoint(cfg.Minio.Host)
 	minioClient := dbinit.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
 		cfg.Minio.SecretKey, true)
+	logger.DBInfo(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true)
 
 	postgresURL := dbinit.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
 		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
 	postgresPool, err := dbinit.NewPostgresPool(postgresURL)
 	if err != nil {
-		log.Fatal("Something went wrong while creating postgres pool ", err)
+		logger.DBFatal(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false,
+			"Something went wrong while creating postgres pool", err)
 	}
+	logger.DBInfo(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false)
 
 	err = postgresPool.Ping(context.Background())
 	if err != nil {
-		log.Fatal("Cannot ping postgres database ", err)
+		logger.DBFatal(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false,
+			"Cannot ping postgres database", err)
 	}
 
 	postgresMetrics, err := metrics.NewDBMetrics("postgres")
@@ -158,8 +163,9 @@ func (srv *Server) Run() error {
 
 	err = redisClient.Ping(context.Background()).Err()
 	if err != nil {
-		log.Fatalf("Cannot ping Redis: %v", err)
+		logger.DBFatal(cfg.Redis.Host, cfg.Redis.Port, "redis", cfg.Redis.DB, false, "Cannot ping Redis", err)
 	}
+	logger.DBInfo(cfg.Redis.Host, cfg.Redis.Port, "redis", cfg.Redis.DB, false)
 
 	redisMetrics, err := metrics.NewDBMetrics("redis")
 	if err != nil {
@@ -219,7 +225,7 @@ func (srv *Server) Run() error {
 	serverCfg := createServerConfig(serverURL, cfg.Server.Timeout, &muxWithCORS)
 	srv.server = createServer(serverCfg)
 
-	log.Printf("Server is listening on %s\n", serverURL)
+	logger.ServerInfo(cfg.Server.Host, cfg.Server.Port, isProduction)
 
 	return srv.server.ListenAndServe()
 }
