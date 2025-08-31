@@ -61,8 +61,9 @@ type Socks5ProxieConfig struct {
 }
 
 type VKMethodConfig struct {
-	URL    string `yaml:"url"`
-	Method string `yaml:"method"`
+	URL         string `yaml:"url"`
+	Method      string `yaml:"method"`
+	ContentType string `yaml:"content_type"`
 }
 
 type VKApiConfig struct {

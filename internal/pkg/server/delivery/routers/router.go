@@ -40,7 +40,7 @@ func NewRouter(cfg *config.Config,
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface, cfg.CtxUserKey)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, cfg.CtxUserKey)
-	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
+	authHandler := authdel.NewAuthHandler(authInterface)
 	tableHandler := tabledel.NewTableHandler(tableInterface, cfg.CtxUserKey)
 	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
 

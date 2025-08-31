@@ -2,9 +2,10 @@ package delivery
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/google/uuid"
@@ -14,14 +15,12 @@ import (
 
 type AuthHandler struct {
 	usecases        authinterface.AuthUsecases
-	vkApiCfg        *config.VKApiConfig
 	sessionDuration time.Duration
 }
 
-func NewAuthHandler(usecases authinterface.AuthUsecases, vkApiCfg *config.VKApiConfig) *AuthHandler {
+func NewAuthHandler(usecases authinterface.AuthUsecases) *AuthHandler {
 	return &AuthHandler{
 		usecases:        usecases,
-		vkApiCfg:        vkApiCfg,
 		sessionDuration: 30 * 24 * time.Hour,
 	}
 }
@@ -40,49 +39,28 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	vkRawData, err := h.exchangeCode(w, &reqData)
-	if err != nil {
-		return
-	}
-
-	var vkTokens models.VKTokensData
-
-	err = json.Unmarshal(vkRawData, &vkTokens)
-	if err != nil {
-		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, vkRawData)
-		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
-
-		return
-	}
-
-	rawPublicInfo, err := h.getPublicInfo(w, vkTokens.IDToken)
-	if err != nil {
-		return
-	}
-
-	var publicInfo models.PublicInfo
-
-	err = json.Unmarshal(rawPublicInfo, &publicInfo)
-	if err != nil {
-		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, rawPublicInfo)
-		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
-
-		return
-	}
-
 	sessionID := uuid.NewString()
 
-	user, err := h.usecases.Login(ctx, sessionID, &publicInfo.User, &vkTokens, h.sessionDuration)
+	user, err := h.usecases.Login(ctx, sessionID, &reqData, h.sessionDuration)
 	if err != nil {
-		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, publicInfo.User)
-		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		var status string
+
+		switch {
+		case errors.Is(err, apperrors.VKApiError):
+			status = responses.ErrVKServer
+		default:
+			status = responses.ErrInternalServer
+		}
+
+		l.DeliveryError(ctx, responses.StatusInternalServerError, status, err, nil)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, status)
 
 		return
 	}
 
 	newSession := h.createSession(sessionID)
 	http.SetCookie(w, newSession)
-	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user})
+	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user.Name})
 	responses.SendOkResponse(w, &models.AuthResponse{
 		IsAuth: true,
 		User:   *user,

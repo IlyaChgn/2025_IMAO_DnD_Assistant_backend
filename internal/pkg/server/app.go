@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	authext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/external"
 	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
@@ -124,6 +125,9 @@ func (srv *Server) Run() error {
 	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
 	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 
+	vkClient := authext.NewVKApi(cfg.VKApi.RedirectURI, cfg.VKApi.ClientID, cfg.VKApi.SecretKey, cfg.VKApi.ServiceKey,
+		cfg.VKApi.Exchange, cfg.VKApi.PublicInfo)
+
 	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
 	mongoDatabase := dbinit.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
@@ -208,7 +212,7 @@ func (srv *Server) Run() error {
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
-	authUsecases := authuc.NewAuthUsecases(authRepository, sessionManager)
+	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager)
 
 	credentials := handlers.AllowCredentials()
