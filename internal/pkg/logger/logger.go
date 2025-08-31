@@ -1,11 +1,10 @@
 package logger
 
-import "os"
-
-func (l *logger) DeliveryInfo(msg string) {
-	ln := l.with("ex", []int{1, 2, 3, 5})
-	ln.zap.Info(msg)
-}
+import (
+	"context"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
+	"os"
+)
 
 func (l *logger) ServerInfo(host, port string, isProduction bool) {
 	mode := "development"
@@ -46,4 +45,39 @@ func (l *logger) DBFatal(host, port, db string, dbName any, isSecure bool, msg s
 	ln.zap.Error()
 
 	os.Exit(1)
+}
+
+func (l *logger) logDeliveryRequest(ctx context.Context) *logger {
+	return l.with("layer", "delivery").
+		with("path", utils.GetURL(ctx)).
+		with("method", utils.GetMethod(ctx)).
+		with("session_id", utils.GetSession(ctx))
+}
+
+func (l *logger) logDeliveryResponse(code int, status string) *logger {
+	return l.with("code", code).
+		with("status", status)
+}
+
+func (l *logger) DeliveryInfo(ctx context.Context, msg string, fields any) {
+	newLogger := l
+	newLogger = newLogger.with("fields", fields)
+
+	newLogger.logDeliveryRequest(ctx).
+		with("msg", msg).
+		zap.Info()
+}
+
+func (l *logger) DeliveryError(ctx context.Context, code int, status string, err error, fields any) {
+	newLogger := l
+
+	newLogger = newLogger.logDeliveryRequest(ctx).logDeliveryResponse(code, status)
+
+	if code == 500 {
+		newLogger.with("err", err.Error()).
+			with("fields", fields).
+			zap.Error()
+		return
+	}
+	newLogger.zap.Warn()
 }

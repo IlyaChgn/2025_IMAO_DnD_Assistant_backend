@@ -135,8 +135,18 @@ func (srv *Server) Run() error {
 	}
 
 	minioURI := dbinit.NewMinioEndpoint(cfg.Minio.Host)
-	minioClient := dbinit.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
-		cfg.Minio.SecretKey, true)
+	minioClient, err := dbinit.ConnectToMinio(minioURI, cfg.Minio.AccessKey, cfg.Minio.SecretKey, true)
+	if err != nil {
+		logger.DBFatal(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true,
+			"Failed to initialize MinIO client", err)
+	}
+
+	_, err = minioClient.ListBuckets(context.Background())
+	if err != nil {
+		logger.DBFatal(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true,
+			"Failed to connect to MinIO server", err)
+	}
+
 	logger.DBInfo(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true)
 
 	postgresURL := dbinit.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
@@ -146,13 +156,13 @@ func (srv *Server) Run() error {
 		logger.DBFatal(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false,
 			"Something went wrong while creating postgres pool", err)
 	}
-	logger.DBInfo(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false)
 
 	err = postgresPool.Ping(context.Background())
 	if err != nil {
 		logger.DBFatal(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false,
 			"Cannot ping postgres database", err)
 	}
+	logger.DBInfo(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false)
 
 	postgresMetrics, err := metrics.NewDBMetrics("postgres")
 	if err != nil {

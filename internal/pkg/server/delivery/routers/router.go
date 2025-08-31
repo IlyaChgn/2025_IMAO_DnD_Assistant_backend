@@ -18,6 +18,7 @@ import (
 	mylog "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/log"
 	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/metrics"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/reqdata"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	tabledel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/delivery"
 	"github.com/gorilla/mux"
@@ -50,8 +51,9 @@ func NewRouter(cfg *config.Config,
 	logMiddleware := mylog.CreateLogMiddleware(logger)
 	metricsMiddleware := mymetrics.CreateMetricsMiddleware(m)
 
-	router.Use(myrecovery.RecoveryMiddleware)
 	router.Use(logMiddleware)
+	router.Use(reqdata.RequestDataMiddleware)
+	router.Use(myrecovery.RecoveryMiddleware)
 	router.Use(metricsMiddleware)
 
 	router.PathPrefix("/metrics").Handler(promhttp.Handler())

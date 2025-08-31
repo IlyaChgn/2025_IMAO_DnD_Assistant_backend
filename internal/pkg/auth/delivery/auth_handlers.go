@@ -5,9 +5,9 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/google/uuid"
-	"log"
 	"net/http"
 	"time"
 )
@@ -28,11 +28,13 @@ func NewAuthHandler(usecases authinterface.AuthUsecases, vkApiCfg *config.VKApiC
 
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	var reqData models.LoginRequest
 
 	err := json.NewDecoder(r.Body).Decode(&reqData)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
 
 		return
@@ -47,6 +49,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(vkRawData, &vkTokens)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, vkRawData)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
@@ -61,6 +64,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(rawPublicInfo, &publicInfo)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, rawPublicInfo)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
@@ -70,7 +74,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.usecases.Login(ctx, sessionID, &publicInfo.User, &vkTokens, h.sessionDuration)
 	if err != nil {
-		log.Println(err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, publicInfo.User)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
@@ -78,7 +82,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	newSession := h.createSession(sessionID)
 	http.SetCookie(w, newSession)
-
+	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user})
 	responses.SendOkResponse(w, &models.AuthResponse{
 		IsAuth: true,
 		User:   *user,
@@ -87,12 +91,13 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
+	l := logger.FromContext(ctx)
 	session, _ := r.Cookie("session_id")
 
 	err := h.usecases.Logout(ctx, session.Value)
 	if err != nil {
-		log.Println(err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err,
+			map[string]any{"session_id": session.Value})
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
@@ -100,7 +105,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 
 	session.Expires = time.Now().AddDate(0, 0, -1)
 	http.SetCookie(w, session)
-
+	l.DeliveryInfo(ctx, "user logged out", map[string]any{"session_id": session.Value})
 	responses.SendOkResponse(w, &models.AuthResponse{IsAuth: false})
 }
 
