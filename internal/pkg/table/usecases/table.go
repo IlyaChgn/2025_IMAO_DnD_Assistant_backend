@@ -2,9 +2,11 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"github.com/gorilla/websocket"
@@ -35,12 +37,16 @@ func NewTableUsecases(encounterRepo encounterinterfaces.EncounterRepository,
 }
 
 func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, encounterID string) (string, error) {
+	l := logger.FromContext(ctx)
+
 	encounterData, err := uc.encounterRepo.GetEncounterByID(ctx, encounterID)
 	if err != nil {
+		l.UsecasesError(err, admin.ID, map[string]any{"id": encounterID})
 		return "", err
 	}
 
 	if encounterData.UserID != admin.ID {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, admin.ID, map[string]any{"id": encounterID})
 		return "", apperrors.PermissionDeniedError
 	}
 
@@ -52,6 +58,7 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 
 	uc.sessionWatcher[sessionID] = time.AfterFunc(sessionDuration, func() {
 		uc.stopTimer(sessionID, encounterID)
+		l.UsecasesInfo(fmt.Sprintf("session timer stopped, sessionID: %s", sessionID), admin.ID)
 	})
 
 	uc.mu.Unlock()

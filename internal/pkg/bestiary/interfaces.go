@@ -53,7 +53,7 @@ type GenerationUsecases interface {
 }
 
 type GeneratedCreatureProcessorUsecases interface {
-	ValidateAndProcessGeneratedCreature(*models.Creature) (*models.Creature, error)
+	ValidateAndProcessGeneratedCreature(ctx context.Context, c *models.Creature) (*models.Creature, error)
 }
 
 type ActionProcessorUsecases interface {

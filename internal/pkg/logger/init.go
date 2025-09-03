@@ -21,6 +21,7 @@ func New(key, outputPath, errPath string) (Logger, error) {
 	config.EncoderConfig = zapcore.EncoderConfig{
 		TimeKey:        "ts",
 		LevelKey:       "lvl",
+		CallerKey:      "caller",
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    zapcore.LowercaseLevelEncoder,
 		EncodeTime:     zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05"),
@@ -35,7 +36,7 @@ func New(key, outputPath, errPath string) (Logger, error) {
 
 	ctxKey = key
 	mylogger := &logger{
-		zap: l.Sugar(),
+		zap: l.Sugar().WithOptions(zap.AddCallerSkip(1)),
 	}
 
 	return mylogger, nil

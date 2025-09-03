@@ -218,6 +218,8 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	l.DeliveryInfo(ctx, "added generated creature", map[string]any{"user_id": userID, "id": creatureInput.ID})
+
 	responses.SendOkResponse(w, nil)
 }
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -27,8 +28,11 @@ func NewAuthUsecases(repo authinterface.AuthRepository, vkApi authinterface.VKAp
 
 func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 	loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error) {
+	l := logger.FromContext(ctx)
+
 	vkRawData, err := uc.vkApi.ExchangeCode(ctx, loginData)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
@@ -36,11 +40,13 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 	err = json.Unmarshal(vkRawData, &vkTokens)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
 	rawPublicInfo, err := uc.vkApi.GetPublicInfo(ctx, vkTokens.IDToken)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
@@ -48,10 +54,11 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 	err = json.Unmarshal(rawPublicInfo, &publicInfo)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
-	var userDB *models.User
+	var userDB, actualUser *models.User
 	vkUser := publicInfo.User
 	user := &models.User{
 		VKID:   vkUser.UserID,
@@ -61,16 +68,23 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 	userDB, err = uc.repo.CheckUser(ctx, vkUser.UserID)
 	if err != nil {
-		userDB, err = uc.repo.CreateUser(ctx, user)
+		actualUser, err = uc.repo.CreateUser(ctx, user)
 		if err != nil {
+			l.UsecasesError(err, 0, nil)
 			return nil, err
 		}
+
+		l.UsecasesInfo("added new user", userDB.ID)
 	} else {
 		if userDB.Name != user.Name || userDB.Avatar != user.Avatar {
-			userDB, err = uc.repo.UpdateUser(ctx, user)
+			actualUser, err = uc.repo.UpdateUser(ctx, user)
 			if err != nil {
+				l.UsecasesError(err, 0, userDB.ID)
 				return nil, err
 			}
+			l.UsecasesInfo("updated user", actualUser.ID)
+		} else {
+			actualUser = userDB
 		}
 	}
 
@@ -80,15 +94,18 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 			RefreshToken: vkTokens.RefreshToken,
 			IDToken:      vkTokens.IDToken,
 		},
-		User: *userDB,
+		User: *actualUser,
 	}
 
 	err = uc.sessionManager.CreateSession(ctx, sessionID, sessionData, sessionDuration)
 	if err != nil {
+		l.UsecasesError(err, userDB.ID, nil)
 		return nil, err
 	}
 
-	return userDB, nil
+	l.UsecasesInfo("user logged in", userDB.ID)
+
+	return actualUser, nil
 }
 
 func (uc *authUsecases) Logout(ctx context.Context, sessionID string) error {

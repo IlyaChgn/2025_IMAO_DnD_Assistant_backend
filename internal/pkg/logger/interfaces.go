@@ -12,5 +12,9 @@ type Logger interface {
 	DeliveryInfo(ctx context.Context, msg string, fields any)
 	DeliveryError(ctx context.Context, code int, status string, err error, fields any)
 
+	UsecasesInfo(msg string, userID int)
+	UsecasesWarn(err error, userID int, fields any)
+	UsecasesError(err error, userID int, fields any)
+
 	Sync()
 }

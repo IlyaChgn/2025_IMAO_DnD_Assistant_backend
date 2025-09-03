@@ -61,10 +61,10 @@ func (l *logger) logDeliveryResponse(code int, status string) *logger {
 
 func (l *logger) DeliveryInfo(ctx context.Context, msg string, fields any) {
 	newLogger := l
-	newLogger = newLogger.with("fields", fields)
+	newLogger = newLogger.logDeliveryRequest(ctx)
 
-	newLogger.logDeliveryRequest(ctx).
-		with("msg", msg).
+	newLogger.with("msg", msg).
+		with("fields", fields).
 		zap.Info()
 }
 
@@ -80,4 +80,41 @@ func (l *logger) DeliveryError(ctx context.Context, code int, status string, err
 		return
 	}
 	newLogger.zap.Warn()
+}
+
+func (l *logger) logUsecases(userID int) *logger {
+	newLogerr := l.with("layer", "usecases").
+		with("usecase", utils.GetPrevFunctionName(2))
+
+	if userID == 0 {
+		return newLogerr
+	}
+
+	return newLogerr.with("user_id", userID)
+}
+
+func (l *logger) UsecasesInfo(msg string, userID int) {
+	newLogger := l
+	newLogger = newLogger.logUsecases(userID)
+
+	newLogger.with("msg", msg).
+		zap.Info()
+}
+
+func (l *logger) UsecasesWarn(err error, userID int, fields any) {
+	newLogger := l
+	newLogger = newLogger.logUsecases(userID)
+
+	newLogger.with("err", err.Error()).
+		with("fields", fields).
+		zap.Warn()
+}
+
+func (l *logger) UsecasesError(err error, userID int, fields any) {
+	newLogger := l
+	newLogger = newLogger.logUsecases(userID)
+
+	newLogger.with("err", err.Error()).
+		with("fields", fields).
+		zap.Error(err)
 }
