@@ -115,7 +115,7 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 	var creatureImageRect = creatureInput.ImageBase64
 	objectNameRect := "generated-creature-images/processed/" + stringCreatureId + ".webp"
 
-	urlRect, err := uc.s3.UploadImage(creatureImageRect, objectNameRect)
+	urlRect, err := uc.s3.UploadImage(ctx, creatureImageRect, objectNameRect)
 	if err != nil {
 		l.UsecasesError(err, userID, map[string]any{"creature_id": creatureInput.ID})
 		return err
@@ -124,7 +124,7 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 	var creatureImageToken = creatureInput.ImageBase64Circle
 	objectNameToken := "generated-creature-images/tokens/" + stringCreatureId + ".webp"
 
-	urlToken, err := uc.s3.UploadImage(creatureImageToken, objectNameToken)
+	urlToken, err := uc.s3.UploadImage(ctx, creatureImageToken, objectNameToken)
 	if err != nil {
 		l.UsecasesError(err, userID, map[string]any{"creature_id": creatureInput.ID})
 		return err

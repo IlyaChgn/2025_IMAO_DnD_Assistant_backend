@@ -151,7 +151,7 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 		var status string
 
 		switch {
-		case errors.Is(err, apperrors.InvalidInputError):
+		case errors.Is(err, apperrors.InvalidInputError) || errors.Is(err, apperrors.InvalidIDErr):
 			code = responses.StatusBadRequest
 			status = responses.ErrInvalidID
 		case errors.Is(err, apperrors.PermissionDeniedError):

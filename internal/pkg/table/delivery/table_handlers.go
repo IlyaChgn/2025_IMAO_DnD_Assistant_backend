@@ -80,7 +80,7 @@ func (h *TableHandler) GetTableData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := h.usecases.GetTableData(sessionID)
+	data, err := h.usecases.GetTableData(ctx, sessionID)
 	if err != nil {
 		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrWrongTableID, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongTableID)
@@ -114,5 +114,5 @@ func (h *TableHandler) ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.usecases.AddNewConnection(user, sessionID, conn)
+	h.usecases.AddNewConnection(ctx, user, sessionID, conn)
 }

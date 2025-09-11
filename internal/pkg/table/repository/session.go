@@ -1,12 +1,13 @@
 package repository
 
 import (
+	"context"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils/merger"
 	"github.com/gorilla/websocket"
-	"log"
 	"sync"
 	"time"
 )
@@ -34,7 +35,9 @@ type session struct {
 	metrics metrics.WSSessionMetrics
 }
 
-func (s *session) run() {
+func (s *session) run(ctx context.Context) {
+	l := logger.FromContext(ctx)
+
 	for {
 		select {
 		case msg := <-s.broadcast:
@@ -44,8 +47,7 @@ func (s *session) run() {
 
 			s.encounterData, err = merger.Merge(s.encounterData, msg)
 			if err != nil {
-				log.Println("merge error:", err)
-
+				l.RepoError(err, nil)
 				return
 			}
 
@@ -53,6 +55,7 @@ func (s *session) run() {
 				err := responses.SendWSOkResponse(p.Conn, models.BattleInfo,
 					&models.EncounterData{EncounterData: s.encounterData})
 				if err != nil {
+					l.RepoError(err, nil)
 					p.Conn.Close()
 
 					delete(s.participants, id)
@@ -66,7 +69,9 @@ func (s *session) run() {
 	}
 }
 
-func (s *session) WriteFirstMsg(userID int) {
+func (s *session) WriteFirstMsg(ctx context.Context, userID int) {
+	l := logger.FromContext(ctx)
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.metrics.IncSentMsgs()
@@ -75,6 +80,7 @@ func (s *session) WriteFirstMsg(userID int) {
 
 	err := responses.SendWSOkResponse(conn, models.BattleInfo, &models.EncounterData{EncounterData: s.encounterData})
 	if err != nil {
+		l.RepoError(err, nil)
 		conn.Close()
 
 		delete(s.participants, userID)

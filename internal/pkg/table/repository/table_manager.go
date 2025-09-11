@@ -1,13 +1,14 @@
 package repository
 
 import (
+	"context"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/gorilla/websocket"
-	"log"
 	"sync"
 	"time"
 )
@@ -29,8 +30,9 @@ func NewTableManager(metrics metrics.WSMetrics, sessionMetrics metrics.WSSession
 	}
 }
 
-func (tm *tableManager) CreateSession(admin *models.User, encounter *models.Encounter, sessionID string,
-	callback func(sessionID string)) {
+func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, encounter *models.Encounter,
+	sessionID string, callback func(sessionID string)) {
+	l := logger.FromContext(ctx)
 	newSession := &session{
 		encounterID:     encounter.UUID,
 		encounterName:   encounter.Name,
@@ -49,61 +51,77 @@ func (tm *tableManager) CreateSession(admin *models.User, encounter *models.Enco
 	tm.metrics.IncSessions()
 	tm.mu.Unlock()
 
-	go newSession.run()
+	l.RepoInfo("created WS session", map[string]any{"admin_id": admin.ID, "session_id": sessionID})
+
+	go newSession.run(ctx)
 }
 
-func (tm *tableManager) RemoveSession(sessionID string) {
+func (tm *tableManager) RemoveSession(ctx context.Context, sessionID string) {
+	l := logger.FromContext(ctx)
+
 	tm.mu.RLock()
 	activeSession, ok := tm.sessions[sessionID]
 	tm.mu.RUnlock()
 
 	if !ok {
-		log.Println(apperrors.TableNotFoundErr)
-
+		l.RepoWarn(apperrors.TableNotFoundErr, map[string]any{"session_id": sessionID})
 		return
 	}
 
 	for key := range activeSession.participants {
-		activeSession.RemoveParticipant(key)
+		activeSession.RemoveParticipant(ctx, key)
+		l.RepoInfo("user successfully removed", map[string]any{"session_id": sessionID, "participant_id": key})
 	}
 
 	tm.mu.Lock()
 	tm.metrics.IncreaseDuration(time.Since(activeSession.start))
 	delete(tm.sessions, sessionID)
 	tm.mu.Unlock()
+
+	l.RepoInfo("session removed", map[string]any{"session_id": sessionID})
 }
 
-func (tm *tableManager) GetTableData(sessionID string) (*models.TableData, error) {
+func (tm *tableManager) GetTableData(ctx context.Context, sessionID string) (*models.TableData, error) {
+	l := logger.FromContext(ctx)
+
 	tm.mu.RLock()
 	activeSession, ok := tm.sessions[sessionID]
 	tm.mu.RUnlock()
 
 	if !ok {
+		l.RepoWarn(apperrors.TableNotFoundErr, map[string]any{"session_id": sessionID})
 		return nil, apperrors.TableNotFoundErr
 	}
 
 	return activeSession.GetTableData(), nil
 }
 
-func (tm *tableManager) GetEncounterData(sessionID string) ([]byte, error) {
+func (tm *tableManager) GetEncounterData(ctx context.Context, sessionID string) ([]byte, error) {
+	l := logger.FromContext(ctx)
+
 	tm.mu.RLock()
 	activeSession, ok := tm.sessions[sessionID]
 	tm.mu.RUnlock()
 
 	if !ok {
+		l.RepoWarn(apperrors.TableNotFoundErr, map[string]any{"session_id": sessionID})
 		return nil, apperrors.TableNotFoundErr
 	}
 
 	return activeSession.GetEncounterData(), nil
 }
 
-func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, conn *websocket.Conn) {
+func (tm *tableManager) AddNewConnection(ctx context.Context, user *models.User, sessionID string,
+	conn *websocket.Conn) {
+	l := logger.FromContext(ctx)
+
 	tm.mu.RLock()
 	activeSession, ok := tm.sessions[sessionID]
 	tm.metrics.IncConns()
 	tm.mu.RUnlock()
 
 	if !ok {
+		l.RepoWarn(apperrors.TableNotFoundErr, map[string]any{"session_id": sessionID})
 		responses.SendWSErrResponse(conn, responses.WSStatusBadRequest, responses.ErrInvalidWSSessionID)
 		conn.Close()
 
@@ -113,6 +131,7 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 	var err error
 
 	if activeSession.CheckUser(user.ID) {
+		l.RepoWarn(apperrors.UserAlreadyExistsErr, map[string]any{"session_id": sessionID, "user_id": user.ID})
 		responses.SendWSErrResponse(conn, responses.WSStatusBadRequest, responses.ErrUserAlreadyExistsWS)
 		conn.Close()
 
@@ -120,12 +139,13 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 	}
 
 	if user.ID == activeSession.GetAdminID() {
-		activeSession.AddAdmin(user.ID, user.Name, conn)
+		activeSession.AddAdmin(ctx, user.ID, user.Name, conn)
 	} else {
-		err = activeSession.AddParticipant(user.ID, user.Name, conn)
+		err = activeSession.AddParticipant(ctx, user.ID, user.Name, conn)
 	}
 
 	if err != nil {
+		l.RepoWarn(err, map[string]any{"session_id": sessionID, "user_id": user.ID})
 		responses.SendWSErrResponse(conn, responses.WSStatusBadRequest, responses.ErrMaxPlayersWS)
 		conn.Close()
 
@@ -133,18 +153,23 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 	}
 
 	activeSession.refreshCallback(sessionID)
-	activeSession.WriteFirstMsg(user.ID)
+	activeSession.WriteFirstMsg(ctx, user.ID)
+
+	l.RepoInfo("new connection added", map[string]any{"session_id": sessionID, "user_id": user.ID})
 
 	go func() {
 		defer func() {
 			if activeSession.CheckUser(user.ID) {
-				activeSession.RemoveParticipant(user.ID)
+				l.RepoInfo("user successfully removed",
+					map[string]any{"session_id": sessionID, "user_id": user.ID})
+				activeSession.RemoveParticipant(ctx, user.ID)
 			}
 		}()
 
 		for {
 			_, msg, err := conn.ReadMessage()
 			if err != nil {
+				l.RepoError(err, map[string]any{"session_id": sessionID, "user_id": user.ID, "ws_msg": string(msg)})
 				break
 			}
 
@@ -155,14 +180,15 @@ func (tm *tableManager) AddNewConnection(user *models.User, sessionID string, co
 	}()
 }
 
-func (tm *tableManager) HasActiveUsers(sessionID string) bool {
+func (tm *tableManager) HasActiveUsers(ctx context.Context, sessionID string) bool {
+	l := logger.FromContext(ctx)
+
 	tm.mu.RLock()
 	activeSession, ok := tm.sessions[sessionID]
 	tm.mu.RUnlock()
 
 	if !ok {
-		log.Println(apperrors.TableNotFoundErr)
-
+		l.RepoWarn(apperrors.TableNotFoundErr, map[string]any{"session_id": sessionID})
 		return false
 	}
 

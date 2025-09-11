@@ -32,7 +32,7 @@ type BestiaryUsecases interface {
 }
 
 type BestiaryS3Manager interface {
-	UploadImage(base64Data string, objectName string) (string, error)
+	UploadImage(ctx context.Context, base64Data string, objectName string) (string, error)
 }
 
 type GeminiAPI interface {

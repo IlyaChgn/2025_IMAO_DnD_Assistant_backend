@@ -52,12 +52,12 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 
 	sessionID := utils.RandString(sessionStringLen)
 
-	uc.tableManager.CreateSession(admin, encounterData, sessionID, uc.refreshSession)
+	uc.tableManager.CreateSession(ctx, admin, encounterData, sessionID, uc.refreshSession)
 
 	uc.mu.Lock()
 
 	uc.sessionWatcher[sessionID] = time.AfterFunc(sessionDuration, func() {
-		uc.stopTimer(sessionID, encounterID)
+		uc.stopTimer(ctx, sessionID, encounterID)
 		l.UsecasesInfo(fmt.Sprintf("session timer stopped, sessionID: %s", sessionID), admin.ID)
 	})
 
@@ -66,12 +66,13 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 	return sessionID, nil
 }
 
-func (uc *tableUsecases) GetTableData(sessionID string) (*models.TableData, error) {
-	return uc.tableManager.GetTableData(sessionID)
+func (uc *tableUsecases) GetTableData(ctx context.Context, sessionID string) (*models.TableData, error) {
+	return uc.tableManager.GetTableData(ctx, sessionID)
 }
 
-func (uc *tableUsecases) AddNewConnection(user *models.User, sessionID string, conn *websocket.Conn) {
-	uc.tableManager.AddNewConnection(user, sessionID, conn)
+func (uc *tableUsecases) AddNewConnection(ctx context.Context, user *models.User, sessionID string,
+	conn *websocket.Conn) {
+	uc.tableManager.AddNewConnection(ctx, user, sessionID, conn)
 }
 
 func (uc *tableUsecases) refreshSession(sessionID string) {
@@ -82,8 +83,8 @@ func (uc *tableUsecases) refreshSession(sessionID string) {
 	uc.sessionWatcher[sessionID].Reset(sessionDuration)
 }
 
-func (uc *tableUsecases) stopTimer(sessionID, encounterID string) {
-	data, _ := uc.tableManager.GetEncounterData(sessionID)
+func (uc *tableUsecases) stopTimer(ctx context.Context, sessionID, encounterID string) {
+	data, _ := uc.tableManager.GetEncounterData(ctx, sessionID)
 
 	uc.mu.Lock()
 	uc.sessionWatcher[sessionID].Stop()
@@ -91,5 +92,5 @@ func (uc *tableUsecases) stopTimer(sessionID, encounterID string) {
 	uc.mu.Unlock()
 
 	uc.encounterRepo.UpdateEncounter(context.Background(), data, encounterID)
-	uc.tableManager.RemoveSession(sessionID)
+	uc.tableManager.RemoveSession(ctx, sessionID)
 }

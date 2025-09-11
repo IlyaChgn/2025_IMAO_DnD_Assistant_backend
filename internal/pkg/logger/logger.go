@@ -105,7 +105,7 @@ func (l *logger) UsecasesWarn(err error, userID int, fields any) {
 	newLogger := l
 	newLogger = newLogger.logUsecases(userID)
 
-	newLogger.with("err", err.Error()).
+	newLogger.with("msg", err.Error()).
 		with("fields", fields).
 		zap.Warn()
 }
@@ -117,4 +117,34 @@ func (l *logger) UsecasesError(err error, userID int, fields any) {
 	newLogger.with("err", err.Error()).
 		with("fields", fields).
 		zap.Error(err)
+}
+
+func (l *logger) logRepo(params map[string]any) *logger {
+	return l.with("layer", "repo").
+		with("method", utils.GetPrevFunctionName(2)).
+		with("params", params)
+}
+
+func (l *logger) RepoInfo(msg string, params map[string]any) {
+	newLogger := l
+	newLogger = newLogger.logRepo(params)
+
+	newLogger.with("msg", msg).
+		zap.Info()
+}
+
+func (l *logger) RepoWarn(err error, params map[string]any) {
+	newLogger := l
+	newLogger = newLogger.logRepo(params)
+
+	newLogger.with("msg", err.Error()).
+		zap.Warn()
+}
+
+func (l *logger) RepoError(err error, params map[string]any) {
+	newLogger := l
+	newLogger = newLogger.logRepo(params)
+
+	newLogger.with("err", err.Error()).
+		zap.Error()
 }

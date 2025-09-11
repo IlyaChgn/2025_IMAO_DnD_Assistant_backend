@@ -16,5 +16,9 @@ type Logger interface {
 	UsecasesWarn(err error, userID int, fields any)
 	UsecasesError(err error, userID int, fields any)
 
+	RepoInfo(msg string, params map[string]any)
+	RepoWarn(err error, params map[string]any)
+	RepoError(err error, params map[string]any)
+
 	Sync()
 }

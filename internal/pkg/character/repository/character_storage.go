@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
-	"log"
 	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -52,12 +52,14 @@ func (s *characterStorage) GetCharactersList(ctx context.Context, size, start, u
 }
 
 func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string) (*models.Character, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	collection := s.db.Collection("characters")
 
 	primitiveId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
+		l.RepoWarn(err, map[string]any{"id": id})
 		return nil, apperrors.InvalidIDErr
 	}
 
@@ -65,21 +67,23 @@ func (s *characterStorage) GetCharacterByMongoId(ctx context.Context, id string)
 
 	var character models.Character
 
-	return dbcall.DBCall[*models.Character](fnName, s.metrics, func() (*models.Character, error) {
+	_, err = dbcall.DBCall[*models.Character](fnName, s.metrics, func() (*models.Character, error) {
 		err = collection.FindOne(ctx, filter).Decode(&character)
-		if err != nil {
-			if errors.Is(err, mongo.ErrNoDocuments) {
-				return nil, nil
-			}
-
-			return nil, apperrors.FindMongoDataErr
-		}
-
-		return &character, nil
+		return &character, err
 	})
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		l.RepoWarn(err, map[string]any{"id": id})
+		return nil, nil
+	} else if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return &character, nil
 }
 
 func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.CharacterRaw, userID int) error {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	creaturesCollection := s.db.Collection("characters")
@@ -90,6 +94,7 @@ func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.Char
 
 	err := json.Unmarshal([]byte(cleanedData), &characterData)
 	if err != nil {
+		l.RepoError(err, nil)
 		return apperrors.UnmarashallingJSONError
 	}
 
@@ -104,38 +109,35 @@ func (s *characterStorage) AddCharacter(ctx context.Context, rawChar models.Char
 		Version:        rawChar.Version,
 	}
 
-	return dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
+	err = dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
 		_, err = creaturesCollection.InsertOne(ctx, character)
-		if err != nil {
-			return apperrors.InsertMongoDataErr
-		}
-
-		return nil
+		return err
 	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": character.ID})
+		return apperrors.InsertMongoDataErr
+	}
+
+	return nil
 }
 
 func (s *characterStorage) getCharactersList(ctx context.Context, filters bson.D,
 	findOptions *options.FindOptions) ([]*models.CharacterShort, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	creaturesCollection := s.db.Collection("characters")
 
 	cursor, err := dbcall.DBCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
-		cursor, err := creaturesCollection.Find(ctx, filters, findOptions)
-		if err != nil {
-			if errors.Is(err, mongo.ErrNoDocuments) {
-				return nil, apperrors.NoDocsErr
-			}
-
-			return nil, apperrors.FindMongoDataErr
-		}
-
-		return cursor, nil
+		return creaturesCollection.Find(ctx, filters, findOptions)
 	})
-	if err != nil {
-		return nil, err
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		l.RepoWarn(err, nil)
+		return nil, apperrors.NoDocsErr
+	} else if err != nil {
+		l.RepoError(err, nil)
+		return nil, apperrors.FindMongoDataErr
 	}
-
 	defer cursor.Close(ctx)
 
 	var charactersShort []*models.CharacterShort
@@ -143,7 +145,7 @@ func (s *characterStorage) getCharactersList(ctx context.Context, filters bson.D
 	for cursor.Next(ctx) {
 		var character models.Character
 		if err := cursor.Decode(&character); err != nil {
-			log.Println(err)
+			l.RepoError(err, map[string]any{"id": character.ID})
 			return nil, apperrors.DecodeMongoDataErr
 		}
 

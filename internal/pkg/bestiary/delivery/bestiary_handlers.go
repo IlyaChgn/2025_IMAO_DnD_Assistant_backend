@@ -207,6 +207,9 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 		case errors.Is(err, apperrors.InvalidInputError):
 			code = responses.StatusBadRequest
 			status = responses.ErrInvalidID // NEED TO WRITE APPROPRIATE ERROR
+		case errors.Is(err, apperrors.InvalidBase64Err):
+			code = responses.StatusBadRequest
+			status = responses.ErrWrongBase64
 		default:
 			code = responses.StatusInternalServerError
 			status = responses.ErrInternalServer

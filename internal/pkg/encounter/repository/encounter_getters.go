@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"github.com/jackc/pgx/v5"
@@ -13,22 +14,19 @@ import (
 
 func (s *encounterStorage) GetEncountersList(ctx context.Context,
 	size, start, userID int) (*models.EncountersList, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	rows, err := dbcall.DBCall[pgx.Rows](fnName, s.metrics, func() (pgx.Rows, error) {
-		rows, err := s.pool.Query(ctx, GetEncountersListQuery, userID, size, start)
-		if err != nil && errors.Is(err, pgx.ErrNoRows) {
-			return nil, nil
-		} else if err != nil {
-			return nil, apperrors.QueryError
-		}
-
-		return rows, nil
+		return s.pool.Query(ctx, GetEncountersListQuery, userID, size, start)
 	})
-	if err != nil {
-		return nil, err
+	if err != nil && errors.Is(err, pgx.ErrNoRows) {
+		l.RepoWarn(err, map[string]any{"size": size, "start": start, "userID": userID})
+		return nil, nil
+	} else if err != nil {
+		l.RepoError(err, map[string]any{"size": size, "start": start, "userID": userID})
+		return nil, apperrors.QueryError
 	}
-
 	defer rows.Close()
 
 	var list models.EncountersList
@@ -37,6 +35,7 @@ func (s *encounterStorage) GetEncountersList(ctx context.Context,
 		var encounter models.EncounterInList
 
 		if err := rows.Scan(&encounter.UserID, &encounter.Name, &encounter.UUID); err != nil {
+			l.RepoError(err, map[string]any{"size": size, "start": start, "userID": userID})
 			return nil, apperrors.ScanError
 		}
 
@@ -48,24 +47,21 @@ func (s *encounterStorage) GetEncountersList(ctx context.Context,
 
 func (s *encounterStorage) GetEncountersListWithSearch(ctx context.Context, size, start, userID int,
 	search *models.SearchParams) (*models.EncountersList, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	searchValue := fmt.Sprintf("%s:*", search.Value)
 
 	rows, err := dbcall.DBCall[pgx.Rows](fnName, s.metrics, func() (pgx.Rows, error) {
-		rows, err := s.pool.Query(ctx, GetEncountersListWithSearchQuery, userID, searchValue, size, start)
-		if err != nil && errors.Is(err, pgx.ErrNoRows) {
-			return nil, nil
-		} else if err != nil {
-			return nil, apperrors.QueryError
-		}
-
-		return rows, nil
+		return s.pool.Query(ctx, GetEncountersListWithSearchQuery, userID, searchValue, size, start)
 	})
-	if err != nil {
-		return nil, err
+	if err != nil && errors.Is(err, pgx.ErrNoRows) {
+		l.RepoWarn(err, map[string]any{"size": size, "start": start, "userID": userID, "search": searchValue})
+		return nil, nil
+	} else if err != nil {
+		l.RepoError(err, map[string]any{"size": size, "start": start, "userID": userID, "search": searchValue})
+		return nil, apperrors.QueryError
 	}
-
 	defer rows.Close()
 
 	var list models.EncountersList
@@ -74,6 +70,7 @@ func (s *encounterStorage) GetEncountersListWithSearch(ctx context.Context, size
 		var encounter models.EncounterInList
 
 		if err := rows.Scan(&encounter.UserID, &encounter.Name, &encounter.UUID); err != nil {
+			l.RepoError(err, map[string]any{"size": size, "start": start, "userID": userID, "search": searchValue})
 			return nil, apperrors.ScanError
 		}
 
@@ -84,17 +81,24 @@ func (s *encounterStorage) GetEncountersListWithSearch(ctx context.Context, size
 }
 
 func (s *encounterStorage) GetEncounterByID(ctx context.Context, id string) (*models.Encounter, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	var encounter models.Encounter
 
-	return dbcall.DBCall[*models.Encounter](fnName, s.metrics, func() (*models.Encounter, error) {
+	_, err := dbcall.DBCall[*models.Encounter](fnName, s.metrics, func() (*models.Encounter, error) {
 		line := s.pool.QueryRow(ctx, GetEncounterByIDQuery, id)
 		if err := line.Scan(&encounter.UserID, &encounter.Name, &encounter.Data,
 			&encounter.UUID); err != nil {
-			return nil, apperrors.ScanError
+			return nil, err
 		}
 
 		return &encounter, nil
 	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
+		return nil, apperrors.ScanError
+	}
+
+	return &encounter, nil
 }

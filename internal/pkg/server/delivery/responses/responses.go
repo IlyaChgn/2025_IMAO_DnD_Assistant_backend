@@ -42,9 +42,10 @@ const (
 	ErrWrongTableID = "Wrong table ID"
 	ErrWSUpgrade    = "Websocket upgrade error"
 
-	ErrWrongImage = "Bad image"
-	ErrEmptyImage = "Image not provided"
-	ErrWrongJobID = "Wrong job ID"
+	ErrWrongImage  = "Bad image"
+	ErrEmptyImage  = "Image not provided"
+	ErrWrongJobID  = "Wrong job ID"
+	ErrWrongBase64 = "Invalid base64 format"
 )
 
 func newErrResponse(status string) *models.ErrResponse {
