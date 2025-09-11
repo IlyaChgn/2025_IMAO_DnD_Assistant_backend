@@ -142,7 +142,7 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 func (uc *bestiaryUsecases) ParseCreatureFromImage(ctx context.Context, image []byte) (*models.Creature, error) {
 	l := logger.FromContext(ctx)
 
-	parsedJSON, err := uc.geminiAPI.GenerateFromImage(image)
+	parsedJSON, err := uc.geminiAPI.GenerateFromImage(ctx, image)
 	if err != nil {
 		l.UsecasesError(err, 0, nil)
 		return nil, err
@@ -167,7 +167,7 @@ func (uc *bestiaryUsecases) GenerateCreatureFromDescription(ctx context.Context,
 	description string) (*models.Creature, error) {
 	l := logger.FromContext(ctx)
 
-	parsedJSON, err := uc.geminiAPI.GenerateFromDescription(description)
+	parsedJSON, err := uc.geminiAPI.GenerateFromDescription(ctx, description)
 	if err != nil {
 		l.UsecasesError(err, 0, nil)
 		return nil, err

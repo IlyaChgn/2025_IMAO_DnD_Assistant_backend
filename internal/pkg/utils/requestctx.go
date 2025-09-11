@@ -6,9 +6,11 @@ import (
 )
 
 const (
-	keyMethod  = "method"
-	keyURL     = "path"
-	keySession = "session"
+	keyMethod           = "method"
+	keyURL              = "path"
+	keySession          = "session"
+	keyExternalMethod   = "external_method"
+	keyExternalEndpoint = "external_endpoint"
 )
 
 func SaveRequestData(ctx context.Context, r *http.Request) context.Context {
@@ -44,6 +46,27 @@ func GetURL(ctx context.Context) string {
 
 func GetSession(ctx context.Context) string {
 	if v, ok := ctx.Value(keySession).(string); ok {
+		return v
+	}
+	return ""
+}
+
+func SaveExternalRequestData(ctx context.Context, r *http.Request) context.Context {
+	return context.WithValue(
+		context.WithValue(ctx, keyExternalEndpoint, r.URL.String()),
+		keyExternalMethod, r.Method,
+	)
+}
+
+func GetExternalMethod(ctx context.Context) string {
+	if v, ok := ctx.Value(keyExternalMethod).(string); ok {
+		return v
+	}
+	return ""
+}
+
+func GetExternalURL(ctx context.Context) string {
+	if v, ok := ctx.Value(keyExternalEndpoint).(string); ok {
 		return v
 	}
 	return ""

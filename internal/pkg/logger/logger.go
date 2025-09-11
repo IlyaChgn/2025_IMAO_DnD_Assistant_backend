@@ -148,3 +148,38 @@ func (l *logger) RepoError(err error, params map[string]any) {
 	newLogger.with("err", err.Error()).
 		zap.Error()
 }
+
+func (l *logger) ExternalWithContext(ctx context.Context, endpoint, method string) {
+
+}
+
+func (l *logger) logExternal(ctx context.Context, params map[string]any) *logger {
+	return l.with("layer", "external").
+		with("endpoint", utils.GetExternalURL(ctx)).
+		with("method", utils.GetExternalMethod(ctx)).
+		with("params", params)
+}
+
+func (l *logger) ExternalInfo(ctx context.Context, msg string, params map[string]any) {
+	newLogger := l
+	newLogger = newLogger.logExternal(ctx, params)
+
+	newLogger.with("msg", msg).
+		zap.Info()
+}
+
+func (l *logger) ExternalWarn(ctx context.Context, err error, params map[string]any) {
+	newLogger := l
+	newLogger = newLogger.logExternal(ctx, params)
+
+	newLogger.with("msg", err.Error()).
+		zap.Warn()
+}
+
+func (l *logger) ExternalError(ctx context.Context, err error, params map[string]any) {
+	newLogger := l
+	newLogger = newLogger.logExternal(ctx, params)
+
+	newLogger.with("err", err.Error()).
+		zap.Error()
+}

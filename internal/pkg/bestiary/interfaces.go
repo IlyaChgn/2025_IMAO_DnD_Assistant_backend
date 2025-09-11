@@ -36,8 +36,8 @@ type BestiaryS3Manager interface {
 }
 
 type GeminiAPI interface {
-	GenerateFromImage(image []byte) (map[string]interface{}, error)
-	GenerateFromDescription(desc string) (map[string]interface{}, error)
+	GenerateFromImage(ctx context.Context, image []byte) (map[string]interface{}, error)
+	GenerateFromDescription(ctx context.Context, desc string) (map[string]interface{}, error)
 }
 
 type LLMJobRepository interface {

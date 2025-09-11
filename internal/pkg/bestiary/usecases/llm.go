@@ -82,9 +82,9 @@ func (uc *LLMUsecase) process(ctx context.Context, id string) {
 
 	// Генерация сущности из описания или изображения
 	if job.Description != nil {
-		raw, err = uc.geminiAPI.GenerateFromDescription(*job.Description)
+		raw, err = uc.geminiAPI.GenerateFromDescription(ctx, *job.Description)
 	} else {
-		raw, err = uc.geminiAPI.GenerateFromImage(job.Image)
+		raw, err = uc.geminiAPI.GenerateFromImage(ctx, job.Image)
 	}
 
 	if err != nil {

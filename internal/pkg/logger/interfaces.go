@@ -20,5 +20,9 @@ type Logger interface {
 	RepoWarn(err error, params map[string]any)
 	RepoError(err error, params map[string]any)
 
+	ExternalInfo(ctx context.Context, msg string, params map[string]any)
+	ExternalWarn(ctx context.Context, err error, params map[string]any)
+	ExternalError(ctx context.Context, err error, params map[string]any)
+
 	Sync()
 }
