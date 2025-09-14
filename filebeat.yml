@@ -1,0 +1,38 @@
+filebeat.inputs:
+  - type: filestream
+    id: app-logs
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/logs.json
+    parsers:
+      - ndjson:
+          keys_under_root: true
+          overwrite_keys: true
+          add_error_key: true
+
+processors:
+  - rename:
+      fields:
+        - from: "lvl"
+          to: "log.level"
+      ignore_missing: true
+      fail_on_error: false
+
+  - rename:
+      fields:
+        - from: "ts"
+          to: "@timestamp"
+      ignore_missing: true
+      fail_on_error: false
+
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+setup.template.name: "app-logs"
+setup.template.pattern: "app-logs-*"
+
+output.elasticsearch:
+  hosts: ["${ELASTICSEARCH_HOSTS}"]
+  username: "${ELASTICSEARCH_USERNAME}"
+  password: "${ELASTICSEARCH_PASSWORD}"
+  index: "app-logs-%{+yyyy.MM.dd}"
