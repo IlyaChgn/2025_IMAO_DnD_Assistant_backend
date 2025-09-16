@@ -69,6 +69,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
+    restart: always
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=true
@@ -98,6 +99,7 @@ services:
       - KIBANA_PASSWORD=${KIBANA_PASSWORD}
 
   kibana:
+    restart: always
     image: kibana:8.13.0
     container_name: kibana
     depends_on:
@@ -115,6 +117,7 @@ services:
       - ${KIBANA_PORT}:5601
 
   filebeat:
+    restart: always
     image: elastic/filebeat:8.13.0
     container_name: filebeat
     user: root

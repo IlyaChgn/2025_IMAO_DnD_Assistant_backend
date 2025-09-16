@@ -1,6 +1,6 @@
 filebeat.inputs:
   - type: filestream
-    id: app-logs
+    id: encounterium-logs
     enabled: true
     paths:
       - /usr/share/filebeat/logs/logs.json
@@ -28,11 +28,22 @@ processors:
   - add_host_metadata: ~
   - add_cloud_metadata: ~
 
-setup.template.name: "app-logs"
-setup.template.pattern: "app-logs-*"
+setup.ilm.enabled: true
+setup.ilm.rollover_alias: "encounterium-logs"
+setup.ilm.policy_name: "encounterium-logs-policy"
+setup.ilm.policy:
+  phases:
+    hot:
+      actions:
+        rollover:
+          max_age: "1d"
+          max_size: "50gb"
+    delete:
+      min_age: "14d"
+      actions:
+        delete: {}
 
 output.elasticsearch:
   hosts: ["${ELASTICSEARCH_HOSTS}"]
   username: "${ELASTICSEARCH_USERNAME}"
   password: "${ELASTICSEARCH_PASSWORD}"
-  index: "app-logs-%{+yyyy.MM.dd}"
