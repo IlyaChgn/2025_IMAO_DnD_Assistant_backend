@@ -3,6 +3,7 @@ package usecases
 import (
 	"context"
 	"encoding/json"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"io"
 	"mime/multipart"
 	"strconv"
@@ -24,7 +25,10 @@ func NewCharacterUsecases(repo characterinterfaces.CharacterRepository) characte
 
 func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start, userID int,
 	search models.SearchParams) ([]*models.CharacterShort, error) {
+	l := logger.FromContext(ctx)
+
 	if start < 0 || size <= 0 {
+		l.UsecasesWarn(apperrors.StartPosSizeError, userID, map[string]any{"start": start, "size": size})
 		return nil, apperrors.StartPosSizeError
 	}
 
@@ -32,8 +36,11 @@ func (uc *characterUsecases) GetCharactersList(ctx context.Context, size, start,
 }
 
 func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.File, userID int) error {
+	l := logger.FromContext(ctx)
+
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
+		l.UsecasesError(err, userID, nil)
 		return apperrors.ReadFileError
 	}
 
@@ -41,10 +48,12 @@ func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.Fi
 
 	err = json.Unmarshal(fileBytes, &rawChar)
 	if err != nil {
+		l.UsecasesError(err, userID, nil)
 		return apperrors.InvalidJSONError
 	}
 
 	if rawChar.Data == "" {
+		l.UsecasesWarn(apperrors.InvalidInputError, userID, nil)
 		return apperrors.InvalidInputError
 	}
 
@@ -53,16 +62,21 @@ func (uc *characterUsecases) AddCharacter(ctx context.Context, file multipart.Fi
 
 func (uc *characterUsecases) GetCharacterByMongoId(ctx context.Context, id string,
 	userID int) (*models.Character, error) {
+	l := logger.FromContext(ctx)
+
 	if id == "" {
+		l.UsecasesWarn(apperrors.InvalidInputError, userID, nil)
 		return nil, apperrors.InvalidInputError
 	}
 
 	character, err := uc.repo.GetCharacterByMongoId(ctx, id)
 	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"id": id})
 		return nil, err
 	}
 
 	if character.UserID != "*" && character.UserID != strconv.Itoa(userID) {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"id": id})
 		return nil, apperrors.PermissionDeniedError
 	}
 

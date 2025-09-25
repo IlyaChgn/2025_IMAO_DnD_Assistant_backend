@@ -60,6 +60,78 @@ services:
     volumes:
       - grafana_storage:/var/lib/grafana
 
+  elasticsearch:
+    image: elasticsearch:8.13.0
+    container_name: elasticsearch
+    healthcheck:
+      test: "curl -s -f -u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD} http://127.0.0.1:9200/_cluster/health"
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - ${ELASTIC_PORT}:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  user_init:
+    image: curlimages/curl
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./init:/init
+    entrypoint: ["/bin/sh", "/init/user_init.sh"]
+    environment:
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_HOST=${ELASTIC_HOST}
+      - ELASTIC_PORT=${ELASTIC_PORT}
+      - KIBANA_USER=${KIBANA_USER}
+      - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+
+  kibana:
+    restart: always
+    image: kibana:8.13.0
+    container_name: kibana
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      user_init:
+        condition: service_completed_successfully
+    environment:
+      - ELASTICSEARCH_HOSTS=http://${ELASTIC_HOST}:${ELASTIC_PORT}
+      - XPACK_SECURITY_ENABLED=true
+      - ELASTICSEARCH_USERNAME=${KIBANA_USER}
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - LOG_LEVEL=debug
+    ports:
+      - ${KIBANA_PORT}:5601
+
+  filebeat:
+    restart: always
+    image: elastic/filebeat:8.13.0
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs.json:/usr/share/filebeat/logs/logs.json:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=http://${ELASTIC_HOST}:${ELASTIC_PORT}
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
 volumes:
   postgres:
   redis:
@@ -68,3 +140,4 @@ volumes:
   prometheus_data:
   grafana:
   grafana_storage:
+  esdata:

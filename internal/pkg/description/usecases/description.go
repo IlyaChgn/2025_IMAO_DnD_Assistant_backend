@@ -3,6 +3,7 @@ package usecases
 import (
 	"context"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	descriptioninterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
@@ -22,6 +23,8 @@ func NewDescriptionUsecase(
 
 func (uc *descriptionUsecase) GenerateDescription(ctx context.Context,
 	req models.DescriptionGenerationRequest) (models.DescriptionGenerationResponse, error) {
+	l := logger.FromContext(ctx)
+
 	descriptionRequest := descriptionproto.DescriptionRequest{
 		FirstCharId:  req.FirstCharID,
 		SecondCharId: req.SecondCharID,
@@ -29,6 +32,7 @@ func (uc *descriptionUsecase) GenerateDescription(ctx context.Context,
 
 	descriptionResponse, err := uc.descriptionClient.GenerateDescription(ctx, &descriptionRequest)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return models.DescriptionGenerationResponse{}, apperrors.ReceivedDescriptionError
 	}
 

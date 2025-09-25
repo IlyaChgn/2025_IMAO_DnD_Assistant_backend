@@ -32,12 +32,12 @@ type BestiaryUsecases interface {
 }
 
 type BestiaryS3Manager interface {
-	UploadImage(base64Data string, objectName string) (string, error)
+	UploadImage(ctx context.Context, base64Data string, objectName string) (string, error)
 }
 
 type GeminiAPI interface {
-	GenerateFromImage(image []byte) (map[string]interface{}, error)
-	GenerateFromDescription(desc string) (map[string]interface{}, error)
+	GenerateFromImage(ctx context.Context, image []byte) (map[string]interface{}, error)
+	GenerateFromDescription(ctx context.Context, desc string) (map[string]interface{}, error)
 }
 
 type LLMJobRepository interface {
@@ -53,7 +53,7 @@ type GenerationUsecases interface {
 }
 
 type GeneratedCreatureProcessorUsecases interface {
-	ValidateAndProcessGeneratedCreature(*models.Creature) (*models.Creature, error)
+	ValidateAndProcessGeneratedCreature(ctx context.Context, c *models.Creature) (*models.Creature, error)
 }
 
 type ActionProcessorUsecases interface {

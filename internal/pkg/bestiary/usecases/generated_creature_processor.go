@@ -2,8 +2,9 @@ package usecases
 
 import (
 	"context"
-	"errors"
-	"log"
+	"fmt"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"regexp"
 	"strings"
 
@@ -23,18 +24,22 @@ func NewGeneratedCreatureProcessor(
 	}
 }
 
-func (processor *GeneratedCreatureProcessor) ValidateAndProcessGeneratedCreature(c *models.Creature) (*models.Creature, error) {
+func (processor *GeneratedCreatureProcessor) ValidateAndProcessGeneratedCreature(
+	ctx context.Context, c *models.Creature,
+) (*models.Creature, error) {
+	l := logger.FromContext(ctx)
+
 	if c == nil {
-		return nil, errors.New("nil creature")
+		l.UsecasesError(apperrors.NilCreatureErr, 0, nil)
+		return nil, apperrors.NilCreatureErr
 	}
 
-	// Создаем копию, чтобы избежать мутаций оригинального объекта
 	updated := *c
 
 	// 🧠 Попробуем получить LLM-атаки
 	attacksLLM, err := processor.actionProcessor.ProcessActions(context.Background(), updated.Actions)
 	if err != nil {
-		log.Printf("[GeneratedCreatureProcessor] failed to parse LLM actions: %v", err)
+		l.UsecasesInfo(fmt.Sprintf("failed to parse LLM actions: %v", err), 0)
 		// Ошибка — пропускаем
 	} else {
 		updated.LLMParsedAttack = attacksLLM

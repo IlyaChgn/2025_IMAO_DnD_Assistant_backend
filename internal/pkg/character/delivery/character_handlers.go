@@ -3,7 +3,7 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
-	"log"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -28,11 +28,13 @@ func NewCharacterHandler(usecases characterinterfaces.CharacterUsecases, ctxUser
 
 func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	var reqData models.CharacterReq
 
 	err := json.NewDecoder(r.Body).Decode(&reqData)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
 
 		return
@@ -43,14 +45,24 @@ func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Requ
 
 	list, err := h.usecases.GetCharactersList(ctx, reqData.Size, reqData.Start, userID, reqData.Search)
 	if err != nil {
+		var code int
+		var status string
+
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
+			l.DeliveryInfo(ctx, "empty data", nil)
 			responses.SendOkResponse(w, nil)
+			return
 		case errors.Is(err, apperrors.StartPosSizeError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
+			code = responses.StatusBadRequest
+			status = responses.ErrSizeOrPosition
 		default:
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, reqData)
+		responses.SendErrResponse(w, code, status)
 
 		return
 	}
@@ -60,9 +72,11 @@ func (h *CharacterHandler) GetCharactersList(w http.ResponseWriter, r *http.Requ
 
 func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	err := r.ParseMultipartForm(2 << 20)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrWrongFileSize, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileSize)
 
 		return
@@ -70,7 +84,7 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 
 	file, header, err := r.FormFile("characterFile")
 	if err != nil {
-		log.Println(err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
@@ -78,6 +92,7 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 	defer file.Close()
 
 	if header.Header.Get("Content-Type") != "application/json" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrWrongFileType, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileType)
 
 		return
@@ -88,28 +103,40 @@ func (h *CharacterHandler) AddCharacter(w http.ResponseWriter, r *http.Request) 
 
 	err = h.usecases.AddCharacter(ctx, file, userID)
 	if err != nil {
+		var code int
+		var status string
+
 		switch {
 		case errors.Is(err, apperrors.InvalidInputError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrEmptyCharacterData)
+			code = responses.StatusBadRequest
+			status = responses.ErrEmptyCharacterData
 		case errors.Is(err, apperrors.InvalidJSONError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+			code = responses.StatusBadRequest
+			status = responses.ErrBadJSON
 		default:
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, nil)
+		responses.SendErrResponse(w, code, status)
 
 		return
 	}
 
+	l.DeliveryInfo(ctx, "added character from JSON", map[string]any{"user_id": userID})
 	responses.SendOkResponse(w, nil)
 }
 
 func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	vars := mux.Vars(r)
 
 	id, ok := vars["id"]
 	if !ok || id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
 
 		return
@@ -120,20 +147,32 @@ func (h *CharacterHandler) GetCharacterByMongoId(w http.ResponseWriter, r *http.
 
 	character, err := h.usecases.GetCharacterByMongoId(ctx, id, userID)
 	if err != nil {
+		var code int
+		var status string
+
 		switch {
-		case errors.Is(err, apperrors.InvalidInputError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		case errors.Is(err, apperrors.InvalidInputError) || errors.Is(err, apperrors.InvalidIDErr):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
 		case errors.Is(err, apperrors.PermissionDeniedError):
-			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
+			code = responses.StatusForbidden
+			status = responses.ErrForbidden
 		default:
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, nil)
+		responses.SendErrResponse(w, code, status)
 
 		return
 	}
 
 	if character == nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrCharacterNotFound, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCharacterNotFound)
+
+		return
 	}
 
 	responses.SendOkResponse(w, character)

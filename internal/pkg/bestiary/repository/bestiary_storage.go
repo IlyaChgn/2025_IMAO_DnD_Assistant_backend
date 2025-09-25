@@ -7,13 +7,13 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 	"strconv"
 )
 
@@ -41,6 +41,7 @@ func NewBestiaryStorage(db *mongo.Database, metrics mymetrics.DBMetrics) bestiar
 
 func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
 	filter models.FilterParams, search models.SearchParams) ([]*models.BestiaryCreature, error) {
+	l := logger.FromContext(ctx)
 	filters := buildTypesFilters(filter)
 
 	if search.Value != "" {
@@ -54,6 +55,7 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 
 	findOptions, err := buildFindOptions(start, size, order)
 	if err != nil {
+		l.RepoError(err, map[string]any{"start": start, "size": size})
 		return nil, err
 	}
 
@@ -62,6 +64,7 @@ func (s *bestiaryStorage) GetCreaturesList(ctx context.Context, size, start int,
 
 func (s *bestiaryStorage) GetUserCreaturesList(ctx context.Context, size, start int, order []models.Order,
 	filter models.FilterParams, search models.SearchParams, userID int) ([]*models.BestiaryCreature, error) {
+	l := logger.FromContext(ctx)
 	filters := buildTypesFilters(filter)
 
 	if search.Value != "" {
@@ -77,6 +80,7 @@ func (s *bestiaryStorage) GetUserCreaturesList(ctx context.Context, size, start 
 
 	findOptions, err := buildFindOptions(start, size, order)
 	if err != nil {
+		l.RepoError(err, map[string]any{"start": start, "size": size})
 		return nil, err
 	}
 
@@ -85,6 +89,7 @@ func (s *bestiaryStorage) GetUserCreaturesList(ctx context.Context, size, start 
 
 func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
 	isUserCollection bool) (*models.Creature, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	var collection *mongo.Collection
@@ -98,22 +103,24 @@ func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
 	filter := bson.M{"url": fmt.Sprintf("/bestiary/%s", url)}
 	var creature models.Creature
 
-	return dbcall.DBCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
+	_, err := dbcall.DBCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
 		err := collection.FindOne(ctx, filter).Decode(&creature)
-		if err == nil {
-			return &creature, nil
-		}
-
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, nil
-		}
-
-		return nil, apperrors.FindMongoDataErr
+		return &creature, err
 	})
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		l.RepoWarn(err, map[string]any{"url": url})
+		return nil, nil
+	} else if err != nil {
+		l.RepoError(err, map[string]any{"url": url})
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return &creature, nil
 }
 
 func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 	findOptions *options.FindOptions, isUserCollection bool) ([]*models.BestiaryCreature, error) {
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	var collection *mongo.Collection
@@ -127,20 +134,14 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 	var allCreatures []*models.BestiaryCreature
 
 	cursor, err := dbcall.DBCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
-		cursor, err := collection.Find(ctx, filters, findOptions)
-		if err != nil {
-			if errors.Is(err, mongo.ErrNoDocuments) {
-				return nil, nil
-			}
-			log.Println(err)
-
-			return nil, apperrors.FindMongoDataErr
-		}
-
-		return cursor, nil
+		return collection.Find(ctx, filters, findOptions)
 	})
-	if err != nil {
-		return nil, err
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		l.RepoWarn(err, nil)
+		return nil, nil
+	} else if err != nil {
+		l.RepoError(err, nil)
+		return nil, apperrors.FindMongoDataErr
 	}
 	defer cursor.Close(ctx)
 
@@ -148,6 +149,7 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 		var creature models.BestiaryCreature
 
 		if err := cursor.Decode(&creature); err != nil {
+			l.RepoError(err, nil)
 			return nil, apperrors.DecodeMongoDataErr
 		}
 
@@ -159,14 +161,17 @@ func (s *bestiaryStorage) getCreaturesList(ctx context.Context, filters bson.D,
 
 func (s *bestiaryStorage) AddGeneratedCreature(ctx context.Context, creature models.Creature) error {
 	creaturesCollection := s.db.Collection("generated_creatures")
+	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
-	return dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
+	err := dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
 		_, err := creaturesCollection.InsertOne(ctx, creature)
-		if err != nil {
-			return apperrors.InsertMongoDataErr
-		}
-
-		return nil
+		return err
 	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": creature.ID})
+		return apperrors.InsertMongoDataErr
+	}
+
+	return nil
 }

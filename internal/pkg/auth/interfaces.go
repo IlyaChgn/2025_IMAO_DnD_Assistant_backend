@@ -13,8 +13,8 @@ type AuthRepository interface {
 }
 
 type AuthUsecases interface {
-	Login(ctx context.Context, sessionID string, vkUser *models.UserPublicInfo,
-		tokens *models.VKTokensData, sessionDuration time.Duration) (*models.User, error)
+	Login(ctx context.Context, sessionID string,
+		loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error)
 	Logout(ctx context.Context, sessionID string) error
 	CheckAuth(ctx context.Context, sessionID string) (*models.User, bool)
 	// GetUserIDBySessionID следует использовать только если точно понятно, что пользователь авторизован и данные корректны
@@ -26,4 +26,9 @@ type SessionManager interface {
 		sessionDuration time.Duration) error
 	RemoveSession(ctx context.Context, sessionID string) error
 	GetSession(ctx context.Context, sessionID string) (*models.FullSessionData, bool)
+}
+
+type VKApi interface {
+	ExchangeCode(ctx context.Context, data *models.LoginRequest) ([]byte, error)
+	GetPublicInfo(ctx context.Context, idToken string) ([]byte, error)
 }

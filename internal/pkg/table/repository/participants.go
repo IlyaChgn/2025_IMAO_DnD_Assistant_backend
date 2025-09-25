@@ -1,14 +1,16 @@
 package repository
 
 import (
+	"context"
+	"fmt"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/gorilla/websocket"
-	"log"
 )
 
-func (s *session) AddParticipant(userID int, name string, conn *websocket.Conn) error {
+func (s *session) AddParticipant(ctx context.Context, userID int, name string, conn *websocket.Conn) error {
 	s.mu.Lock()
 
 	if s.playersNum == maxPlayersNum {
@@ -28,12 +30,12 @@ func (s *session) AddParticipant(userID int, name string, conn *websocket.Conn) 
 
 	s.mu.Unlock()
 
-	s.sendParticipantsInfo(userID, models.Connected)
+	s.sendParticipantsInfo(ctx, userID, models.Connected)
 
 	return nil
 }
 
-func (s *session) AddAdmin(userID int, name string, conn *websocket.Conn) {
+func (s *session) AddAdmin(ctx context.Context, userID int, name string, conn *websocket.Conn) {
 	s.mu.Lock()
 
 	newParticipant := &participant{
@@ -48,14 +50,16 @@ func (s *session) AddAdmin(userID int, name string, conn *websocket.Conn) {
 
 	s.mu.Unlock()
 
-	s.sendParticipantsInfo(userID, models.Connected)
+	s.sendParticipantsInfo(ctx, userID, models.Connected)
 }
 
-func (s *session) RemoveParticipant(userID int) {
+func (s *session) RemoveParticipant(ctx context.Context, userID int) {
+	l := logger.FromContext(ctx)
+
 	defer func() {
 		if err := recover(); err != nil {
-			log.Println("Recovered from panic in deleting participants:", err)
-			log.Println("userID = ", userID)
+			l.RepoError(fmt.Errorf("recovered from panic after deleting participant, %v", err),
+				map[string]any{"user_id": userID})
 		}
 	}()
 
@@ -70,10 +74,10 @@ func (s *session) RemoveParticipant(userID int) {
 
 	s.mu.Unlock()
 
-	s.sendParticipantsInfo(userID, models.Disconnected)
+	s.sendParticipantsInfo(ctx, userID, models.Disconnected)
 }
 
-func (s *session) sendParticipantsInfo(userID int, status models.ParticipantStatus) {
+func (s *session) sendParticipantsInfo(ctx context.Context, userID int, status models.ParticipantStatus) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

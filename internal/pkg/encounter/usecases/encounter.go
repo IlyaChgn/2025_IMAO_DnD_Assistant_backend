@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/google/uuid"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -21,7 +22,10 @@ func NewEncounterUsecases(repo encounterinterfaces.EncounterRepository) encounte
 
 func (uc *encounterUsecases) GetEncountersList(ctx context.Context, size, start, userID int,
 	search *models.SearchParams) (*models.EncountersList, error) {
+	l := logger.FromContext(ctx)
+
 	if start < 0 || size <= 0 {
+		l.UsecasesWarn(apperrors.StartPosSizeError, userID, map[string]any{"start": start, "size": size})
 		return nil, apperrors.StartPosSizeError
 	}
 
@@ -33,8 +37,11 @@ func (uc *encounterUsecases) GetEncountersList(ctx context.Context, size, start,
 }
 
 func (uc *encounterUsecases) GetEncounterByID(ctx context.Context, id string, userID int) (*models.Encounter, error) {
+	l := logger.FromContext(ctx)
+
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"id": id})
 		return nil, apperrors.PermissionDeniedError
 	}
 
@@ -42,7 +49,10 @@ func (uc *encounterUsecases) GetEncounterByID(ctx context.Context, id string, us
 }
 
 func (uc *encounterUsecases) SaveEncounter(ctx context.Context, encounter *models.SaveEncounterReq, userID int) error {
+	l := logger.FromContext(ctx)
+
 	if encounter.Name == "" || len(encounter.Name) > 60 {
+		l.UsecasesWarn(apperrors.InvalidInputError, userID, map[string]any{"name": encounter.Name})
 		return apperrors.InvalidInputError
 	}
 
@@ -52,8 +62,11 @@ func (uc *encounterUsecases) SaveEncounter(ctx context.Context, encounter *model
 }
 
 func (uc *encounterUsecases) UpdateEncounter(ctx context.Context, data []byte, id string, userID int) error {
+	l := logger.FromContext(ctx)
+
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"id": id})
 		return apperrors.PermissionDeniedError
 	}
 
@@ -61,8 +74,11 @@ func (uc *encounterUsecases) UpdateEncounter(ctx context.Context, data []byte, i
 }
 
 func (uc *encounterUsecases) RemoveEncounter(ctx context.Context, id string, userID int) error {
+	l := logger.FromContext(ctx)
+
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"id": id})
 		return apperrors.PermissionDeniedError
 	}
 

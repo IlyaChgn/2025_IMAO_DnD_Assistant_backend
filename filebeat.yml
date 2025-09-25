@@ -1,0 +1,49 @@
+filebeat.inputs:
+  - type: filestream
+    id: encounterium-logs
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/logs.json
+    parsers:
+      - ndjson:
+          keys_under_root: true
+          overwrite_keys: true
+          add_error_key: true
+
+processors:
+  - rename:
+      fields:
+        - from: "lvl"
+          to: "log.level"
+      ignore_missing: true
+      fail_on_error: false
+
+  - rename:
+      fields:
+        - from: "ts"
+          to: "@timestamp"
+      ignore_missing: true
+      fail_on_error: false
+
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+setup.ilm.enabled: true
+setup.ilm.rollover_alias: "encounterium-logs"
+setup.ilm.policy_name: "encounterium-logs-policy"
+setup.ilm.policy:
+  phases:
+    hot:
+      actions:
+        rollover:
+          max_age: "1d"
+          max_size: "50gb"
+    delete:
+      min_age: "14d"
+      actions:
+        delete: {}
+
+output.elasticsearch:
+  hosts: ["${ELASTICSEARCH_HOSTS}"]
+  username: "${ELASTICSEARCH_USERNAME}"
+  password: "${ELASTICSEARCH_PASSWORD}"

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -32,7 +33,10 @@ func NewBestiaryUsecases(
 
 func (uc *bestiaryUsecases) GetCreaturesList(ctx context.Context, size, start int, order []models.Order,
 	filter models.FilterParams, search models.SearchParams) ([]*models.BestiaryCreature, error) {
+	l := logger.FromContext(ctx)
+
 	if start < 0 || size <= 0 {
+		l.UsecasesWarn(apperrors.StartPosSizeError, 0, map[string]any{"start": start, "size": size})
 		return nil, apperrors.StartPosSizeError
 	}
 
@@ -40,8 +44,11 @@ func (uc *bestiaryUsecases) GetCreaturesList(ctx context.Context, size, start in
 }
 
 func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName string) (*models.Creature, error) {
+	l := logger.FromContext(ctx)
+
 	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, false)
 	if err != nil {
+		l.UsecasesError(err, 0, map[string]any{"creature": engName})
 		return nil, err
 	}
 
@@ -50,7 +57,10 @@ func (uc *bestiaryUsecases) GetCreatureByEngName(ctx context.Context, engName st
 
 func (uc *bestiaryUsecases) GetUserCreaturesList(ctx context.Context, size, start int, order []models.Order,
 	filter models.FilterParams, search models.SearchParams, userID int) ([]*models.BestiaryCreature, error) {
+	l := logger.FromContext(ctx)
+
 	if start < 0 || size <= 0 {
+		l.UsecasesWarn(apperrors.StartPosSizeError, 0, map[string]any{"start": start, "size": size})
 		return nil, apperrors.StartPosSizeError
 	}
 
@@ -59,12 +69,16 @@ func (uc *bestiaryUsecases) GetUserCreaturesList(ctx context.Context, size, star
 
 func (uc *bestiaryUsecases) GetUserCreatureByEngName(ctx context.Context, engName string,
 	userID int) (*models.Creature, error) {
+	l := logger.FromContext(ctx)
+
 	creature, err := uc.repo.GetCreatureByEngName(ctx, engName, true)
 	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"creature": engName})
 		return nil, err
 	}
 
 	if creature.UserID != strconv.Itoa(userID) {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"creature": engName})
 		return nil, apperrors.PermissionDeniedError
 	}
 
@@ -73,6 +87,8 @@ func (uc *bestiaryUsecases) GetUserCreatureByEngName(ctx context.Context, engNam
 
 func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 	creatureInput models.CreatureInput, userID int) error {
+	l := logger.FromContext(ctx)
+
 	var generatedCreature = creatureInput.Creature // скопировали всё, кроме ID
 
 	if creatureInput.ID == "current" || creatureInput.ID == "" {
@@ -81,13 +97,14 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 	} else {
 		objectID, err := primitive.ObjectIDFromHex(creatureInput.ID)
 		if err != nil {
-
+			l.UsecasesError(err, userID, map[string]any{"creature_id": creatureInput.ID})
 			return apperrors.InvalidInputError
 		}
 		generatedCreature.ID = objectID
 	}
 
 	if creatureInput.Name.Eng == "" {
+		l.UsecasesError(apperrors.InvalidInputError, userID, nil)
 		return apperrors.InvalidInputError
 	}
 
@@ -98,16 +115,18 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 	var creatureImageRect = creatureInput.ImageBase64
 	objectNameRect := "generated-creature-images/processed/" + stringCreatureId + ".webp"
 
-	urlRect, err := uc.s3.UploadImage(creatureImageRect, objectNameRect)
+	urlRect, err := uc.s3.UploadImage(ctx, creatureImageRect, objectNameRect)
 	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"creature_id": creatureInput.ID})
 		return err
 	}
 
 	var creatureImageToken = creatureInput.ImageBase64Circle
 	objectNameToken := "generated-creature-images/tokens/" + stringCreatureId + ".webp"
 
-	urlToken, err := uc.s3.UploadImage(creatureImageToken, objectNameToken)
+	urlToken, err := uc.s3.UploadImage(ctx, creatureImageToken, objectNameToken)
 	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"creature_id": creatureInput.ID})
 		return err
 	}
 
@@ -121,38 +140,49 @@ func (uc *bestiaryUsecases) AddGeneratedCreature(ctx context.Context,
 }
 
 func (uc *bestiaryUsecases) ParseCreatureFromImage(ctx context.Context, image []byte) (*models.Creature, error) {
-	parsedJSON, err := uc.geminiAPI.GenerateFromImage(image)
+	l := logger.FromContext(ctx)
+
+	parsedJSON, err := uc.geminiAPI.GenerateFromImage(ctx, image)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
 	parsedBytes, err := json.Marshal(parsedJSON)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
 	var creature models.Creature
 	if err := json.Unmarshal(parsedBytes, &creature); err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
 	return &creature, nil
 }
 
-func (uc *bestiaryUsecases) GenerateCreatureFromDescription(ctx context.Context, description string) (*models.Creature, error) {
-	parsedJSON, err := uc.geminiAPI.GenerateFromDescription(description)
+func (uc *bestiaryUsecases) GenerateCreatureFromDescription(ctx context.Context,
+	description string) (*models.Creature, error) {
+	l := logger.FromContext(ctx)
+
+	parsedJSON, err := uc.geminiAPI.GenerateFromDescription(ctx, description)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
 	parsedBytes, err := json.Marshal(parsedJSON)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 
 	var creature models.Creature
 	err = json.Unmarshal(parsedBytes, &creature)
 	if err != nil {
+		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
 

@@ -2,9 +2,11 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"github.com/gorilla/websocket"
@@ -35,23 +37,28 @@ func NewTableUsecases(encounterRepo encounterinterfaces.EncounterRepository,
 }
 
 func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, encounterID string) (string, error) {
+	l := logger.FromContext(ctx)
+
 	encounterData, err := uc.encounterRepo.GetEncounterByID(ctx, encounterID)
 	if err != nil {
+		l.UsecasesError(err, admin.ID, map[string]any{"id": encounterID})
 		return "", err
 	}
 
 	if encounterData.UserID != admin.ID {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, admin.ID, map[string]any{"id": encounterID})
 		return "", apperrors.PermissionDeniedError
 	}
 
 	sessionID := utils.RandString(sessionStringLen)
 
-	uc.tableManager.CreateSession(admin, encounterData, sessionID, uc.refreshSession)
+	uc.tableManager.CreateSession(ctx, admin, encounterData, sessionID, uc.refreshSession)
 
 	uc.mu.Lock()
 
 	uc.sessionWatcher[sessionID] = time.AfterFunc(sessionDuration, func() {
-		uc.stopTimer(sessionID, encounterID)
+		uc.stopTimer(ctx, sessionID, encounterID)
+		l.UsecasesInfo(fmt.Sprintf("session timer stopped, sessionID: %s", sessionID), admin.ID)
 	})
 
 	uc.mu.Unlock()
@@ -59,12 +66,13 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 	return sessionID, nil
 }
 
-func (uc *tableUsecases) GetTableData(sessionID string) (*models.TableData, error) {
-	return uc.tableManager.GetTableData(sessionID)
+func (uc *tableUsecases) GetTableData(ctx context.Context, sessionID string) (*models.TableData, error) {
+	return uc.tableManager.GetTableData(ctx, sessionID)
 }
 
-func (uc *tableUsecases) AddNewConnection(user *models.User, sessionID string, conn *websocket.Conn) {
-	uc.tableManager.AddNewConnection(user, sessionID, conn)
+func (uc *tableUsecases) AddNewConnection(ctx context.Context, user *models.User, sessionID string,
+	conn *websocket.Conn) {
+	uc.tableManager.AddNewConnection(ctx, user, sessionID, conn)
 }
 
 func (uc *tableUsecases) refreshSession(sessionID string) {
@@ -75,8 +83,8 @@ func (uc *tableUsecases) refreshSession(sessionID string) {
 	uc.sessionWatcher[sessionID].Reset(sessionDuration)
 }
 
-func (uc *tableUsecases) stopTimer(sessionID, encounterID string) {
-	data, _ := uc.tableManager.GetEncounterData(sessionID)
+func (uc *tableUsecases) stopTimer(ctx context.Context, sessionID, encounterID string) {
+	data, _ := uc.tableManager.GetEncounterData(ctx, sessionID)
 
 	uc.mu.Lock()
 	uc.sessionWatcher[sessionID].Stop()
@@ -84,5 +92,5 @@ func (uc *tableUsecases) stopTimer(sessionID, encounterID string) {
 	uc.mu.Unlock()
 
 	uc.encounterRepo.UpdateEncounter(context.Background(), data, encounterID)
-	uc.tableManager.RemoveSession(sessionID)
+	uc.tableManager.RemoveSession(ctx, sessionID)
 }

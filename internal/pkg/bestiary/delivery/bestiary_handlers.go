@@ -3,8 +3,8 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -29,11 +29,13 @@ func NewBestiaryHandler(usecases bestiaryinterface.BestiaryUsecases, ctxUserKey 
 
 func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	var reqData models.BestiaryReq
 
 	err := json.NewDecoder(r.Body).Decode(&reqData)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
 
 		return
@@ -42,18 +44,27 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 	list, err := h.usecases.GetCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
 		reqData.Search)
 	if err != nil {
+		var status string
+		var code int
+
 		switch {
 		case errors.Is(err, apperrors.NoDocsErr):
+			l.DeliveryInfo(ctx, "empty data", nil)
 			responses.SendOkResponse(w, nil)
+			return
 		case errors.Is(err, apperrors.StartPosSizeError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
+			code = responses.StatusBadRequest
+			status = responses.ErrSizeOrPosition
 		case errors.Is(err, apperrors.UnknownDirectionError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongDirection)
+			code = responses.StatusBadRequest
+			status = responses.ErrWrongDirection
 		default:
-			log.Println(err)
-
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, reqData)
+		responses.SendErrResponse(w, code, status)
 
 		return
 	}
@@ -63,19 +74,21 @@ func (h *BestiaryHandler) GetCreaturesList(w http.ResponseWriter, r *http.Reques
 
 func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
 
 	creature, err := h.usecases.GetCreatureByEngName(ctx, creatureName)
 	if err != nil {
-		log.Println(err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
 	}
 
 	if creature == nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrCreatureNotFound, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
 
 		return
@@ -86,11 +99,13 @@ func (h *BestiaryHandler) GetCreatureByName(w http.ResponseWriter, r *http.Reque
 
 func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	var reqData models.BestiaryReq
 
 	err := json.NewDecoder(r.Body).Decode(&reqData)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
 
 		return
@@ -102,16 +117,23 @@ func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Re
 	list, err := h.usecases.GetUserCreaturesList(ctx, reqData.Size, reqData.Start, reqData.Order, reqData.Filter,
 		reqData.Search, userID)
 	if err != nil {
+		var code int
+		var status string
+
 		switch {
 		case errors.Is(err, apperrors.StartPosSizeError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrSizeOrPosition)
+			code = responses.StatusBadRequest
+			status = responses.ErrSizeOrPosition
 		case errors.Is(err, apperrors.UnknownDirectionError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongDirection)
+			code = responses.StatusBadRequest
+			status = responses.ErrWrongDirection
 		default:
-			log.Println(err)
-
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, reqData)
+		responses.SendErrResponse(w, code, status)
 
 		return
 	}
@@ -121,6 +143,7 @@ func (h *BestiaryHandler) GetUserCreaturesList(w http.ResponseWriter, r *http.Re
 
 func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	vars := mux.Vars(r)
 	creatureName := vars["name"]
@@ -130,19 +153,26 @@ func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.R
 
 	creature, err := h.usecases.GetUserCreatureByEngName(ctx, creatureName, userID)
 	if err != nil {
+		var code int
+		var status string
+
 		switch {
 		case errors.Is(err, apperrors.PermissionDeniedError):
-			responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrForbidden)
+			code = responses.StatusForbidden
+			status = responses.ErrForbidden
 		default:
-			log.Println(err)
-
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, map[string]string{"name": creatureName})
+		responses.SendErrResponse(w, code, status)
 
 		return
 	}
 
 	if creature == nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrCreatureNotFound, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrCreatureNotFound)
 
 		return
@@ -153,13 +183,15 @@ func (h *BestiaryHandler) GetUserCreatureByName(w http.ResponseWriter, r *http.R
 
 func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	l := logger.FromContext(ctx)
 
 	var creatureInput models.CreatureInput
 
 	err := json.NewDecoder(r.Body).Decode(&creatureInput)
 	if err != nil {
-		log.Println("JSON decode error:", err)
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+
 		return
 	}
 
@@ -168,21 +200,39 @@ func (h *BestiaryHandler) AddGeneratedCreature(w http.ResponseWriter, r *http.Re
 
 	err = h.usecases.AddGeneratedCreature(ctx, creatureInput, userID)
 	if err != nil {
+		var code int
+		var status string
+
 		switch {
 		case errors.Is(err, apperrors.InvalidInputError):
-			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID) // NEED TO WRITE APROPRIATE ERROR
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID // NEED TO WRITE APPROPRIATE ERROR
+		case errors.Is(err, apperrors.InvalidBase64Err):
+			code = responses.StatusBadRequest
+			status = responses.ErrWrongBase64
 		default:
-			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
 		}
+
+		l.DeliveryError(ctx, code, status, err, nil)
+		responses.SendErrResponse(w, code, status)
+
 		return
 	}
+
+	l.DeliveryInfo(ctx, "added generated creature", map[string]any{"user_id": userID, "id": creatureInput.ID})
 
 	responses.SendOkResponse(w, nil)
 }
 
 func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrWrongFileSize, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileSize)
 
 		return
@@ -190,6 +240,7 @@ func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r 
 
 	file, _, err := r.FormFile("image")
 	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrWrongImage, nil, nil)
 		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongImage)
 
 		return
@@ -198,15 +249,15 @@ func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r 
 
 	imageBytes, err := io.ReadAll(file)
 	if err != nil {
-		log.Println(err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
 	}
 
-	creature, err := h.usecases.ParseCreatureFromImage(r.Context(), imageBytes)
+	creature, err := h.usecases.ParseCreatureFromImage(ctx, imageBytes)
 	if err != nil {
-		log.Println("AI call error, ", err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return
@@ -216,18 +267,22 @@ func (h *BestiaryHandler) UploadCreatureStatblockImage(w http.ResponseWriter, r 
 }
 
 func (h *BestiaryHandler) SubmitCreatureGenerationPrompt(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
 	var input models.DescriptionGenPrompt
 
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
-		responses.SendErrResponse(w, responses.StatusBadRequest, "Invalid JSON")
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
 
 		return
 	}
 
 	creature, err := h.usecases.GenerateCreatureFromDescription(r.Context(), input.Description)
 	if err != nil {
-		log.Println("AI generation failed, ", err)
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
 		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
 
 		return

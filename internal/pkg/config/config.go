@@ -61,8 +61,9 @@ type Socks5ProxieConfig struct {
 }
 
 type VKMethodConfig struct {
-	URL    string `yaml:"url"`
-	Method string `yaml:"method"`
+	URL         string `yaml:"url"`
+	Method      string `yaml:"method"`
+	ContentType string `yaml:"content_type"`
 }
 
 type VKApiConfig struct {
@@ -89,17 +90,27 @@ type ProxiesConfig struct {
 	Socks5Proxie Socks5ProxieConfig
 }
 
+type LoggerConfig struct {
+	Key        string `yaml:"key"`
+	OutputPath string `yaml:"path"`
+	ErrPath    string `yaml:"err_path"`
+}
+
 type Config struct {
-	Server     ServerConfig `yaml:"server"`
-	Mongo      MongoConfig
-	Postgres   PostgresConfig
-	Redis      RedisConfig
-	Minio      MinioConfig
-	Services   ServicesConfig `yaml:"services"`
-	VKApi      VKApiConfig    `yaml:"vk_api"`
-	Gemini     GeminiConfig
-	Proxies    ProxiesConfig
-	CtxUserKey string `yaml:"user_key"`
+	Server ServerConfig `yaml:"server"`
+
+	Mongo    MongoConfig
+	Postgres PostgresConfig
+	Redis    RedisConfig
+	Minio    MinioConfig
+
+	Services ServicesConfig `yaml:"services"`
+	VKApi    VKApiConfig    `yaml:"vk_api"`
+	Gemini   GeminiConfig
+	Proxies  ProxiesConfig
+
+	Logger     LoggerConfig `yaml:"logger"`
+	CtxUserKey string       `yaml:"user_key"`
 }
 
 func ReadConfig(cfgPath string) *Config {

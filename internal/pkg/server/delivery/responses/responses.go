@@ -20,9 +20,11 @@ const (
 
 const (
 	ErrInternalServer = "Server error"
-	ErrBadJSON        = "Wrong JSON format"
-	ErrNotAuthorized  = "User not authorized"
-	ErrForbidden      = "User have no access to this content"
+	ErrVKServer       = "VK server error"
+
+	ErrBadJSON       = "Wrong JSON format"
+	ErrNotAuthorized = "User not authorized"
+	ErrForbidden     = "User have no access to this content"
 
 	ErrCreatureNotFound  = "Creature with same URL not found"
 	ErrCharacterNotFound = "Character with same URL not found"
@@ -37,14 +39,13 @@ const (
 	ErrWrongEncounterName = "Encounter name must not be empty and more than 60 characters"
 	ErrInvalidID          = "Invalid ID"
 
-	ErrVKServer = "VK server error"
-
 	ErrWrongTableID = "Wrong table ID"
 	ErrWSUpgrade    = "Websocket upgrade error"
 
-	ErrWrongImage = "Bad image"
-	ErrEmptyImage = "Image not provided"
-	ErrWrongJobID = "Wrong job ID"
+	ErrWrongImage  = "Bad image"
+	ErrEmptyImage  = "Image not provided"
+	ErrWrongJobID  = "Wrong job ID"
+	ErrWrongBase64 = "Invalid base64 format"
 )
 
 func newErrResponse(status string) *models.ErrResponse {

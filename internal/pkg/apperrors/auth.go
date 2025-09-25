@@ -9,4 +9,7 @@ var (
 	MarshallingSessionError = errors.New("something went wrong while marshalling user session")
 
 	UserDoesNotExistError = errors.New("user does not exist")
+
+	VKApiError  = errors.New("VK API error")
+	ClientError = errors.New("client error")
 )

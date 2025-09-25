@@ -12,18 +12,22 @@ import (
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
+	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
+	mylog "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/log"
 	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/metrics"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/reqdata"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	tabledel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/delivery"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"log"
 )
 
 func NewRouter(cfg *config.Config,
+	logger mylogger.Logger,
+	m metrics.HTTPMetrics,
 	bestiaryInterface bestiaryinterfaces.BestiaryUsecases,
 	descriptionInterface descriptioninterfaces.DescriptionUsecases,
 	characterInterface characterinterfaces.CharacterUsecases,
@@ -36,7 +40,7 @@ func NewRouter(cfg *config.Config,
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface, cfg.CtxUserKey)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, cfg.CtxUserKey)
-	authHandler := authdel.NewAuthHandler(authInterface, &cfg.VKApi)
+	authHandler := authdel.NewAuthHandler(authInterface)
 	tableHandler := tabledel.NewTableHandler(tableInterface, cfg.CtxUserKey)
 	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
 
@@ -44,15 +48,12 @@ func NewRouter(cfg *config.Config,
 
 	router := mux.NewRouter()
 
-	router.Use(myrecovery.RecoveryMiddleware)
-
-	m, err := metrics.NewHTTPMetrics()
-	if err != nil {
-		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
-	}
-
+	logMiddleware := mylog.CreateLogMiddleware(logger)
 	metricsMiddleware := mymetrics.CreateMetricsMiddleware(m)
 
+	router.Use(logMiddleware)
+	router.Use(reqdata.RequestDataMiddleware)
+	router.Use(myrecovery.RecoveryMiddleware)
 	router.Use(metricsMiddleware)
 
 	router.PathPrefix("/metrics").Handler(promhttp.Handler())

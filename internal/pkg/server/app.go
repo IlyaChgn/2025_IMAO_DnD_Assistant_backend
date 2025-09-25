@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	authext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/external"
+	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 	"log"
@@ -78,17 +80,26 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
+	logger, err := mylogger.New(cfg.Logger.Key, cfg.Logger.OutputPath, cfg.Logger.ErrPath)
+	if err != nil {
+		log.Fatalf("Failed to initialize log: %v", err)
+	}
+	defer logger.Sync()
+
+	m, err := metrics.NewHTTPMetrics()
+	if err != nil {
+		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
+	}
+
 	descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
 
 	grpcConnDescription, err := grpc.NewClient(
 		descriptionAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
-
 	if err != nil {
 		log.Fatalf("Error occurred while starting grpc connection on description service, %v", err)
 	}
-
 	defer grpcConnDescription.Close()
 
 	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
@@ -114,29 +125,48 @@ func (srv *Server) Run() error {
 	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
 	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 
+	vkClient := authext.NewVKApi(cfg.VKApi.RedirectURI, cfg.VKApi.ClientID, cfg.VKApi.SecretKey, cfg.VKApi.ServiceKey,
+		cfg.VKApi.Exchange, cfg.VKApi.PublicInfo)
+
 	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
 		cfg.Mongo.Port, !isProduction)
 	mongoDatabase := dbinit.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
+	logger.DBInfo(cfg.Mongo.Host, cfg.Mongo.Port, "mongodb", cfg.Mongo.DBName, !isProduction)
+
 	mongoMetrics, err := metrics.NewDBMetrics("mongo")
 	if err != nil {
 		log.Fatal("Something went wrong initializing prometheus mongo metrics, ", err)
 	}
 
 	minioURI := dbinit.NewMinioEndpoint(cfg.Minio.Host)
-	minioClient := dbinit.ConnectToMinio(context.Background(), minioURI, cfg.Minio.AccessKey,
-		cfg.Minio.SecretKey, true)
+	minioClient, err := dbinit.ConnectToMinio(minioURI, cfg.Minio.AccessKey, cfg.Minio.SecretKey, true)
+	if err != nil {
+		logger.DBFatal(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true,
+			"Failed to initialize MinIO client", err)
+	}
+
+	_, err = minioClient.ListBuckets(context.Background())
+	if err != nil {
+		logger.DBFatal(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true,
+			"Failed to connect to MinIO server", err)
+	}
+
+	logger.DBInfo(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true)
 
 	postgresURL := dbinit.NewConnectionString(cfg.Postgres.Username, cfg.Postgres.Password,
 		cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName)
 	postgresPool, err := dbinit.NewPostgresPool(postgresURL)
 	if err != nil {
-		log.Fatal("Something went wrong while creating postgres pool ", err)
+		logger.DBFatal(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false,
+			"Something went wrong while creating postgres pool", err)
 	}
 
 	err = postgresPool.Ping(context.Background())
 	if err != nil {
-		log.Fatal("Cannot ping postgres database ", err)
+		logger.DBFatal(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false,
+			"Cannot ping postgres database", err)
 	}
+	logger.DBInfo(cfg.Postgres.Host, cfg.Postgres.Port, "postgres", cfg.Postgres.DBName, false)
 
 	postgresMetrics, err := metrics.NewDBMetrics("postgres")
 	if err != nil {
@@ -147,8 +177,9 @@ func (srv *Server) Run() error {
 
 	err = redisClient.Ping(context.Background()).Err()
 	if err != nil {
-		log.Fatalf("Cannot ping Redis: %v", err)
+		logger.DBFatal(cfg.Redis.Host, cfg.Redis.Port, "redis", cfg.Redis.DB, false, "Cannot ping Redis", err)
 	}
+	logger.DBInfo(cfg.Redis.Host, cfg.Redis.Port, "redis", cfg.Redis.DB, false)
 
 	redisMetrics, err := metrics.NewDBMetrics("redis")
 	if err != nil {
@@ -181,7 +212,7 @@ func (srv *Server) Run() error {
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
-	authUsecases := authuc.NewAuthUsecases(authRepository, sessionManager)
+	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager)
 
 	credentials := handlers.AllowCredentials()
@@ -191,6 +222,8 @@ func (srv *Server) Run() error {
 
 	router := myrouter.NewRouter(
 		cfg,
+		logger,
+		m,
 		bestiaryUsecases,
 		descriptionUsecases,
 		characterUsecases,
@@ -206,7 +239,7 @@ func (srv *Server) Run() error {
 	serverCfg := createServerConfig(serverURL, cfg.Server.Timeout, &muxWithCORS)
 	srv.server = createServer(serverCfg)
 
-	log.Printf("Server is listening on %s\n", serverURL)
+	logger.ServerInfo(cfg.Server.Host, cfg.Server.Port, isProduction)
 
 	return srv.server.ListenAndServe()
 }
