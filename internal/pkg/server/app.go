@@ -37,6 +37,8 @@ import (
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
 	encounteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/usecases"
+	mapsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/repository"
+	mapsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/usecases"
 	maptilerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/repository"
 	maptileuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/socks5proxy"
@@ -205,6 +207,7 @@ func (srv *Server) Run() error {
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase, mongoMetrics)
 	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool, postgresMetrics)
 	maptileRepository := maptilerepo.NewMapTilesStorage(mongoDatabase, mongoMetrics)
+	mapsRepository := mapsrepo.NewMapsStorage(postgresPool, postgresMetrics)
 	authRepository := authrepo.NewAuthStorage(postgresPool, postgresMetrics)
 	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
 	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
@@ -219,6 +222,7 @@ func (srv *Server) Run() error {
 	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager)
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)
+	mapsUsecases := mapsuc.NewMapsUsecases(mapsRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
@@ -237,6 +241,7 @@ func (srv *Server) Run() error {
 		tableUsecases,
 		llmUsecases,
 		maptilesUsecases,
+		mapsUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 

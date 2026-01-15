@@ -30,3 +30,5 @@ logs.json
 internal/pkg/bestiary/repository/filter.json
 /test_scripts
 
+.claude/settings.local.json
+CLAUDE.md
