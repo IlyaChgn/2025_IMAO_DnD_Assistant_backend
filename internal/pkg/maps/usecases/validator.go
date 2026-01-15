@@ -7,11 +7,12 @@ import (
 )
 
 const (
-	MinNameLength    = 1
-	MaxNameLength    = 255
-	RequiredSchemaV  = 1
-	MinRotation      = 0
-	MaxRotation      = 3
+	MinNameLength      = 1
+	MaxNameLength      = 255
+	RequiredSchemaV    = 1
+	MinRotation        = 0
+	MaxRotation        = 3
+	MapUnitsPerTile    = 6 // Each tile occupies 6x6 units
 )
 
 // ValidateMapRequest validates a map creation/update request and returns validation errors
@@ -40,12 +41,22 @@ func ValidateMapRequest(name string, data *models.MapData) []models.ValidationEr
 			Field:   "data.widthUnits",
 			Message: "widthUnits must be a positive integer",
 		})
+	} else if data.WidthUnits%MapUnitsPerTile != 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   "data.widthUnits",
+			Message: fmt.Sprintf("widthUnits must be a multiple of %d", MapUnitsPerTile),
+		})
 	}
 
 	if data.HeightUnits <= 0 {
 		errors = append(errors, models.ValidationError{
 			Field:   "data.heightUnits",
 			Message: "heightUnits must be a positive integer",
+		})
+	} else if data.HeightUnits%MapUnitsPerTile != 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   "data.heightUnits",
+			Message: fmt.Sprintf("heightUnits must be a multiple of %d", MapUnitsPerTile),
 		})
 	}
 
@@ -81,12 +92,22 @@ func validatePlacement(index int, p *models.Placement) []models.ValidationError 
 			Field:   prefix + ".x",
 			Message: "placement x must be >= 0",
 		})
+	} else if p.X%MapUnitsPerTile != 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   prefix + ".x",
+			Message: fmt.Sprintf("placement x must be a multiple of %d", MapUnitsPerTile),
+		})
 	}
 
 	if p.Y < 0 {
 		errors = append(errors, models.ValidationError{
 			Field:   prefix + ".y",
 			Message: "placement y must be >= 0",
+		})
+	} else if p.Y%MapUnitsPerTile != 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   prefix + ".y",
+			Message: fmt.Sprintf("placement y must be a multiple of %d", MapUnitsPerTile),
 		})
 	}
 
