@@ -94,7 +94,7 @@ services:
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - ELASTIC_HOST=${ELASTIC_HOST}
-      - ELASTIC_PORT=${ELASTIC_PORT}
+      - ELASTIC_PORT=9200
       - KIBANA_USER=${KIBANA_USER}
       - KIBANA_PASSWORD=${KIBANA_PASSWORD}
 
@@ -108,7 +108,7 @@ services:
       user_init:
         condition: service_completed_successfully
     environment:
-      - ELASTICSEARCH_HOSTS=http://${ELASTIC_HOST}:${ELASTIC_PORT}
+      - ELASTICSEARCH_HOSTS=http://${ELASTIC_HOST}:9200
       - XPACK_SECURITY_ENABLED=true
       - ELASTICSEARCH_USERNAME=${KIBANA_USER}
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}

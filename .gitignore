@@ -24,6 +24,9 @@ go.work
 .idea
 
 prod.env
+console.env
+console.prod.env
 logs.json
 internal/pkg/bestiary/repository/filter.json
 /test_scripts
+
