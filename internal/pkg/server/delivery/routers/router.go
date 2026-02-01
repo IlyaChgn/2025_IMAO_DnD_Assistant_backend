@@ -13,6 +13,10 @@ import (
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
 	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
+	mapsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps"
+	mapsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/delivery"
+	maptilesinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles"
+	maptilesdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
 	mylog "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/log"
@@ -34,7 +38,9 @@ func NewRouter(cfg *config.Config,
 	encounterInterface encounterinterfaces.EncounterUsecases,
 	authInterface authinterface.AuthUsecases,
 	tableInterface tableinterfaces.TableUsecases,
-	llmInterface bestiaryinterfaces.GenerationUsecases) *mux.Router {
+	llmInterface bestiaryinterfaces.GenerationUsecases,
+	maptilesInterface maptilesinterfaces.MapTilesUsecases,
+	mapsInterface mapsinterfaces.MapsUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -43,6 +49,8 @@ func NewRouter(cfg *config.Config,
 	authHandler := authdel.NewAuthHandler(authInterface)
 	tableHandler := tabledel.NewTableHandler(tableInterface, cfg.CtxUserKey)
 	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
+	mapTilesHandler := maptilesdel.NewMapTilesHandler(maptilesInterface, cfg.CtxUserKey)
+	mapsHandler := mapsdel.NewMapsHandler(mapsInterface, cfg.CtxUserKey)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -67,6 +75,8 @@ func NewRouter(cfg *config.Config,
 	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
 	ServeTableRouter(rootRouter, tableHandler, loginRequiredMiddleware)
 	ServeLLMRouter(rootRouter, llmHandler, loginRequiredMiddleware)
+	ServeMapTilesRouter(rootRouter, mapTilesHandler, loginRequiredMiddleware)
+	ServeMapsRouter(rootRouter, mapsHandler, loginRequiredMiddleware)
 
 	return router
 }

@@ -32,12 +32,21 @@ docker-compose -f docker compose.yml -f docker-compose.pgadmin.yml up -d
 ## Для запуска minio и mongodb
 
 ``` bash
-docker-compose -f docker compose.yml -f docker-compose.mongo_and_minio.yml up -d
+docker compose -f docker-compose.yml -f docker-compose.mongo_and_minio.yml up -d
 
 ```
 
 ## Prod start
 
 ``` bash
+docker compose --env-file console.prod.env  up -d
+```
+
+
+``` bash
 go run cmd/app/main.go -prod
 ```
+
+## Notes 
+
+minio2 на 1070 компе поднимать через docker compose в папке plug репозитория
