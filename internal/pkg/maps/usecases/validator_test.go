@@ -248,9 +248,9 @@ func TestValidateMapRequest_MultiplePlacements(t *testing.T) {
 		WidthUnits:    78, // 13 tiles * 6 units
 		HeightUnits:   60, // 10 tiles * 6 units
 		Placements: []models.Placement{
-			{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 0},  // valid
-			{ID: "", TileID: "stone", X: 6, Y: 0, Rot: 1},           // invalid id
-			{ID: "cell:0:2", TileID: "", X: 12, Y: 0, Rot: 2},       // invalid tileId
+			{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 0}, // valid
+			{ID: "", TileID: "stone", X: 6, Y: 0, Rot: 1},         // invalid id
+			{ID: "cell:0:2", TileID: "", X: 12, Y: 0, Rot: 2},     // invalid tileId
 		},
 	}
 
