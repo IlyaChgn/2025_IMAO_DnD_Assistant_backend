@@ -70,10 +70,12 @@
   Проблема: logger.FromContext(ctx) — type assertion panic
   Где: Все usecases
   Влияние на тесты: Каждый тест должен создавать ctx с real logger
+  Статус: ✅ Решено в PR1 — FromContext возвращает noop logger при отсутствии логгера в контексте
   ────────────────────────────────────────
   Проблема: var ctxKey string — глобальная мутабельная переменная в logger
   Где: logger/init.go:10
   Влияние на тесты: Параллельные тесты с разными ключами могут конфликтовать
+  Статус: ✅ Решено в PR1 — заменено на type loggerCtxKey struct{}, LoggerConfig.Key deprecated
   ────────────────────────────────────────
   Проблема: uuid.NewString() напрямую
   Где: encounter/usecases:59, llm.go:26,45, auth/delivery:42
@@ -107,7 +109,7 @@
   CI / Tooling
 
   - Нет CI (нет .github/workflows/)
-  - Нет Makefile в корне проекта
+  - Makefile в корне проекта: make test, make test-race, make test-cover (добавлен в PR2)
   - Нет golangci-lint конфига
   - Vendor mode (-mod=vendor) активен
 
@@ -194,8 +196,9 @@
   1. Не проверять логи — logger вызывается, но его вывод не assert'ится
   2. Не проверять exact UUID — assert != "" или проверять формат
   3. Не полагаться на time.Now() — в тестах это пока некритично (timestamps в repo layer); если понадобится — inject Clock interface
-  4. Context с logger — выделить test helper newTestContext() в shared место
-  5. -race flag — обнаруживает data races до того, как они станут flaky
+  4. Context с logger — noop logger возвращается автоматически из FromContext, специальный setup не нужен
+  5. -race flag — обнаруживает data races до того, как они станут flaky (make test-race, требует CGO_ENABLED=1)
+  6. Handler error assertions — использовать testhelpers.DecodeErrorResponse(t, rr.Body), не дублировать decode + struct assert
 
   ---
   4. Принципы тестируемости — правила для команды
@@ -335,7 +338,7 @@
   ┌────────────────┬─────────────┬──────────────┬──────────┬─────────────┬────────────────────────────┐
   │     Домен      │ Domain/Pure │ Usecase Unit │ Delivery │ Integration │         Приоритет          │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ encounter      │      —      │      P1      │    P2    │     P4      │       Высший (пилот)       │
+  │ encounter      │      —      │   Есть ✅    │ Есть ✅  │     P4      │       Высший (пилот)       │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ maps           │   Есть ✅   │      P1      │    P2    │     P4      │       Высший (пилот)       │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
@@ -345,7 +348,7 @@
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ auth           │      —      │      P3      │    P3    │     P4      │          Средний           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ maptiles       │      —      │   Есть ✅    │    P3    │      —      │           Низкий           │
+  │ maptiles       │      —      │   Есть ✅    │ Есть ✅  │      —      │           Низкий           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ table          │      —      │      P3      │    —     │     P4      │ Низкий (websocket, сложно) │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
@@ -396,12 +399,16 @@
   ---
   8. Backlog (чеклист с приоритетами)
 
-  - P0 — Vendor testify/require
-  - P0 — Создать internal/pkg/testhelpers/context.go
-  - P0 — Создать Makefile с test targets
-  - P1 — encounter/usecases/encounter_test.go (14 сценариев)
+  - ✅ P0 — Vendor testify/require (отложено — используем assert)
+  - ✅ P0 — Создать internal/pkg/testhelpers/helpers.go (NewTestContext, MustJSON, DoRequest, DecodeJSON, DecodeErrorResponse)
+  - ✅ P0 — Создать Makefile с test targets (PR2)
+  - ✅ P0 — Исправить logger ctxKey (typed struct key + noop fallback, PR1)
+  - ✅ P0 — Deprecated LoggerConfig.Key (PR2)
+  - ✅ P1 — encounter/usecases/encounter_test.go (14 сценариев, PR1)
+  - ✅ P1 — maptiles/usecases/maptiles_test.go (4 сценария table-driven, PR2)
   - P1 — maps/usecases/maps_test.go (11 сценариев)
-  - P2 — encounter/delivery/encounter_handlers_test.go (7 сценариев)
+  - ✅ P2 — encounter/delivery/encounter_handlers_test.go (2 сценария, PR1; обновлено PR2)
+  - ✅ P2 — maptiles/delivery/maptiles_handlers_test.go (2 сценария, PR2)
   - P2 — maps/delivery/maps_handlers_test.go
   - P2 — bestiary/usecases/bestiary_test.go
   - P2 — character/usecases/character_test.go
@@ -418,7 +425,7 @@
   internal/
   ├── pkg/
   │   ├── testhelpers/
-  │   │   └── context.go          ← NewTestContext(), shared fakes если нужны
+  │   │   └── helpers.go          ← NewTestContext(), MustJSON(), DoRequest(), DecodeJSON(), DecodeErrorResponse()
   │   ├── encounter/
   │   │   ├── usecases/
   │   │   │   ├── encounter.go

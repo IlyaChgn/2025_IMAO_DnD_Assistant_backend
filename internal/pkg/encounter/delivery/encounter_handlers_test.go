@@ -72,11 +72,7 @@ func TestSaveEncounter_InvalidInput_Returns400(t *testing.T) {
 	handler.SaveEncounter(rr, req)
 
 	assert.Equal(t, responses.StatusBadRequest, rr.Code)
-
-	var errResp models.ErrResponse
-	testhelpers.DecodeJSON(t, rr.Body, &errResp)
-
-	assert.Equal(t, responses.ErrWrongEncounterName, errResp.Status)
+	assert.Equal(t, responses.ErrWrongEncounterName, testhelpers.DecodeErrorResponse(t, rr.Body))
 }
 
 func TestSaveEncounter_BadJSON_Returns400(t *testing.T) {
@@ -95,9 +91,5 @@ func TestSaveEncounter_BadJSON_Returns400(t *testing.T) {
 	handler.SaveEncounter(rr, req)
 
 	assert.Equal(t, responses.StatusBadRequest, rr.Code)
-
-	var errResp models.ErrResponse
-	testhelpers.DecodeJSON(t, rr.Body, &errResp)
-
-	assert.Equal(t, responses.ErrBadJSON, errResp.Status)
+	assert.Equal(t, responses.ErrBadJSON, testhelpers.DecodeErrorResponse(t, rr.Body))
 }

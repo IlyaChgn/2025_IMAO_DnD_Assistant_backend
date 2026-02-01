@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 )
 
 // NewTestContext returns a context suitable for tests.
@@ -52,4 +54,16 @@ func DecodeJSON(t *testing.T, body *bytes.Buffer, dst any) {
 	if err := json.NewDecoder(body).Decode(dst); err != nil {
 		t.Fatalf("DecodeJSON: failed to decode: %v", err)
 	}
+}
+
+// DecodeErrorResponse is a convenience wrapper that decodes the response body
+// into models.ErrResponse and returns the Status field. It fails the test if
+// decoding fails.
+func DecodeErrorResponse(t *testing.T, body *bytes.Buffer) string {
+	t.Helper()
+
+	var resp models.ErrResponse
+	DecodeJSON(t, body, &resp)
+
+	return resp.Status
 }
