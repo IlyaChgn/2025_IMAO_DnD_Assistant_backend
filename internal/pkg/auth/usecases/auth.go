@@ -74,7 +74,7 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 			return nil, err
 		}
 
-		l.UsecasesInfo("added new user", userDB.ID)
+		l.UsecasesInfo("added new user", actualUser.ID)
 	} else {
 		if userDB.Name != user.Name || userDB.Avatar != user.Avatar {
 			actualUser, err = uc.repo.UpdateUser(ctx, user)
@@ -99,11 +99,11 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 	err = uc.sessionManager.CreateSession(ctx, sessionID, sessionData, sessionDuration)
 	if err != nil {
-		l.UsecasesError(err, userDB.ID, nil)
+		l.UsecasesError(err, actualUser.ID, nil)
 		return nil, err
 	}
 
-	l.UsecasesInfo("user logged in", userDB.ID)
+	l.UsecasesInfo("user logged in", actualUser.ID)
 
 	return actualUser, nil
 }

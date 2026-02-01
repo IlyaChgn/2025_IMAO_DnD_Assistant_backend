@@ -363,11 +363,11 @@
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ maps           │   Есть ✅   │   Есть ✅    │ Есть ✅  │     P4      │       Высший (пилот)       │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ bestiary       │      —      │      P2      │    P3    │     P4      │          Высокий           │
+  │ bestiary       │      —      │ Частично ✅  │ Есть ✅  │     P4      │          Высокий           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ character      │      —      │   Есть ✅    │ Есть ✅  │     P4      │          Средний           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ auth           │      —      │      P3      │    P3    │     P4      │          Средний           │
+  │ auth           │      —      │   Есть ✅    │ Есть ✅  │     P4      │          Средний           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ maptiles       │      —      │   Есть ✅    │ Есть ✅  │      —      │           Низкий           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
@@ -375,7 +375,7 @@
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ bestiary/llm   │      —      │      P3      │    P3    │     P4      │  Низкий (async goroutine)  │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ description    │      —      │      P3      │    P3    │      —      │    Низкий (gRPC proxy)     │
+  │ description    │      —      │   Есть ✅    │ Есть ✅  │      —      │    Низкий (gRPC proxy)     │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ utils/merger   │   Есть ✅   │      —       │    —     │      —      │           Готов            │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
@@ -431,13 +431,18 @@
   - ✅ P2 — encounter/delivery/encounter_handlers_test.go (2 сценария, PR1; обновлено PR2)
   - ✅ P2 — maptiles/delivery/maptiles_handlers_test.go (2 сценария, PR2)
   - ✅ P2 — maps/delivery/maps_handlers_test.go (4 сценария, PR4)
-  - P2 — bestiary/usecases/bestiary_test.go
+  - ✅ P2 — bestiary/usecases/bestiary_test.go (14 read-сценариев + 6 processor, PR5; write/LLM методы пропущены — S3, ObjectID, GeminiAPI)
   - ✅ P2 — character/usecases/character_test.go (13 сценариев, PR3)
   - ✅ P2 — character/delivery/character_handlers_test.go (2 сценария, PR3)
-  - P3 — auth/usecases/auth_test.go
-  - P3 — bestiary/delivery/bestiary_handlers_test.go
-  - P3 — bestiary/usecases/llm_test.go (requires synchronous process or WaitGroup)
-  - P3 — table/usecases/table_test.go
+  - ✅ P3 — auth/usecases/auth_test.go (15 сценариев, 4 метода + bugfix nil deref, PR5)
+  - ✅ P3 — auth/delivery/auth_handlers_test.go (4 сценария, PR5)
+  - ✅ P3 — bestiary/delivery/bestiary_handlers_test.go (5 сценариев, PR5)
+  - ✅ P3 — description/usecases/description_test.go (2 сценария, PR5)
+  - ✅ P3 — description/delivery/description_handlers_test.go (2 сценария, PR5)
+  - P3 — bestiary/usecases/llm_test.go (отложен: goroutines, async state machine)
+  - P3 — table/usecases/table_test.go (отложен: websocket, goroutines, timers, sync.Mutex)
+  - P3 — bestiary/usecases/actions_processor_test.go (отложен: gRPC protobuf Struct.AsMap())
+  - SKIP — statblockgenerator (пустой stub, нет методов)
   - ✅ P4 — Integration test scaffold: build tag, Makefile targets, NoopDBMetrics (PR3)
   - ✅ P4 — encounter/repository integration smoke test: Save + GetByID (PR3)
   - ✅ P4 — CI pipeline: ci.yml (unit + race + vet) + integration.yml (manual, Postgres + Redis) (PR4)
