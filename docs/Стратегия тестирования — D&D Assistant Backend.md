@@ -134,9 +134,8 @@
   Обоснование: assert не останавливает тест при критичном fail → cascade failures. require решает это. Одна команда: go mod vendor после go get
   ────────────────────────────────────────
   Инструмент: Мок-генерация
-  Решение: Ручные fakes/stubs
-  Обоснование: Интерфейсы в проекте небольшие (1–6 методов). Ручные стабы — минимум зависимостей, максимум понятности, нет кодогенерации. Генераторы (mockgen) имеют смысл при  
-    10+ интерфейсах с 10+ методами — не наш случай
+  Решение: gomock (go.uber.org/mock) для usecase-зависимостей + ручные fakes для delivery
+  Обоснование: gomock генерирует строгие моки с проверкой вызовов (unexpected call = fail). Usecase-тесты используют сгенерированные моки для repo/clients интерфейсов. Delivery-тесты используют ручные fakes для usecase-интерфейсов (проще, достаточно для HTTP-маппинга). Генерация: `make mocks` или `go generate ./internal/pkg/auth/...`
   ────────────────────────────────────────
   Инструмент: net/http/httptest
   Решение: Использовать (stdlib)
@@ -155,7 +154,6 @@
   Обоснование: Нет CI, значит сначала unit-тесты; интеграционные — позже
   Что НЕ добавляем
 
-  - gomock/mockgen — overhead для малых интерфейсов
   - ginkgo/gomega — BDD-стиль чужд проекту
   - golangci-lint — полезен, но вне скоупа тестовой стратегии
 
@@ -231,6 +229,28 @@
   - ✅ bestiary/actions_processor: protobuf types (structpb.Struct, AsMap) не должны попадать в usecase слой. Решено: введён ActionProcessorGateway интерфейс (возвращает map[string]interface{}), конвертация structpb.Struct → map вынесена в delivery adapter (action_processor_adapter.go). Usecase теперь тестируется без protobuf зависимостей
   - ✅ bestiary/llm: async goroutine и uuid.New() делали тесты недетерминированными. Решено: AsyncRunner интерфейс (prod: go fn(), test: fn()), IDGenerator интерфейс (prod: uuid.New(), test: фиксированный ID). Usecase тестируется синхронно без sleep/таймеров. Prod реализации в infra.go
   - ✅ table: time.AfterFunc и utils.RandString делали тесты недетерминированными, *websocket.Conn в интерфейсе блокировал transport-тесты. Решено: SessionIDGenerator интерфейс (prod: RandString, test: фиксированный ID), TimerFactory + SessionTimer интерфейсы (prod: time.AfterFunc, test: fake без реальных таймеров). Usecase-логика (permission check, session creation, timer registration) тестируется синхронно. Websocket transport (repository/session.go, repository/participants.go) остаётся без unit-тестов — тонкий адаптер, покрывается интеграционно. Prod реализации в usecases/infra.go
+
+  Стандарт команды: тесты и моки (PR12)
+
+  Handler contract tests (delivery):
+  1. Одна тест-функция на handler/endpoint (TestLogin, TestLogout, TestCheckAuth)
+  2. Table-driven: []struct с name, request setup, fake, wantStatus, wantErrCode
+  3. Субтесты через t.Run(tt.name, ...) + t.Parallel()
+  4. Assertions: status code + testhelpers.DecodeErrorResponse (без полного сравнения JSON body)
+  5. Ручные fakes для usecase-интерфейсов (простые struct с полями-результатами)
+  6. Короткие имена кейсов: bad_json, vk_api_error, happy_path, no_cookie
+
+  Usecase unit tests:
+  1. Table-driven с setup func(...) для конфигурации mock expectations
+  2. Сгенерированные моки (gomock) для интерфейсов зависимостей (repo, clients, session manager)
+  3. gomock проверяет отсутствие unexpected calls автоматически
+  4. НЕ мокать инфраструктурные типы (pgxpool, redis client, *websocket.Conn) на уровне usecase
+
+  Генерация моков:
+  1. Добавить `//go:generate mockgen -source=interfaces.go -destination=mocks/mock_<domain>.go -package=mocks` в interfaces.go домена
+  2. Запуск: `make mocks` или `go generate ./internal/pkg/<domain>/...`
+  3. Сгенерированные файлы коммитятся в repo (vendor mode)
+  4. Пакет: `go.uber.org/mock` (v0.6.0+), CLI: `mockgen`
 
   ---
   5. План внедрения
@@ -438,8 +458,8 @@
   - ✅ P2 — bestiary/usecases/bestiary_test.go (19 read-сценариев + 6 processor, PR5+PR6; write/LLM методы пропущены — S3, ObjectID, GeminiAPI)
   - ✅ P2 — character/usecases/character_test.go (13 сценариев, PR3)
   - ✅ P2 — character/delivery/character_handlers_test.go (2 сценария, PR3)
-  - ✅ P3 — auth/usecases/auth_test.go (15 сценариев, 4 метода + bugfix nil deref, PR5)
-  - ✅ P3 — auth/delivery/auth_handlers_test.go (4 сценария, PR5)
+  - ✅ P3 — auth/usecases/auth_test.go (15 сценариев, 4 метода + bugfix nil deref, PR5; рефакторинг PR12: gomock вместо ручных fakes)
+  - ✅ P3 — auth/delivery/auth_handlers_test.go (4 сценария, PR5; рефакторинг PR12: table-driven, 9 субтестов в 3 функциях)
   - ✅ P3 — bestiary/delivery/bestiary_handlers_test.go (12 сценариев, PR5+PR6)
   - ✅ P3 — description/usecases/description_test.go (2 сценария, PR5)
   - ✅ P3 — description/delivery/description_handlers_test.go (2 сценария, PR5)

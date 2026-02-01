@@ -47,67 +47,172 @@ func (f *fakeAuthUsecases) GetUserIDBySessionID(_ context.Context, _ string) int
 
 // --- tests ---
 
-func TestLogin_BadJSON_Returns400(t *testing.T) {
+func TestLogin(t *testing.T) {
 	t.Parallel()
 
-	handler := delivery.NewAuthHandler(&fakeAuthUsecases{})
+	tests := []struct {
+		name        string
+		body        []byte
+		fake        *fakeAuthUsecases
+		wantStatus  int
+		wantErrCode string
+	}{
+		{
+			name:        "bad_json",
+			body:        []byte(`{invalid json`),
+			fake:        &fakeAuthUsecases{},
+			wantStatus:  responses.StatusBadRequest,
+			wantErrCode: responses.ErrBadJSON,
+		},
+		{
+			name:        "vk_api_error",
+			body:        testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
+			fake:        &fakeAuthUsecases{loginErr: apperrors.VKApiError},
+			wantStatus:  responses.StatusInternalServerError,
+			wantErrCode: responses.ErrVKServer,
+		},
+		{
+			name:        "generic_error",
+			body:        testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
+			fake:        &fakeAuthUsecases{loginErr: errors.New("unexpected")},
+			wantStatus:  responses.StatusInternalServerError,
+			wantErrCode: responses.ErrInternalServer,
+		},
+		{
+			name:       "happy_path",
+			body:       testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
+			fake:       &fakeAuthUsecases{loginResult: &models.User{ID: 1, Name: "Tester"}},
+			wantStatus: responses.StatusOk,
+		},
+	}
 
-	req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
-	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid json`)))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
-	rr := httptest.NewRecorder()
-	handler.Login(rr, req)
+			handler := delivery.NewAuthHandler(tt.fake)
 
-	assert.Equal(t, responses.StatusBadRequest, rr.Code)
-	assert.Equal(t, responses.ErrBadJSON, testhelpers.DecodeErrorResponse(t, rr.Body))
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
+			req.Body = io.NopCloser(bytes.NewReader(tt.body))
+
+			rr := httptest.NewRecorder()
+			handler.Login(rr, req)
+
+			assert.Equal(t, tt.wantStatus, rr.Code)
+
+			if tt.wantErrCode != "" {
+				assert.Equal(t, tt.wantErrCode, testhelpers.DecodeErrorResponse(t, rr.Body))
+			} else {
+				var resp models.AuthResponse
+				testhelpers.DecodeJSON(t, rr.Body, &resp)
+				assert.True(t, resp.IsAuth)
+			}
+		})
+	}
 }
 
-func TestLogin_VKApiError_Returns500(t *testing.T) {
+func TestLogout(t *testing.T) {
 	t.Parallel()
 
-	handler := delivery.NewAuthHandler(
-		&fakeAuthUsecases{loginErr: apperrors.VKApiError},
-	)
+	tests := []struct {
+		name        string
+		fake        *fakeAuthUsecases
+		wantStatus  int
+		wantErrCode string
+	}{
+		{
+			name:        "error",
+			fake:        &fakeAuthUsecases{logoutErr: errors.New("redis error")},
+			wantStatus:  responses.StatusInternalServerError,
+			wantErrCode: responses.ErrInternalServer,
+		},
+		{
+			name:       "happy_path",
+			fake:       &fakeAuthUsecases{},
+			wantStatus: responses.StatusOk,
+		},
+	}
 
-	body := testhelpers.MustJSON(t, models.LoginRequest{Code: "code"})
-	req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
-	req.Body = io.NopCloser(bytes.NewReader(body))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
-	rr := httptest.NewRecorder()
-	handler.Login(rr, req)
+			handler := delivery.NewAuthHandler(tt.fake)
 
-	assert.Equal(t, responses.StatusInternalServerError, rr.Code)
-	assert.Equal(t, responses.ErrVKServer, testhelpers.DecodeErrorResponse(t, rr.Body))
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/logout", nil)
+			req.AddCookie(&http.Cookie{Name: "session_id", Value: "test-session"})
+
+			rr := httptest.NewRecorder()
+			handler.Logout(rr, req)
+
+			assert.Equal(t, tt.wantStatus, rr.Code)
+
+			if tt.wantErrCode != "" {
+				assert.Equal(t, tt.wantErrCode, testhelpers.DecodeErrorResponse(t, rr.Body))
+			} else {
+				var resp models.AuthResponse
+				testhelpers.DecodeJSON(t, rr.Body, &resp)
+				assert.False(t, resp.IsAuth)
+			}
+		})
+	}
 }
 
-func TestLogin_GenericError_Returns500(t *testing.T) {
+func TestCheckAuth(t *testing.T) {
 	t.Parallel()
 
-	handler := delivery.NewAuthHandler(
-		&fakeAuthUsecases{loginErr: errors.New("unexpected")},
-	)
+	tests := []struct {
+		name       string
+		cookie     *http.Cookie
+		fake       *fakeAuthUsecases
+		wantStatus int
+		wantAuth   bool
+	}{
+		{
+			name:       "no_cookie",
+			cookie:     nil,
+			fake:       &fakeAuthUsecases{},
+			wantStatus: responses.StatusOk,
+			wantAuth:   false,
+		},
+		{
+			name:       "not_authenticated",
+			cookie:     &http.Cookie{Name: "session_id", Value: "test-session"},
+			fake:       &fakeAuthUsecases{checkAuthIsAuth: false},
+			wantStatus: responses.StatusOk,
+			wantAuth:   false,
+		},
+		{
+			name:   "authenticated",
+			cookie: &http.Cookie{Name: "session_id", Value: "test-session"},
+			fake: &fakeAuthUsecases{
+				checkAuthUser:   &models.User{ID: 1, Name: "Tester"},
+				checkAuthIsAuth: true,
+			},
+			wantStatus: responses.StatusOk,
+			wantAuth:   true,
+		},
+	}
 
-	body := testhelpers.MustJSON(t, models.LoginRequest{Code: "code"})
-	req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
-	req.Body = io.NopCloser(bytes.NewReader(body))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
-	rr := httptest.NewRecorder()
-	handler.Login(rr, req)
+			handler := delivery.NewAuthHandler(tt.fake)
 
-	assert.Equal(t, responses.StatusInternalServerError, rr.Code)
-	assert.Equal(t, responses.ErrInternalServer, testhelpers.DecodeErrorResponse(t, rr.Body))
-}
+			req := httptest.NewRequest(http.MethodGet, "/api/auth/check", nil)
+			if tt.cookie != nil {
+				req.AddCookie(tt.cookie)
+			}
 
-func TestCheckAuth_NoCookie_ReturnsNotAuth(t *testing.T) {
-	t.Parallel()
+			rr := httptest.NewRecorder()
+			handler.CheckAuth(rr, req)
 
-	handler := delivery.NewAuthHandler(&fakeAuthUsecases{})
+			assert.Equal(t, tt.wantStatus, rr.Code)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/auth/check", nil)
-	// no session_id cookie
-
-	rr := httptest.NewRecorder()
-	handler.CheckAuth(rr, req)
-
-	assert.Equal(t, http.StatusOK, rr.Code)
+			var resp models.AuthResponse
+			testhelpers.DecodeJSON(t, rr.Body, &resp)
+			assert.Equal(t, tt.wantAuth, resp.IsAuth)
+		})
+	}
 }

@@ -1,5 +1,7 @@
 package auth
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_auth.go -package=mocks
+
 import (
 	"context"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"

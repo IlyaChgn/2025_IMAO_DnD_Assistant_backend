@@ -1,4 +1,4 @@
-.PHONY: test test-race test-cover test-integration integration-up integration-down
+.PHONY: test test-race test-cover test-integration integration-up integration-down mocks
 
 test:
 	go test -mod=vendor ./...
@@ -18,3 +18,6 @@ integration-up:
 
 integration-down:
 	docker compose down
+
+mocks:
+	go generate ./internal/pkg/auth/...

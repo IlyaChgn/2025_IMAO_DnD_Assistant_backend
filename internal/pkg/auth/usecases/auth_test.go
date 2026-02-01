@@ -8,71 +8,10 @@ import (
 	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fakes ---
-
-type fakeAuthRepo struct {
-	checkUserResult *models.User
-	checkUserErr    error
-	createResult    *models.User
-	createErr       error
-	updateResult    *models.User
-	updateErr       error
-}
-
-func (f *fakeAuthRepo) CheckUser(_ context.Context, _ string) (*models.User, error) {
-	return f.checkUserResult, f.checkUserErr
-}
-
-func (f *fakeAuthRepo) CreateUser(_ context.Context, _ *models.User) (*models.User, error) {
-	return f.createResult, f.createErr
-}
-
-func (f *fakeAuthRepo) UpdateUser(_ context.Context, _ *models.User) (*models.User, error) {
-	return f.updateResult, f.updateErr
-}
-
-type fakeVKApi struct {
-	exchangeResult []byte
-	exchangeErr    error
-	publicResult   []byte
-	publicErr      error
-}
-
-func (f *fakeVKApi) ExchangeCode(_ context.Context, _ *models.LoginRequest) ([]byte, error) {
-	return f.exchangeResult, f.exchangeErr
-}
-
-func (f *fakeVKApi) GetPublicInfo(_ context.Context, _ string) ([]byte, error) {
-	return f.publicResult, f.publicErr
-}
-
-type fakeSessionManager struct {
-	createErr    error
-	removeErr    error
-	getResult    *models.FullSessionData
-	getIsAuth    bool
-	createCalled bool
-	removeCalled bool
-}
-
-func (f *fakeSessionManager) CreateSession(_ context.Context, _ string, _ *models.FullSessionData,
-	_ time.Duration) error {
-	f.createCalled = true
-	return f.createErr
-}
-
-func (f *fakeSessionManager) RemoveSession(_ context.Context, _ string) error {
-	f.removeCalled = true
-	return f.removeErr
-}
-
-func (f *fakeSessionManager) GetSession(_ context.Context, _ string) (*models.FullSessionData, bool) {
-	return f.getResult, f.getIsAuth
-}
 
 // --- helpers ---
 
@@ -107,7 +46,6 @@ func TestLogin(t *testing.T) {
 	createErr := errors.New("db create error")
 	updateErr := errors.New("db update error")
 	sessionErr := errors.New("session create error")
-	checkUserErr := apperrors.UserDoesNotExistError
 
 	existingUser := &models.User{ID: 1, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "old-avatar"}
 	createdUser := &models.User{ID: 2, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "avatar-url"}
@@ -115,107 +53,115 @@ func TestLogin(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		vk      *fakeVKApi
-		repo    *fakeAuthRepo
-		sess    *fakeSessionManager
+		setup   func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager)
 		wantErr error
 		wantNil bool
 	}{
 		{
-			name:    "ExchangeCode error is propagated",
-			vk:      &fakeVKApi{exchangeErr: exchangeErr},
-			repo:    &fakeAuthRepo{},
-			sess:    &fakeSessionManager{},
+			name: "exchange_code_error",
+			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(nil, exchangeErr)
+			},
 			wantErr: exchangeErr,
 			wantNil: true,
 		},
 		{
-			name:    "invalid VK tokens JSON returns error",
-			vk:      &fakeVKApi{exchangeResult: []byte(`{invalid`)},
-			repo:    &fakeAuthRepo{},
-			sess:    &fakeSessionManager{},
+			name: "invalid_vk_tokens_json",
+			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return([]byte(`{invalid`), nil)
+			},
 			wantNil: true,
 		},
 		{
-			name: "GetPublicInfo error is propagated",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicErr:      publicInfoErr,
+			name: "get_public_info_error",
+			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").Return(nil, publicInfoErr)
 			},
-			repo:    &fakeAuthRepo{},
-			sess:    &fakeSessionManager{},
 			wantErr: publicInfoErr,
 			wantNil: true,
 		},
 		{
-			name: "invalid public info JSON returns error",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   []byte(`{invalid`),
+			name: "invalid_public_info_json",
+			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").Return([]byte(`{invalid`), nil)
 			},
-			repo:    &fakeAuthRepo{},
-			sess:    &fakeSessionManager{},
 			wantNil: true,
 		},
 		{
-			name: "new user: CreateUser error is propagated",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"),
+			name: "new_user_create_error",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
+				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(nil, createErr)
 			},
-			repo:    &fakeAuthRepo{checkUserErr: checkUserErr, createErr: createErr},
-			sess:    &fakeSessionManager{},
 			wantErr: createErr,
 			wantNil: true,
 		},
 		{
-			name: "existing user: UpdateUser error is propagated",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"),
+			name: "existing_user_update_error",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(nil, updateErr)
 			},
-			repo:    &fakeAuthRepo{checkUserResult: existingUser, updateErr: updateErr},
-			sess:    &fakeSessionManager{},
 			wantErr: updateErr,
 			wantNil: true,
 		},
 		{
-			name: "session creation error is propagated",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"),
+			name: "session_creation_error",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
+				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(sessionErr)
 			},
-			repo:    &fakeAuthRepo{checkUserErr: checkUserErr, createResult: createdUser},
-			sess:    &fakeSessionManager{createErr: sessionErr},
 			wantErr: sessionErr,
 			wantNil: true,
 		},
 		{
-			name: "happy path: new user created and session stored",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"),
+			name: "happy_path_new_user",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
+				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
 			},
-			repo: &fakeAuthRepo{checkUserErr: checkUserErr, createResult: createdUser},
-			sess: &fakeSessionManager{},
 		},
 		{
-			name: "happy path: existing user updated",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"),
+			name: "happy_path_existing_user_updated",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(updatedUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
 			},
-			repo: &fakeAuthRepo{checkUserResult: existingUser, updateResult: updatedUser},
-			sess: &fakeSessionManager{},
 		},
 		{
-			name: "happy path: existing user no update needed",
-			vk: &fakeVKApi{
-				exchangeResult: validVKTokensJSON(),
-				publicResult:   validPublicInfoJSON("Ivan", "Ivanov", "old-avatar"),
+			name: "happy_path_no_update_needed",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "old-avatar"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+				// No UpdateUser call expected — gomock will fail if it's called.
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
 			},
-			repo: &fakeAuthRepo{checkUserResult: existingUser},
-			sess: &fakeSessionManager{},
 		},
 	}
 
@@ -223,19 +169,24 @@ func TestLogin(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewAuthUsecases(tt.repo, tt.vk, tt.sess)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockAuthRepository(ctrl)
+			vk := mocks.NewMockVKApi(ctrl)
+			sess := mocks.NewMockSessionManager(ctrl)
+
+			tt.setup(repo, vk, sess)
+
+			uc := NewAuthUsecases(repo, vk, sess)
 			result, err := uc.Login(context.Background(), "session-id",
 				&models.LoginRequest{Code: "code"}, time.Hour)
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
 			} else if tt.wantNil {
-				// error occurred but we don't check specific type (e.g., JSON unmarshal)
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
 				assert.NotNil(t, result)
-				assert.True(t, tt.sess.createCalled, "session should be created")
 			}
 
 			if tt.wantNil {
@@ -252,16 +203,20 @@ func TestLogout(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		sess    *fakeSessionManager
+		setup   func(sess *mocks.MockSessionManager)
 		wantErr error
 	}{
 		{
-			name: "happy path",
-			sess: &fakeSessionManager{},
+			name: "happy_path",
+			setup: func(sess *mocks.MockSessionManager) {
+				sess.EXPECT().RemoveSession(gomock.Any(), "session-id").Return(nil)
+			},
 		},
 		{
-			name:    "session removal error is propagated",
-			sess:    &fakeSessionManager{removeErr: removeErr},
+			name: "removal_error",
+			setup: func(sess *mocks.MockSessionManager) {
+				sess.EXPECT().RemoveSession(gomock.Any(), "session-id").Return(removeErr)
+			},
 			wantErr: removeErr,
 		},
 	}
@@ -270,7 +225,15 @@ func TestLogout(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewAuthUsecases(&fakeAuthRepo{}, &fakeVKApi{}, tt.sess)
+			ctrl := gomock.NewController(t)
+			sess := mocks.NewMockSessionManager(ctrl)
+			tt.setup(sess)
+
+			uc := NewAuthUsecases(
+				mocks.NewMockAuthRepository(ctrl),
+				mocks.NewMockVKApi(ctrl),
+				sess,
+			)
 			err := uc.Logout(context.Background(), "session-id")
 
 			if tt.wantErr != nil {
@@ -291,19 +254,23 @@ func TestCheckAuth(t *testing.T) {
 
 	tests := []struct {
 		name       string
-		sess       *fakeSessionManager
+		setup      func(sess *mocks.MockSessionManager)
 		wantAuth   bool
 		wantNilUsr bool
 	}{
 		{
-			name:       "not authenticated returns nil user and false",
-			sess:       &fakeSessionManager{getIsAuth: false},
+			name: "not_authenticated",
+			setup: func(sess *mocks.MockSessionManager) {
+				sess.EXPECT().GetSession(gomock.Any(), "session-id").Return(nil, false)
+			},
 			wantAuth:   false,
 			wantNilUsr: true,
 		},
 		{
-			name:     "authenticated returns user and true",
-			sess:     &fakeSessionManager{getResult: sessionData, getIsAuth: true},
+			name: "authenticated",
+			setup: func(sess *mocks.MockSessionManager) {
+				sess.EXPECT().GetSession(gomock.Any(), "session-id").Return(sessionData, true)
+			},
 			wantAuth: true,
 		},
 	}
@@ -312,7 +279,15 @@ func TestCheckAuth(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewAuthUsecases(&fakeAuthRepo{}, &fakeVKApi{}, tt.sess)
+			ctrl := gomock.NewController(t)
+			sess := mocks.NewMockSessionManager(ctrl)
+			tt.setup(sess)
+
+			uc := NewAuthUsecases(
+				mocks.NewMockAuthRepository(ctrl),
+				mocks.NewMockVKApi(ctrl),
+				sess,
+			)
 			user, isAuth := uc.CheckAuth(context.Background(), "session-id")
 
 			assert.Equal(t, tt.wantAuth, isAuth)
@@ -334,8 +309,15 @@ func TestGetUserIDBySessionID(t *testing.T) {
 		User: models.User{ID: 42},
 	}
 
-	sess := &fakeSessionManager{getResult: sessionData, getIsAuth: true}
-	uc := NewAuthUsecases(&fakeAuthRepo{}, &fakeVKApi{}, sess)
+	ctrl := gomock.NewController(t)
+	sess := mocks.NewMockSessionManager(ctrl)
+	sess.EXPECT().GetSession(gomock.Any(), "session-id").Return(sessionData, true)
+
+	uc := NewAuthUsecases(
+		mocks.NewMockAuthRepository(ctrl),
+		mocks.NewMockVKApi(ctrl),
+		sess,
+	)
 
 	id := uc.GetUserIDBySessionID(context.Background(), "session-id")
 	assert.Equal(t, 42, id)
