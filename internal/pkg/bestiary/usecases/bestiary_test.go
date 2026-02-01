@@ -103,6 +103,20 @@ func TestGetCreaturesList(t *testing.T) {
 			repo:    &fakeBestiaryRepo{listErr: repoErr},
 			wantErr: repoErr,
 		},
+		{
+			name:    "NoDocsErr is propagated",
+			start:   0,
+			size:    10,
+			repo:    &fakeBestiaryRepo{listErr: apperrors.NoDocsErr},
+			wantErr: apperrors.NoDocsErr,
+		},
+		{
+			name:    "UnknownDirectionError is propagated",
+			start:   0,
+			size:    10,
+			repo:    &fakeBestiaryRepo{listErr: apperrors.UnknownDirectionError},
+			wantErr: apperrors.UnknownDirectionError,
+		},
 	}
 
 	for _, tt := range tests {
@@ -150,6 +164,11 @@ func TestGetCreatureByEngName(t *testing.T) {
 			wantErr: repoErr,
 			wantNil: true,
 		},
+		{
+			name:    "nil creature returned without error",
+			repo:    &fakeBestiaryRepo{creatureResult: nil},
+			wantNil: true,
+		},
 	}
 
 	for _, tt := range tests {
@@ -163,11 +182,12 @@ func TestGetCreatureByEngName(t *testing.T) {
 				assert.True(t, errors.Is(err, tt.wantErr))
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, expected, result)
 			}
 
 			if tt.wantNil {
 				assert.Nil(t, result)
+			} else if tt.wantErr == nil {
+				assert.Equal(t, expected, result)
 			}
 		})
 	}
@@ -215,6 +235,20 @@ func TestGetUserCreaturesList(t *testing.T) {
 			size:    10,
 			repo:    &fakeBestiaryRepo{userListErr: repoErr},
 			wantErr: repoErr,
+		},
+		{
+			name:    "NoDocsErr is propagated",
+			start:   0,
+			size:    10,
+			repo:    &fakeBestiaryRepo{userListErr: apperrors.NoDocsErr},
+			wantErr: apperrors.NoDocsErr,
+		},
+		{
+			name:    "UnknownDirectionError is propagated",
+			start:   0,
+			size:    10,
+			repo:    &fakeBestiaryRepo{userListErr: apperrors.UnknownDirectionError},
+			wantErr: apperrors.UnknownDirectionError,
 		},
 	}
 

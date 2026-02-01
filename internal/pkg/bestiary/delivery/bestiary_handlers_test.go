@@ -20,11 +20,13 @@ import (
 // --- fake usecase ---
 
 type fakeBestiaryUsecases struct {
-	listResult  []*models.BestiaryCreature
-	listErr     error
-	creatureErr error
-	addErr      error
-	generateErr error
+	listResult     []*models.BestiaryCreature
+	listErr        error
+	creatureErr    error
+	addErr         error
+	generateErr    error
+	userListResult []*models.BestiaryCreature
+	userListErr    error
 }
 
 func (f *fakeBestiaryUsecases) GetCreaturesList(_ context.Context, _, _ int, _ []models.Order,
@@ -38,7 +40,7 @@ func (f *fakeBestiaryUsecases) GetCreatureByEngName(_ context.Context, _ string)
 
 func (f *fakeBestiaryUsecases) GetUserCreaturesList(_ context.Context, _, _ int, _ []models.Order,
 	_ models.FilterParams, _ models.SearchParams, _ int) ([]*models.BestiaryCreature, error) {
-	return nil, nil
+	return f.userListResult, f.userListErr
 }
 
 func (f *fakeBestiaryUsecases) GetUserCreatureByEngName(_ context.Context, _ string, _ int) (*models.Creature, error) {
@@ -150,4 +152,117 @@ func TestSubmitCreatureGenerationPrompt_BadJSON_Returns400(t *testing.T) {
 
 	assert.Equal(t, responses.StatusBadRequest, rr.Code)
 	assert.Equal(t, responses.ErrBadJSON, testhelpers.DecodeErrorResponse(t, rr.Body))
+}
+
+func TestGetCreaturesList_NoDocsErr_Returns200(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewBestiaryHandler(
+		&fakeBestiaryUsecases{listErr: apperrors.NoDocsErr},
+		ctxUserKey,
+	)
+
+	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: 0, Size: 10})
+	req := httptest.NewRequest(http.MethodPost, "/api/bestiary", nil)
+	req.Body = io.NopCloser(bytes.NewReader(body))
+
+	rr := httptest.NewRecorder()
+	handler.GetCreaturesList(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+}
+
+func TestGetCreaturesList_UnknownDirectionError_Returns400(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewBestiaryHandler(
+		&fakeBestiaryUsecases{listErr: apperrors.UnknownDirectionError},
+		ctxUserKey,
+	)
+
+	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: 0, Size: 10})
+	req := httptest.NewRequest(http.MethodPost, "/api/bestiary", nil)
+	req.Body = io.NopCloser(bytes.NewReader(body))
+
+	rr := httptest.NewRecorder()
+	handler.GetCreaturesList(rr, req)
+
+	assert.Equal(t, responses.StatusBadRequest, rr.Code)
+	assert.Equal(t, responses.ErrWrongDirection, testhelpers.DecodeErrorResponse(t, rr.Body))
+}
+
+func TestGetUserCreaturesList_BadJSON_Returns400(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewBestiaryHandler(&fakeBestiaryUsecases{}, ctxUserKey)
+
+	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
+	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid json`)))
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+
+	rr := httptest.NewRecorder()
+	handler.GetUserCreaturesList(rr, req)
+
+	assert.Equal(t, responses.StatusBadRequest, rr.Code)
+	assert.Equal(t, responses.ErrBadJSON, testhelpers.DecodeErrorResponse(t, rr.Body))
+}
+
+func TestGetUserCreaturesList_StartPosSizeError_Returns400(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewBestiaryHandler(
+		&fakeBestiaryUsecases{userListErr: apperrors.StartPosSizeError},
+		ctxUserKey,
+	)
+
+	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: -1, Size: 10})
+	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
+	req.Body = io.NopCloser(bytes.NewReader(body))
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+
+	rr := httptest.NewRecorder()
+	handler.GetUserCreaturesList(rr, req)
+
+	assert.Equal(t, responses.StatusBadRequest, rr.Code)
+	assert.Equal(t, responses.ErrSizeOrPosition, testhelpers.DecodeErrorResponse(t, rr.Body))
+}
+
+func TestGetUserCreaturesList_UnknownDirectionError_Returns400(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewBestiaryHandler(
+		&fakeBestiaryUsecases{userListErr: apperrors.UnknownDirectionError},
+		ctxUserKey,
+	)
+
+	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: 0, Size: 10})
+	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
+	req.Body = io.NopCloser(bytes.NewReader(body))
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+
+	rr := httptest.NewRecorder()
+	handler.GetUserCreaturesList(rr, req)
+
+	assert.Equal(t, responses.StatusBadRequest, rr.Code)
+	assert.Equal(t, responses.ErrWrongDirection, testhelpers.DecodeErrorResponse(t, rr.Body))
+}
+
+func TestGetUserCreaturesList_GenericError_Returns500(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewBestiaryHandler(
+		&fakeBestiaryUsecases{userListErr: errors.New("unexpected")},
+		ctxUserKey,
+	)
+
+	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: 0, Size: 10})
+	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
+	req.Body = io.NopCloser(bytes.NewReader(body))
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+
+	rr := httptest.NewRecorder()
+	handler.GetUserCreaturesList(rr, req)
+
+	assert.Equal(t, responses.StatusInternalServerError, rr.Code)
+	assert.Equal(t, responses.ErrInternalServer, testhelpers.DecodeErrorResponse(t, rr.Body))
 }
