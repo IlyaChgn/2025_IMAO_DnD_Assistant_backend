@@ -85,7 +85,7 @@ func (srv *Server) Run() error {
 		log.Fatal("The config wasn`t opened")
 	}
 
-	logger, err := mylogger.New(cfg.Logger.Key, cfg.Logger.OutputPath, cfg.Logger.ErrPath)
+	logger, err := mylogger.New(cfg.Logger.OutputPath, cfg.Logger.ErrPath)
 	if err != nil {
 		log.Fatalf("Failed to initialize log: %v", err)
 	}

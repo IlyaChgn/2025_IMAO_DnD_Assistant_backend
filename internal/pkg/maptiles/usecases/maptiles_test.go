@@ -7,7 +7,6 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,20 +19,10 @@ func (m *mockRepo) GetCategories(_ context.Context, _ int) ([]*models.MapTileCat
 	return m.categories, m.err
 }
 
-func newTestContext() context.Context {
-	l, err := logger.New("test-logger", "stdout", "stderr")
-	if err != nil {
-		panic(err)
-	}
-
-	return l.WithContext(context.Background())
-}
-
 func TestGetCategories_NegativeUserID(t *testing.T) {
 	uc := NewMapTilesUsecases(&mockRepo{})
-	ctx := newTestContext()
 
-	result, err := uc.GetCategories(ctx, -1)
+	result, err := uc.GetCategories(context.Background(), -1)
 
 	assert.Error(t, err)
 	assert.Nil(t, result)
@@ -46,9 +35,8 @@ func TestGetCategories_ValidUserID(t *testing.T) {
 	}
 
 	uc := NewMapTilesUsecases(&mockRepo{categories: expected})
-	ctx := newTestContext()
 
-	result, err := uc.GetCategories(ctx, 1)
+	result, err := uc.GetCategories(context.Background(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expected, result)

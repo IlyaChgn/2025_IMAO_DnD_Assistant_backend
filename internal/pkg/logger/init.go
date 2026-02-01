@@ -2,18 +2,21 @@ package logger
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-var ctxKey string
+// loggerCtxKey is an unexported struct type used as the context key for the logger.
+// Using a struct type (not string) avoids collisions and is safe for parallel tests.
+type loggerCtxKey struct{}
 
 type logger struct {
 	zap *zap.SugaredLogger
 }
 
-func New(key, outputPath, errPath string) (Logger, error) {
+func New(outputPath, errPath string) (Logger, error) {
 	config := zap.NewProductionConfig()
 	config.DisableStacktrace = false
 	config.OutputPaths = []string{outputPath}
@@ -34,7 +37,6 @@ func New(key, outputPath, errPath string) (Logger, error) {
 		return nil, err
 	}
 
-	ctxKey = key
 	mylogger := &logger{
 		zap: l.Sugar().WithOptions(zap.AddCallerSkip(1)),
 	}
@@ -43,11 +45,16 @@ func New(key, outputPath, errPath string) (Logger, error) {
 }
 
 func (l *logger) WithContext(ctx context.Context) context.Context {
-	return context.WithValue(ctx, ctxKey, l.with("request-uuid", uuid.NewString()))
+	return context.WithValue(ctx, loggerCtxKey{}, l.with("request-uuid", uuid.NewString()))
 }
 
+// FromContext extracts the Logger from context. If no logger is present,
+// it returns a no-op logger instead of panicking.
 func FromContext(ctx context.Context) Logger {
-	return ctx.Value(ctxKey).(Logger)
+	if l, ok := ctx.Value(loggerCtxKey{}).(Logger); ok {
+		return l
+	}
+	return noop
 }
 
 func (l *logger) with(key string, val interface{}) *logger {
