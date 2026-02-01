@@ -27,6 +27,7 @@ import (
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
+	bestiarydlv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
 	bestiaryproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery/protobuf"
 	bestiaryext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/external"
 	bestiaryrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/repository"
@@ -213,14 +214,17 @@ func (srv *Server) Run() error {
 	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
 	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
-	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorClient)
+	actionProcessorGateway := bestiarydlv.NewActionProcessorAdapter(actionProcessorClient)
+	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorGateway)
 	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor(actionProcessorUsecase)
-	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor)
+	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor,
+		bestiaryuc.NewGoRunner(), bestiaryuc.NewUUIDGenerator())
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
-	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager)
+	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager,
+		tableuc.NewRandSessionIDGen(), tableuc.NewRealTimerFactory())
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)
 	mapsUsecases := mapsuc.NewMapsUsecases(mapsRepository)
 

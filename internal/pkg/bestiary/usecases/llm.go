@@ -3,27 +3,37 @@ package usecases
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
-	"github.com/google/uuid"
 )
 
 type LLMUsecase struct {
 	storage                    bestiaryinterface.LLMJobRepository
 	geminiAPI                  bestiaryinterface.GeminiAPI
 	generatedCreatureProcessor bestiaryinterface.GeneratedCreatureProcessorUsecases
+	runner                     bestiaryinterface.AsyncRunner
+	idGen                      bestiaryinterface.IDGenerator
 }
 
 func NewLLMUsecase(storage bestiaryinterface.LLMJobRepository,
 	geminiAPI bestiaryinterface.GeminiAPI,
-	generatedCreatureProcessor bestiaryinterface.GeneratedCreatureProcessorUsecases) *LLMUsecase {
-	return &LLMUsecase{storage: storage, geminiAPI: geminiAPI, generatedCreatureProcessor: generatedCreatureProcessor}
+	generatedCreatureProcessor bestiaryinterface.GeneratedCreatureProcessorUsecases,
+	runner bestiaryinterface.AsyncRunner,
+	idGen bestiaryinterface.IDGenerator) *LLMUsecase {
+	return &LLMUsecase{
+		storage:                    storage,
+		geminiAPI:                  geminiAPI,
+		generatedCreatureProcessor: generatedCreatureProcessor,
+		runner:                     runner,
+		idGen:                      idGen,
+	}
 }
 
 func (uc *LLMUsecase) SubmitText(ctx context.Context, desc string) (string, error) {
 	l := logger.FromContext(ctx)
-	id := uuid.New().String()
+	id := uc.idGen.NewID()
 	job := &models.LLMJob{
 		ID:          id,
 		Description: &desc,
@@ -35,14 +45,14 @@ func (uc *LLMUsecase) SubmitText(ctx context.Context, desc string) (string, erro
 		return "", err
 	}
 
-	go uc.process(ctx, id)
+	uc.runner.Go(func() { uc.process(ctx, id) })
 
 	return id, nil
 }
 
 func (uc *LLMUsecase) SubmitImage(ctx context.Context, img []byte) (string, error) {
 	l := logger.FromContext(ctx)
-	id := uuid.New().String()
+	id := uc.idGen.NewID()
 	job := &models.LLMJob{
 		ID:     id,
 		Image:  img,
@@ -54,7 +64,7 @@ func (uc *LLMUsecase) SubmitImage(ctx context.Context, img []byte) (string, erro
 		return "", err
 	}
 
-	go uc.process(ctx, id)
+	uc.runner.Go(func() { uc.process(ctx, id) })
 
 	return id, nil
 }

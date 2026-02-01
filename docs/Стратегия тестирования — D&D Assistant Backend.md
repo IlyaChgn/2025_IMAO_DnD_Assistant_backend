@@ -226,8 +226,11 @@
 
   - encounter.SaveEncounter: uuid.NewString() вызывается напрямую — при тестировании нельзя проверить какой ID был передан в repo. Рекомендация: передавать ID generator через  
   конструктор. Не блокирует написание тестов (просто не assertим exact ID)
-  - bestiary/llm.go: go uc.process(...) — при тестировании нужно ждать goroutine. Рекомендация: для тестов process можно вызывать синхронно или добавить sync.WaitGroup.        
+  - bestiary/llm.go: go uc.process(...) — при тестировании нужно ждать goroutine. Рекомендация: для тестов process можно вызывать синхронно или добавить sync.WaitGroup.
   Отложить до этапа 2
+  - ✅ bestiary/actions_processor: protobuf types (structpb.Struct, AsMap) не должны попадать в usecase слой. Решено: введён ActionProcessorGateway интерфейс (возвращает map[string]interface{}), конвертация structpb.Struct → map вынесена в delivery adapter (action_processor_adapter.go). Usecase теперь тестируется без protobuf зависимостей
+  - ✅ bestiary/llm: async goroutine и uuid.New() делали тесты недетерминированными. Решено: AsyncRunner интерфейс (prod: go fn(), test: fn()), IDGenerator интерфейс (prod: uuid.New(), test: фиксированный ID). Usecase тестируется синхронно без sleep/таймеров. Prod реализации в infra.go
+  - ✅ table: time.AfterFunc и utils.RandString делали тесты недетерминированными, *websocket.Conn в интерфейсе блокировал transport-тесты. Решено: SessionIDGenerator интерфейс (prod: RandString, test: фиксированный ID), TimerFactory + SessionTimer интерфейсы (prod: time.AfterFunc, test: fake без реальных таймеров). Usecase-логика (permission check, session creation, timer registration) тестируется синхронно. Websocket transport (repository/session.go, repository/participants.go) остаётся без unit-тестов — тонкий адаптер, покрывается интеграционно. Prod реализации в usecases/infra.go
 
   ---
   5. План внедрения
@@ -353,6 +356,7 @@
 
   Текущее покрытие:
   - ✅ encounter/repository: SaveEncounter + GetEncounterByID (PostgreSQL smoke test)
+  - ✅ table/delivery: ServeWS websocket upgrade + mux routing smoke test (in-process httptest.NewServer + gorilla/websocket.Dial, PR11; не требует внешней инфраструктуры; проверяет upgrade, извлечение session ID из URL vars, передачу user из context). Глубокие WS-сценарии (broadcast, multi-participant, reconnect) остаются вне scope — покрываются ручным/E2E тестированием
 
   ---
   6. Матрица покрытия (домены × уровни × приоритет)
@@ -371,9 +375,9 @@
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ maptiles       │      —      │   Есть ✅    │ Есть ✅  │      —      │           Низкий           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ table          │      —      │      P3      │    —     │     P4      │ Низкий (websocket, сложно) │
+  │ table          │      —      │   Есть ✅    │ Есть ✅  │  Есть ✅    │ Покрыт (seam: TimerFactory)│
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ bestiary/llm   │      —      │      P3      │    P3    │     P4      │  Низкий (async goroutine)  │
+  │ bestiary/llm   │      —      │   Есть ✅    │    P3    │     P4      │  Покрыт (seam: AsyncRunner)│
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ description    │      —      │   Есть ✅    │ Есть ✅  │      —      │    Низкий (gRPC proxy)     │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
@@ -439,9 +443,11 @@
   - ✅ P3 — bestiary/delivery/bestiary_handlers_test.go (12 сценариев, PR5+PR6)
   - ✅ P3 — description/usecases/description_test.go (2 сценария, PR5)
   - ✅ P3 — description/delivery/description_handlers_test.go (2 сценария, PR5)
-  - P3 — bestiary/usecases/llm_test.go (отложен: goroutines, async state machine)
-  - P3 — table/usecases/table_test.go (отложен: websocket, goroutines, timers, sync.Mutex)
-  - P3 — bestiary/usecases/actions_processor_test.go (отложен: gRPC protobuf Struct.AsMap())
+  - ✅ P3 — bestiary/usecases/llm_test.go (12 сценариев, PR8; seams: AsyncRunner (sync fake в тестах), IDGenerator (фиксированный ID), все зависимости через интерфейсы)
+  - ✅ P3 — table/usecases/table_test.go (8 сценариев, PR9; seams: SessionIDGenerator (фиксированный ID), TimerFactory (fake timer), бизнес-логика тестируется синхронно, websocket transport skipped)
+  - ✅ P3 — table/delivery/table_handlers_test.go (7 сценариев, PR9+PR10; CreateSession: BadJSON→400, PermissionDenied→400, ScanError→400, GenericError→500; GetTableData: MissingID→400, UsecaseError→400, HappyPath→200)
+  - ✅ P4 — table/delivery/servews_integration_test.go (1 smoke, PR11; websocket upgrade через httptest.NewServer + gorilla/websocket.Dial, mux routing с {id} param, user injection через middleware; запуск: `make test-integration` или `go test -tags=integration`)
+  - ✅ P3 — bestiary/usecases/actions_processor_test.go (10 сценариев, PR7; seam: ActionProcessorGateway интерфейс, protobuf→map конвертация вынесена в delivery adapter)
   - SKIP — statblockgenerator (пустой stub, нет методов)
   - ✅ P4 — Integration test scaffold: build tag, Makefile targets, NoopDBMetrics (PR3)
   - ✅ P4 — encounter/repository integration smoke test: Save + GetByID (PR3)
