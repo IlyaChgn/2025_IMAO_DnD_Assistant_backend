@@ -113,9 +113,21 @@
     - `.github/workflows/integration.yml` — manual (workflow_dispatch): Postgres 16 + Redis 7 services, `make test-integration`
     - Race detector обязателен на Linux (CGO_ENABLED=1 по умолчанию), невозможен на Windows без gcc
     - Vendor mode: `cache: false` в setup-go, все команды через `-mod=vendor`
-  - Makefile в корне проекта: make test, make test-race, make test-cover, make test-integration (добавлен в PR2, дополнен PR3)
+  - Makefile в корне проекта: make test, make test-race, make test-cover, make test-integration, make mocks, make verify (добавлен в PR2, дополнен PR3)
   - Нет golangci-lint конфига
   - Vendor mode (-mod=vendor) активен
+
+  Локальная проверка перед коммитом: `make verify`
+
+  Команда `make verify` последовательно выполняет:
+  1. `gofmt` — проверяет форматирование (без изменения файлов, только проверка)
+  2. `go vet` — статический анализ
+  3. `go test` — запуск всех unit-тестов
+  4. Консистентность моков — запускает `make mocks`, затем `git diff --exit-code` чтобы убедиться, что сгенерированные моки соответствуют текущим интерфейсам
+
+  Если mock-файлы устарели (интерфейс изменился, а `make mocks` не был выполнен), verify упадёт с ошибкой.
+
+  Правило: при изменении interfaces.go любого домена — обязательно выполнить `make mocks` и закоммитить обновлённые mock-файлы. `make verify` ловит нарушения этого правила автоматически.
 
   ---
   2. Тестовый стек
@@ -251,6 +263,50 @@
   2. Запуск: `make mocks` или `go generate ./internal/pkg/<domain>/...`
   3. Сгенерированные файлы коммитятся в repo (vendor mode)
   4. Пакет: `go.uber.org/mock` (v0.6.0+), CLI: `mockgen`
+  5. При изменении interfaces.go → `make mocks` → коммит обновлённых моков
+  6. `make verify` автоматически проверяет консистентность моков перед коммитом
+
+  Статус миграции usecase-тестов на gomock:
+  ┌────────────────────────┬──────────┬─────────────────────────────────────────────────────┐
+  │         Домен          │  Статус  │                     Примечание                       │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ auth                   │  ✅ gomock │ Пилот (PR12)                                       │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ encounter              │  ✅ gomock │ MockEncounterRepository                             │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ maps                   │  ✅ gomock │ MockMapsRepository                                  │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ character              │  ✅ gomock │ MockCharacterRepository + hand-written fakeFile     │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ maptiles               │  ✅ gomock │ MockMapTilesRepository                              │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ bestiary               │  ✅ gomock │ MockBestiaryRepository, MockBestiaryS3Manager,      │
+  │                        │           │ MockGeminiAPI                                       │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ bestiary/actions_proc  │  ✅ gomock │ MockActionProcessorGateway                          │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ bestiary/gen_creature  │  ✅ gomock │ MockActionProcessorUsecases                         │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ bestiary/llm           │  ✅ fake  │ Stateful fakeLLMStorage (in-memory storage fake);   │
+  │                        │           │ допустимо по правилу stateful storage fakes (см.    │
+  │                        │           │ ниже). Остальные зависимости через gomock            │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ table                  │  ✅ gomock │ MockTableManager, MockSessionIDGenerator,           │
+  │                        │           │ MockTimerFactory, MockSessionTimer +                │
+  │                        │           │ cross-domain encmocks.MockEncounterRepository       │
+  ├────────────────────────┼──────────┼─────────────────────────────────────────────────────┤
+  │ description            │  ✅ gomock │ DescriptionGateway seam (protobuf→Go types),       │
+  │                        │           │ MockDescriptionGateway                              │
+  └────────────────────────┴──────────┴─────────────────────────────────────────────────────┘
+
+  Правило: stateful in-memory fakes
+  Stateful hand-written fakes допустимы для storage-уровня зависимостей, когда:
+  1. Тест верифицирует конечное состояние хранилища после multi-step pipeline (пример: bestiary/llm fakeLLMStorage хранит jobs в map, тест проверяет статус после async processing)
+  2. gomock DoAndReturn усложняет тест без выигрыша в читаемости
+  3. Фейк реализует storage-интерфейс (repository), а не внешний сервис/клиент
+
+  Внешние сервисы и клиенты (gRPC, HTTP API, S3) всегда мокаются через gomock.
+  Stdlib-интерфейсы (multipart.File) могут использовать hand-written fakes (пример: character/fakeFile).
 
   ---
   5. План внедрения

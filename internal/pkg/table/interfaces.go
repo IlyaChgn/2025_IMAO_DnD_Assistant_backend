@@ -1,5 +1,7 @@
 package table
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_table.go -package=mocks
+
 import (
 	"context"
 	"time"

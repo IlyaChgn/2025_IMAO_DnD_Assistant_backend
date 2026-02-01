@@ -7,48 +7,34 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/mocks"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fake gRPC client ---
-
-type fakeDescriptionClient struct {
-	result *descriptionproto.DescriptionResponse
-	err    error
-}
-
-func (f *fakeDescriptionClient) GenerateDescription(_ context.Context,
-	_ *descriptionproto.DescriptionRequest, _ ...grpc.CallOption) (*descriptionproto.DescriptionResponse, error) {
-	return f.result, f.err
-}
-
-// --- tests ---
 
 func TestGenerateDescription(t *testing.T) {
 	t.Parallel()
 
-	grpcErr := errors.New("grpc unavailable")
+	gatewayErr := errors.New("grpc unavailable")
 
 	tests := []struct {
 		name      string
-		client    *fakeDescriptionClient
+		setup     func(gw *mocks.MockDescriptionGateway)
 		wantErr   error
 		wantEmpty bool
 	}{
 		{
-			name:      "gRPC error returns ReceivedDescriptionError",
-			client:    &fakeDescriptionClient{err: grpcErr},
+			name: "gateway error returns ReceivedDescriptionError",
+			setup: func(gw *mocks.MockDescriptionGateway) {
+				gw.EXPECT().Describe(gomock.Any(), "char-1", "char-2").Return("", gatewayErr)
+			},
 			wantErr:   apperrors.ReceivedDescriptionError,
 			wantEmpty: true,
 		},
 		{
 			name: "happy path returns description",
-			client: &fakeDescriptionClient{
-				result: &descriptionproto.DescriptionResponse{
-					BattleDescription: "The goblin attacks!",
-				},
+			setup: func(gw *mocks.MockDescriptionGateway) {
+				gw.EXPECT().Describe(gomock.Any(), "char-1", "char-2").Return("The goblin attacks!", nil)
 			},
 		},
 	}
@@ -57,7 +43,11 @@ func TestGenerateDescription(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewDescriptionUsecase(tt.client)
+			ctrl := gomock.NewController(t)
+			gw := mocks.NewMockDescriptionGateway(ctrl)
+			tt.setup(gw)
+
+			uc := NewDescriptionUsecase(gw)
 			result, err := uc.GenerateDescription(context.Background(),
 				models.DescriptionGenerationRequest{
 					FirstCharID:  "char-1",

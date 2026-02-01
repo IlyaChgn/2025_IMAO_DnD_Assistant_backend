@@ -7,21 +7,10 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fake action processor ---
-
-type fakeActionProcessor struct {
-	result []models.AttackLLM
-	err    error
-}
-
-func (f *fakeActionProcessor) ProcessActions(_ context.Context, _ []models.Action) ([]models.AttackLLM, error) {
-	return f.result, f.err
-}
-
-// --- tests ---
 
 func TestValidateAndProcessGeneratedCreature(t *testing.T) {
 	t.Parallel()
@@ -30,32 +19,36 @@ func TestValidateAndProcessGeneratedCreature(t *testing.T) {
 	processorErr := errors.New("grpc error")
 
 	tests := []struct {
-		name      string
-		creature  *models.Creature
-		processor *fakeActionProcessor
-		wantErr   error
-		wantNil   bool
+		name     string
+		creature *models.Creature
+		setup    func(proc *mocks.MockActionProcessorUsecases)
+		wantErr  error
+		wantNil  bool
 	}{
 		{
-			name:      "nil creature returns NilCreatureErr",
-			creature:  nil,
-			processor: &fakeActionProcessor{},
-			wantErr:   apperrors.NilCreatureErr,
-			wantNil:   true,
+			name:     "nil creature returns NilCreatureErr",
+			creature: nil,
+			setup:    func(_ *mocks.MockActionProcessorUsecases) {},
+			wantErr:  apperrors.NilCreatureErr,
+			wantNil:  true,
 		},
 		{
 			name: "action processor error does not fail overall",
 			creature: &models.Creature{
 				Actions: []models.Action{{Name: "Bite", Value: "attack"}},
 			},
-			processor: &fakeActionProcessor{err: processorErr},
+			setup: func(proc *mocks.MockActionProcessorUsecases) {
+				proc.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).Return(nil, processorErr)
+			},
 		},
 		{
 			name: "happy path sets LLMParsedAttack",
 			creature: &models.Creature{
 				Actions: []models.Action{{Name: "Bite", Value: "attack"}},
 			},
-			processor: &fakeActionProcessor{result: attacks},
+			setup: func(proc *mocks.MockActionProcessorUsecases) {
+				proc.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).Return(attacks, nil)
+			},
 		},
 	}
 
@@ -63,8 +56,12 @@ func TestValidateAndProcessGeneratedCreature(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			proc := NewGeneratedCreatureProcessor(tt.processor)
-			result, err := proc.ValidateAndProcessGeneratedCreature(context.Background(), tt.creature)
+			ctrl := gomock.NewController(t)
+			proc := mocks.NewMockActionProcessorUsecases(ctrl)
+			tt.setup(proc)
+
+			processor := NewGeneratedCreatureProcessor(proc)
+			result, err := processor.ValidateAndProcessGeneratedCreature(context.Background(), tt.creature)
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
@@ -76,7 +73,7 @@ func TestValidateAndProcessGeneratedCreature(t *testing.T) {
 				assert.Nil(t, result)
 			} else if tt.wantErr == nil {
 				assert.NotNil(t, result)
-				if tt.processor.err == nil {
+				if processorErr == nil || tt.name == "happy path sets LLMParsedAttack" {
 					assert.Equal(t, attacks, result.LLMParsedAttack)
 				}
 			}

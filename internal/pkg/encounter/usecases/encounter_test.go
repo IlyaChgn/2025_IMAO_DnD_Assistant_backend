@@ -8,65 +8,10 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fake repository ---
-
-type fakeEncounterRepo struct {
-	// Return values
-	listResult      *models.EncountersList
-	listErr         error
-	encounterResult *models.Encounter
-	encounterErr    error
-	saveErr         error
-	updateErr       error
-	removeErr       error
-	hasPermission   bool
-
-	// Captured calls
-	saveCalled       bool
-	saveID           string
-	updateCalled     bool
-	removeCalled     bool
-	listSearchCalled bool
-}
-
-func (f *fakeEncounterRepo) GetEncountersList(_ context.Context, _, _, _ int) (*models.EncountersList, error) {
-	return f.listResult, f.listErr
-}
-
-func (f *fakeEncounterRepo) GetEncountersListWithSearch(_ context.Context, _, _, _ int,
-	_ *models.SearchParams) (*models.EncountersList, error) {
-	f.listSearchCalled = true
-	return f.listResult, f.listErr
-}
-
-func (f *fakeEncounterRepo) GetEncounterByID(_ context.Context, _ string) (*models.Encounter, error) {
-	return f.encounterResult, f.encounterErr
-}
-
-func (f *fakeEncounterRepo) SaveEncounter(_ context.Context, _ *models.SaveEncounterReq, id string, _ int) error {
-	f.saveCalled = true
-	f.saveID = id
-	return f.saveErr
-}
-
-func (f *fakeEncounterRepo) UpdateEncounter(_ context.Context, _ []byte, _ string) error {
-	f.updateCalled = true
-	return f.updateErr
-}
-
-func (f *fakeEncounterRepo) RemoveEncounter(_ context.Context, _ string) error {
-	f.removeCalled = true
-	return f.removeErr
-}
-
-func (f *fakeEncounterRepo) CheckPermission(_ context.Context, _ string, _ int) bool {
-	return f.hasPermission
-}
-
-// --- tests ---
 
 func TestGetEncountersList(t *testing.T) {
 	t.Parallel()
@@ -79,17 +24,17 @@ func TestGetEncountersList(t *testing.T) {
 		size       int
 		start      int
 		search     *models.SearchParams
-		repo       *fakeEncounterRepo
+		setup      func(repo *mocks.MockEncounterRepository)
 		wantErr    error
 		wantNil    bool
-		wantSearch bool
+		wantResult *models.EncountersList
 	}{
 		{
 			name:    "negative start returns StartPosSizeError",
 			size:    10,
 			start:   -1,
 			search:  &models.SearchParams{},
-			repo:    &fakeEncounterRepo{},
+			setup:   func(_ *mocks.MockEncounterRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -98,7 +43,7 @@ func TestGetEncountersList(t *testing.T) {
 			size:    0,
 			start:   0,
 			search:  &models.SearchParams{},
-			repo:    &fakeEncounterRepo{},
+			setup:   func(_ *mocks.MockEncounterRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -107,22 +52,32 @@ func TestGetEncountersList(t *testing.T) {
 			size:   10,
 			start:  0,
 			search: &models.SearchParams{},
-			repo:   &fakeEncounterRepo{listResult: expected},
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().GetEncountersList(gomock.Any(), 10, 0, 1).
+					Return(expected, nil)
+			},
+			wantResult: expected,
 		},
 		{
-			name:       "happy path with search delegates to search method",
-			size:       10,
-			start:      0,
-			search:     &models.SearchParams{Value: "dragon"},
-			repo:       &fakeEncounterRepo{listResult: expected},
-			wantSearch: true,
+			name:   "happy path with search delegates to search method",
+			size:   10,
+			start:  0,
+			search: &models.SearchParams{Value: "dragon"},
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().GetEncountersListWithSearch(gomock.Any(), 10, 0, 1, gomock.Any()).
+					Return(expected, nil)
+			},
+			wantResult: expected,
 		},
 		{
-			name:    "repo error is propagated",
-			size:    10,
-			start:   0,
-			search:  &models.SearchParams{},
-			repo:    &fakeEncounterRepo{listErr: repoErr},
+			name:   "repo error is propagated",
+			size:   10,
+			start:  0,
+			search: &models.SearchParams{},
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().GetEncountersList(gomock.Any(), 10, 0, 1).
+					Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 			wantNil: true,
 		},
@@ -132,7 +87,11 @@ func TestGetEncountersList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewEncounterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockEncounterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewEncounterUsecases(repo)
 			result, err := uc.GetEncountersList(context.Background(), tt.size, tt.start, 1, tt.search)
 
 			if tt.wantErr != nil {
@@ -144,11 +103,7 @@ func TestGetEncountersList(t *testing.T) {
 			if tt.wantNil {
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, expected, result)
-			}
-
-			if tt.wantSearch {
-				assert.True(t, tt.repo.listSearchCalled, "expected search method to be called")
+				assert.Equal(t, tt.wantResult, result)
 			}
 		})
 	}
@@ -162,34 +117,37 @@ func TestSaveEncounter(t *testing.T) {
 	tests := []struct {
 		name      string
 		encounter *models.SaveEncounterReq
-		repo      *fakeEncounterRepo
+		setup     func(repo *mocks.MockEncounterRepository)
 		wantErr   error
-		wantSave  bool
 	}{
 		{
 			name:      "empty name returns InvalidInputError",
 			encounter: &models.SaveEncounterReq{Name: ""},
-			repo:      &fakeEncounterRepo{},
+			setup:     func(_ *mocks.MockEncounterRepository) {},
 			wantErr:   apperrors.InvalidInputError,
 		},
 		{
 			name:      "name too long returns InvalidInputError",
 			encounter: &models.SaveEncounterReq{Name: strings.Repeat("a", 61)},
-			repo:      &fakeEncounterRepo{},
+			setup:     func(_ *mocks.MockEncounterRepository) {},
 			wantErr:   apperrors.InvalidInputError,
 		},
 		{
 			name:      "happy path calls repo with non-empty UUID",
 			encounter: &models.SaveEncounterReq{Name: "Battle"},
-			repo:      &fakeEncounterRepo{},
-			wantSave:  true,
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().SaveEncounter(gomock.Any(), gomock.Any(), gomock.Not(""), 1).
+					Return(nil)
+			},
 		},
 		{
 			name:      "repo error is propagated",
 			encounter: &models.SaveEncounterReq{Name: "Battle"},
-			repo:      &fakeEncounterRepo{saveErr: repoErr},
-			wantErr:   repoErr,
-			wantSave:  true,
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().SaveEncounter(gomock.Any(), gomock.Any(), gomock.Not(""), 1).
+					Return(repoErr)
+			},
+			wantErr: repoErr,
 		},
 	}
 
@@ -197,19 +155,17 @@ func TestSaveEncounter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewEncounterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockEncounterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewEncounterUsecases(repo)
 			err := uc.SaveEncounter(context.Background(), tt.encounter, 1)
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
 			} else {
 				assert.NoError(t, err)
-			}
-
-			assert.Equal(t, tt.wantSave, tt.repo.saveCalled)
-
-			if tt.wantSave && tt.wantErr == nil {
-				assert.NotEmpty(t, tt.repo.saveID, "expected UUID to be generated")
 			}
 		})
 	}
@@ -223,23 +179,31 @@ func TestGetEncounterByID(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		repo    *fakeEncounterRepo
+		setup   func(repo *mocks.MockEncounterRepository)
 		wantErr error
 		wantNil bool
 	}{
 		{
-			name:    "no permission returns PermissionDeniedError",
-			repo:    &fakeEncounterRepo{hasPermission: false},
+			name: "no permission returns PermissionDeniedError",
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(false)
+			},
 			wantErr: apperrors.PermissionDeniedError,
 			wantNil: true,
 		},
 		{
 			name: "happy path returns encounter",
-			repo: &fakeEncounterRepo{hasPermission: true, encounterResult: expectedEncounter},
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(true)
+				repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(expectedEncounter, nil)
+			},
 		},
 		{
-			name:    "repo error is propagated",
-			repo:    &fakeEncounterRepo{hasPermission: true, encounterErr: repoErr},
+			name: "repo error is propagated",
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(true)
+				repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 			wantNil: true,
 		},
@@ -249,7 +213,11 @@ func TestGetEncounterByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewEncounterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockEncounterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewEncounterUsecases(repo)
 			result, err := uc.GetEncounterByID(context.Background(), "enc-1", 1)
 
 			if tt.wantErr != nil {
@@ -272,17 +240,22 @@ func TestUpdateEncounter(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		repo    *fakeEncounterRepo
+		setup   func(repo *mocks.MockEncounterRepository)
 		wantErr error
 	}{
 		{
-			name:    "no permission returns PermissionDeniedError",
-			repo:    &fakeEncounterRepo{hasPermission: false},
+			name: "no permission returns PermissionDeniedError",
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(false)
+			},
 			wantErr: apperrors.PermissionDeniedError,
 		},
 		{
 			name: "happy path delegates to repo",
-			repo: &fakeEncounterRepo{hasPermission: true},
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(true)
+				repo.EXPECT().UpdateEncounter(gomock.Any(), []byte(`{}`), "enc-1").Return(nil)
+			},
 		},
 	}
 
@@ -290,14 +263,17 @@ func TestUpdateEncounter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewEncounterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockEncounterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewEncounterUsecases(repo)
 			err := uc.UpdateEncounter(context.Background(), []byte(`{}`), "enc-1", 1)
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr))
 			} else {
 				assert.NoError(t, err)
-				assert.True(t, tt.repo.updateCalled)
 			}
 		})
 	}
@@ -308,17 +284,22 @@ func TestRemoveEncounter(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		repo    *fakeEncounterRepo
+		setup   func(repo *mocks.MockEncounterRepository)
 		wantErr error
 	}{
 		{
-			name:    "no permission returns PermissionDeniedError",
-			repo:    &fakeEncounterRepo{hasPermission: false},
+			name: "no permission returns PermissionDeniedError",
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(false)
+			},
 			wantErr: apperrors.PermissionDeniedError,
 		},
 		{
 			name: "happy path delegates to repo",
-			repo: &fakeEncounterRepo{hasPermission: true},
+			setup: func(repo *mocks.MockEncounterRepository) {
+				repo.EXPECT().CheckPermission(gomock.Any(), "enc-1", 1).Return(true)
+				repo.EXPECT().RemoveEncounter(gomock.Any(), "enc-1").Return(nil)
+			},
 		},
 	}
 
@@ -326,14 +307,17 @@ func TestRemoveEncounter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewEncounterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockEncounterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewEncounterUsecases(repo)
 			err := uc.RemoveEncounter(context.Background(), "enc-1", 1)
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr))
 			} else {
 				assert.NoError(t, err)
-				assert.True(t, tt.repo.removeCalled)
 			}
 		})
 	}

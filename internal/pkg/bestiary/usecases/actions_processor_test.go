@@ -7,22 +7,10 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fake gateway ---
-
-type fakeGateway struct {
-	result map[string]interface{}
-	err    error
-}
-
-func (f *fakeGateway) ProcessActions(_ context.Context,
-	_ []models.Action) (map[string]interface{}, error) {
-	return f.result, f.err
-}
-
-// --- tests ---
 
 func TestProcessActions(t *testing.T) {
 	t.Parallel()
@@ -32,111 +20,130 @@ func TestProcessActions(t *testing.T) {
 	tests := []struct {
 		name    string
 		actions []models.Action
-		gateway *fakeGateway
+		setup   func(gw *mocks.MockActionProcessorGateway)
 		wantErr error
 		wantLen int
 	}{
 		{
 			name:    "gateway error returns ReceivedActionProcessingError",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{err: gatewayErr},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).Return(nil, gatewayErr)
+			},
 			wantErr: apperrors.ReceivedActionProcessingError,
 		},
 		{
 			name:    "missing parsed_actions key returns ParsedActionsErr",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"other_key": "value",
-			}},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{"other_key": "value"}, nil)
+			},
 			wantErr: apperrors.ParsedActionsErr,
 		},
 		{
 			name:    "empty map returns ParsedActionsErr",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{}},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{}, nil)
+			},
 			wantErr: apperrors.ParsedActionsErr,
 		},
 		{
 			name:    "parsed_actions is not a list returns unmarshal error",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": "not-a-list",
-			}},
-			wantErr: nil, // json.Unmarshal of a string into []AttackLLM fails
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{"parsed_actions": "not-a-list"}, nil)
+			},
 		},
 		{
 			name:    "parsed_actions with wrong field types returns unmarshal error",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": []interface{}{
-					map[string]interface{}{
-						"name":         123, // should be string
-						"attack_bonus": true,
-					},
-				},
-			}},
-			wantErr: nil, // json type mismatch
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{
+						"parsed_actions": []interface{}{
+							map[string]interface{}{
+								"name":         123,
+								"attack_bonus": true,
+							},
+						},
+					}, nil)
+			},
 		},
 		{
 			name:    "happy path: single attack parsed",
 			actions: []models.Action{{Name: "Bite", Value: "melee attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": []interface{}{
-					map[string]interface{}{
-						"name":        "Bite",
-						"type":        "melee",
-						"attackBonus": "+5",
-						"reach":       "5 ft.",
-						"target":      "one target",
-					},
-				},
-			}},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{
+						"parsed_actions": []interface{}{
+							map[string]interface{}{
+								"name":        "Bite",
+								"type":        "melee",
+								"attackBonus": "+5",
+								"reach":       "5 ft.",
+								"target":      "one target",
+							},
+						},
+					}, nil)
+			},
 			wantLen: 1,
 		},
 		{
 			name:    "happy path: multiple attacks parsed",
 			actions: []models.Action{{Name: "Bite", Value: "a"}, {Name: "Claw", Value: "b"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": []interface{}{
-					map[string]interface{}{"name": "Bite", "type": "melee"},
-					map[string]interface{}{"name": "Claw", "type": "melee"},
-				},
-			}},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{
+						"parsed_actions": []interface{}{
+							map[string]interface{}{"name": "Bite", "type": "melee"},
+							map[string]interface{}{"name": "Claw", "type": "melee"},
+						},
+					}, nil)
+			},
 			wantLen: 2,
 		},
 		{
 			name:    "happy path: empty parsed_actions list returns empty slice",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": []interface{}{},
-			}},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{"parsed_actions": []interface{}{}}, nil)
+			},
 			wantLen: 0,
 		},
 		{
 			name:    "nil actions still calls gateway",
 			actions: nil,
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": []interface{}{},
-			}},
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Nil()).
+					Return(map[string]interface{}{"parsed_actions": []interface{}{}}, nil)
+			},
 			wantLen: 0,
 		},
 		{
 			name:    "parsed_actions with nested damage object",
 			actions: []models.Action{{Name: "Bite", Value: "attack"}},
-			gateway: &fakeGateway{result: map[string]interface{}{
-				"parsed_actions": []interface{}{
-					map[string]interface{}{
-						"name": "Bite",
-						"type": "melee",
-						"damage": map[string]interface{}{
-							"dice":  "d8",
-							"count": float64(2),
-							"type":  "piercing",
-							"bonus": float64(4),
+			setup: func(gw *mocks.MockActionProcessorGateway) {
+				gw.EXPECT().ProcessActions(gomock.Any(), gomock.Any()).
+					Return(map[string]interface{}{
+						"parsed_actions": []interface{}{
+							map[string]interface{}{
+								"name": "Bite",
+								"type": "melee",
+								"damage": map[string]interface{}{
+									"dice":  "d8",
+									"count": float64(2),
+									"type":  "piercing",
+									"bonus": float64(4),
+								},
+							},
 						},
-					},
-				},
-			}},
+					}, nil)
+			},
 			wantLen: 1,
 		},
 	}
@@ -145,7 +152,11 @@ func TestProcessActions(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewActionProcessorUsecase(tt.gateway)
+			ctrl := gomock.NewController(t)
+			gw := mocks.NewMockActionProcessorGateway(ctrl)
+			tt.setup(gw)
+
+			uc := NewActionProcessorUsecase(gw)
 			result, err := uc.ProcessActions(context.Background(), tt.actions)
 
 			if tt.wantErr != nil {

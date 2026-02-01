@@ -1,5 +1,7 @@
 package bestiary
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_bestiary.go -package=mocks
+
 import (
 	"context"
 

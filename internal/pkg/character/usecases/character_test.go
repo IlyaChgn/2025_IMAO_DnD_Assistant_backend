@@ -9,36 +9,12 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
 
-// --- fake repository ---
-
-type fakeCharacterRepo struct {
-	listResult      []*models.CharacterShort
-	listErr         error
-	characterResult *models.Character
-	characterErr    error
-	addErr          error
-
-	addCalled bool
-}
-
-func (f *fakeCharacterRepo) GetCharactersList(_ context.Context, _, _, _ int,
-	_ models.SearchParams) ([]*models.CharacterShort, error) {
-	return f.listResult, f.listErr
-}
-
-func (f *fakeCharacterRepo) GetCharacterByMongoId(_ context.Context, _ string) (*models.Character, error) {
-	return f.characterResult, f.characterErr
-}
-
-func (f *fakeCharacterRepo) AddCharacter(_ context.Context, _ models.CharacterRaw, _ int) error {
-	f.addCalled = true
-	return f.addErr
-}
-
-// --- fake multipart.File ---
+// --- fake multipart.File (not a domain interface — keep as hand-written fake) ---
 
 type fakeFile struct {
 	io.ReadSeeker
@@ -69,7 +45,7 @@ func TestGetCharactersList(t *testing.T) {
 		name    string
 		size    int
 		start   int
-		repo    *fakeCharacterRepo
+		setup   func(repo *mocks.MockCharacterRepository)
 		wantErr error
 		wantNil bool
 	}{
@@ -77,7 +53,7 @@ func TestGetCharactersList(t *testing.T) {
 			name:    "negative start returns StartPosSizeError",
 			size:    10,
 			start:   -1,
-			repo:    &fakeCharacterRepo{},
+			setup:   func(_ *mocks.MockCharacterRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -85,7 +61,7 @@ func TestGetCharactersList(t *testing.T) {
 			name:    "zero size returns StartPosSizeError",
 			size:    0,
 			start:   0,
-			repo:    &fakeCharacterRepo{},
+			setup:   func(_ *mocks.MockCharacterRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -93,13 +69,19 @@ func TestGetCharactersList(t *testing.T) {
 			name:  "happy path returns list",
 			size:  10,
 			start: 0,
-			repo:  &fakeCharacterRepo{listResult: expected},
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().GetCharactersList(gomock.Any(), 10, 0, 1, models.SearchParams{}).
+					Return(expected, nil)
+			},
 		},
 		{
-			name:    "repo error is propagated",
-			size:    10,
-			start:   0,
-			repo:    &fakeCharacterRepo{listErr: repoErr},
+			name:  "repo error is propagated",
+			size:  10,
+			start: 0,
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().GetCharactersList(gomock.Any(), 10, 0, 1, models.SearchParams{}).
+					Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 		},
 	}
@@ -108,7 +90,11 @@ func TestGetCharactersList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewCharacterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockCharacterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewCharacterUsecases(repo)
 			result, err := uc.GetCharactersList(context.Background(), tt.size, tt.start, 1, models.SearchParams{})
 
 			if tt.wantErr != nil {
@@ -138,7 +124,7 @@ func TestGetCharacterByMongoId(t *testing.T) {
 		name    string
 		id      string
 		userID  int
-		repo    *fakeCharacterRepo
+		setup   func(repo *mocks.MockCharacterRepository)
 		wantErr error
 		wantNil bool
 	}{
@@ -146,7 +132,7 @@ func TestGetCharacterByMongoId(t *testing.T) {
 			name:    "empty id returns InvalidInputError",
 			id:      "",
 			userID:  1,
-			repo:    &fakeCharacterRepo{},
+			setup:   func(_ *mocks.MockCharacterRepository) {},
 			wantErr: apperrors.InvalidInputError,
 			wantNil: true,
 		},
@@ -154,27 +140,35 @@ func TestGetCharacterByMongoId(t *testing.T) {
 			name:   "happy path returns own character",
 			id:     "abc123",
 			userID: 1,
-			repo:   &fakeCharacterRepo{characterResult: ownedChar},
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().GetCharacterByMongoId(gomock.Any(), "abc123").Return(ownedChar, nil)
+			},
 		},
 		{
 			name:   "public character accessible by any user",
 			id:     "abc123",
 			userID: 42,
-			repo:   &fakeCharacterRepo{characterResult: publicChar},
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().GetCharacterByMongoId(gomock.Any(), "abc123").Return(publicChar, nil)
+			},
 		},
 		{
-			name:    "other user's character returns PermissionDeniedError",
-			id:      "abc123",
-			userID:  1,
-			repo:    &fakeCharacterRepo{characterResult: otherUserChar},
+			name:   "other user's character returns PermissionDeniedError",
+			id:     "abc123",
+			userID: 1,
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().GetCharacterByMongoId(gomock.Any(), "abc123").Return(otherUserChar, nil)
+			},
 			wantErr: apperrors.PermissionDeniedError,
 			wantNil: true,
 		},
 		{
-			name:    "repo error is propagated",
-			id:      "abc123",
-			userID:  1,
-			repo:    &fakeCharacterRepo{characterErr: repoErr},
+			name:   "repo error is propagated",
+			id:     "abc123",
+			userID: 1,
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().GetCharacterByMongoId(gomock.Any(), "abc123").Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 			wantNil: true,
 		},
@@ -184,7 +178,11 @@ func TestGetCharacterByMongoId(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewCharacterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockCharacterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewCharacterUsecases(repo)
 			result, err := uc.GetCharacterByMongoId(context.Background(), tt.id, tt.userID)
 
 			if tt.wantErr != nil {
@@ -212,34 +210,35 @@ func TestAddCharacter(t *testing.T) {
 	tests := []struct {
 		name     string
 		fileData []byte
-		repo     *fakeCharacterRepo
+		setup    func(repo *mocks.MockCharacterRepository)
 		wantErr  error
-		wantAdd  bool
 	}{
 		{
 			name:     "invalid JSON returns InvalidJSONError",
 			fileData: []byte(`{not valid json`),
-			repo:     &fakeCharacterRepo{},
+			setup:    func(_ *mocks.MockCharacterRepository) {},
 			wantErr:  apperrors.InvalidJSONError,
 		},
 		{
 			name:     "empty data field returns InvalidInputError",
 			fileData: []byte(emptyDataJSON),
-			repo:     &fakeCharacterRepo{},
+			setup:    func(_ *mocks.MockCharacterRepository) {},
 			wantErr:  apperrors.InvalidInputError,
 		},
 		{
 			name:     "happy path calls repo",
 			fileData: []byte(validJSON),
-			repo:     &fakeCharacterRepo{},
-			wantAdd:  true,
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().AddCharacter(gomock.Any(), gomock.Any(), 1).Return(nil)
+			},
 		},
 		{
 			name:     "repo error is propagated",
 			fileData: []byte(validJSON),
-			repo:     &fakeCharacterRepo{addErr: repoErr},
-			wantErr:  repoErr,
-			wantAdd:  true,
+			setup: func(repo *mocks.MockCharacterRepository) {
+				repo.EXPECT().AddCharacter(gomock.Any(), gomock.Any(), 1).Return(repoErr)
+			},
+			wantErr: repoErr,
 		},
 	}
 
@@ -247,7 +246,11 @@ func TestAddCharacter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewCharacterUsecases(tt.repo)
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockCharacterRepository(ctrl)
+			tt.setup(repo)
+
+			uc := NewCharacterUsecases(repo)
 			err := uc.AddCharacter(context.Background(), newFakeFile(tt.fileData), 1)
 
 			if tt.wantErr != nil {
@@ -255,8 +258,6 @@ func TestAddCharacter(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 			}
-
-			assert.Equal(t, tt.wantAdd, tt.repo.addCalled)
 		})
 	}
 }

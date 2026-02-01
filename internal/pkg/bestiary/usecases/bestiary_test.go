@@ -7,58 +7,10 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fake repository ---
-
-type fakeBestiaryRepo struct {
-	listResult     []*models.BestiaryCreature
-	listErr        error
-	creatureResult *models.Creature
-	creatureErr    error
-	userListResult []*models.BestiaryCreature
-	userListErr    error
-	addErr         error
-}
-
-func (f *fakeBestiaryRepo) GetCreaturesList(_ context.Context, _, _ int, _ []models.Order,
-	_ models.FilterParams, _ models.SearchParams) ([]*models.BestiaryCreature, error) {
-	return f.listResult, f.listErr
-}
-
-func (f *fakeBestiaryRepo) GetCreatureByEngName(_ context.Context, _ string, _ bool) (*models.Creature, error) {
-	return f.creatureResult, f.creatureErr
-}
-
-func (f *fakeBestiaryRepo) GetUserCreaturesList(_ context.Context, _, _ int, _ []models.Order,
-	_ models.FilterParams, _ models.SearchParams, _ int) ([]*models.BestiaryCreature, error) {
-	return f.userListResult, f.userListErr
-}
-
-func (f *fakeBestiaryRepo) AddGeneratedCreature(_ context.Context, _ models.Creature) error {
-	return f.addErr
-}
-
-// --- fake S3 & Gemini (unused by read methods, satisfy constructor) ---
-
-type fakeS3 struct{}
-
-func (f *fakeS3) UploadImage(_ context.Context, _, _ string) (string, error) {
-	return "", nil
-}
-
-type fakeGemini struct{}
-
-func (f *fakeGemini) GenerateFromImage(_ context.Context, _ []byte) (map[string]interface{}, error) {
-	return nil, nil
-}
-
-func (f *fakeGemini) GenerateFromDescription(_ context.Context, _ string) (map[string]interface{}, error) {
-	return nil, nil
-}
-
-// --- tests ---
 
 func TestGetCreaturesList(t *testing.T) {
 	t.Parallel()
@@ -70,7 +22,7 @@ func TestGetCreaturesList(t *testing.T) {
 		name    string
 		start   int
 		size    int
-		repo    *fakeBestiaryRepo
+		setup   func(repo *mocks.MockBestiaryRepository)
 		wantErr error
 		wantNil bool
 	}{
@@ -78,7 +30,7 @@ func TestGetCreaturesList(t *testing.T) {
 			name:    "negative start returns StartPosSizeError",
 			start:   -1,
 			size:    10,
-			repo:    &fakeBestiaryRepo{},
+			setup:   func(_ *mocks.MockBestiaryRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -86,7 +38,7 @@ func TestGetCreaturesList(t *testing.T) {
 			name:    "zero size returns StartPosSizeError",
 			start:   0,
 			size:    0,
-			repo:    &fakeBestiaryRepo{},
+			setup:   func(_ *mocks.MockBestiaryRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -94,27 +46,39 @@ func TestGetCreaturesList(t *testing.T) {
 			name:  "happy path returns list",
 			start: 0,
 			size:  10,
-			repo:  &fakeBestiaryRepo{listResult: expected},
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}).Return(expected, nil)
+			},
 		},
 		{
-			name:    "repo error is propagated",
-			start:   0,
-			size:    10,
-			repo:    &fakeBestiaryRepo{listErr: repoErr},
+			name:  "repo error is propagated",
+			start: 0,
+			size:  10,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}).Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 		},
 		{
-			name:    "NoDocsErr is propagated",
-			start:   0,
-			size:    10,
-			repo:    &fakeBestiaryRepo{listErr: apperrors.NoDocsErr},
+			name:  "NoDocsErr is propagated",
+			start: 0,
+			size:  10,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}).Return(nil, apperrors.NoDocsErr)
+			},
 			wantErr: apperrors.NoDocsErr,
 		},
 		{
-			name:    "UnknownDirectionError is propagated",
-			start:   0,
-			size:    10,
-			repo:    &fakeBestiaryRepo{listErr: apperrors.UnknownDirectionError},
+			name:  "UnknownDirectionError is propagated",
+			start: 0,
+			size:  10,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}).Return(nil, apperrors.UnknownDirectionError)
+			},
 			wantErr: apperrors.UnknownDirectionError,
 		},
 	}
@@ -123,7 +87,13 @@ func TestGetCreaturesList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewBestiaryUsecases(tt.repo, &fakeS3{}, &fakeGemini{})
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockBestiaryRepository(ctrl)
+			s3 := mocks.NewMockBestiaryS3Manager(ctrl)
+			gemini := mocks.NewMockGeminiAPI(ctrl)
+			tt.setup(repo)
+
+			uc := NewBestiaryUsecases(repo, s3, gemini)
 			result, err := uc.GetCreaturesList(context.Background(), tt.size, tt.start,
 				nil, models.FilterParams{}, models.SearchParams{})
 
@@ -150,23 +120,29 @@ func TestGetCreatureByEngName(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		repo    *fakeBestiaryRepo
+		setup   func(repo *mocks.MockBestiaryRepository)
 		wantErr error
 		wantNil bool
 	}{
 		{
 			name: "happy path returns creature",
-			repo: &fakeBestiaryRepo{creatureResult: expected},
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreatureByEngName(gomock.Any(), "goblin", false).Return(expected, nil)
+			},
 		},
 		{
-			name:    "repo error is propagated",
-			repo:    &fakeBestiaryRepo{creatureErr: repoErr},
+			name: "repo error is propagated",
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreatureByEngName(gomock.Any(), "goblin", false).Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 			wantNil: true,
 		},
 		{
-			name:    "nil creature returned without error",
-			repo:    &fakeBestiaryRepo{creatureResult: nil},
+			name: "nil creature returned without error",
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreatureByEngName(gomock.Any(), "goblin", false).Return(nil, nil)
+			},
 			wantNil: true,
 		},
 	}
@@ -175,7 +151,13 @@ func TestGetCreatureByEngName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewBestiaryUsecases(tt.repo, &fakeS3{}, &fakeGemini{})
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockBestiaryRepository(ctrl)
+			s3 := mocks.NewMockBestiaryS3Manager(ctrl)
+			gemini := mocks.NewMockGeminiAPI(ctrl)
+			tt.setup(repo)
+
+			uc := NewBestiaryUsecases(repo, s3, gemini)
 			result, err := uc.GetCreatureByEngName(context.Background(), "goblin")
 
 			if tt.wantErr != nil {
@@ -203,7 +185,7 @@ func TestGetUserCreaturesList(t *testing.T) {
 		name    string
 		start   int
 		size    int
-		repo    *fakeBestiaryRepo
+		setup   func(repo *mocks.MockBestiaryRepository)
 		wantErr error
 		wantNil bool
 	}{
@@ -211,7 +193,7 @@ func TestGetUserCreaturesList(t *testing.T) {
 			name:    "negative start returns StartPosSizeError",
 			start:   -1,
 			size:    10,
-			repo:    &fakeBestiaryRepo{},
+			setup:   func(_ *mocks.MockBestiaryRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -219,7 +201,7 @@ func TestGetUserCreaturesList(t *testing.T) {
 			name:    "zero size returns StartPosSizeError",
 			start:   0,
 			size:    0,
-			repo:    &fakeBestiaryRepo{},
+			setup:   func(_ *mocks.MockBestiaryRepository) {},
 			wantErr: apperrors.StartPosSizeError,
 			wantNil: true,
 		},
@@ -227,27 +209,39 @@ func TestGetUserCreaturesList(t *testing.T) {
 			name:  "happy path returns list",
 			start: 0,
 			size:  10,
-			repo:  &fakeBestiaryRepo{userListResult: expected},
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetUserCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}, 1).Return(expected, nil)
+			},
 		},
 		{
-			name:    "repo error is propagated",
-			start:   0,
-			size:    10,
-			repo:    &fakeBestiaryRepo{userListErr: repoErr},
+			name:  "repo error is propagated",
+			start: 0,
+			size:  10,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetUserCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}, 1).Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 		},
 		{
-			name:    "NoDocsErr is propagated",
-			start:   0,
-			size:    10,
-			repo:    &fakeBestiaryRepo{userListErr: apperrors.NoDocsErr},
+			name:  "NoDocsErr is propagated",
+			start: 0,
+			size:  10,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetUserCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}, 1).Return(nil, apperrors.NoDocsErr)
+			},
 			wantErr: apperrors.NoDocsErr,
 		},
 		{
-			name:    "UnknownDirectionError is propagated",
-			start:   0,
-			size:    10,
-			repo:    &fakeBestiaryRepo{userListErr: apperrors.UnknownDirectionError},
+			name:  "UnknownDirectionError is propagated",
+			start: 0,
+			size:  10,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetUserCreaturesList(gomock.Any(), 10, 0, gomock.Any(),
+					models.FilterParams{}, models.SearchParams{}, 1).Return(nil, apperrors.UnknownDirectionError)
+			},
 			wantErr: apperrors.UnknownDirectionError,
 		},
 	}
@@ -256,7 +250,13 @@ func TestGetUserCreaturesList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewBestiaryUsecases(tt.repo, &fakeS3{}, &fakeGemini{})
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockBestiaryRepository(ctrl)
+			s3 := mocks.NewMockBestiaryS3Manager(ctrl)
+			gemini := mocks.NewMockGeminiAPI(ctrl)
+			tt.setup(repo)
+
+			uc := NewBestiaryUsecases(repo, s3, gemini)
 			result, err := uc.GetUserCreaturesList(context.Background(), tt.size, tt.start,
 				nil, models.FilterParams{}, models.SearchParams{}, 1)
 
@@ -285,26 +285,32 @@ func TestGetUserCreatureByEngName(t *testing.T) {
 	tests := []struct {
 		name    string
 		userID  int
-		repo    *fakeBestiaryRepo
+		setup   func(repo *mocks.MockBestiaryRepository)
 		wantErr error
 		wantNil bool
 	}{
 		{
 			name:   "happy path returns own creature",
 			userID: 1,
-			repo:   &fakeBestiaryRepo{creatureResult: ownedCreature},
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreatureByEngName(gomock.Any(), "goblin", true).Return(ownedCreature, nil)
+			},
 		},
 		{
-			name:    "other user's creature returns PermissionDeniedError",
-			userID:  1,
-			repo:    &fakeBestiaryRepo{creatureResult: otherCreature},
+			name:   "other user's creature returns PermissionDeniedError",
+			userID: 1,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreatureByEngName(gomock.Any(), "goblin", true).Return(otherCreature, nil)
+			},
 			wantErr: apperrors.PermissionDeniedError,
 			wantNil: true,
 		},
 		{
-			name:    "repo error is propagated",
-			userID:  1,
-			repo:    &fakeBestiaryRepo{creatureErr: repoErr},
+			name:   "repo error is propagated",
+			userID: 1,
+			setup: func(repo *mocks.MockBestiaryRepository) {
+				repo.EXPECT().GetCreatureByEngName(gomock.Any(), "goblin", true).Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 			wantNil: true,
 		},
@@ -314,7 +320,13 @@ func TestGetUserCreatureByEngName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewBestiaryUsecases(tt.repo, &fakeS3{}, &fakeGemini{})
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockBestiaryRepository(ctrl)
+			s3 := mocks.NewMockBestiaryS3Manager(ctrl)
+			gemini := mocks.NewMockGeminiAPI(ctrl)
+			tt.setup(repo)
+
+			uc := NewBestiaryUsecases(repo, s3, gemini)
 			result, err := uc.GetUserCreatureByEngName(context.Background(), "goblin", tt.userID)
 
 			if tt.wantErr != nil {

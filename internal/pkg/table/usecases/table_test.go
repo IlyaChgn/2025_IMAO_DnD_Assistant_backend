@@ -8,93 +8,11 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
-	"github.com/gorilla/websocket"
+	encmocks "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/mocks"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
-
-// --- fakes ---
-
-type fakeEncounterRepo struct {
-	encounter *models.Encounter
-	getErr    error
-	updateErr error
-}
-
-func (f *fakeEncounterRepo) GetEncountersListWithSearch(_ context.Context, _, _, _ int,
-	_ *models.SearchParams) (*models.EncountersList, error) {
-	return nil, nil
-}
-func (f *fakeEncounterRepo) GetEncountersList(_ context.Context, _, _, _ int) (*models.EncountersList, error) {
-	return nil, nil
-}
-func (f *fakeEncounterRepo) GetEncounterByID(_ context.Context, _ string) (*models.Encounter, error) {
-	return f.encounter, f.getErr
-}
-func (f *fakeEncounterRepo) SaveEncounter(_ context.Context, _ *models.SaveEncounterReq, _ string, _ int) error {
-	return nil
-}
-func (f *fakeEncounterRepo) UpdateEncounter(_ context.Context, _ []byte, _ string) error {
-	return f.updateErr
-}
-func (f *fakeEncounterRepo) RemoveEncounter(_ context.Context, _ string) error { return nil }
-func (f *fakeEncounterRepo) CheckPermission(_ context.Context, _ string, _ int) bool {
-	return false
-}
-
-type fakeTableManager struct {
-	createCalled bool
-	createdID    string
-	tableData    *models.TableData
-	tableErr     error
-	encounterRaw []byte
-	encounterErr error
-	removeCalled bool
-}
-
-func (f *fakeTableManager) CreateSession(_ context.Context, _ *models.User, _ *models.Encounter,
-	sessionID string, _ func(string)) {
-	f.createCalled = true
-	f.createdID = sessionID
-}
-func (f *fakeTableManager) RemoveSession(_ context.Context, _ string) {
-	f.removeCalled = true
-}
-func (f *fakeTableManager) GetTableData(_ context.Context, _ string) (*models.TableData, error) {
-	return f.tableData, f.tableErr
-}
-func (f *fakeTableManager) GetEncounterData(_ context.Context, _ string) ([]byte, error) {
-	return f.encounterRaw, f.encounterErr
-}
-func (f *fakeTableManager) AddNewConnection(_ context.Context, _ *models.User, _ string,
-	_ *websocket.Conn) {
-}
-func (f *fakeTableManager) HasActiveUsers(_ context.Context, _ string) bool { return false }
-
-type fixedSessionIDGen struct {
-	id string
-}
-
-func (g *fixedSessionIDGen) NewSessionID() string { return g.id }
-
-type fakeTimer struct {
-	stopCalled  bool
-	resetCalled bool
-}
-
-func (t *fakeTimer) Stop() bool                 { t.stopCalled = true; return true }
-func (t *fakeTimer) Reset(_ time.Duration) bool { t.resetCalled = true; return true }
-
-type fakeTimerFactory struct {
-	lastTimer *fakeTimer
-}
-
-func (f *fakeTimerFactory) AfterFunc(_ time.Duration, _ func()) tableinterfaces.SessionTimer {
-	f.lastTimer = &fakeTimer{}
-	return f.lastTimer
-}
-
-// --- tests ---
 
 func TestCreateSession(t *testing.T) {
 	t.Parallel()
@@ -102,45 +20,48 @@ func TestCreateSession(t *testing.T) {
 	repoErr := errors.New("db failure")
 
 	tests := []struct {
-		name    string
-		admin   *models.User
-		encID   string
-		repo    *fakeEncounterRepo
-		manager *fakeTableManager
-		fixedID string
+		name  string
+		admin *models.User
+		encID string
+		setup func(repo *encmocks.MockEncounterRepository, mgr *mocks.MockTableManager,
+			idGen *mocks.MockSessionIDGenerator, tf *mocks.MockTimerFactory, timer *mocks.MockSessionTimer)
 		wantErr error
 		wantID  string
 	}{
 		{
-			name:    "encounter repo error is propagated",
-			admin:   &models.User{ID: 1, Name: "Admin"},
-			encID:   "enc-1",
-			repo:    &fakeEncounterRepo{getErr: repoErr},
-			manager: &fakeTableManager{},
-			fixedID: "session-1",
+			name:  "encounter repo error is propagated",
+			admin: &models.User{ID: 1, Name: "Admin"},
+			encID: "enc-1",
+			setup: func(repo *encmocks.MockEncounterRepository, _ *mocks.MockTableManager,
+				_ *mocks.MockSessionIDGenerator, _ *mocks.MockTimerFactory, _ *mocks.MockSessionTimer) {
+				repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(nil, repoErr)
+			},
 			wantErr: repoErr,
 		},
 		{
 			name:  "wrong user returns PermissionDeniedError",
 			admin: &models.User{ID: 1, Name: "Admin"},
 			encID: "enc-1",
-			repo: &fakeEncounterRepo{
-				encounter: &models.Encounter{UserID: 999, UUID: "enc-1"},
+			setup: func(repo *encmocks.MockEncounterRepository, _ *mocks.MockTableManager,
+				_ *mocks.MockSessionIDGenerator, _ *mocks.MockTimerFactory, _ *mocks.MockSessionTimer) {
+				repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
+					Return(&models.Encounter{UserID: 999, UUID: "enc-1"}, nil)
 			},
-			manager: &fakeTableManager{},
-			fixedID: "session-2",
 			wantErr: apperrors.PermissionDeniedError,
 		},
 		{
 			name:  "happy path returns session ID",
 			admin: &models.User{ID: 1, Name: "Admin"},
 			encID: "enc-1",
-			repo: &fakeEncounterRepo{
-				encounter: &models.Encounter{UserID: 1, UUID: "enc-1", Name: "Battle"},
+			setup: func(repo *encmocks.MockEncounterRepository, mgr *mocks.MockTableManager,
+				idGen *mocks.MockSessionIDGenerator, tf *mocks.MockTimerFactory, timer *mocks.MockSessionTimer) {
+				repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
+					Return(&models.Encounter{UserID: 1, UUID: "enc-1", Name: "Battle"}, nil)
+				idGen.EXPECT().NewSessionID().Return("test-session-abc")
+				mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "test-session-abc", gomock.Any())
+				tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer)
 			},
-			manager: &fakeTableManager{},
-			fixedID: "test-session-abc",
-			wantID:  "test-session-abc",
+			wantID: "test-session-abc",
 		},
 	}
 
@@ -148,24 +69,25 @@ func TestCreateSession(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			tf := &fakeTimerFactory{}
-			uc := NewTableUsecases(tt.repo, tt.manager,
-				&fixedSessionIDGen{id: tt.fixedID}, tf)
+			ctrl := gomock.NewController(t)
+			repo := encmocks.NewMockEncounterRepository(ctrl)
+			mgr := mocks.NewMockTableManager(ctrl)
+			idGen := mocks.NewMockSessionIDGenerator(ctrl)
+			tf := mocks.NewMockTimerFactory(ctrl)
+			timer := mocks.NewMockSessionTimer(ctrl)
+			tt.setup(repo, mgr, idGen, tf, timer)
 
+			uc := NewTableUsecases(repo, mgr, idGen, tf)
 			id, err := uc.CreateSession(context.Background(), tt.admin, tt.encID)
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
 				assert.Empty(t, id)
-				assert.False(t, tt.manager.createCalled)
 				return
 			}
 
 			assert.NoError(t, err)
 			assert.Equal(t, tt.wantID, id)
-			assert.True(t, tt.manager.createCalled)
-			assert.Equal(t, tt.fixedID, tt.manager.createdID)
-			assert.NotNil(t, tf.lastTimer, "timer should be created")
 		})
 	}
 }
@@ -173,18 +95,23 @@ func TestCreateSession(t *testing.T) {
 func TestCreateSession_TimerIsRegistered(t *testing.T) {
 	t.Parallel()
 
-	repo := &fakeEncounterRepo{
-		encounter: &models.Encounter{UserID: 1, UUID: "enc-1", Name: "Battle"},
-	}
-	manager := &fakeTableManager{}
-	tf := &fakeTimerFactory{}
+	ctrl := gomock.NewController(t)
+	repo := encmocks.NewMockEncounterRepository(ctrl)
+	mgr := mocks.NewMockTableManager(ctrl)
+	idGen := mocks.NewMockSessionIDGenerator(ctrl)
+	tf := mocks.NewMockTimerFactory(ctrl)
+	timer := mocks.NewMockSessionTimer(ctrl)
 
-	uc := NewTableUsecases(repo, manager, &fixedSessionIDGen{id: "sid-1"}, tf)
+	repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
+		Return(&models.Encounter{UserID: 1, UUID: "enc-1", Name: "Battle"}, nil)
+	idGen.EXPECT().NewSessionID().Return("sid-1")
+	mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "sid-1", gomock.Any())
+	tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer)
 
+	uc := NewTableUsecases(repo, mgr, idGen, tf)
 	id, err := uc.CreateSession(context.Background(), &models.User{ID: 1, Name: "Admin"}, "enc-1")
 	assert.NoError(t, err)
 	assert.Equal(t, "sid-1", id)
-	assert.NotNil(t, tf.lastTimer)
 }
 
 func TestGetTableData(t *testing.T) {
@@ -198,16 +125,20 @@ func TestGetTableData(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		manager *fakeTableManager
+		setup   func(mgr *mocks.MockTableManager)
 		wantErr bool
 	}{
 		{
-			name:    "happy path returns table data",
-			manager: &fakeTableManager{tableData: expected},
+			name: "happy path returns table data",
+			setup: func(mgr *mocks.MockTableManager) {
+				mgr.EXPECT().GetTableData(gomock.Any(), "session-1").Return(expected, nil)
+			},
 		},
 		{
-			name:    "manager error is propagated",
-			manager: &fakeTableManager{tableErr: managerErr},
+			name: "manager error is propagated",
+			setup: func(mgr *mocks.MockTableManager) {
+				mgr.EXPECT().GetTableData(gomock.Any(), "session-1").Return(nil, managerErr)
+			},
 			wantErr: true,
 		},
 	}
@@ -216,9 +147,14 @@ func TestGetTableData(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			uc := NewTableUsecases(&fakeEncounterRepo{}, tt.manager,
-				&fixedSessionIDGen{id: "unused"}, &fakeTimerFactory{})
+			ctrl := gomock.NewController(t)
+			repo := encmocks.NewMockEncounterRepository(ctrl)
+			mgr := mocks.NewMockTableManager(ctrl)
+			idGen := mocks.NewMockSessionIDGenerator(ctrl)
+			tf := mocks.NewMockTimerFactory(ctrl)
+			tt.setup(mgr)
 
+			uc := NewTableUsecases(repo, mgr, idGen, tf)
 			result, err := uc.GetTableData(context.Background(), "session-1")
 
 			if tt.wantErr {
@@ -235,22 +171,72 @@ func TestGetTableData(t *testing.T) {
 func TestCreateSession_MultipleSessionsGetUniqueIDs(t *testing.T) {
 	t.Parallel()
 
-	repo := &fakeEncounterRepo{
-		encounter: &models.Encounter{UserID: 1, UUID: "enc-1"},
-	}
-	manager := &fakeTableManager{}
+	encounter := &models.Encounter{UserID: 1, UUID: "enc-1"}
+	admin := &models.User{ID: 1, Name: "Admin"}
 
 	// First session
-	uc1 := NewTableUsecases(repo, manager, &fixedSessionIDGen{id: "session-A"}, &fakeTimerFactory{})
-	id1, err1 := uc1.CreateSession(context.Background(), &models.User{ID: 1, Name: "Admin"}, "enc-1")
+	ctrl1 := gomock.NewController(t)
+	repo1 := encmocks.NewMockEncounterRepository(ctrl1)
+	mgr1 := mocks.NewMockTableManager(ctrl1)
+	idGen1 := mocks.NewMockSessionIDGenerator(ctrl1)
+	tf1 := mocks.NewMockTimerFactory(ctrl1)
+	timer1 := mocks.NewMockSessionTimer(ctrl1)
+
+	repo1.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(encounter, nil)
+	idGen1.EXPECT().NewSessionID().Return("session-A")
+	mgr1.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "session-A", gomock.Any())
+	tf1.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer1)
+
+	uc1 := NewTableUsecases(repo1, mgr1, idGen1, tf1)
+	id1, err1 := uc1.CreateSession(context.Background(), admin, "enc-1")
 	assert.NoError(t, err1)
 	assert.Equal(t, "session-A", id1)
 
 	// Second session with different ID
-	manager2 := &fakeTableManager{}
-	uc2 := NewTableUsecases(repo, manager2, &fixedSessionIDGen{id: "session-B"}, &fakeTimerFactory{})
-	id2, err2 := uc2.CreateSession(context.Background(), &models.User{ID: 1, Name: "Admin"}, "enc-1")
+	ctrl2 := gomock.NewController(t)
+	repo2 := encmocks.NewMockEncounterRepository(ctrl2)
+	mgr2 := mocks.NewMockTableManager(ctrl2)
+	idGen2 := mocks.NewMockSessionIDGenerator(ctrl2)
+	tf2 := mocks.NewMockTimerFactory(ctrl2)
+	timer2 := mocks.NewMockSessionTimer(ctrl2)
+
+	repo2.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(encounter, nil)
+	idGen2.EXPECT().NewSessionID().Return("session-B")
+	mgr2.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "session-B", gomock.Any())
+	tf2.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer2)
+
+	uc2 := NewTableUsecases(repo2, mgr2, idGen2, tf2)
+	id2, err2 := uc2.CreateSession(context.Background(), admin, "enc-1")
 	assert.NoError(t, err2)
 	assert.Equal(t, "session-B", id2)
 	assert.NotEqual(t, id1, id2)
+}
+
+// Verify that AfterFunc receives a reasonable duration (non-zero).
+func TestCreateSession_TimerDuration(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	repo := encmocks.NewMockEncounterRepository(ctrl)
+	mgr := mocks.NewMockTableManager(ctrl)
+	idGen := mocks.NewMockSessionIDGenerator(ctrl)
+	tf := mocks.NewMockTimerFactory(ctrl)
+	timer := mocks.NewMockSessionTimer(ctrl)
+
+	repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
+		Return(&models.Encounter{UserID: 1, UUID: "enc-1"}, nil)
+	idGen.EXPECT().NewSessionID().Return("sid-dur")
+	mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "sid-dur", gomock.Any())
+
+	var capturedDuration time.Duration
+	tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).DoAndReturn(
+		func(d time.Duration, f func()) *mocks.MockSessionTimer {
+			capturedDuration = d
+			return timer
+		})
+
+	uc := NewTableUsecases(repo, mgr, idGen, tf)
+	_, err := uc.CreateSession(context.Background(), &models.User{ID: 1}, "enc-1")
+	assert.NoError(t, err)
+	assert.True(t, capturedDuration > 0, "timer duration should be positive")
 }

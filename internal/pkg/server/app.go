@@ -34,6 +34,7 @@ import (
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
 	characteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/usecases"
+	descriptiondlv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
@@ -219,7 +220,8 @@ func (srv *Server) Run() error {
 	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor(actionProcessorUsecase)
 	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor,
 		bestiaryuc.NewGoRunner(), bestiaryuc.NewUUIDGenerator())
-	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionClient)
+	descriptionGateway := descriptiondlv.NewDescriptionGatewayAdapter(descriptionClient)
+	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
