@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 )
 
 // NewTestContext returns a context suitable for tests.
@@ -55,6 +57,18 @@ func DecodeJSON(t *testing.T, body *bytes.Buffer, dst any) {
 		t.Fatalf("DecodeJSON: failed to decode: %v", err)
 	}
 }
+
+// NoopDBMetrics returns a metrics.DBMetrics implementation that does nothing.
+// Useful for integration tests where Prometheus is not available.
+func NoopDBMetrics() metrics.DBMetrics {
+	return &noopDBMetrics{}
+}
+
+type noopDBMetrics struct{}
+
+func (n *noopDBMetrics) IncreaseHits(_ string)                      {}
+func (n *noopDBMetrics) IncreaseErrs(_ string)                      {}
+func (n *noopDBMetrics) IncreaseDuration(_ string, _ time.Duration) {}
 
 // DecodeErrorResponse is a convenience wrapper that decodes the response body
 // into models.ErrResponse and returns the Status field. It fails the test if

@@ -108,8 +108,12 @@
 
   CI / Tooling
 
-  - Нет CI (нет .github/workflows/)
-  - Makefile в корне проекта: make test, make test-race, make test-cover (добавлен в PR2)
+  - GitHub Actions CI (добавлено в PR4):
+    - `.github/workflows/ci.yml` — push/PR: `make test` (unit) + `make test-race` (race detector) + `go vet`
+    - `.github/workflows/integration.yml` — manual (workflow_dispatch): Postgres 16 + Redis 7 services, `make test-integration`
+    - Race detector обязателен на Linux (CGO_ENABLED=1 по умолчанию), невозможен на Windows без gcc
+    - Vendor mode: `cache: false` в setup-go, все команды через `-mod=vendor`
+  - Makefile в корне проекта: make test, make test-race, make test-cover, make test-integration (добавлен в PR2, дополнен PR3)
   - Нет golangci-lint конфига
   - Vendor mode (-mod=vendor) активен
 
@@ -326,25 +330,42 @@
   ├───────────────────┼───────────────────────────────────┼─────────────────┤
   │ SaveEncounter     │ InvalidInputError                 │ 400             │
   └───────────────────┴───────────────────────────────────┴─────────────────┘
-  Этап 4 — Integration Tests (позже)
+  Этап 4 — Integration Tests
 
-  - Build tag: //go:build integration
-  - Docker Compose для Postgres + MongoDB + Redis
-  - 2–5 сценариев: auth login flow, encounter CRUD, bestiary list
-  - testcontainers-go или docker compose up -d в test setup
+  Инфраструктура (добавлена в PR3):
+  - Build tag: `//go:build integration` + `// +build integration` (файлы: `*_integration_test.go`)
+  - Обычный `go test ./...` НЕ запускает integration tests
+  - `make test-integration` — запуск с тегом integration
+  - `make integration-up` — поднимает PostgreSQL + Redis через docker compose
+  - `make integration-down` — останавливает контейнеры
+
+  Конфигурация:
+  - Env var `TEST_POSTGRES_DSN` — DSN для тестовой базы (пример: `postgres://user:pass@localhost:5432/testdb`)
+  - Тест пропускается с `t.Skip()` если env не задан
+  - Тест создаёт схему, seedит данные, чистит за собой в t.Cleanup
+
+  Принципы:
+  1. Один smoke test на адаптер — не разрастаться
+  2. Детерминированный: создаёт свои данные, не зависит от существующих
+  3. Изолированный: cleanup в defer/t.Cleanup
+  4. NoopDBMetrics из testhelpers для обхода Prometheus в тестах
+  5. Не добавлять testcontainers без необходимости — используем существующий docker-compose
+
+  Текущее покрытие:
+  - ✅ encounter/repository: SaveEncounter + GetEncounterByID (PostgreSQL smoke test)
 
   ---
   6. Матрица покрытия (домены × уровни × приоритет)
   ┌────────────────┬─────────────┬──────────────┬──────────┬─────────────┬────────────────────────────┐
   │     Домен      │ Domain/Pure │ Usecase Unit │ Delivery │ Integration │         Приоритет          │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ encounter      │      —      │   Есть ✅    │ Есть ✅  │     P4      │       Высший (пилот)       │
+  │ encounter      │      —      │   Есть ✅    │ Есть ✅  │  Есть ✅    │       Высший (пилот)       │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ maps           │   Есть ✅   │      P1      │    P2    │     P4      │       Высший (пилот)       │
+  │ maps           │   Есть ✅   │   Есть ✅    │ Есть ✅  │     P4      │       Высший (пилот)       │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ bestiary       │      —      │      P2      │    P3    │     P4      │          Высокий           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
-  │ character      │      —      │      P2      │    P3    │     P4      │          Средний           │
+  │ character      │      —      │   Есть ✅    │ Есть ✅  │     P4      │          Средний           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
   │ auth           │      —      │      P3      │    P3    │     P4      │          Средний           │
   ├────────────────┼─────────────┼──────────────┼──────────┼─────────────┼────────────────────────────┤
@@ -406,18 +427,20 @@
   - ✅ P0 — Deprecated LoggerConfig.Key (PR2)
   - ✅ P1 — encounter/usecases/encounter_test.go (14 сценариев, PR1)
   - ✅ P1 — maptiles/usecases/maptiles_test.go (4 сценария table-driven, PR2)
-  - P1 — maps/usecases/maps_test.go (11 сценариев)
+  - ✅ P1 — maps/usecases/maps_test.go (20 сценариев, 5 методов, PR4)
   - ✅ P2 — encounter/delivery/encounter_handlers_test.go (2 сценария, PR1; обновлено PR2)
   - ✅ P2 — maptiles/delivery/maptiles_handlers_test.go (2 сценария, PR2)
-  - P2 — maps/delivery/maps_handlers_test.go
+  - ✅ P2 — maps/delivery/maps_handlers_test.go (4 сценария, PR4)
   - P2 — bestiary/usecases/bestiary_test.go
-  - P2 — character/usecases/character_test.go
+  - ✅ P2 — character/usecases/character_test.go (13 сценариев, PR3)
+  - ✅ P2 — character/delivery/character_handlers_test.go (2 сценария, PR3)
   - P3 — auth/usecases/auth_test.go
   - P3 — bestiary/delivery/bestiary_handlers_test.go
   - P3 — bestiary/usecases/llm_test.go (requires synchronous process or WaitGroup)
   - P3 — table/usecases/table_test.go
-  - P4 — Integration tests с //go:build integration
-  - P4 — CI pipeline (GitHub Actions)
+  - ✅ P4 — Integration test scaffold: build tag, Makefile targets, NoopDBMetrics (PR3)
+  - ✅ P4 — encounter/repository integration smoke test: Save + GetByID (PR3)
+  - ✅ P4 — CI pipeline: ci.yml (unit + race + vet) + integration.yml (manual, Postgres + Redis) (PR4)
 
   ---
   9. Предложение по структуре файлов
@@ -430,9 +453,18 @@
   │   │   ├── usecases/
   │   │   │   ├── encounter.go
   │   │   │   └── encounter_test.go    ← usecase unit tests
+  │   │   ├── repository/
+  │   │   │   └── encounter_integration_test.go  ← //go:build integration
   │   │   └── delivery/
   │   │       ├── encounter_handlers.go
   │   │       └── encounter_handlers_test.go  ← handler contract tests
+  │   ├── character/
+  │   │   ├── usecases/
+  │   │   │   ├── character.go
+  │   │   │   └── character_test.go    ← usecase unit tests
+  │   │   └── delivery/
+  │   │       ├── character_handlers.go
+  │   │       └── character_handlers_test.go  ← handler contract tests
   │   ├── maps/
   │   │   ├── usecases/
   │   │   │   ├── maps.go
