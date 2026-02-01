@@ -41,6 +41,9 @@ func (h *MapTilesHandler) GetCategories(w http.ResponseWriter, r *http.Request) 
 			l.DeliveryInfo(ctx, "empty data", nil)
 			responses.SendOkResponse(w, nil)
 			return
+		case errors.Is(err, apperrors.InvalidUserIDError):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
 		default:
 			code = responses.StatusInternalServerError
 			status = responses.ErrInternalServer

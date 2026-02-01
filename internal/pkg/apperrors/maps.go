@@ -10,4 +10,5 @@ var (
 	InvalidDimensionsError  = errors.New("invalid map dimensions")
 	InvalidPlacementError   = errors.New("invalid placement")
 	MapValidationError      = errors.New("map validation failed")
+	InvalidUserIDError      = errors.New("invalid user ID")
 )

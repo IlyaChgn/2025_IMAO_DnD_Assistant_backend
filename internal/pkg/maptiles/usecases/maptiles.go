@@ -4,9 +4,9 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
-
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	maptilesinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles"
 )
 
@@ -20,9 +20,9 @@ func NewMapTilesUsecases(repo maptilesinterfaces.MapTilesRepository) maptilesint
 
 func (uc *mapTilesUsecases) GetCategories(ctx context.Context, userID int) ([]*models.MapTileCategory, error) {
 	l := logger.FromContext(ctx)
-	if userID < 0 { // примитивная валидация (по аналогии со стилем)
-		l.UsecasesWarn(nil, userID, map[string]any{"userID": userID})
-		// здесь особой бизнес-ошибки нет, просто логируем; можно вернуть пусто
+	if userID < 0 {
+		l.UsecasesWarn(apperrors.InvalidUserIDError, userID, map[string]any{"userID": userID})
+		return nil, apperrors.InvalidUserIDError
 	}
 
 	list, err := uc.repo.GetCategories(ctx, userID)
