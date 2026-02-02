@@ -82,6 +82,11 @@ type GoogleOAuthConfig struct {
 	RedirectURI  string `env:"GOOGLE_REDIRECT_URI"`
 }
 
+type YandexOAuthConfig struct {
+	ClientID     string `env:"YANDEX_CLIENT_ID"`
+	ClientSecret string `env:"YANDEX_CLIENT_SECRET"`
+}
+
 type GeminiConfig struct {
 	Host        string `env:"GEMINI_HOST"`
 	Port        string `env:"GEMINI_PORT"`
@@ -122,6 +127,7 @@ type Config struct {
 	Services    ServicesConfig `yaml:"services"`
 	VKApi       VKApiConfig    `yaml:"vk_api"`
 	GoogleOAuth GoogleOAuthConfig
+	YandexOAuth YandexOAuthConfig
 	Gemini      GeminiConfig
 	Proxies     ProxiesConfig
 

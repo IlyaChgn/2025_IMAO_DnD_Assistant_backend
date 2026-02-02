@@ -230,10 +230,12 @@ func (srv *Server) Run() error {
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 	googleClient := authext.NewGoogleOAuth(cfg.GoogleOAuth.ClientID, cfg.GoogleOAuth.ClientSecret,
 		cfg.GoogleOAuth.RedirectURI)
+	yandexClient := authext.NewYandexOAuth(cfg.YandexOAuth.ClientID, cfg.YandexOAuth.ClientSecret)
 
 	oauthProviders := map[string]authinterface.OAuthProvider{
 		vkClient.Name():     vkClient,
 		googleClient.Name(): googleClient,
+		yandexClient.Name(): yandexClient,
 	}
 	authUsecases := authuc.NewAuthUsecases(authRepository, identityRepository, oauthProviders, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager,
