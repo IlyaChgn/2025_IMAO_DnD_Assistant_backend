@@ -91,6 +91,9 @@ type ProxiesConfig struct {
 }
 
 type LoggerConfig struct {
+	// Deprecated: Key is no longer used. The logger context key is now a typed
+	// struct (logger.loggerCtxKey) and does not need external configuration.
+	// This field will be removed in a future version.
 	Key        string `yaml:"key"`
 	OutputPath string `yaml:"path"`
 	ErrPath    string `yaml:"err_path"`

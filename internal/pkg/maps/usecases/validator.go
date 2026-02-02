@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	MinNameLength      = 1
-	MaxNameLength      = 255
-	RequiredSchemaV    = 1
-	MinRotation        = 0
-	MaxRotation        = 3
-	MapUnitsPerTile    = 6 // Each tile occupies 6x6 units
+	MinNameLength   = 1
+	MaxNameLength   = 255
+	RequiredSchemaV = 1
+	MinRotation     = 0
+	MaxRotation     = 3
+	MapUnitsPerTile = 6 // Each tile occupies 6x6 units
 )
 
 // ValidateMapRequest validates a map creation/update request and returns validation errors

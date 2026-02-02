@@ -1,5 +1,7 @@
 package maps
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_maps.go -package=mocks
+
 import (
 	"context"
 

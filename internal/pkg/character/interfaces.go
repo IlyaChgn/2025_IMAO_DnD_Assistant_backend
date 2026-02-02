@@ -1,5 +1,7 @@
 package character
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_character.go -package=mocks
+
 import (
 	"context"
 	"mime/multipart"

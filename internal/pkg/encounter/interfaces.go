@@ -1,5 +1,7 @@
 package encounter
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_encounter.go -package=mocks
+
 import (
 	"context"
 

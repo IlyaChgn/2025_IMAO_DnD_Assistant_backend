@@ -1,5 +1,7 @@
 package bestiary
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_bestiary.go -package=mocks
+
 import (
 	"context"
 
@@ -58,4 +60,16 @@ type GeneratedCreatureProcessorUsecases interface {
 
 type ActionProcessorUsecases interface {
 	ProcessActions(ctx context.Context, actions []models.Action) ([]models.AttackLLM, error)
+}
+
+type ActionProcessorGateway interface {
+	ProcessActions(ctx context.Context, actions []models.Action) (map[string]interface{}, error)
+}
+
+type AsyncRunner interface {
+	Go(fn func())
+}
+
+type IDGenerator interface {
+	NewID() string
 }

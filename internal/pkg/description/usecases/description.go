@@ -2,22 +2,20 @@ package usecases
 
 import (
 	"context"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	descriptioninterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
-	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 )
 
 type descriptionUsecase struct {
-	descriptionClient descriptionproto.DescriptionServiceClient
+	gateway descriptioninterfaces.DescriptionGateway
 }
 
-func NewDescriptionUsecase(
-	descriptionClient descriptionproto.DescriptionServiceClient) descriptioninterfaces.DescriptionUsecases {
+func NewDescriptionUsecase(gateway descriptioninterfaces.DescriptionGateway) descriptioninterfaces.DescriptionUsecases {
 	return &descriptionUsecase{
-		descriptionClient: descriptionClient,
+		gateway: gateway,
 	}
 }
 
@@ -25,18 +23,13 @@ func (uc *descriptionUsecase) GenerateDescription(ctx context.Context,
 	req models.DescriptionGenerationRequest) (models.DescriptionGenerationResponse, error) {
 	l := logger.FromContext(ctx)
 
-	descriptionRequest := descriptionproto.DescriptionRequest{
-		FirstCharId:  req.FirstCharID,
-		SecondCharId: req.SecondCharID,
-	}
-
-	descriptionResponse, err := uc.descriptionClient.GenerateDescription(ctx, &descriptionRequest)
+	battleDescription, err := uc.gateway.Describe(ctx, req.FirstCharID, req.SecondCharID)
 	if err != nil {
 		l.UsecasesError(err, 0, nil)
 		return models.DescriptionGenerationResponse{}, apperrors.ReceivedDescriptionError
 	}
 
 	return models.DescriptionGenerationResponse{
-		BattleDescription: descriptionResponse.BattleDescription,
+		BattleDescription: battleDescription,
 	}, nil
 }

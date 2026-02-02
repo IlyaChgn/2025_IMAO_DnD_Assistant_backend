@@ -7,49 +7,78 @@ import (
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/mocks"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
 
-type mockRepo struct {
-	categories []*models.MapTileCategory
-	err        error
-}
+func TestGetCategories(t *testing.T) {
+	t.Parallel()
 
-func (m *mockRepo) GetCategories(_ context.Context, _ int) ([]*models.MapTileCategory, error) {
-	return m.categories, m.err
-}
+	expected := []*models.MapTileCategory{{Name: "terrain"}}
+	repoErr := errors.New("db failure")
 
-func newTestContext() context.Context {
-	l, err := logger.New("test-logger", "stdout", "stderr")
-	if err != nil {
-		panic(err)
+	tests := []struct {
+		name    string
+		userID  int
+		setup   func(repo *mocks.MockMapTilesRepository)
+		wantErr error
+		wantNil bool
+	}{
+		{
+			name:    "negative userID returns InvalidUserIDError",
+			userID:  -1,
+			setup:   func(_ *mocks.MockMapTilesRepository) {},
+			wantErr: apperrors.InvalidUserIDError,
+			wantNil: true,
+		},
+		{
+			name:   "happy path returns categories",
+			userID: 1,
+			setup: func(repo *mocks.MockMapTilesRepository) {
+				repo.EXPECT().GetCategories(gomock.Any(), 1).Return(expected, nil)
+			},
+		},
+		{
+			name:   "repo error is propagated",
+			userID: 1,
+			setup: func(repo *mocks.MockMapTilesRepository) {
+				repo.EXPECT().GetCategories(gomock.Any(), 1).Return(nil, repoErr)
+			},
+			wantErr: repoErr,
+			wantNil: true,
+		},
+		{
+			name:   "zero userID is valid",
+			userID: 0,
+			setup: func(repo *mocks.MockMapTilesRepository) {
+				repo.EXPECT().GetCategories(gomock.Any(), 0).Return(expected, nil)
+			},
+		},
 	}
 
-	return l.WithContext(context.Background())
-}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
-func TestGetCategories_NegativeUserID(t *testing.T) {
-	uc := NewMapTilesUsecases(&mockRepo{})
-	ctx := newTestContext()
+			ctrl := gomock.NewController(t)
+			repo := mocks.NewMockMapTilesRepository(ctrl)
+			tt.setup(repo)
 
-	result, err := uc.GetCategories(ctx, -1)
+			uc := NewMapTilesUsecases(repo)
+			result, err := uc.GetCategories(context.Background(), tt.userID)
 
-	assert.Error(t, err)
-	assert.Nil(t, result)
-	assert.True(t, errors.Is(err, apperrors.InvalidUserIDError))
-}
+			if tt.wantErr != nil {
+				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
 
-func TestGetCategories_ValidUserID(t *testing.T) {
-	expected := []*models.MapTileCategory{
-		{Name: "terrain"},
+			if tt.wantNil {
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, expected, result)
+			}
+		})
 	}
-
-	uc := NewMapTilesUsecases(&mockRepo{categories: expected})
-	ctx := newTestContext()
-
-	result, err := uc.GetCategories(ctx, 1)
-
-	assert.NoError(t, err)
-	assert.Equal(t, expected, result)
 }

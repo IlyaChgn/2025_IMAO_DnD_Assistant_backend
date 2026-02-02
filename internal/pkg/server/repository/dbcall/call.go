@@ -9,7 +9,7 @@ func DBCall[T any](fnName string, m metrics.DBMetrics, dbFn func() (T, error)) (
 	m.IncreaseHits(fnName)
 
 	start := time.Now()
-	defer m.IncreaseDuration(fnName, time.Since(start))
+	defer func() { m.IncreaseDuration(fnName, time.Since(start)) }()
 
 	result, err := dbFn()
 

@@ -1,5 +1,7 @@
 package maptiles
 
+//go:generate mockgen -source=interfaces.go -destination=mocks/mock_maptiles.go -package=mocks
+
 import (
 	"context"
 

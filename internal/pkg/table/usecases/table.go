@@ -3,36 +3,42 @@ package usecases
 import (
 	"context"
 	"fmt"
+	"sync"
+	"time"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"github.com/gorilla/websocket"
-	"sync"
-	"time"
 )
 
 const (
-	sessionStringLen = 32
-	sessionDuration  = 15 * time.Minute
+	sessionDuration = 15 * time.Minute
 )
 
 type tableUsecases struct {
 	tableManager  tableinterfaces.TableManager
 	encounterRepo encounterinterfaces.EncounterRepository
 
-	sessionWatcher map[string]*time.Timer
+	idGen        tableinterfaces.SessionIDGenerator
+	timerFactory tableinterfaces.TimerFactory
+
+	sessionWatcher map[string]tableinterfaces.SessionTimer
 	mu             sync.RWMutex
 }
 
 func NewTableUsecases(encounterRepo encounterinterfaces.EncounterRepository,
-	manager tableinterfaces.TableManager) tableinterfaces.TableUsecases {
+	manager tableinterfaces.TableManager,
+	idGen tableinterfaces.SessionIDGenerator,
+	timerFactory tableinterfaces.TimerFactory) tableinterfaces.TableUsecases {
 	return &tableUsecases{
 		tableManager:   manager,
 		encounterRepo:  encounterRepo,
-		sessionWatcher: make(map[string]*time.Timer),
+		idGen:          idGen,
+		timerFactory:   timerFactory,
+		sessionWatcher: make(map[string]tableinterfaces.SessionTimer),
 	}
 }
 
@@ -50,13 +56,13 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 		return "", apperrors.PermissionDeniedError
 	}
 
-	sessionID := utils.RandString(sessionStringLen)
+	sessionID := uc.idGen.NewSessionID()
 
 	uc.tableManager.CreateSession(ctx, admin, encounterData, sessionID, uc.refreshSession)
 
 	uc.mu.Lock()
 
-	uc.sessionWatcher[sessionID] = time.AfterFunc(sessionDuration, func() {
+	uc.sessionWatcher[sessionID] = uc.timerFactory.AfterFunc(sessionDuration, func() {
 		uc.stopTimer(ctx, sessionID, encounterID)
 		l.UsecasesInfo(fmt.Sprintf("session timer stopped, sessionID: %s", sessionID), admin.ID)
 	})
