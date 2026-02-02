@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"time"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
@@ -108,4 +110,20 @@ func (s *authStorage) UpdateUser(ctx context.Context, user *models.User) (*model
 	}
 
 	return &dbUser, nil
+}
+
+func (s *authStorage) UpdateLastLoginAt(ctx context.Context, userID int, t time.Time) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	err := dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
+		_, execErr := s.pool.Exec(ctx, UpdateLastLoginAtQuery, t, userID)
+		return execErr
+	})
+	if err != nil {
+		l.RepoWarn(err, map[string]any{"user_id": userID})
+		return err
+	}
+
+	return nil
 }

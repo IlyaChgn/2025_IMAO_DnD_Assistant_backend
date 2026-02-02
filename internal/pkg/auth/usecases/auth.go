@@ -103,6 +103,10 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 		return nil, err
 	}
 
+	if loginErr := uc.repo.UpdateLastLoginAt(ctx, actualUser.ID, time.Now().UTC()); loginErr != nil {
+		l.UsecasesWarn(loginErr, actualUser.ID, nil)
+	}
+
 	l.UsecasesInfo("user logged in", actualUser.ID)
 
 	return actualUser, nil

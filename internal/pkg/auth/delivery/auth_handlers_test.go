@@ -45,6 +45,14 @@ func (f *fakeAuthUsecases) GetUserIDBySessionID(_ context.Context, _ string) int
 	return 0
 }
 
+// --- helpers ---
+
+const testSessionDuration = 30 * 24 * time.Hour
+
+func newHandler(fake *fakeAuthUsecases, isProd bool) *delivery.AuthHandler {
+	return delivery.NewAuthHandler(fake, testSessionDuration, isProd)
+}
+
 // --- tests ---
 
 func TestLogin(t *testing.T) {
@@ -90,7 +98,7 @@ func TestLogin(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := delivery.NewAuthHandler(tt.fake)
+			handler := newHandler(tt.fake, false)
 
 			req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
 			req.Body = io.NopCloser(bytes.NewReader(tt.body))
@@ -137,7 +145,7 @@ func TestLogout(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := delivery.NewAuthHandler(tt.fake)
+			handler := newHandler(tt.fake, false)
 
 			req := httptest.NewRequest(http.MethodPost, "/api/auth/logout", nil)
 			req.AddCookie(&http.Cookie{Name: "session_id", Value: "test-session"})
@@ -198,7 +206,7 @@ func TestCheckAuth(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := delivery.NewAuthHandler(tt.fake)
+			handler := newHandler(tt.fake, false)
 
 			req := httptest.NewRequest(http.MethodGet, "/api/auth/check", nil)
 			if tt.cookie != nil {
@@ -213,6 +221,108 @@ func TestCheckAuth(t *testing.T) {
 			var resp models.AuthResponse
 			testhelpers.DecodeJSON(t, rr.Body, &resp)
 			assert.Equal(t, tt.wantAuth, resp.IsAuth)
+		})
+	}
+}
+
+// --- cookie flag tests ---
+
+func findCookie(rr *httptest.ResponseRecorder, name string) *http.Cookie {
+	for _, c := range rr.Result().Cookies() {
+		if c.Name == name {
+			return c
+		}
+	}
+
+	return nil
+}
+
+func TestLoginCookieFlags(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		isProd     bool
+		wantSecure bool
+	}{
+		{
+			name:       "dev_mode",
+			isProd:     false,
+			wantSecure: false,
+		},
+		{
+			name:       "prod_mode",
+			isProd:     true,
+			wantSecure: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			fake := &fakeAuthUsecases{loginResult: &models.User{ID: 1, Name: "Tester"}}
+			handler := newHandler(fake, tt.isProd)
+
+			body := testhelpers.MustJSON(t, models.LoginRequest{Code: "code"})
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
+			req.Body = io.NopCloser(bytes.NewReader(body))
+
+			rr := httptest.NewRecorder()
+			handler.Login(rr, req)
+
+			assert.Equal(t, responses.StatusOk, rr.Code)
+
+			cookie := findCookie(rr, "session_id")
+			assert.NotNil(t, cookie)
+			assert.True(t, cookie.HttpOnly)
+			assert.Equal(t, tt.wantSecure, cookie.Secure)
+			assert.Equal(t, http.SameSiteLaxMode, cookie.SameSite)
+		})
+	}
+}
+
+func TestLogoutCookieFlags(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		isProd     bool
+		wantSecure bool
+	}{
+		{
+			name:       "dev_mode",
+			isProd:     false,
+			wantSecure: false,
+		},
+		{
+			name:       "prod_mode",
+			isProd:     true,
+			wantSecure: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			fake := &fakeAuthUsecases{}
+			handler := newHandler(fake, tt.isProd)
+
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/logout", nil)
+			req.AddCookie(&http.Cookie{Name: "session_id", Value: "test-session"})
+
+			rr := httptest.NewRecorder()
+			handler.Logout(rr, req)
+
+			assert.Equal(t, responses.StatusOk, rr.Code)
+
+			cookie := findCookie(rr, "session_id")
+			assert.NotNil(t, cookie)
+			assert.True(t, cookie.HttpOnly)
+			assert.Equal(t, tt.wantSecure, cookie.Secure)
+			assert.Equal(t, http.SameSiteLaxMode, cookie.SameSite)
+			assert.True(t, cookie.Expires.Before(time.Now()), "logout cookie must be expired")
 		})
 	}
 }

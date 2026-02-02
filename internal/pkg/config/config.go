@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 	"gopkg.in/yaml.v3"
@@ -90,6 +91,10 @@ type ProxiesConfig struct {
 	Socks5Proxie Socks5ProxieConfig
 }
 
+type SessionConfig struct {
+	Duration time.Duration `yaml:"duration" env:"SESSION_DURATION" env-default:"720h"`
+}
+
 type LoggerConfig struct {
 	// Deprecated: Key is no longer used. The logger context key is now a typed
 	// struct (logger.loggerCtxKey) and does not need external configuration.
@@ -100,7 +105,8 @@ type LoggerConfig struct {
 }
 
 type Config struct {
-	Server ServerConfig `yaml:"server"`
+	Server  ServerConfig  `yaml:"server"`
+	Session SessionConfig `yaml:"session"`
 
 	Mongo    MongoConfig
 	Postgres PostgresConfig
@@ -114,6 +120,7 @@ type Config struct {
 
 	Logger     LoggerConfig `yaml:"logger"`
 	CtxUserKey string       `yaml:"user_key"`
+	IsProd     bool         `yaml:"-"`
 }
 
 func ReadConfig(cfgPath string) *Config {

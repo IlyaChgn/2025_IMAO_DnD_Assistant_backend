@@ -12,6 +12,7 @@ type AuthRepository interface {
 	CheckUser(ctx context.Context, vkid string) (*models.User, error)
 	CreateUser(ctx context.Context, user *models.User) (*models.User, error)
 	UpdateUser(ctx context.Context, user *models.User) (*models.User, error)
+	UpdateLastLoginAt(ctx context.Context, userID int, t time.Time) error
 }
 
 type AuthUsecases interface {

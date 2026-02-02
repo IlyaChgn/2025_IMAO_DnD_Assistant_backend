@@ -16,12 +16,14 @@ import (
 type AuthHandler struct {
 	usecases        authinterface.AuthUsecases
 	sessionDuration time.Duration
+	isProd          bool
 }
 
-func NewAuthHandler(usecases authinterface.AuthUsecases) *AuthHandler {
+func NewAuthHandler(usecases authinterface.AuthUsecases, sessionDuration time.Duration, isProd bool) *AuthHandler {
 	return &AuthHandler{
 		usecases:        usecases,
-		sessionDuration: 30 * 24 * time.Hour,
+		sessionDuration: sessionDuration,
+		isProd:          isProd,
 	}
 }
 
@@ -81,8 +83,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session.Expires = time.Now().AddDate(0, 0, -1)
-	http.SetCookie(w, session)
+	http.SetCookie(w, h.clearSession())
 	l.DeliveryInfo(ctx, "user logged out", map[string]any{"session_id": session.Value})
 	responses.SendOkResponse(w, &models.AuthResponse{IsAuth: false})
 }

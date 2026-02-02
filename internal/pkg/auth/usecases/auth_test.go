@@ -137,6 +137,7 @@ func TestLogin(t *testing.T) {
 				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), createdUser.ID, gomock.Any()).Return(nil)
 			},
 		},
 		{
@@ -149,6 +150,7 @@ func TestLogin(t *testing.T) {
 				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(updatedUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), updatedUser.ID, gomock.Any()).Return(nil)
 			},
 		},
 		{
@@ -161,6 +163,21 @@ func TestLogin(t *testing.T) {
 				// No UpdateUser call expected — gomock will fail if it's called.
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), existingUser.ID, gomock.Any()).Return(nil)
+			},
+		},
+		{
+			name: "update_last_login_at_fails_but_login_succeeds",
+			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
+				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
+				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
+					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
+				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
+				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), createdUser.ID, gomock.Any()).
+					Return(errors.New("db timeout"))
 			},
 		},
 	}

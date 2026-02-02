@@ -36,3 +36,4 @@ internal/pkg/**/mocks/
 .claude/settings.local.json
 CLAUDE.md
 docs/TESTING.local.md
+/my_docs
