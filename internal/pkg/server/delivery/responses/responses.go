@@ -21,6 +21,7 @@ const (
 const (
 	ErrInternalServer = "Server error"
 	ErrVKServer       = "VK server error"
+	ErrOAuthProvider  = "OAuth provider error"
 
 	ErrBadJSON       = "Wrong JSON format"
 	ErrBadRequest    = "Bad request"

@@ -76,6 +76,12 @@ type VKApiConfig struct {
 	PublicInfo  VKMethodConfig `yaml:"public_info"`
 }
 
+type GoogleOAuthConfig struct {
+	ClientID     string `env:"GOOGLE_CLIENT_ID"`
+	ClientSecret string `env:"GOOGLE_CLIENT_SECRET"`
+	RedirectURI  string `env:"GOOGLE_REDIRECT_URI"`
+}
+
 type GeminiConfig struct {
 	Host        string `env:"GEMINI_HOST"`
 	Port        string `env:"GEMINI_PORT"`
@@ -113,10 +119,11 @@ type Config struct {
 	Redis    RedisConfig
 	Minio    MinioConfig
 
-	Services ServicesConfig `yaml:"services"`
-	VKApi    VKApiConfig    `yaml:"vk_api"`
-	Gemini   GeminiConfig
-	Proxies  ProxiesConfig
+	Services    ServicesConfig `yaml:"services"`
+	VKApi       VKApiConfig    `yaml:"vk_api"`
+	GoogleOAuth GoogleOAuthConfig
+	Gemini      GeminiConfig
+	Proxies     ProxiesConfig
 
 	Logger     LoggerConfig `yaml:"logger"`
 	CtxUserKey string       `yaml:"user_key"`

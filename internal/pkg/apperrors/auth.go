@@ -14,6 +14,7 @@ var (
 
 	UnsupportedProviderError = errors.New("unsupported OAuth provider")
 
-	VKApiError  = errors.New("VK API error")
-	ClientError = errors.New("client error")
+	OAuthProviderError = errors.New("OAuth provider error")
+	VKApiError         = errors.New("VK API error")
+	ClientError        = errors.New("client error")
 )

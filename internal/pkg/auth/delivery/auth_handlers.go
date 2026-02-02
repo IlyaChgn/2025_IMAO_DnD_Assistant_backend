@@ -58,6 +58,8 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		case errors.Is(err, apperrors.VKApiError):
 			status = responses.ErrVKServer
+		case errors.Is(err, apperrors.OAuthProviderError):
+			status = responses.ErrOAuthProvider
 		default:
 			status = responses.ErrInternalServer
 		}

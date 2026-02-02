@@ -228,8 +228,12 @@ func (srv *Server) Run() error {
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
+	googleClient := authext.NewGoogleOAuth(cfg.GoogleOAuth.ClientID, cfg.GoogleOAuth.ClientSecret,
+		cfg.GoogleOAuth.RedirectURI)
+
 	oauthProviders := map[string]authinterface.OAuthProvider{
-		vkClient.Name(): vkClient,
+		vkClient.Name():     vkClient,
+		googleClient.Name(): googleClient,
 	}
 	authUsecases := authuc.NewAuthUsecases(authRepository, identityRepository, oauthProviders, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager,
