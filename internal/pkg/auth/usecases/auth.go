@@ -61,9 +61,9 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 	var userDB, actualUser *models.User
 	vkUser := publicInfo.User
 	user := &models.User{
-		VKID:   vkUser.UserID,
-		Name:   fmt.Sprintf("%s %s", vkUser.FirstName, vkUser.LastName),
-		Avatar: vkUser.Avatar,
+		VKID:        vkUser.UserID,
+		DisplayName: fmt.Sprintf("%s %s", vkUser.FirstName, vkUser.LastName),
+		AvatarURL:   vkUser.Avatar,
 	}
 
 	userDB, err = uc.repo.CheckUser(ctx, vkUser.UserID)
@@ -76,7 +76,7 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 		l.UsecasesInfo("added new user", actualUser.ID)
 	} else {
-		if userDB.Name != user.Name || userDB.Avatar != user.Avatar {
+		if userDB.DisplayName != user.DisplayName || userDB.AvatarURL != user.AvatarURL {
 			actualUser, err = uc.repo.UpdateUser(ctx, user)
 			if err != nil {
 				l.UsecasesError(err, 0, userDB.ID)

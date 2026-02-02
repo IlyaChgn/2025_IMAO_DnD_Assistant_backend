@@ -30,7 +30,7 @@ func TestCreateSession(t *testing.T) {
 	}{
 		{
 			name:  "encounter repo error is propagated",
-			admin: &models.User{ID: 1, Name: "Admin"},
+			admin: &models.User{ID: 1, DisplayName: "Admin"},
 			encID: "enc-1",
 			setup: func(repo *encmocks.MockEncounterRepository, _ *mocks.MockTableManager,
 				_ *mocks.MockSessionIDGenerator, _ *mocks.MockTimerFactory, _ *mocks.MockSessionTimer) {
@@ -40,7 +40,7 @@ func TestCreateSession(t *testing.T) {
 		},
 		{
 			name:  "wrong user returns PermissionDeniedError",
-			admin: &models.User{ID: 1, Name: "Admin"},
+			admin: &models.User{ID: 1, DisplayName: "Admin"},
 			encID: "enc-1",
 			setup: func(repo *encmocks.MockEncounterRepository, _ *mocks.MockTableManager,
 				_ *mocks.MockSessionIDGenerator, _ *mocks.MockTimerFactory, _ *mocks.MockSessionTimer) {
@@ -51,7 +51,7 @@ func TestCreateSession(t *testing.T) {
 		},
 		{
 			name:  "happy path returns session ID",
-			admin: &models.User{ID: 1, Name: "Admin"},
+			admin: &models.User{ID: 1, DisplayName: "Admin"},
 			encID: "enc-1",
 			setup: func(repo *encmocks.MockEncounterRepository, mgr *mocks.MockTableManager,
 				idGen *mocks.MockSessionIDGenerator, tf *mocks.MockTimerFactory, timer *mocks.MockSessionTimer) {
@@ -109,7 +109,7 @@ func TestCreateSession_TimerIsRegistered(t *testing.T) {
 	tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer)
 
 	uc := NewTableUsecases(repo, mgr, idGen, tf)
-	id, err := uc.CreateSession(context.Background(), &models.User{ID: 1, Name: "Admin"}, "enc-1")
+	id, err := uc.CreateSession(context.Background(), &models.User{ID: 1, DisplayName: "Admin"}, "enc-1")
 	assert.NoError(t, err)
 	assert.Equal(t, "sid-1", id)
 }
@@ -172,7 +172,7 @@ func TestCreateSession_MultipleSessionsGetUniqueIDs(t *testing.T) {
 	t.Parallel()
 
 	encounter := &models.Encounter{UserID: 1, UUID: "enc-1"}
-	admin := &models.User{ID: 1, Name: "Admin"}
+	admin := &models.User{ID: 1, DisplayName: "Admin"}
 
 	// First session
 	ctrl1 := gomock.NewController(t)

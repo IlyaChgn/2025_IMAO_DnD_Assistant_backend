@@ -48,7 +48,7 @@ func TestLoginRequiredMiddleware(t *testing.T) {
 			cookie: &http.Cookie{Name: "session_id", Value: "good-session"},
 			setup: func(uc *mocks.MockAuthUsecases) {
 				uc.EXPECT().CheckAuth(gomock.Any(), "good-session").
-					Return(&models.User{ID: 1, Name: "Tester", Status: "active"}, true)
+					Return(&models.User{ID: 1, DisplayName: "Tester", Status: "active"}, true)
 			},
 			wantCode: http.StatusOK,
 			wantNext: true,
@@ -58,7 +58,7 @@ func TestLoginRequiredMiddleware(t *testing.T) {
 			cookie: &http.Cookie{Name: "session_id", Value: "old-session"},
 			setup: func(uc *mocks.MockAuthUsecases) {
 				uc.EXPECT().CheckAuth(gomock.Any(), "old-session").
-					Return(&models.User{ID: 1, Name: "Tester", Status: ""}, true)
+					Return(&models.User{ID: 1, DisplayName: "Tester", Status: ""}, true)
 			},
 			wantCode: http.StatusOK,
 			wantNext: true,
@@ -68,7 +68,7 @@ func TestLoginRequiredMiddleware(t *testing.T) {
 			cookie: &http.Cookie{Name: "session_id", Value: "banned-session"},
 			setup: func(uc *mocks.MockAuthUsecases) {
 				uc.EXPECT().CheckAuth(gomock.Any(), "banned-session").
-					Return(&models.User{ID: 2, Name: "Banned", Status: "banned"}, true)
+					Return(&models.User{ID: 2, DisplayName: "Banned", Status: "banned"}, true)
 			},
 			wantCode:    responses.StatusForbidden,
 			wantErrCode: responses.ErrUserInactive,
@@ -78,7 +78,7 @@ func TestLoginRequiredMiddleware(t *testing.T) {
 			cookie: &http.Cookie{Name: "session_id", Value: "deleted-session"},
 			setup: func(uc *mocks.MockAuthUsecases) {
 				uc.EXPECT().CheckAuth(gomock.Any(), "deleted-session").
-					Return(&models.User{ID: 3, Name: "Deleted", Status: "deleted"}, true)
+					Return(&models.User{ID: 3, DisplayName: "Deleted", Status: "deleted"}, true)
 			},
 			wantCode:    responses.StatusForbidden,
 			wantErrCode: responses.ErrUserInactive,

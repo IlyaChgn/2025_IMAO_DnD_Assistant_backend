@@ -57,7 +57,7 @@ func TestGetCharactersList_BadJSON_Returns400(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/character", nil)
 	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid`)))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetCharactersList(rr, req)
@@ -81,7 +81,7 @@ func TestGetCharactersList_StartPosSizeError_Returns400(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/character", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetCharactersList(rr, req)

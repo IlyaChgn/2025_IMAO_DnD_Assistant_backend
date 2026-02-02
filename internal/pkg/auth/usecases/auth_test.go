@@ -47,9 +47,9 @@ func TestLogin(t *testing.T) {
 	updateErr := errors.New("db update error")
 	sessionErr := errors.New("session create error")
 
-	existingUser := &models.User{ID: 1, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "old-avatar"}
-	createdUser := &models.User{ID: 2, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "avatar-url"}
-	updatedUser := &models.User{ID: 1, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "new-avatar"}
+	existingUser := &models.User{ID: 1, VKID: "vk-123", DisplayName: "Ivan Ivanov", AvatarURL: "old-avatar"}
+	createdUser := &models.User{ID: 2, VKID: "vk-123", DisplayName: "Ivan Ivanov", AvatarURL: "avatar-url"}
+	updatedUser := &models.User{ID: 1, VKID: "vk-123", DisplayName: "Ivan Ivanov", AvatarURL: "new-avatar"}
 
 	tests := []struct {
 		name    string
@@ -266,7 +266,7 @@ func TestCheckAuth(t *testing.T) {
 	t.Parallel()
 
 	sessionData := &models.FullSessionData{
-		User: models.User{ID: 1, Name: "Tester"},
+		User: models.User{ID: 1, DisplayName: "Tester"},
 	}
 
 	tests := []struct {

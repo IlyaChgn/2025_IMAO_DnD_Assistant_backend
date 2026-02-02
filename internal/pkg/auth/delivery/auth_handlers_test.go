@@ -89,7 +89,7 @@ func TestLogin(t *testing.T) {
 		{
 			name:       "happy_path",
 			body:       testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
-			fake:       &fakeAuthUsecases{loginResult: &models.User{ID: 1, Name: "Tester"}},
+			fake:       &fakeAuthUsecases{loginResult: &models.User{ID: 1, DisplayName: "Tester"}},
 			wantStatus: responses.StatusOk,
 		},
 	}
@@ -194,7 +194,7 @@ func TestCheckAuth(t *testing.T) {
 			name:   "authenticated",
 			cookie: &http.Cookie{Name: "session_id", Value: "test-session"},
 			fake: &fakeAuthUsecases{
-				checkAuthUser:   &models.User{ID: 1, Name: "Tester"},
+				checkAuthUser:   &models.User{ID: 1, DisplayName: "Tester"},
 				checkAuthIsAuth: true,
 			},
 			wantStatus: responses.StatusOk,
@@ -261,7 +261,7 @@ func TestLoginCookieFlags(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			fake := &fakeAuthUsecases{loginResult: &models.User{ID: 1, Name: "Tester"}}
+			fake := &fakeAuthUsecases{loginResult: &models.User{ID: 1, DisplayName: "Tester"}}
 			handler := newHandler(fake, tt.isProd)
 
 			body := testhelpers.MustJSON(t, models.LoginRequest{Code: "code"})

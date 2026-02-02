@@ -81,7 +81,7 @@ func TestCreateMap_BadJSON_Returns400(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/maps", nil)
 	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid json`)))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateMap(rr, req)
@@ -111,7 +111,7 @@ func TestCreateMap_ValidationError_Returns422(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/maps", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateMap(rr, req)
@@ -135,7 +135,7 @@ func TestCreateMap_InternalError_Returns500(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/maps", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateMap(rr, req)
@@ -153,7 +153,7 @@ func TestListMaps_InternalError_Returns500(t *testing.T) {
 	)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/maps?start=-1&size=10", nil)
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.ListMaps(rr, req)

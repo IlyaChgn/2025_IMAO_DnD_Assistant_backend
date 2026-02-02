@@ -62,7 +62,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	newSession := h.createSession(sessionID)
 	http.SetCookie(w, newSession)
-	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user.Name})
+	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user.DisplayName})
 	responses.SendOkResponse(w, &models.AuthResponse{
 		IsAuth: true,
 		User:   *user,

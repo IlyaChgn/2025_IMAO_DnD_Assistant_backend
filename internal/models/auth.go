@@ -14,11 +14,11 @@ type TokensData struct {
 }
 
 type User struct {
-	ID     int    `json:"id"`
-	VKID   string `json:"vkID"`
-	Name   string `json:"name"`
-	Avatar string `json:"avatar"`
-	Status string `json:"status,omitempty"`
+	ID          int    `json:"id"`
+	VKID        string `json:"vkID"`
+	DisplayName string `json:"displayName"`
+	AvatarURL   string `json:"avatarUrl,omitempty"`
+	Status      string `json:"status,omitempty"`
 }
 
 type FullSessionData struct {
