@@ -34,7 +34,7 @@ func (s *authStorage) CheckUser(ctx context.Context, vkid string) (*models.User,
 
 	_, err := dbcall.DBCall[*models.User](fnName, s.metrics, func() (*models.User, error) {
 		line := s.pool.QueryRow(ctx, CheckUserQuery, vkid)
-		if err := line.Scan(&user.ID, &user.VKID, &user.Name, &user.Avatar); err != nil {
+		if err := line.Scan(&user.ID, &user.VKID, &user.Name, &user.Avatar, &user.Status); err != nil {
 			return nil, err
 		}
 
@@ -62,7 +62,7 @@ func (s *authStorage) CreateUser(ctx context.Context, user *models.User) (*model
 		defer tx.Rollback(ctx)
 
 		line := tx.QueryRow(ctx, CreateUserQuery, user.VKID, user.Name, user.Avatar)
-		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar); err != nil {
+		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar, &dbUser.Status); err != nil {
 			return nil, err
 		}
 
@@ -94,7 +94,7 @@ func (s *authStorage) UpdateUser(ctx context.Context, user *models.User) (*model
 		defer tx.Rollback(ctx)
 
 		line := tx.QueryRow(ctx, UpdateUserQuery, user.VKID, user.Name, user.Avatar)
-		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar); err != nil {
+		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.Name, &dbUser.Avatar, &dbUser.Status); err != nil {
 			return nil, err
 		}
 

@@ -2,22 +2,22 @@ package repository
 
 const (
 	CheckUserQuery = `
-		SELECT id, vkid, name, avatar
+		SELECT id, vkid, display_name, avatar_url, status
 		FROM public."user"
 		WHERE vkid = $1;
 	`
 
 	CreateUserQuery = `
-		INSERT INTO public."user" (vkid, name, avatar)
+		INSERT INTO public."user" (vkid, display_name, avatar_url)
 		VALUES ($1, $2, $3)
-		RETURNING id, vkid, name, avatar;
+		RETURNING id, vkid, display_name, avatar_url, status;
 	`
 
 	UpdateUserQuery = `
 		UPDATE public."user"
-		SET name = $2, avatar = $3, updated_at = now()
+		SET display_name = $2, avatar_url = $3, updated_at = now()
 		WHERE vkid = $1
-		RETURNING id, vkid, name, avatar;
+		RETURNING id, vkid, display_name, avatar_url, status;
 	`
 
 	UpdateLastLoginAtQuery = `

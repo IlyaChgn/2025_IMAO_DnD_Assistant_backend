@@ -18,6 +18,7 @@ type User struct {
 	VKID   string `json:"vkID"`
 	Name   string `json:"name"`
 	Avatar string `json:"avatar"`
+	Status string `json:"status,omitempty"`
 }
 
 type FullSessionData struct {

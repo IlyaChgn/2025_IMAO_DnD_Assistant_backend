@@ -25,6 +25,7 @@ const (
 	ErrBadJSON       = "Wrong JSON format"
 	ErrNotAuthorized = "User not authorized"
 	ErrForbidden     = "User have no access to this content"
+	ErrUserInactive  = "USER_INACTIVE"
 
 	ErrCreatureNotFound  = "Creature with same URL not found"
 	ErrCharacterNotFound = "Character with same URL not found"
