@@ -26,7 +26,7 @@ const (
 	`
 
 	FindUserByIdentityQuery = `
-		SELECT u.id, u.vkid, u.display_name, u.avatar_url, u.status
+		SELECT u.id, u.display_name, u.avatar_url, u.status
 		FROM public."user" u
 		JOIN public.user_identity ui ON ui.user_id = u.id
 		WHERE ui.provider = $1 AND ui.provider_user_id = $2;

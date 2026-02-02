@@ -49,9 +49,9 @@ func TestLogin(t *testing.T) {
 	sessionErr := errors.New("session create error")
 	identityCreateErr := errors.New("identity create error")
 
-	existingUser := &models.User{ID: 1, VKID: "vk-123", DisplayName: "Ivan Ivanov", AvatarURL: "old-avatar"}
-	createdUser := &models.User{ID: 2, VKID: "vk-123", DisplayName: "Ivan Ivanov", AvatarURL: "avatar-url"}
-	updatedUser := &models.User{ID: 1, VKID: "vk-123", DisplayName: "Ivan Ivanov", AvatarURL: "new-avatar"}
+	existingUser := &models.User{ID: 1, DisplayName: "Ivan Ivanov", AvatarURL: "old-avatar"}
+	createdUser := &models.User{ID: 2, DisplayName: "Ivan Ivanov", AvatarURL: "avatar-url"}
+	updatedUser := &models.User{ID: 1, DisplayName: "Ivan Ivanov", AvatarURL: "new-avatar"}
 
 	existingIdentity := &models.UserIdentity{ID: 10, UserID: 1, Provider: "vk", ProviderUserID: "vk-123"}
 
@@ -128,7 +128,7 @@ func TestLogin(t *testing.T) {
 					Return(validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(existingIdentity, nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
 				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(nil, updateErr)
 			},
 			wantErr: updateErr,
@@ -173,7 +173,7 @@ func TestLogin(t *testing.T) {
 					Return(validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(existingIdentity, nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
 				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(updatedUser, nil)
 				idRepo.EXPECT().UpdateLastUsed(gomock.Any(), existingIdentity.ID, gomock.Any()).Return(nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
@@ -189,7 +189,7 @@ func TestLogin(t *testing.T) {
 					Return(validPublicInfoJSON("Ivan", "Ivanov", "old-avatar"), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(existingIdentity, nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
 				idRepo.EXPECT().UpdateLastUsed(gomock.Any(), existingIdentity.ID, gomock.Any()).Return(nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)

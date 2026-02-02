@@ -26,22 +26,22 @@ func NewAuthStorage(pool serverrepo.PostgresPool, metrics mymetrics.DBMetrics) a
 	}
 }
 
-func (s *authStorage) CheckUser(ctx context.Context, vkid string) (*models.User, error) {
+func (s *authStorage) GetUserByID(ctx context.Context, userID int) (*models.User, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
 	var user models.User
 
 	_, err := dbcall.DBCall[*models.User](fnName, s.metrics, func() (*models.User, error) {
-		line := s.pool.QueryRow(ctx, CheckUserQuery, vkid)
-		if err := line.Scan(&user.ID, &user.VKID, &user.DisplayName, &user.AvatarURL, &user.Status); err != nil {
+		line := s.pool.QueryRow(ctx, GetUserByIDQuery, userID)
+		if err := line.Scan(&user.ID, &user.DisplayName, &user.AvatarURL, &user.Status); err != nil {
 			return nil, err
 		}
 
 		return &user, nil
 	})
 	if err != nil {
-		l.RepoWarn(err, map[string]any{"vk_id": vkid})
+		l.RepoWarn(err, map[string]any{"user_id": userID})
 		return nil, apperrors.UserDoesNotExistError
 	}
 
@@ -61,8 +61,8 @@ func (s *authStorage) CreateUser(ctx context.Context, user *models.User) (*model
 		}
 		defer tx.Rollback(ctx)
 
-		line := tx.QueryRow(ctx, CreateUserQuery, user.VKID, user.DisplayName, user.AvatarURL)
-		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.DisplayName, &dbUser.AvatarURL, &dbUser.Status); err != nil {
+		line := tx.QueryRow(ctx, CreateUserQuery, user.DisplayName, user.AvatarURL)
+		if err := line.Scan(&dbUser.ID, &dbUser.DisplayName, &dbUser.AvatarURL, &dbUser.Status); err != nil {
 			return nil, err
 		}
 
@@ -73,7 +73,7 @@ func (s *authStorage) CreateUser(ctx context.Context, user *models.User) (*model
 		return &dbUser, nil
 	})
 	if err != nil {
-		l.RepoError(err, map[string]any{"vk_id": user.VKID, "name": user.DisplayName, "avatar": user.AvatarURL})
+		l.RepoError(err, map[string]any{"name": user.DisplayName, "avatar": user.AvatarURL})
 		return nil, apperrors.TxError
 	}
 
@@ -93,8 +93,8 @@ func (s *authStorage) UpdateUser(ctx context.Context, user *models.User) (*model
 		}
 		defer tx.Rollback(ctx)
 
-		line := tx.QueryRow(ctx, UpdateUserQuery, user.VKID, user.DisplayName, user.AvatarURL)
-		if err := line.Scan(&dbUser.ID, &dbUser.VKID, &dbUser.DisplayName, &dbUser.AvatarURL, &dbUser.Status); err != nil {
+		line := tx.QueryRow(ctx, UpdateUserQuery, user.ID, user.DisplayName, user.AvatarURL)
+		if err := line.Scan(&dbUser.ID, &dbUser.DisplayName, &dbUser.AvatarURL, &dbUser.Status); err != nil {
 			return nil, err
 		}
 
@@ -105,7 +105,7 @@ func (s *authStorage) UpdateUser(ctx context.Context, user *models.User) (*model
 		return &dbUser, nil
 	})
 	if err != nil {
-		l.RepoError(err, map[string]any{"vk_id": user.VKID, "name": user.DisplayName, "avatar": user.AvatarURL})
+		l.RepoError(err, map[string]any{"user_id": user.ID, "name": user.DisplayName, "avatar": user.AvatarURL})
 		return nil, apperrors.TxError
 	}
 

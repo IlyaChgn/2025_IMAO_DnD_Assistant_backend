@@ -15,7 +15,6 @@ type TokensData struct {
 
 type User struct {
 	ID          int    `json:"id"`
-	VKID        string `json:"vkID"`
 	DisplayName string `json:"displayName"`
 	AvatarURL   string `json:"avatarUrl,omitempty"`
 	Status      string `json:"status,omitempty"`

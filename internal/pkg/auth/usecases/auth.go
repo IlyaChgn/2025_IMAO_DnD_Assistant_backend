@@ -76,7 +76,7 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 	if identity != nil {
 		// Existing user via identity
-		userDB, err := uc.repo.CheckUser(ctx, vkUser.UserID)
+		userDB, err := uc.repo.GetUserByID(ctx, identity.UserID)
 		if err != nil {
 			l.UsecasesError(err, 0, nil)
 			return nil, err
@@ -84,7 +84,7 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 		if userDB.DisplayName != displayName || userDB.AvatarURL != vkUser.Avatar {
 			user := &models.User{
-				VKID:        vkUser.UserID,
+				ID:          userDB.ID,
 				DisplayName: displayName,
 				AvatarURL:   vkUser.Avatar,
 			}
@@ -107,7 +107,6 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 	} else {
 		// New user: create user + identity
 		user := &models.User{
-			VKID:        vkUser.UserID,
 			DisplayName: displayName,
 			AvatarURL:   vkUser.Avatar,
 		}

@@ -1,23 +1,23 @@
 package repository
 
 const (
-	CheckUserQuery = `
-		SELECT id, vkid, display_name, avatar_url, status
+	GetUserByIDQuery = `
+		SELECT id, display_name, avatar_url, status
 		FROM public."user"
-		WHERE vkid = $1;
+		WHERE id = $1;
 	`
 
 	CreateUserQuery = `
-		INSERT INTO public."user" (vkid, display_name, avatar_url)
-		VALUES ($1, $2, $3)
-		RETURNING id, vkid, display_name, avatar_url, status;
+		INSERT INTO public."user" (display_name, avatar_url)
+		VALUES ($1, $2)
+		RETURNING id, display_name, avatar_url, status;
 	`
 
 	UpdateUserQuery = `
 		UPDATE public."user"
 		SET display_name = $2, avatar_url = $3, updated_at = now()
-		WHERE vkid = $1
-		RETURNING id, vkid, display_name, avatar_url, status;
+		WHERE id = $1
+		RETURNING id, display_name, avatar_url, status;
 	`
 
 	UpdateLastLoginAtQuery = `
