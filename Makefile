@@ -1,12 +1,15 @@
 .PHONY: test test-race test-cover test-integration integration-up integration-down mocks verify
 
-test:
+mocks:
+	GOFLAGS=-mod=vendor go generate -run mockgen ./internal/...
+
+test: mocks
 	go test -mod=vendor ./...
 
-test-race:
+test-race: mocks
 	CGO_ENABLED=1 go test -mod=vendor -race ./...
 
-test-cover:
+test-cover: mocks
 	go test -mod=vendor -coverprofile=coverage.out ./...
 	go tool cover -func=coverage.out
 
@@ -19,24 +22,13 @@ integration-up:
 integration-down:
 	docker compose down
 
-mocks:
-	go generate ./internal/pkg/auth/...
-	go generate ./internal/pkg/encounter/...
-	go generate ./internal/pkg/maps/...
-	go generate ./internal/pkg/character/...
-	go generate ./internal/pkg/maptiles/...
-	go generate ./internal/pkg/bestiary/...
-	go generate ./internal/pkg/description/...
-	go generate ./internal/pkg/table/...
-
 verify:
-	@echo "==> gofmt (warning only — pre-existing issues in codebase)"
-	@gofmt -l ./internal/ || true
+	@echo "==> gofmt"
+	@test -z "$$(gofmt -l ./internal/ ./cmd/ ./db/)" || (echo "gofmt check failed:"; gofmt -l ./internal/ ./cmd/ ./db/; exit 1)
+	@echo "==> mocks"
+	$(MAKE) mocks
 	@echo "==> go vet"
 	go vet -mod=vendor ./...
 	@echo "==> go test"
 	go test -mod=vendor ./...
-	@echo "==> mocks consistency"
-	$(MAKE) mocks
-	@git diff --exit-code -- '*.go' || (echo "ERROR: generated mocks are out of date, run 'make mocks' and commit"; exit 1)
 	@echo "==> all checks passed"

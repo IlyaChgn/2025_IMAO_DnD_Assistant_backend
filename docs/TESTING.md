@@ -114,14 +114,21 @@ Each domain's `interfaces.go` has a `//go:generate` directive:
 //go:generate mockgen -source=interfaces.go -destination=mocks/mock_<domain>.go -package=mocks
 ```
 
+**Generated mocks are NOT committed to git.** They are gitignored (`internal/pkg/**/mocks/`) and regenerated automatically by `make test`, `make test-race`, and `make verify`.
+
 ### Workflow
 
 1. Edit `interfaces.go` (add/change/remove a method)
-2. Run `make mocks`
-3. Commit the updated mock files alongside the interface change
-4. `make verify` catches stale mocks automatically
+2. Run `make test` or `make verify` — mocks are regenerated automatically
+3. Alternatively, run `make mocks` directly to regenerate without running tests
 
-Generated mock files are committed to the repo (vendor mode).
+### On a fresh clone
+
+```bash
+make test    # generates mocks, then runs tests — works out of the box
+```
+
+No manual mock generation step needed. The `test`, `test-race`, `test-cover`, and `verify` targets all depend on `mocks`.
 
 ---
 
@@ -130,15 +137,18 @@ Generated mock files are committed to the repo (vendor mode).
 ### Unit tests
 
 ```bash
-make test           # go test -mod=vendor ./...
-make test-race      # CGO_ENABLED=1 go test -mod=vendor -race ./...
-make test-cover     # go test with -coverprofile + go tool cover
+make test           # generates mocks, then: go test -mod=vendor ./...
+make test-race      # generates mocks, then: go test -race -mod=vendor ./...
+make test-cover     # generates mocks, then: go test -coverprofile + go tool cover
 ```
 
-### Mock generation
+All test targets depend on `mocks` — no manual generation step needed.
+
+### Mock generation (standalone)
 
 ```bash
-make mocks          # go generate for all domains (auth, encounter, maps, character, maptiles, bestiary, description, table)
+make mocks                                        # GOFLAGS=-mod=vendor go generate -run mockgen ./internal/...
+go generate -run mockgen ./internal/pkg/auth/...  # single domain
 ```
 
 ### Pre-commit verification
@@ -148,12 +158,10 @@ make verify
 ```
 
 Runs sequentially:
-1. `gofmt` — checks formatting
-2. `go vet` — static analysis
-3. `go test` — full unit test suite
-4. **Mocks consistency** — runs `make mocks`, then `git diff --exit-code` to ensure mocks match current interfaces
-
-If mock files are stale, verify fails with: `ERROR: generated mocks are out of date, run 'make mocks' and commit`.
+1. `gofmt` — checks formatting (hard failure)
+2. `make mocks` — regenerates mocks
+3. `go vet` — static analysis
+4. `go test` — full unit test suite
 
 ### Integration tests
 
@@ -166,6 +174,26 @@ make integration-down   # docker compose down
 Integration tests use build tag `//go:build integration` and are never run by `make test`.
 
 Requires `TEST_POSTGRES_DSN` env var. Tests skip with `t.Skip()` if not set.
+
+### CI pipeline
+
+CI (`.github/workflows/ci.yml`) runs on every push/PR:
+
+**Unit Tests** job:
+
+1. `go install go.uber.org/mock/mockgen@v0.6.0` — installs mockgen binary
+2. `make verify` — gofmt + mocks + go vet + go test
+
+**Race Detector** job:
+
+1. `go install go.uber.org/mock/mockgen@v0.6.0` — installs mockgen binary
+2. `make test-race` — go test -race
+
+CI installs mockgen, then runs make targets; these targets generate mocks automatically before running checks (via the `mocks` dependency in the Makefile).
+
+**Prerequisite:** `mockgen` must be in `$PATH`. Locally, install once with `go install go.uber.org/mock/mockgen@v0.6.0`. In CI, this is handled automatically.
+
+**Network dependency:** `go install mockgen@v0.6.0` requires network access (downloads the binary). This is available in GitHub Actions. Mock generation itself (`go generate -run mockgen`) does NOT need network — it reads local source files.
 
 ---
 
