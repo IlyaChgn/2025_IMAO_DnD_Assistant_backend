@@ -114,3 +114,22 @@ func (s *identityStorage) ListByUserID(ctx context.Context, userID int) ([]model
 
 	return identities, nil
 }
+
+func (s *identityStorage) DeleteByUserAndProvider(ctx context.Context, userID int, provider string) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	return dbcall.ErrOnlyDBCall(fnName, s.metrics, func() error {
+		tag, err := s.pool.Exec(ctx, DeleteIdentityByUserAndProviderQuery, userID, provider)
+		if err != nil {
+			l.RepoError(err, map[string]any{"user_id": userID, "provider": provider})
+			return apperrors.TxError
+		}
+
+		if tag.RowsAffected() == 0 {
+			return apperrors.IdentityNotFoundError
+		}
+
+		return nil
+	})
+}

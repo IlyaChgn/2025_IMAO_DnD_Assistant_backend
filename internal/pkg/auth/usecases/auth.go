@@ -156,3 +156,78 @@ func (uc *authUsecases) GetUserIDBySessionID(ctx context.Context, sessionID stri
 
 	return data.User.ID
 }
+
+func (uc *authUsecases) ListIdentities(ctx context.Context, userID int) ([]models.UserIdentity, error) {
+	return uc.identityRepo.ListByUserID(ctx, userID)
+}
+
+func (uc *authUsecases) LinkIdentity(ctx context.Context, userID int, provider string,
+	loginData *models.LoginRequest) error {
+	l := logger.FromContext(ctx)
+
+	oauthProvider, ok := uc.providers[provider]
+	if !ok {
+		err := fmt.Errorf("unsupported OAuth provider: %s", provider)
+		l.UsecasesError(err, userID, nil)
+		return apperrors.UnsupportedProviderError
+	}
+
+	oauthResult, err := oauthProvider.Authenticate(ctx, loginData)
+	if err != nil {
+		l.UsecasesError(err, userID, nil)
+		return err
+	}
+
+	existing, findErr := uc.identityRepo.FindByProvider(ctx, provider, oauthResult.ProviderUserID)
+	if findErr != nil && !errors.Is(findErr, apperrors.IdentityNotFoundError) {
+		l.UsecasesError(findErr, userID, nil)
+		return findErr
+	}
+
+	if existing != nil {
+		if existing.UserID == userID {
+			return nil
+		}
+
+		return apperrors.IdentityAlreadyLinkedError
+	}
+
+	newIdentity := &models.UserIdentity{
+		UserID:         userID,
+		Provider:       provider,
+		ProviderUserID: oauthResult.ProviderUserID,
+		Email:          oauthResult.Email,
+	}
+
+	if createErr := uc.identityRepo.CreateIdentity(ctx, newIdentity); createErr != nil {
+		l.UsecasesError(createErr, userID, nil)
+		return createErr
+	}
+
+	l.UsecasesInfo("identity linked", userID)
+
+	return nil
+}
+
+func (uc *authUsecases) UnlinkIdentity(ctx context.Context, userID int, provider string) error {
+	l := logger.FromContext(ctx)
+
+	identities, err := uc.identityRepo.ListByUserID(ctx, userID)
+	if err != nil {
+		l.UsecasesError(err, userID, nil)
+		return err
+	}
+
+	if len(identities) <= 1 {
+		return apperrors.LastIdentityError
+	}
+
+	if deleteErr := uc.identityRepo.DeleteByUserAndProvider(ctx, userID, provider); deleteErr != nil {
+		l.UsecasesError(deleteErr, userID, nil)
+		return deleteErr
+	}
+
+	l.UsecasesInfo("identity unlinked", userID)
+
+	return nil
+}

@@ -22,6 +22,9 @@ type AuthUsecases interface {
 	CheckAuth(ctx context.Context, sessionID string) (*models.User, bool)
 	// GetUserIDBySessionID следует использовать только если точно понятно, что пользователь авторизован и данные корректны
 	GetUserIDBySessionID(ctx context.Context, sessionID string) int
+	ListIdentities(ctx context.Context, userID int) ([]models.UserIdentity, error)
+	LinkIdentity(ctx context.Context, userID int, provider string, loginData *models.LoginRequest) error
+	UnlinkIdentity(ctx context.Context, userID int, provider string) error
 }
 
 type SessionManager interface {
@@ -36,6 +39,7 @@ type IdentityRepository interface {
 	CreateIdentity(ctx context.Context, identity *models.UserIdentity) error
 	UpdateLastUsed(ctx context.Context, identityID int, t time.Time) error
 	ListByUserID(ctx context.Context, userID int) ([]models.UserIdentity, error)
+	DeleteByUserAndProvider(ctx context.Context, userID int, provider string) error
 }
 
 // OAuthProvider abstracts an OAuth identity provider (VK, Google, Yandex, etc.).

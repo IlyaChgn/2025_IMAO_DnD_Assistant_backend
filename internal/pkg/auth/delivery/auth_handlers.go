@@ -19,13 +19,16 @@ type AuthHandler struct {
 	usecases        authinterface.AuthUsecases
 	sessionDuration time.Duration
 	isProd          bool
+	ctxUserKey      string
 }
 
-func NewAuthHandler(usecases authinterface.AuthUsecases, sessionDuration time.Duration, isProd bool) *AuthHandler {
+func NewAuthHandler(usecases authinterface.AuthUsecases, sessionDuration time.Duration,
+	isProd bool, ctxUserKey string) *AuthHandler {
 	return &AuthHandler{
 		usecases:        usecases,
 		sessionDuration: sessionDuration,
 		isProd:          isProd,
+		ctxUserKey:      ctxUserKey,
 	}
 }
 
@@ -117,4 +120,85 @@ func (h *AuthHandler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.SendOkResponse(w, &models.AuthResponse{IsAuth: true, User: *user})
+}
+
+func (h *AuthHandler) ListIdentities(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	identities, err := h.usecases.ListIdentities(ctx, user.ID)
+	if err != nil {
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+
+		return
+	}
+
+	responses.SendOkResponse(w, identities)
+}
+
+func (h *AuthHandler) LinkIdentity(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	provider := mux.Vars(r)["provider"]
+
+	var reqData models.LoginRequest
+
+	err := json.NewDecoder(r.Body).Decode(&reqData)
+	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+
+		return
+	}
+
+	err = h.usecases.LinkIdentity(ctx, user.ID, provider, &reqData)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.UnsupportedProviderError):
+			l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadRequest, err, nil)
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadRequest)
+		case errors.Is(err, apperrors.IdentityAlreadyLinkedError):
+			l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrIdentityAlreadyLinked, err, nil)
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrIdentityAlreadyLinked)
+		default:
+			l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *AuthHandler) UnlinkIdentity(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	provider := mux.Vars(r)["provider"]
+
+	err := h.usecases.UnlinkIdentity(ctx, user.ID, provider)
+	if err != nil {
+		switch {
+		case errors.Is(err, apperrors.LastIdentityError):
+			l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrLastIdentity, err, nil)
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrLastIdentity)
+		case errors.Is(err, apperrors.IdentityNotFoundError):
+			l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadRequest, err, nil)
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadRequest)
+		default:
+			l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
+			responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		}
+
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }

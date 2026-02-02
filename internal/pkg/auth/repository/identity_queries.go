@@ -25,6 +25,11 @@ const (
 		ORDER BY created_at;
 	`
 
+	DeleteIdentityByUserAndProviderQuery = `
+		DELETE FROM public.user_identity
+		WHERE user_id = $1 AND provider = $2;
+	`
+
 	FindUserByIdentityQuery = `
 		SELECT u.id, u.display_name, u.avatar_url, u.status
 		FROM public."user" u

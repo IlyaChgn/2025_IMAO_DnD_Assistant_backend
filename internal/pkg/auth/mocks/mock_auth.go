@@ -154,6 +154,35 @@ func (mr *MockAuthUsecasesMockRecorder) GetUserIDBySessionID(ctx, sessionID any)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserIDBySessionID", reflect.TypeOf((*MockAuthUsecases)(nil).GetUserIDBySessionID), ctx, sessionID)
 }
 
+// LinkIdentity mocks base method.
+func (m *MockAuthUsecases) LinkIdentity(ctx context.Context, userID int, provider string, loginData *models.LoginRequest) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LinkIdentity", ctx, userID, provider, loginData)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// LinkIdentity indicates an expected call of LinkIdentity.
+func (mr *MockAuthUsecasesMockRecorder) LinkIdentity(ctx, userID, provider, loginData any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LinkIdentity", reflect.TypeOf((*MockAuthUsecases)(nil).LinkIdentity), ctx, userID, provider, loginData)
+}
+
+// ListIdentities mocks base method.
+func (m *MockAuthUsecases) ListIdentities(ctx context.Context, userID int) ([]models.UserIdentity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListIdentities", ctx, userID)
+	ret0, _ := ret[0].([]models.UserIdentity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListIdentities indicates an expected call of ListIdentities.
+func (mr *MockAuthUsecasesMockRecorder) ListIdentities(ctx, userID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListIdentities", reflect.TypeOf((*MockAuthUsecases)(nil).ListIdentities), ctx, userID)
+}
+
 // Login mocks base method.
 func (m *MockAuthUsecases) Login(ctx context.Context, provider, sessionID string, loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error) {
 	m.ctrl.T.Helper()
@@ -181,6 +210,20 @@ func (m *MockAuthUsecases) Logout(ctx context.Context, sessionID string) error {
 func (mr *MockAuthUsecasesMockRecorder) Logout(ctx, sessionID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Logout", reflect.TypeOf((*MockAuthUsecases)(nil).Logout), ctx, sessionID)
+}
+
+// UnlinkIdentity mocks base method.
+func (m *MockAuthUsecases) UnlinkIdentity(ctx context.Context, userID int, provider string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UnlinkIdentity", ctx, userID, provider)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UnlinkIdentity indicates an expected call of UnlinkIdentity.
+func (mr *MockAuthUsecasesMockRecorder) UnlinkIdentity(ctx, userID, provider any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnlinkIdentity", reflect.TypeOf((*MockAuthUsecases)(nil).UnlinkIdentity), ctx, userID, provider)
 }
 
 // MockSessionManager is a mock of SessionManager interface.
@@ -286,6 +329,20 @@ func (m *MockIdentityRepository) CreateIdentity(ctx context.Context, identity *m
 func (mr *MockIdentityRepositoryMockRecorder) CreateIdentity(ctx, identity any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateIdentity", reflect.TypeOf((*MockIdentityRepository)(nil).CreateIdentity), ctx, identity)
+}
+
+// DeleteByUserAndProvider mocks base method.
+func (m *MockIdentityRepository) DeleteByUserAndProvider(ctx context.Context, userID int, provider string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteByUserAndProvider", ctx, userID, provider)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteByUserAndProvider indicates an expected call of DeleteByUserAndProvider.
+func (mr *MockIdentityRepositoryMockRecorder) DeleteByUserAndProvider(ctx, userID, provider any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByUserAndProvider", reflect.TypeOf((*MockIdentityRepository)(nil).DeleteByUserAndProvider), ctx, userID, provider)
 }
 
 // FindByProvider mocks base method.

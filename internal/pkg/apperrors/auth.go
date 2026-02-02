@@ -17,4 +17,7 @@ var (
 	OAuthProviderError = errors.New("OAuth provider error")
 	VKApiError         = errors.New("VK API error")
 	ClientError        = errors.New("client error")
+
+	IdentityAlreadyLinkedError = errors.New("identity already linked to another user")
+	LastIdentityError          = errors.New("cannot unlink last identity")
 )
