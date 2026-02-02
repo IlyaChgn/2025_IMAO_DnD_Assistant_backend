@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	authext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/external"
 	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
@@ -227,7 +228,10 @@ func (srv *Server) Run() error {
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
-	authUsecases := authuc.NewAuthUsecases(authRepository, identityRepository, vkClient, sessionManager)
+	oauthProviders := map[string]authinterface.OAuthProvider{
+		vkClient.Name(): vkClient,
+	}
+	authUsecases := authuc.NewAuthUsecases(authRepository, identityRepository, oauthProviders, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager,
 		tableuc.NewRandSessionIDGen(), tableuc.NewRealTimerFactory())
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)

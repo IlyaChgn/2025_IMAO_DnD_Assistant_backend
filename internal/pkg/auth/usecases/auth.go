@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -16,59 +15,41 @@ import (
 type authUsecases struct {
 	repo           authinterface.AuthRepository
 	identityRepo   authinterface.IdentityRepository
-	vkApi          authinterface.VKApi
+	providers      map[string]authinterface.OAuthProvider
 	sessionManager authinterface.SessionManager
 }
 
 func NewAuthUsecases(repo authinterface.AuthRepository, identityRepo authinterface.IdentityRepository,
-	vkApi authinterface.VKApi, sessionManager authinterface.SessionManager) authinterface.AuthUsecases {
+	providers map[string]authinterface.OAuthProvider, sessionManager authinterface.SessionManager) authinterface.AuthUsecases {
 	return &authUsecases{
 		repo:           repo,
 		identityRepo:   identityRepo,
-		vkApi:          vkApi,
+		providers:      providers,
 		sessionManager: sessionManager,
 	}
 }
 
-func (uc *authUsecases) Login(ctx context.Context, sessionID string,
+func (uc *authUsecases) Login(ctx context.Context, provider string, sessionID string,
 	loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error) {
 	l := logger.FromContext(ctx)
 
-	vkRawData, err := uc.vkApi.ExchangeCode(ctx, loginData)
+	oauthProvider, ok := uc.providers[provider]
+	if !ok {
+		err := fmt.Errorf("unsupported OAuth provider: %s", provider)
+		l.UsecasesError(err, 0, nil)
+		return nil, apperrors.UnsupportedProviderError
+	}
+
+	oauthResult, err := oauthProvider.Authenticate(ctx, loginData)
 	if err != nil {
 		l.UsecasesError(err, 0, nil)
 		return nil, err
 	}
-
-	var vkTokens models.VKTokensData
-
-	err = json.Unmarshal(vkRawData, &vkTokens)
-	if err != nil {
-		l.UsecasesError(err, 0, nil)
-		return nil, err
-	}
-
-	rawPublicInfo, err := uc.vkApi.GetPublicInfo(ctx, vkTokens.IDToken)
-	if err != nil {
-		l.UsecasesError(err, 0, nil)
-		return nil, err
-	}
-
-	var publicInfo models.PublicInfo
-
-	err = json.Unmarshal(rawPublicInfo, &publicInfo)
-	if err != nil {
-		l.UsecasesError(err, 0, nil)
-		return nil, err
-	}
-
-	vkUser := publicInfo.User
-	displayName := fmt.Sprintf("%s %s", vkUser.FirstName, vkUser.LastName)
 
 	// Try identity-based lookup first
 	var actualUser *models.User
 
-	identity, identityErr := uc.identityRepo.FindByProvider(ctx, "vk", vkUser.UserID)
+	identity, identityErr := uc.identityRepo.FindByProvider(ctx, provider, oauthResult.ProviderUserID)
 	if identityErr != nil && !errors.Is(identityErr, apperrors.IdentityNotFoundError) {
 		l.UsecasesError(identityErr, 0, nil)
 		return nil, identityErr
@@ -82,11 +63,11 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 			return nil, err
 		}
 
-		if userDB.DisplayName != displayName || userDB.AvatarURL != vkUser.Avatar {
+		if userDB.DisplayName != oauthResult.DisplayName || userDB.AvatarURL != oauthResult.AvatarURL {
 			user := &models.User{
 				ID:          userDB.ID,
-				DisplayName: displayName,
-				AvatarURL:   vkUser.Avatar,
+				DisplayName: oauthResult.DisplayName,
+				AvatarURL:   oauthResult.AvatarURL,
 			}
 
 			actualUser, err = uc.repo.UpdateUser(ctx, user)
@@ -107,8 +88,8 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 	} else {
 		// New user: create user + identity
 		user := &models.User{
-			DisplayName: displayName,
-			AvatarURL:   vkUser.Avatar,
+			DisplayName: oauthResult.DisplayName,
+			AvatarURL:   oauthResult.AvatarURL,
 		}
 
 		actualUser, err = uc.repo.CreateUser(ctx, user)
@@ -121,9 +102,9 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 
 		newIdentity := &models.UserIdentity{
 			UserID:         actualUser.ID,
-			Provider:       "vk",
-			ProviderUserID: vkUser.UserID,
-			Email:          vkUser.Email,
+			Provider:       provider,
+			ProviderUserID: oauthResult.ProviderUserID,
+			Email:          oauthResult.Email,
 		}
 
 		if identityCreateErr := uc.identityRepo.CreateIdentity(ctx, newIdentity); identityCreateErr != nil {
@@ -133,10 +114,11 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 	}
 
 	sessionData := &models.FullSessionData{
+		Provider: provider,
 		Tokens: models.TokensData{
-			AccessToken:  vkTokens.AccessToken,
-			RefreshToken: vkTokens.RefreshToken,
-			IDToken:      vkTokens.IDToken,
+			AccessToken:  oauthResult.AccessToken,
+			RefreshToken: oauthResult.RefreshToken,
+			IDToken:      oauthResult.IDToken,
 		},
 		User: *actualUser,
 	}

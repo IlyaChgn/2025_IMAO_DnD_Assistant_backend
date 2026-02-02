@@ -15,6 +15,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/testhelpers"
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,7 +29,7 @@ type fakeAuthUsecases struct {
 	checkAuthIsAuth bool
 }
 
-func (f *fakeAuthUsecases) Login(_ context.Context, _ string, _ *models.LoginRequest,
+func (f *fakeAuthUsecases) Login(_ context.Context, _ string, _ string, _ *models.LoginRequest,
 	_ time.Duration) (*models.User, error) {
 	return f.loginResult, f.loginErr
 }
@@ -100,8 +101,9 @@ func TestLogin(t *testing.T) {
 
 			handler := newHandler(tt.fake, false)
 
-			req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/login/vk", nil)
 			req.Body = io.NopCloser(bytes.NewReader(tt.body))
+			req = mux.SetURLVars(req, map[string]string{"provider": "vk"})
 
 			rr := httptest.NewRecorder()
 			handler.Login(rr, req)

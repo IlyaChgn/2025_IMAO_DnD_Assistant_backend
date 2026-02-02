@@ -30,9 +30,21 @@ type UserIdentity struct {
 	LastUsedAt     string `json:"lastUsedAt,omitempty"`
 }
 
+// OAuthResult is the provider-agnostic result of an OAuth authentication flow.
+type OAuthResult struct {
+	ProviderUserID string
+	DisplayName    string
+	AvatarURL      string
+	Email          string
+	AccessToken    string
+	RefreshToken   string
+	IDToken        string
+}
+
 type FullSessionData struct {
-	Tokens TokensData `json:"tokens"`
-	User   User       `json:"user"`
+	Provider string     `json:"provider"`
+	Tokens   TokensData `json:"tokens"`
+	User     User       `json:"user"`
 }
 
 type AuthResponse struct {

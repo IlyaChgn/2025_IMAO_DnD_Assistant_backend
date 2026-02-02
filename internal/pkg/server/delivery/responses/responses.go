@@ -23,6 +23,7 @@ const (
 	ErrVKServer       = "VK server error"
 
 	ErrBadJSON       = "Wrong JSON format"
+	ErrBadRequest    = "Bad request"
 	ErrNotAuthorized = "User not authorized"
 	ErrForbidden     = "User have no access to this content"
 	ErrUserInactive  = "USER_INACTIVE"

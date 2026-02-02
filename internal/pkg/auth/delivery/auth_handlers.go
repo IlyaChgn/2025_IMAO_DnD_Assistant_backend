@@ -3,14 +3,16 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
+	"time"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/google/uuid"
-	"net/http"
-	"time"
+	"github.com/gorilla/mux"
 )
 
 type AuthHandler struct {
@@ -31,6 +33,8 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	l := logger.FromContext(ctx)
 
+	provider := mux.Vars(r)["provider"]
+
 	var reqData models.LoginRequest
 
 	err := json.NewDecoder(r.Body).Decode(&reqData)
@@ -43,11 +47,15 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	sessionID := uuid.NewString()
 
-	user, err := h.usecases.Login(ctx, sessionID, &reqData, h.sessionDuration)
+	user, err := h.usecases.Login(ctx, provider, sessionID, &reqData, h.sessionDuration)
 	if err != nil {
 		var status string
 
 		switch {
+		case errors.Is(err, apperrors.UnsupportedProviderError):
+			l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadRequest, err, nil)
+			responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadRequest)
+			return
 		case errors.Is(err, apperrors.VKApiError):
 			status = responses.ErrVKServer
 		default:
@@ -62,7 +70,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	newSession := h.createSession(sessionID)
 	http.SetCookie(w, newSession)
-	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user.DisplayName})
+	l.DeliveryInfo(ctx, "user authorized", map[string]any{"session_id": sessionID, "user": user.DisplayName, "provider": provider})
 	responses.SendOkResponse(w, &models.AuthResponse{
 		IsAuth: true,
 		User:   *user,

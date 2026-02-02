@@ -16,7 +16,7 @@ type AuthRepository interface {
 }
 
 type AuthUsecases interface {
-	Login(ctx context.Context, sessionID string,
+	Login(ctx context.Context, provider string, sessionID string,
 		loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error)
 	Logout(ctx context.Context, sessionID string) error
 	CheckAuth(ctx context.Context, sessionID string) (*models.User, bool)
@@ -38,7 +38,8 @@ type IdentityRepository interface {
 	ListByUserID(ctx context.Context, userID int) ([]models.UserIdentity, error)
 }
 
-type VKApi interface {
-	ExchangeCode(ctx context.Context, data *models.LoginRequest) ([]byte, error)
-	GetPublicInfo(ctx context.Context, idToken string) ([]byte, error)
+// OAuthProvider abstracts an OAuth identity provider (VK, Google, Yandex, etc.).
+type OAuthProvider interface {
+	Name() string
+	Authenticate(ctx context.Context, loginData *models.LoginRequest) (*models.OAuthResult, error)
 }

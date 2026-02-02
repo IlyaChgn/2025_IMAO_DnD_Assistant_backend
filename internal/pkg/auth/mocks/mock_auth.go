@@ -155,18 +155,18 @@ func (mr *MockAuthUsecasesMockRecorder) GetUserIDBySessionID(ctx, sessionID any)
 }
 
 // Login mocks base method.
-func (m *MockAuthUsecases) Login(ctx context.Context, sessionID string, loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error) {
+func (m *MockAuthUsecases) Login(ctx context.Context, provider, sessionID string, loginData *models.LoginRequest, sessionDuration time.Duration) (*models.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Login", ctx, sessionID, loginData, sessionDuration)
+	ret := m.ctrl.Call(m, "Login", ctx, provider, sessionID, loginData, sessionDuration)
 	ret0, _ := ret[0].(*models.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Login indicates an expected call of Login.
-func (mr *MockAuthUsecasesMockRecorder) Login(ctx, sessionID, loginData, sessionDuration any) *gomock.Call {
+func (mr *MockAuthUsecasesMockRecorder) Login(ctx, provider, sessionID, loginData, sessionDuration any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAuthUsecases)(nil).Login), ctx, sessionID, loginData, sessionDuration)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAuthUsecases)(nil).Login), ctx, provider, sessionID, loginData, sessionDuration)
 }
 
 // Logout mocks base method.
@@ -332,56 +332,55 @@ func (mr *MockIdentityRepositoryMockRecorder) UpdateLastUsed(ctx, identityID, t 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLastUsed", reflect.TypeOf((*MockIdentityRepository)(nil).UpdateLastUsed), ctx, identityID, t)
 }
 
-// MockVKApi is a mock of VKApi interface.
-type MockVKApi struct {
+// MockOAuthProvider is a mock of OAuthProvider interface.
+type MockOAuthProvider struct {
 	ctrl     *gomock.Controller
-	recorder *MockVKApiMockRecorder
+	recorder *MockOAuthProviderMockRecorder
 	isgomock struct{}
 }
 
-// MockVKApiMockRecorder is the mock recorder for MockVKApi.
-type MockVKApiMockRecorder struct {
-	mock *MockVKApi
+// MockOAuthProviderMockRecorder is the mock recorder for MockOAuthProvider.
+type MockOAuthProviderMockRecorder struct {
+	mock *MockOAuthProvider
 }
 
-// NewMockVKApi creates a new mock instance.
-func NewMockVKApi(ctrl *gomock.Controller) *MockVKApi {
-	mock := &MockVKApi{ctrl: ctrl}
-	mock.recorder = &MockVKApiMockRecorder{mock}
+// NewMockOAuthProvider creates a new mock instance.
+func NewMockOAuthProvider(ctrl *gomock.Controller) *MockOAuthProvider {
+	mock := &MockOAuthProvider{ctrl: ctrl}
+	mock.recorder = &MockOAuthProviderMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockVKApi) EXPECT() *MockVKApiMockRecorder {
+func (m *MockOAuthProvider) EXPECT() *MockOAuthProviderMockRecorder {
 	return m.recorder
 }
 
-// ExchangeCode mocks base method.
-func (m *MockVKApi) ExchangeCode(ctx context.Context, data *models.LoginRequest) ([]byte, error) {
+// Authenticate mocks base method.
+func (m *MockOAuthProvider) Authenticate(ctx context.Context, loginData *models.LoginRequest) (*models.OAuthResult, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ExchangeCode", ctx, data)
-	ret0, _ := ret[0].([]byte)
+	ret := m.ctrl.Call(m, "Authenticate", ctx, loginData)
+	ret0, _ := ret[0].(*models.OAuthResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ExchangeCode indicates an expected call of ExchangeCode.
-func (mr *MockVKApiMockRecorder) ExchangeCode(ctx, data any) *gomock.Call {
+// Authenticate indicates an expected call of Authenticate.
+func (mr *MockOAuthProviderMockRecorder) Authenticate(ctx, loginData any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExchangeCode", reflect.TypeOf((*MockVKApi)(nil).ExchangeCode), ctx, data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockOAuthProvider)(nil).Authenticate), ctx, loginData)
 }
 
-// GetPublicInfo mocks base method.
-func (m *MockVKApi) GetPublicInfo(ctx context.Context, idToken string) ([]byte, error) {
+// Name mocks base method.
+func (m *MockOAuthProvider) Name() string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPublicInfo", ctx, idToken)
-	ret0, _ := ret[0].([]byte)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret := m.ctrl.Call(m, "Name")
+	ret0, _ := ret[0].(string)
+	return ret0
 }
 
-// GetPublicInfo indicates an expected call of GetPublicInfo.
-func (mr *MockVKApiMockRecorder) GetPublicInfo(ctx, idToken any) *gomock.Call {
+// Name indicates an expected call of Name.
+func (mr *MockOAuthProviderMockRecorder) Name() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPublicInfo", reflect.TypeOf((*MockVKApi)(nil).GetPublicInfo), ctx, idToken)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Name", reflect.TypeOf((*MockOAuthProvider)(nil).Name))
 }

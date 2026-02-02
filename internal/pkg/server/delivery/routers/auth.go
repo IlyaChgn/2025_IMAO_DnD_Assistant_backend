@@ -12,6 +12,6 @@ func ServeAuthRouter(router *mux.Router, authHandler *authdel.AuthHandler, login
 	subrouterLoginRequired.Use(loginRequiredMiddleware)
 	subrouterLoginRequired.HandleFunc("/logout", authHandler.Logout).Methods("POST")
 
-	subrouter.HandleFunc("/login", authHandler.Login).Methods("POST")
+	subrouter.HandleFunc("/login/{provider}", authHandler.Login).Methods("POST")
 	subrouter.HandleFunc("/check", authHandler.CheckAuth).Methods("GET")
 }

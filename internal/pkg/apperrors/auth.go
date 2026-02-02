@@ -12,6 +12,8 @@ var (
 
 	IdentityNotFoundError = errors.New("identity not found")
 
+	UnsupportedProviderError = errors.New("unsupported OAuth provider")
+
 	VKApiError  = errors.New("VK API error")
 	ClientError = errors.New("client error")
 )
