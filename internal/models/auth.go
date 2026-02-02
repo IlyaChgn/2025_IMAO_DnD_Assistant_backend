@@ -21,6 +21,16 @@ type User struct {
 	Status      string `json:"status,omitempty"`
 }
 
+type UserIdentity struct {
+	ID             int    `json:"id"`
+	UserID         int    `json:"userId"`
+	Provider       string `json:"provider"`
+	ProviderUserID string `json:"providerUserId"`
+	Email          string `json:"email,omitempty"`
+	CreatedAt      string `json:"createdAt,omitempty"`
+	LastUsedAt     string `json:"lastUsedAt,omitempty"`
+}
+
 type FullSessionData struct {
 	Tokens TokensData `json:"tokens"`
 	User   User       `json:"user"`

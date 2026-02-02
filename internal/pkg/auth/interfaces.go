@@ -31,6 +31,13 @@ type SessionManager interface {
 	GetSession(ctx context.Context, sessionID string) (*models.FullSessionData, bool)
 }
 
+type IdentityRepository interface {
+	FindByProvider(ctx context.Context, provider, providerUserID string) (*models.UserIdentity, error)
+	CreateIdentity(ctx context.Context, identity *models.UserIdentity) error
+	UpdateLastUsed(ctx context.Context, identityID int, t time.Time) error
+	ListByUserID(ctx context.Context, userID int) ([]models.UserIdentity, error)
+}
+
 type VKApi interface {
 	ExchangeCode(ctx context.Context, data *models.LoginRequest) ([]byte, error)
 	GetPublicInfo(ctx context.Context, idToken string) ([]byte, error)

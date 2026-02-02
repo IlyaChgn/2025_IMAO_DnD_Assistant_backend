@@ -10,6 +10,8 @@ var (
 
 	UserDoesNotExistError = errors.New("user does not exist")
 
+	IdentityNotFoundError = errors.New("identity not found")
+
 	VKApiError  = errors.New("VK API error")
 	ClientError = errors.New("client error")
 )

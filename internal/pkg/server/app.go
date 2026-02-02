@@ -213,6 +213,7 @@ func (srv *Server) Run() error {
 	maptileRepository := maptilerepo.NewMapTilesStorage(mongoDatabase, mongoMetrics)
 	mapsRepository := mapsrepo.NewMapsStorage(postgresPool, postgresMetrics)
 	authRepository := authrepo.NewAuthStorage(postgresPool, postgresMetrics)
+	identityRepository := authrepo.NewIdentityStorage(postgresPool, postgresMetrics)
 	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
 	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
@@ -226,7 +227,7 @@ func (srv *Server) Run() error {
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
-	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
+	authUsecases := authuc.NewAuthUsecases(authRepository, identityRepository, vkClient, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager,
 		tableuc.NewRandSessionIDGen(), tableuc.NewRealTimerFactory())
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)

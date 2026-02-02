@@ -3,24 +3,28 @@ package usecases
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 )
 
 type authUsecases struct {
 	repo           authinterface.AuthRepository
+	identityRepo   authinterface.IdentityRepository
 	vkApi          authinterface.VKApi
 	sessionManager authinterface.SessionManager
 }
 
-func NewAuthUsecases(repo authinterface.AuthRepository, vkApi authinterface.VKApi,
-	sessionManager authinterface.SessionManager) authinterface.AuthUsecases {
+func NewAuthUsecases(repo authinterface.AuthRepository, identityRepo authinterface.IdentityRepository,
+	vkApi authinterface.VKApi, sessionManager authinterface.SessionManager) authinterface.AuthUsecases {
 	return &authUsecases{
 		repo:           repo,
+		identityRepo:   identityRepo,
 		vkApi:          vkApi,
 		sessionManager: sessionManager,
 	}
@@ -58,16 +62,56 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 		return nil, err
 	}
 
-	var userDB, actualUser *models.User
 	vkUser := publicInfo.User
-	user := &models.User{
-		VKID:        vkUser.UserID,
-		DisplayName: fmt.Sprintf("%s %s", vkUser.FirstName, vkUser.LastName),
-		AvatarURL:   vkUser.Avatar,
+	displayName := fmt.Sprintf("%s %s", vkUser.FirstName, vkUser.LastName)
+
+	// Try identity-based lookup first
+	var actualUser *models.User
+
+	identity, identityErr := uc.identityRepo.FindByProvider(ctx, "vk", vkUser.UserID)
+	if identityErr != nil && !errors.Is(identityErr, apperrors.IdentityNotFoundError) {
+		l.UsecasesError(identityErr, 0, nil)
+		return nil, identityErr
 	}
 
-	userDB, err = uc.repo.CheckUser(ctx, vkUser.UserID)
-	if err != nil {
+	if identity != nil {
+		// Existing user via identity
+		userDB, err := uc.repo.CheckUser(ctx, vkUser.UserID)
+		if err != nil {
+			l.UsecasesError(err, 0, nil)
+			return nil, err
+		}
+
+		if userDB.DisplayName != displayName || userDB.AvatarURL != vkUser.Avatar {
+			user := &models.User{
+				VKID:        vkUser.UserID,
+				DisplayName: displayName,
+				AvatarURL:   vkUser.Avatar,
+			}
+
+			actualUser, err = uc.repo.UpdateUser(ctx, user)
+			if err != nil {
+				l.UsecasesError(err, 0, userDB.ID)
+				return nil, err
+			}
+
+			l.UsecasesInfo("updated user", actualUser.ID)
+		} else {
+			actualUser = userDB
+		}
+
+		// Best-effort: update identity last_used_at
+		if usedErr := uc.identityRepo.UpdateLastUsed(ctx, identity.ID, time.Now().UTC()); usedErr != nil {
+			l.UsecasesWarn(usedErr, actualUser.ID, nil)
+		}
+	} else {
+		// New user: create user + identity
+		user := &models.User{
+			VKID:        vkUser.UserID,
+			DisplayName: displayName,
+			AvatarURL:   vkUser.Avatar,
+		}
+
 		actualUser, err = uc.repo.CreateUser(ctx, user)
 		if err != nil {
 			l.UsecasesError(err, 0, nil)
@@ -75,16 +119,17 @@ func (uc *authUsecases) Login(ctx context.Context, sessionID string,
 		}
 
 		l.UsecasesInfo("added new user", actualUser.ID)
-	} else {
-		if userDB.DisplayName != user.DisplayName || userDB.AvatarURL != user.AvatarURL {
-			actualUser, err = uc.repo.UpdateUser(ctx, user)
-			if err != nil {
-				l.UsecasesError(err, 0, userDB.ID)
-				return nil, err
-			}
-			l.UsecasesInfo("updated user", actualUser.ID)
-		} else {
-			actualUser = userDB
+
+		newIdentity := &models.UserIdentity{
+			UserID:         actualUser.ID,
+			Provider:       "vk",
+			ProviderUserID: vkUser.UserID,
+			Email:          vkUser.Email,
+		}
+
+		if identityCreateErr := uc.identityRepo.CreateIdentity(ctx, newIdentity); identityCreateErr != nil {
+			l.UsecasesError(identityCreateErr, actualUser.ID, nil)
+			return nil, identityCreateErr
 		}
 	}
 
