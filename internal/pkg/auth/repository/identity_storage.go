@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -12,6 +13,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
 	serverrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbinit"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type identityStorage struct {
@@ -34,9 +36,15 @@ func (s *identityStorage) FindByProvider(ctx context.Context, provider, provider
 
 	_, err := dbcall.DBCall[*models.UserIdentity](fnName, s.metrics, func() (*models.UserIdentity, error) {
 		line := s.pool.QueryRow(ctx, FindIdentityByProviderQuery, provider, providerUserID)
+
+		var email *string
 		if err := line.Scan(&identity.ID, &identity.UserID, &identity.Provider,
-			&identity.ProviderUserID, &identity.Email); err != nil {
+			&identity.ProviderUserID, &email); err != nil {
 			return nil, err
+		}
+
+		if email != nil {
+			identity.Email = *email
 		}
 
 		return &identity, nil
@@ -57,6 +65,12 @@ func (s *identityStorage) CreateIdentity(ctx context.Context, identity *models.U
 		_, err := s.pool.Exec(ctx, CreateIdentityQuery,
 			identity.UserID, identity.Provider, identity.ProviderUserID, identity.Email)
 		if err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) && pgErr.Code == "23505" &&
+				pgErr.ConstraintName == "uq_identity_provider" {
+				return apperrors.IdentityAlreadyLinkedError
+			}
+
 			l.RepoError(err, map[string]any{
 				"user_id": identity.UserID, "provider": identity.Provider,
 				"provider_user_id": identity.ProviderUserID,
@@ -97,9 +111,17 @@ func (s *identityStorage) ListByUserID(ctx context.Context, userID int) ([]model
 		var result []models.UserIdentity
 		for rows.Next() {
 			var id models.UserIdentity
+			var email, createdAt *string
 			if err := rows.Scan(&id.ID, &id.UserID, &id.Provider, &id.ProviderUserID,
-				&id.Email, &id.CreatedAt); err != nil {
+				&email, &createdAt); err != nil {
 				return nil, err
+			}
+
+			if email != nil {
+				id.Email = *email
+			}
+			if createdAt != nil {
+				id.CreatedAt = *createdAt
 			}
 
 			result = append(result, id)

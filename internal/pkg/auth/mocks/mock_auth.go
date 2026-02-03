@@ -57,6 +57,21 @@ func (mr *MockAuthRepositoryMockRecorder) CreateUser(ctx, user any) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockAuthRepository)(nil).CreateUser), ctx, user)
 }
 
+// CreateUserWithIdentity mocks base method.
+func (m *MockAuthRepository) CreateUserWithIdentity(ctx context.Context, user *models.User, identity *models.UserIdentity) (*models.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUserWithIdentity", ctx, user, identity)
+	ret0, _ := ret[0].(*models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUserWithIdentity indicates an expected call of CreateUserWithIdentity.
+func (mr *MockAuthRepositoryMockRecorder) CreateUserWithIdentity(ctx, user, identity any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUserWithIdentity", reflect.TypeOf((*MockAuthRepository)(nil).CreateUserWithIdentity), ctx, user, identity)
+}
+
 // GetUserByID mocks base method.
 func (m *MockAuthRepository) GetUserByID(ctx context.Context, userID int) (*models.User, error) {
 	m.ctrl.T.Helper()

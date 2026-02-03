@@ -11,6 +11,7 @@ import (
 type AuthRepository interface {
 	GetUserByID(ctx context.Context, userID int) (*models.User, error)
 	CreateUser(ctx context.Context, user *models.User) (*models.User, error)
+	CreateUserWithIdentity(ctx context.Context, user *models.User, identity *models.UserIdentity) (*models.User, error)
 	UpdateUser(ctx context.Context, user *models.User) (*models.User, error)
 	UpdateLastLoginAt(ctx context.Context, userID int, t time.Time) error
 }

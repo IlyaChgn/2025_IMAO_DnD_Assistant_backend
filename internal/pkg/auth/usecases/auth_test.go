@@ -76,7 +76,7 @@ func TestLogin(t *testing.T) {
 				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(nil, apperrors.IdentityNotFoundError)
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(nil, createErr)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, createErr)
 			},
 			wantErr: createErr,
 			wantNil: true,
@@ -88,8 +88,7 @@ func TestLogin(t *testing.T) {
 				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(nil, apperrors.IdentityNotFoundError)
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
-				idRepo.EXPECT().CreateIdentity(gomock.Any(), gomock.Any()).Return(identityCreateErr)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, identityCreateErr)
 			},
 			wantErr: identityCreateErr,
 			wantNil: true,
@@ -116,8 +115,7 @@ func TestLogin(t *testing.T) {
 				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(nil, apperrors.IdentityNotFoundError)
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
-				idRepo.EXPECT().CreateIdentity(gomock.Any(), gomock.Any()).Return(nil)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(createdUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(sessionErr)
 			},
@@ -131,8 +129,7 @@ func TestLogin(t *testing.T) {
 				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(nil, apperrors.IdentityNotFoundError)
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
-				idRepo.EXPECT().CreateIdentity(gomock.Any(), gomock.Any()).Return(nil)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(createdUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
 				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), createdUser.ID, gomock.Any()).Return(nil)
@@ -178,12 +175,31 @@ func TestLogin(t *testing.T) {
 				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
 				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
 					Return(nil, apperrors.IdentityNotFoundError)
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
-				idRepo.EXPECT().CreateIdentity(gomock.Any(), gomock.Any()).Return(nil)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(createdUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
 				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), createdUser.ID, gomock.Any()).
 					Return(errors.New("db timeout"))
+			},
+		},
+		{
+			name:     "identity_race_recovery",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				// First FindByProvider: identity not found (race window opens)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				// CreateUserWithIdentity fails: identity was created by concurrent request
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil, apperrors.IdentityAlreadyLinkedError)
+				// Retry FindByProvider: identity now exists
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(existingIdentity, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), existingUser.ID, gomock.Any()).Return(nil)
 			},
 		},
 	}

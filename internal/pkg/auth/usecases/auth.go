@@ -86,30 +86,42 @@ func (uc *authUsecases) Login(ctx context.Context, provider string, sessionID st
 			l.UsecasesWarn(usedErr, actualUser.ID, nil)
 		}
 	} else {
-		// New user: create user + identity
+		// New user: create user + identity atomically (single transaction).
 		user := &models.User{
 			DisplayName: oauthResult.DisplayName,
 			AvatarURL:   oauthResult.AvatarURL,
 		}
 
-		actualUser, err = uc.repo.CreateUser(ctx, user)
-		if err != nil {
-			l.UsecasesError(err, 0, nil)
-			return nil, err
-		}
-
-		l.UsecasesInfo("added new user", actualUser.ID)
-
 		newIdentity := &models.UserIdentity{
-			UserID:         actualUser.ID,
 			Provider:       provider,
 			ProviderUserID: oauthResult.ProviderUserID,
 			Email:          oauthResult.Email,
 		}
 
-		if identityCreateErr := uc.identityRepo.CreateIdentity(ctx, newIdentity); identityCreateErr != nil {
-			l.UsecasesError(identityCreateErr, actualUser.ID, nil)
-			return nil, identityCreateErr
+		actualUser, err = uc.repo.CreateUserWithIdentity(ctx, user, newIdentity)
+		if err != nil {
+			if errors.Is(err, apperrors.IdentityAlreadyLinkedError) {
+				// Race condition: identity was created concurrently (or existed from migration backfill).
+				// Transaction rolled back — no orphan user was committed.
+				existingIdentity, retryErr := uc.identityRepo.FindByProvider(ctx, provider, oauthResult.ProviderUserID)
+				if retryErr != nil {
+					l.UsecasesError(retryErr, 0, nil)
+					return nil, retryErr
+				}
+
+				actualUser, err = uc.repo.GetUserByID(ctx, existingIdentity.UserID)
+				if err != nil {
+					l.UsecasesError(err, existingIdentity.UserID, nil)
+					return nil, err
+				}
+
+				l.UsecasesInfo("resolved identity race, using existing user", actualUser.ID)
+			} else {
+				l.UsecasesError(err, 0, nil)
+				return nil, err
+			}
+		} else {
+			l.UsecasesInfo("added new user", actualUser.ID)
 		}
 	}
 

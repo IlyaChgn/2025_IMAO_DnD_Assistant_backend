@@ -12,6 +12,12 @@ const (
 		VALUES ($1, $2, $3, $4);
 	`
 
+	CreateIdentityOnConflictQuery = `
+		INSERT INTO public.user_identity (user_id, provider, provider_user_id, email)
+		VALUES ($1, $2, $3, $4)
+		ON CONFLICT (provider, provider_user_id) DO NOTHING;
+	`
+
 	UpdateIdentityLastUsedQuery = `
 		UPDATE public.user_identity
 		SET last_used_at = $1
