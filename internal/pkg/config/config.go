@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 	"gopkg.in/yaml.v3"
@@ -75,6 +76,17 @@ type VKApiConfig struct {
 	PublicInfo  VKMethodConfig `yaml:"public_info"`
 }
 
+type GoogleOAuthConfig struct {
+	ClientID     string `env:"GOOGLE_CLIENT_ID"`
+	ClientSecret string `env:"GOOGLE_CLIENT_SECRET"`
+	RedirectURI  string `env:"GOOGLE_REDIRECT_URI"`
+}
+
+type YandexOAuthConfig struct {
+	ClientID     string `env:"YANDEX_CLIENT_ID"`
+	ClientSecret string `env:"YANDEX_CLIENT_SECRET"`
+}
+
 type GeminiConfig struct {
 	Host        string `env:"GEMINI_HOST"`
 	Port        string `env:"GEMINI_PORT"`
@@ -90,6 +102,10 @@ type ProxiesConfig struct {
 	Socks5Proxie Socks5ProxieConfig
 }
 
+type SessionConfig struct {
+	Duration time.Duration `yaml:"duration" env:"SESSION_DURATION" env-default:"720h"`
+}
+
 type LoggerConfig struct {
 	// Deprecated: Key is no longer used. The logger context key is now a typed
 	// struct (logger.loggerCtxKey) and does not need external configuration.
@@ -100,20 +116,24 @@ type LoggerConfig struct {
 }
 
 type Config struct {
-	Server ServerConfig `yaml:"server"`
+	Server  ServerConfig  `yaml:"server"`
+	Session SessionConfig `yaml:"session"`
 
 	Mongo    MongoConfig
 	Postgres PostgresConfig
 	Redis    RedisConfig
 	Minio    MinioConfig
 
-	Services ServicesConfig `yaml:"services"`
-	VKApi    VKApiConfig    `yaml:"vk_api"`
-	Gemini   GeminiConfig
-	Proxies  ProxiesConfig
+	Services    ServicesConfig `yaml:"services"`
+	VKApi       VKApiConfig    `yaml:"vk_api"`
+	GoogleOAuth GoogleOAuthConfig
+	YandexOAuth YandexOAuthConfig
+	Gemini      GeminiConfig
+	Proxies     ProxiesConfig
 
 	Logger     LoggerConfig `yaml:"logger"`
 	CtxUserKey string       `yaml:"user_key"`
+	IsProd     bool         `yaml:"-"`
 }
 
 func ReadConfig(cfgPath string) *Config {

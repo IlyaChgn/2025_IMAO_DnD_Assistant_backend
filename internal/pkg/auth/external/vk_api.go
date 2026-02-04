@@ -4,16 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"strings"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
-	"io"
-	"net/http"
-	"net/url"
-	"strings"
 )
 
 type vkAPI struct {
@@ -26,7 +27,7 @@ type vkAPI struct {
 }
 
 func NewVKApi(redirectURI, clientID, secretKey, serviceKey string,
-	exchange, publicInfo config.VKMethodConfig) authinterface.VKApi {
+	exchange, publicInfo config.VKMethodConfig) authinterface.OAuthProvider {
 	return &vkAPI{
 		RedirectURI: redirectURI,
 		ClientID:    clientID,
@@ -37,8 +38,49 @@ func NewVKApi(redirectURI, clientID, secretKey, serviceKey string,
 	}
 }
 
-// ExchangeCode возвращает access token, refresh token и ID token в обмен на код верификации с клиента
-func (a *vkAPI) ExchangeCode(ctx context.Context, data *models.LoginRequest) ([]byte, error) {
+func (a *vkAPI) Name() string {
+	return "vk"
+}
+
+func (a *vkAPI) Authenticate(ctx context.Context, loginData *models.LoginRequest) (*models.OAuthResult, error) {
+	l := logger.FromContext(ctx)
+
+	rawTokens, err := a.exchangeCode(ctx, loginData)
+	if err != nil {
+		return nil, err
+	}
+
+	var vkTokens models.VKTokensData
+	if err := json.Unmarshal(rawTokens, &vkTokens); err != nil {
+		l.UsecasesError(err, 0, nil)
+		return nil, err
+	}
+
+	rawPublicInfo, err := a.getPublicInfo(ctx, vkTokens.IDToken)
+	if err != nil {
+		return nil, err
+	}
+
+	var publicInfo models.PublicInfo
+	if err := json.Unmarshal(rawPublicInfo, &publicInfo); err != nil {
+		l.UsecasesError(err, 0, nil)
+		return nil, err
+	}
+
+	vkUser := publicInfo.User
+
+	return &models.OAuthResult{
+		ProviderUserID: vkUser.UserID,
+		DisplayName:    fmt.Sprintf("%s %s", vkUser.FirstName, vkUser.LastName),
+		AvatarURL:      vkUser.Avatar,
+		Email:          vkUser.Email,
+		AccessToken:    vkTokens.AccessToken,
+		RefreshToken:   vkTokens.RefreshToken,
+		IDToken:        vkTokens.IDToken,
+	}, nil
+}
+
+func (a *vkAPI) exchangeCode(ctx context.Context, data *models.LoginRequest) ([]byte, error) {
 	l := logger.FromContext(ctx)
 	urlParams := url.Values{}
 
@@ -91,7 +133,7 @@ func (a *vkAPI) ExchangeCode(ctx context.Context, data *models.LoginRequest) ([]
 	return vkApiData, nil
 }
 
-func (a *vkAPI) GetPublicInfo(ctx context.Context, idToken string) ([]byte, error) {
+func (a *vkAPI) getPublicInfo(ctx context.Context, idToken string) ([]byte, error) {
 	l := logger.FromContext(ctx)
 	urlParams := url.Values{}
 

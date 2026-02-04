@@ -27,6 +27,12 @@ func LoginRequiredMiddleware(uc authinterface.AuthUsecases, ctxUserKey string) m
 				return
 			}
 
+			if user.Status != "" && user.Status != "active" {
+				responses.SendErrResponse(w, responses.StatusForbidden, responses.ErrUserInactive)
+
+				return
+			}
+
 			ctx = context.WithValue(ctx, ctxUserKey, user)
 			r = r.WithContext(ctx)
 

@@ -54,7 +54,7 @@ func (f *wsRecordingUsecases) AddNewConnection(_ context.Context, user *models.U
 // through a real HTTP server with gorilla/mux routing, and that the handler
 // correctly extracts the session ID from the URL and the user from the context.
 func TestServeWS_UpgradeAndConnect(t *testing.T) {
-	testUser := &models.User{ID: 42, Name: "WS Tester"}
+	testUser := &models.User{ID: 42, DisplayName: "WS Tester"}
 	fake := &wsRecordingUsecases{done: make(chan struct{})}
 	handler := delivery.NewTableHandler(fake, integrationCtxUserKey)
 
@@ -97,5 +97,5 @@ func TestServeWS_UpgradeAndConnect(t *testing.T) {
 	assert.True(t, fake.connReceived, "AddNewConnection should have been called")
 	assert.Equal(t, "test-session-42", fake.sessionIDGot)
 	assert.Equal(t, testUser.ID, fake.userGot.ID)
-	assert.Equal(t, testUser.Name, fake.userGot.Name)
+	assert.Equal(t, testUser.DisplayName, fake.userGot.DisplayName)
 }

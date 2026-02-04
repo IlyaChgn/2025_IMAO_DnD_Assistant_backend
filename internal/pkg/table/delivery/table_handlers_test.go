@@ -56,7 +56,7 @@ func TestCreateSession_BadJSON_Returns400(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/table/create", nil)
 	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid json`)))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateSession(rr, req)
@@ -76,7 +76,7 @@ func TestCreateSession_PermissionDenied_Returns400(t *testing.T) {
 	body := testhelpers.MustJSON(t, models.CreateTableRequest{EncounterID: "enc-1"})
 	req := httptest.NewRequest(http.MethodPost, "/api/table/create", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateSession(rr, req)
@@ -96,7 +96,7 @@ func TestCreateSession_ScanError_Returns400(t *testing.T) {
 	body := testhelpers.MustJSON(t, models.CreateTableRequest{EncounterID: "enc-1"})
 	req := httptest.NewRequest(http.MethodPost, "/api/table/create", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateSession(rr, req)
@@ -116,7 +116,7 @@ func TestCreateSession_GenericError_Returns500(t *testing.T) {
 	body := testhelpers.MustJSON(t, models.CreateTableRequest{EncounterID: "enc-1"})
 	req := httptest.NewRequest(http.MethodPost, "/api/table/create", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.CreateSession(rr, req)

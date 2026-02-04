@@ -20,6 +20,9 @@ services:
     host:
     port: 50051
 
+session:
+  duration: 720h
+
 user_key: "user"
 
 vk_api:

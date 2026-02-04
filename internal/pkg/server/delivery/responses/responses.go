@@ -21,10 +21,15 @@ const (
 const (
 	ErrInternalServer = "Server error"
 	ErrVKServer       = "VK server error"
+	ErrOAuthProvider  = "OAuth provider error"
 
-	ErrBadJSON       = "Wrong JSON format"
-	ErrNotAuthorized = "User not authorized"
-	ErrForbidden     = "User have no access to this content"
+	ErrBadJSON               = "Wrong JSON format"
+	ErrBadRequest            = "Bad request"
+	ErrIdentityAlreadyLinked = "Identity already linked to another user"
+	ErrLastIdentity          = "Cannot unlink last identity"
+	ErrNotAuthorized         = "User not authorized"
+	ErrForbidden             = "User have no access to this content"
+	ErrUserInactive          = "USER_INACTIVE"
 
 	ErrCreatureNotFound  = "Creature with same URL not found"
 	ErrCharacterNotFound = "Character with same URL not found"

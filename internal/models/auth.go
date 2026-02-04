@@ -14,15 +14,37 @@ type TokensData struct {
 }
 
 type User struct {
-	ID     int    `json:"id"`
-	VKID   string `json:"vkID"`
-	Name   string `json:"name"`
-	Avatar string `json:"avatar"`
+	ID          int    `json:"id"`
+	DisplayName string `json:"displayName"`
+	AvatarURL   string `json:"avatarUrl,omitempty"`
+	Status      string `json:"status,omitempty"`
+}
+
+type UserIdentity struct {
+	ID             int    `json:"id"`
+	UserID         int    `json:"userId"`
+	Provider       string `json:"provider"`
+	ProviderUserID string `json:"providerUserId"`
+	Email          string `json:"email,omitempty"`
+	CreatedAt      string `json:"createdAt,omitempty"`
+	LastUsedAt     string `json:"lastUsedAt,omitempty"`
+}
+
+// OAuthResult is the provider-agnostic result of an OAuth authentication flow.
+type OAuthResult struct {
+	ProviderUserID string
+	DisplayName    string
+	AvatarURL      string
+	Email          string
+	AccessToken    string
+	RefreshToken   string
+	IDToken        string
 }
 
 type FullSessionData struct {
-	Tokens TokensData `json:"tokens"`
-	User   User       `json:"user"`
+	Provider string     `json:"provider"`
+	Tokens   TokensData `json:"tokens"`
+	User     User       `json:"user"`
 }
 
 type AuthResponse struct {

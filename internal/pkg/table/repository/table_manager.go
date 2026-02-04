@@ -38,7 +38,7 @@ func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, e
 		encounterName:   encounter.Name,
 		encounterData:   encounter.Data,
 		adminID:         admin.ID,
-		adminName:       admin.Name,
+		adminName:       admin.DisplayName,
 		participants:    make(map[int]*participant),
 		broadcast:       make(chan []byte),
 		refreshCallback: callback,
@@ -139,9 +139,9 @@ func (tm *tableManager) AddNewConnection(ctx context.Context, user *models.User,
 	}
 
 	if user.ID == activeSession.GetAdminID() {
-		activeSession.AddAdmin(ctx, user.ID, user.Name, conn)
+		activeSession.AddAdmin(ctx, user.ID, user.DisplayName, conn)
 	} else {
-		err = activeSession.AddParticipant(ctx, user.ID, user.Name, conn)
+		err = activeSession.AddParticipant(ctx, user.ID, user.DisplayName, conn)
 	}
 
 	if err != nil {

@@ -42,7 +42,7 @@ func TestGetCategories_InvalidUserID_Returns400(t *testing.T) {
 	)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/map-tiles/categories", nil)
-	req = withUser(req, ctxUserKey, &models.User{ID: -1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: -1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetCategories(rr, req)
@@ -60,7 +60,7 @@ func TestGetCategories_InternalError_Returns500(t *testing.T) {
 	)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/map-tiles/categories", nil)
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetCategories(rr, req)

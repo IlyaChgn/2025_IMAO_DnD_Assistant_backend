@@ -15,20 +15,25 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/testhelpers"
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
 // --- fake usecase ---
 
 type fakeAuthUsecases struct {
-	loginResult     *models.User
-	loginErr        error
-	logoutErr       error
-	checkAuthUser   *models.User
-	checkAuthIsAuth bool
+	loginResult       *models.User
+	loginErr          error
+	logoutErr         error
+	checkAuthUser     *models.User
+	checkAuthIsAuth   bool
+	listIdentities    []models.UserIdentity
+	listIdentitiesErr error
+	linkErr           error
+	unlinkErr         error
 }
 
-func (f *fakeAuthUsecases) Login(_ context.Context, _ string, _ *models.LoginRequest,
+func (f *fakeAuthUsecases) Login(_ context.Context, _ string, _ string, _ *models.LoginRequest,
 	_ time.Duration) (*models.User, error) {
 	return f.loginResult, f.loginErr
 }
@@ -43,6 +48,33 @@ func (f *fakeAuthUsecases) CheckAuth(_ context.Context, _ string) (*models.User,
 
 func (f *fakeAuthUsecases) GetUserIDBySessionID(_ context.Context, _ string) int {
 	return 0
+}
+
+func (f *fakeAuthUsecases) ListIdentities(_ context.Context, _ int) ([]models.UserIdentity, error) {
+	return f.listIdentities, f.listIdentitiesErr
+}
+
+func (f *fakeAuthUsecases) LinkIdentity(_ context.Context, _ int, _ string, _ *models.LoginRequest) error {
+	return f.linkErr
+}
+
+func (f *fakeAuthUsecases) UnlinkIdentity(_ context.Context, _ int, _ string) error {
+	return f.unlinkErr
+}
+
+// --- helpers ---
+
+const (
+	testSessionDuration = 30 * 24 * time.Hour
+	testCtxUserKey      = "test-user-key"
+)
+
+func newHandler(fake *fakeAuthUsecases, isProd bool) *delivery.AuthHandler {
+	return delivery.NewAuthHandler(fake, testSessionDuration, isProd, testCtxUserKey)
+}
+
+func withUser(r *http.Request, key string, user *models.User) *http.Request {
+	return r.WithContext(context.WithValue(r.Context(), key, user))
 }
 
 // --- tests ---
@@ -81,7 +113,7 @@ func TestLogin(t *testing.T) {
 		{
 			name:       "happy_path",
 			body:       testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
-			fake:       &fakeAuthUsecases{loginResult: &models.User{ID: 1, Name: "Tester"}},
+			fake:       &fakeAuthUsecases{loginResult: &models.User{ID: 1, DisplayName: "Tester"}},
 			wantStatus: responses.StatusOk,
 		},
 	}
@@ -90,10 +122,11 @@ func TestLogin(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := delivery.NewAuthHandler(tt.fake)
+			handler := newHandler(tt.fake, false)
 
-			req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/login/vk", nil)
 			req.Body = io.NopCloser(bytes.NewReader(tt.body))
+			req = mux.SetURLVars(req, map[string]string{"provider": "vk"})
 
 			rr := httptest.NewRecorder()
 			handler.Login(rr, req)
@@ -137,7 +170,7 @@ func TestLogout(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := delivery.NewAuthHandler(tt.fake)
+			handler := newHandler(tt.fake, false)
 
 			req := httptest.NewRequest(http.MethodPost, "/api/auth/logout", nil)
 			req.AddCookie(&http.Cookie{Name: "session_id", Value: "test-session"})
@@ -186,7 +219,7 @@ func TestCheckAuth(t *testing.T) {
 			name:   "authenticated",
 			cookie: &http.Cookie{Name: "session_id", Value: "test-session"},
 			fake: &fakeAuthUsecases{
-				checkAuthUser:   &models.User{ID: 1, Name: "Tester"},
+				checkAuthUser:   &models.User{ID: 1, DisplayName: "Tester"},
 				checkAuthIsAuth: true,
 			},
 			wantStatus: responses.StatusOk,
@@ -198,7 +231,7 @@ func TestCheckAuth(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := delivery.NewAuthHandler(tt.fake)
+			handler := newHandler(tt.fake, false)
 
 			req := httptest.NewRequest(http.MethodGet, "/api/auth/check", nil)
 			if tt.cookie != nil {
@@ -213,6 +246,253 @@ func TestCheckAuth(t *testing.T) {
 			var resp models.AuthResponse
 			testhelpers.DecodeJSON(t, rr.Body, &resp)
 			assert.Equal(t, tt.wantAuth, resp.IsAuth)
+		})
+	}
+}
+
+// --- cookie flag tests ---
+
+func findCookie(rr *httptest.ResponseRecorder, name string) *http.Cookie {
+	for _, c := range rr.Result().Cookies() {
+		if c.Name == name {
+			return c
+		}
+	}
+
+	return nil
+}
+
+func TestLoginCookieFlags(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		isProd     bool
+		wantSecure bool
+	}{
+		{
+			name:       "dev_mode",
+			isProd:     false,
+			wantSecure: false,
+		},
+		{
+			name:       "prod_mode",
+			isProd:     true,
+			wantSecure: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			fake := &fakeAuthUsecases{loginResult: &models.User{ID: 1, DisplayName: "Tester"}}
+			handler := newHandler(fake, tt.isProd)
+
+			body := testhelpers.MustJSON(t, models.LoginRequest{Code: "code"})
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/login", nil)
+			req.Body = io.NopCloser(bytes.NewReader(body))
+
+			rr := httptest.NewRecorder()
+			handler.Login(rr, req)
+
+			assert.Equal(t, responses.StatusOk, rr.Code)
+
+			cookie := findCookie(rr, "session_id")
+			assert.NotNil(t, cookie)
+			assert.True(t, cookie.HttpOnly)
+			assert.Equal(t, tt.wantSecure, cookie.Secure)
+			assert.Equal(t, http.SameSiteLaxMode, cookie.SameSite)
+		})
+	}
+}
+
+func TestLogoutCookieFlags(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		isProd     bool
+		wantSecure bool
+	}{
+		{
+			name:       "dev_mode",
+			isProd:     false,
+			wantSecure: false,
+		},
+		{
+			name:       "prod_mode",
+			isProd:     true,
+			wantSecure: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			fake := &fakeAuthUsecases{}
+			handler := newHandler(fake, tt.isProd)
+
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/logout", nil)
+			req.AddCookie(&http.Cookie{Name: "session_id", Value: "test-session"})
+
+			rr := httptest.NewRecorder()
+			handler.Logout(rr, req)
+
+			assert.Equal(t, responses.StatusOk, rr.Code)
+
+			cookie := findCookie(rr, "session_id")
+			assert.NotNil(t, cookie)
+			assert.True(t, cookie.HttpOnly)
+			assert.Equal(t, tt.wantSecure, cookie.Secure)
+			assert.Equal(t, http.SameSiteLaxMode, cookie.SameSite)
+			assert.True(t, cookie.Expires.Before(time.Now()), "logout cookie must be expired")
+		})
+	}
+}
+
+func TestListIdentities(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name        string
+		fake        *fakeAuthUsecases
+		wantStatus  int
+		wantErrCode string
+	}{
+		{
+			name:        "error",
+			fake:        &fakeAuthUsecases{listIdentitiesErr: errors.New("db error")},
+			wantStatus:  responses.StatusInternalServerError,
+			wantErrCode: responses.ErrInternalServer,
+		},
+		{
+			name: "happy_path",
+			fake: &fakeAuthUsecases{
+				listIdentities: []models.UserIdentity{
+					{ID: 1, Provider: "vk"},
+					{ID: 2, Provider: "google"},
+				},
+			},
+			wantStatus: responses.StatusOk,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			handler := newHandler(tt.fake, false)
+
+			req := httptest.NewRequest(http.MethodGet, "/api/auth/identities", nil)
+			req = withUser(req, testCtxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
+
+			rr := httptest.NewRecorder()
+			handler.ListIdentities(rr, req)
+
+			assert.Equal(t, tt.wantStatus, rr.Code)
+
+			if tt.wantErrCode != "" {
+				assert.Equal(t, tt.wantErrCode, testhelpers.DecodeErrorResponse(t, rr.Body))
+			}
+		})
+	}
+}
+
+func TestLinkIdentity(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		body       []byte
+		fake       *fakeAuthUsecases
+		wantStatus int
+	}{
+		{
+			name:       "bad_json",
+			body:       []byte(`{invalid`),
+			fake:       &fakeAuthUsecases{},
+			wantStatus: responses.StatusBadRequest,
+		},
+		{
+			name:       "unsupported_provider",
+			body:       testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
+			fake:       &fakeAuthUsecases{linkErr: apperrors.UnsupportedProviderError},
+			wantStatus: responses.StatusBadRequest,
+		},
+		{
+			name:       "already_linked",
+			body:       testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
+			fake:       &fakeAuthUsecases{linkErr: apperrors.IdentityAlreadyLinkedError},
+			wantStatus: responses.StatusBadRequest,
+		},
+		{
+			name:       "happy_path",
+			body:       testhelpers.MustJSON(t, models.LoginRequest{Code: "code"}),
+			fake:       &fakeAuthUsecases{},
+			wantStatus: http.StatusNoContent,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			handler := newHandler(tt.fake, false)
+
+			req := httptest.NewRequest(http.MethodPost, "/api/auth/link/google", nil)
+			req.Body = io.NopCloser(bytes.NewReader(tt.body))
+			req = mux.SetURLVars(req, map[string]string{"provider": "google"})
+			req = withUser(req, testCtxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
+
+			rr := httptest.NewRecorder()
+			handler.LinkIdentity(rr, req)
+
+			assert.Equal(t, tt.wantStatus, rr.Code)
+		})
+	}
+}
+
+func TestUnlinkIdentity(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		fake       *fakeAuthUsecases
+		wantStatus int
+	}{
+		{
+			name:       "last_identity",
+			fake:       &fakeAuthUsecases{unlinkErr: apperrors.LastIdentityError},
+			wantStatus: responses.StatusBadRequest,
+		},
+		{
+			name:       "not_found",
+			fake:       &fakeAuthUsecases{unlinkErr: apperrors.IdentityNotFoundError},
+			wantStatus: responses.StatusBadRequest,
+		},
+		{
+			name:       "happy_path",
+			fake:       &fakeAuthUsecases{},
+			wantStatus: http.StatusNoContent,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			handler := newHandler(tt.fake, false)
+
+			req := httptest.NewRequest(http.MethodDelete, "/api/auth/unlink/vk", nil)
+			req = mux.SetURLVars(req, map[string]string{"provider": "vk"})
+			req = withUser(req, testCtxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
+
+			rr := httptest.NewRecorder()
+			handler.UnlinkIdentity(rr, req)
+
+			assert.Equal(t, tt.wantStatus, rr.Code)
 		})
 	}
 }

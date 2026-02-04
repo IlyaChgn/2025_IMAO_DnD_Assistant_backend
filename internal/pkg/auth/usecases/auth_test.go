@@ -2,12 +2,13 @@ package usecases
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"testing"
 	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/mocks"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
@@ -15,25 +16,16 @@ import (
 
 // --- helpers ---
 
-func validVKTokensJSON() []byte {
-	data, _ := json.Marshal(models.VKTokensData{
-		AccessToken:  "access",
-		RefreshToken: "refresh",
-		IDToken:      "id-token",
-	})
-	return data
-}
-
-func validPublicInfoJSON(firstName, lastName, avatar string) []byte {
-	data, _ := json.Marshal(models.PublicInfo{
-		User: models.UserPublicInfo{
-			UserID:    "vk-123",
-			FirstName: firstName,
-			LastName:  lastName,
-			Avatar:    avatar,
-		},
-	})
-	return data
+func validOAuthResult() *models.OAuthResult {
+	return &models.OAuthResult{
+		ProviderUserID: "vk-123",
+		DisplayName:    "Ivan Ivanov",
+		AvatarURL:      "avatar-url",
+		Email:          "ivan@example.com",
+		AccessToken:    "access",
+		RefreshToken:   "refresh",
+		IDToken:        "id-token",
+	}
 }
 
 // --- tests ---
@@ -41,86 +33,89 @@ func validPublicInfoJSON(firstName, lastName, avatar string) []byte {
 func TestLogin(t *testing.T) {
 	t.Parallel()
 
-	exchangeErr := errors.New("vk exchange error")
-	publicInfoErr := errors.New("vk public info error")
+	authErr := errors.New("auth error")
 	createErr := errors.New("db create error")
 	updateErr := errors.New("db update error")
 	sessionErr := errors.New("session create error")
+	identityCreateErr := errors.New("identity create error")
 
-	existingUser := &models.User{ID: 1, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "old-avatar"}
-	createdUser := &models.User{ID: 2, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "avatar-url"}
-	updatedUser := &models.User{ID: 1, VKID: "vk-123", Name: "Ivan Ivanov", Avatar: "new-avatar"}
+	existingUser := &models.User{ID: 1, DisplayName: "Ivan Ivanov", AvatarURL: "old-avatar"}
+	createdUser := &models.User{ID: 2, DisplayName: "Ivan Ivanov", AvatarURL: "avatar-url"}
+	updatedUser := &models.User{ID: 1, DisplayName: "Ivan Ivanov", AvatarURL: "new-avatar"}
+
+	existingIdentity := &models.UserIdentity{ID: 10, UserID: 1, Provider: "vk", ProviderUserID: "vk-123"}
 
 	tests := []struct {
-		name    string
-		setup   func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager)
-		wantErr error
-		wantNil bool
+		name     string
+		provider string
+		setup    func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager)
+		wantErr  error
+		wantNil  bool
 	}{
 		{
-			name: "exchange_code_error",
-			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(nil, exchangeErr)
+			name:     "unsupported_provider",
+			provider: "unknown",
+			setup: func(_ *mocks.MockAuthRepository, _ *mocks.MockIdentityRepository, _ *mocks.MockOAuthProvider, _ *mocks.MockSessionManager) {
 			},
-			wantErr: exchangeErr,
+			wantErr: apperrors.UnsupportedProviderError,
 			wantNil: true,
 		},
 		{
-			name: "invalid_vk_tokens_json",
-			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return([]byte(`{invalid`), nil)
+			name:     "authenticate_error",
+			provider: "vk",
+			setup: func(_ *mocks.MockAuthRepository, _ *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, _ *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(nil, authErr)
 			},
+			wantErr: authErr,
 			wantNil: true,
 		},
 		{
-			name: "get_public_info_error",
-			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").Return(nil, publicInfoErr)
-			},
-			wantErr: publicInfoErr,
-			wantNil: true,
-		},
-		{
-			name: "invalid_public_info_json",
-			setup: func(_ *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").Return([]byte(`{invalid`), nil)
-			},
-			wantNil: true,
-		},
-		{
-			name: "new_user_create_error",
-			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
-					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(nil, createErr)
+			name:     "new_user_create_error",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, _ *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, createErr)
 			},
 			wantErr: createErr,
 			wantNil: true,
 		},
 		{
-			name: "existing_user_update_error",
-			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, _ *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
-					Return(validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"), nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+			name:     "new_user_identity_create_error",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, _ *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, identityCreateErr)
+			},
+			wantErr: identityCreateErr,
+			wantNil: true,
+		},
+		{
+			name:     "existing_user_update_error",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, _ *mocks.MockSessionManager) {
+				result := validOAuthResult()
+				result.AvatarURL = "new-avatar"
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(result, nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(existingIdentity, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
 				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(nil, updateErr)
 			},
 			wantErr: updateErr,
 			wantNil: true,
 		},
 		{
-			name: "session_creation_error",
-			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
-					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
+			name:     "session_creation_error",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(createdUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(sessionErr)
 			},
@@ -128,39 +123,83 @@ func TestLogin(t *testing.T) {
 			wantNil: true,
 		},
 		{
-			name: "happy_path_new_user",
-			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
-					Return(validPublicInfoJSON("Ivan", "Ivanov", "avatar-url"), nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(nil, errors.New("not found"))
-				repo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(createdUser, nil)
+			name:     "happy_path_new_user",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(createdUser, nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), createdUser.ID, gomock.Any()).Return(nil)
 			},
 		},
 		{
-			name: "happy_path_existing_user_updated",
-			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
-					Return(validPublicInfoJSON("Ivan", "Ivanov", "new-avatar"), nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
+			name:     "happy_path_existing_user_updated",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				result := validOAuthResult()
+				result.AvatarURL = "new-avatar"
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(result, nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(existingIdentity, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
 				repo.EXPECT().UpdateUser(gomock.Any(), gomock.Any()).Return(updatedUser, nil)
+				idRepo.EXPECT().UpdateLastUsed(gomock.Any(), existingIdentity.ID, gomock.Any()).Return(nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), updatedUser.ID, gomock.Any()).Return(nil)
 			},
 		},
 		{
-			name: "happy_path_no_update_needed",
-			setup: func(repo *mocks.MockAuthRepository, vk *mocks.MockVKApi, sess *mocks.MockSessionManager) {
-				vk.EXPECT().ExchangeCode(gomock.Any(), gomock.Any()).Return(validVKTokensJSON(), nil)
-				vk.EXPECT().GetPublicInfo(gomock.Any(), "id-token").
-					Return(validPublicInfoJSON("Ivan", "Ivanov", "old-avatar"), nil)
-				repo.EXPECT().CheckUser(gomock.Any(), "vk-123").Return(existingUser, nil)
-				// No UpdateUser call expected — gomock will fail if it's called.
+			name:     "happy_path_no_update_needed",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				result := validOAuthResult()
+				result.AvatarURL = "old-avatar"
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(result, nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(existingIdentity, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
+				idRepo.EXPECT().UpdateLastUsed(gomock.Any(), existingIdentity.ID, gomock.Any()).Return(nil)
 				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), existingUser.ID, gomock.Any()).Return(nil)
+			},
+		},
+		{
+			name:     "update_last_login_at_fails_but_login_succeeds",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).Return(createdUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), createdUser.ID, gomock.Any()).
+					Return(errors.New("db timeout"))
+			},
+		},
+		{
+			name:     "identity_race_recovery",
+			provider: "vk",
+			setup: func(repo *mocks.MockAuthRepository, idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider, sess *mocks.MockSessionManager) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				// First FindByProvider: identity not found (race window opens)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				// CreateUserWithIdentity fails: identity was created by concurrent request
+				repo.EXPECT().CreateUserWithIdentity(gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil, apperrors.IdentityAlreadyLinkedError)
+				// Retry FindByProvider: identity now exists
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(existingIdentity, nil)
+				repo.EXPECT().GetUserByID(gomock.Any(), 1).Return(existingUser, nil)
+				sess.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+					Return(nil)
+				repo.EXPECT().UpdateLastLoginAt(gomock.Any(), existingUser.ID, gomock.Any()).Return(nil)
 			},
 		},
 	}
@@ -171,13 +210,18 @@ func TestLogin(t *testing.T) {
 
 			ctrl := gomock.NewController(t)
 			repo := mocks.NewMockAuthRepository(ctrl)
-			vk := mocks.NewMockVKApi(ctrl)
+			idRepo := mocks.NewMockIdentityRepository(ctrl)
+			oauth := mocks.NewMockOAuthProvider(ctrl)
 			sess := mocks.NewMockSessionManager(ctrl)
 
-			tt.setup(repo, vk, sess)
+			tt.setup(repo, idRepo, oauth, sess)
 
-			uc := NewAuthUsecases(repo, vk, sess)
-			result, err := uc.Login(context.Background(), "session-id",
+			providers := map[string]authinterface.OAuthProvider{
+				"vk": oauth,
+			}
+
+			uc := NewAuthUsecases(repo, idRepo, providers, sess)
+			result, err := uc.Login(context.Background(), tt.provider, "session-id",
 				&models.LoginRequest{Code: "code"}, time.Hour)
 
 			if tt.wantErr != nil {
@@ -231,7 +275,8 @@ func TestLogout(t *testing.T) {
 
 			uc := NewAuthUsecases(
 				mocks.NewMockAuthRepository(ctrl),
-				mocks.NewMockVKApi(ctrl),
+				mocks.NewMockIdentityRepository(ctrl),
+				nil,
 				sess,
 			)
 			err := uc.Logout(context.Background(), "session-id")
@@ -249,7 +294,8 @@ func TestCheckAuth(t *testing.T) {
 	t.Parallel()
 
 	sessionData := &models.FullSessionData{
-		User: models.User{ID: 1, Name: "Tester"},
+		Provider: "vk",
+		User:     models.User{ID: 1, DisplayName: "Tester"},
 	}
 
 	tests := []struct {
@@ -285,7 +331,8 @@ func TestCheckAuth(t *testing.T) {
 
 			uc := NewAuthUsecases(
 				mocks.NewMockAuthRepository(ctrl),
-				mocks.NewMockVKApi(ctrl),
+				mocks.NewMockIdentityRepository(ctrl),
+				nil,
 				sess,
 			)
 			user, isAuth := uc.CheckAuth(context.Background(), "session-id")
@@ -306,7 +353,8 @@ func TestGetUserIDBySessionID(t *testing.T) {
 	t.Parallel()
 
 	sessionData := &models.FullSessionData{
-		User: models.User{ID: 42},
+		Provider: "vk",
+		User:     models.User{ID: 42},
 	}
 
 	ctrl := gomock.NewController(t)
@@ -315,10 +363,238 @@ func TestGetUserIDBySessionID(t *testing.T) {
 
 	uc := NewAuthUsecases(
 		mocks.NewMockAuthRepository(ctrl),
-		mocks.NewMockVKApi(ctrl),
+		mocks.NewMockIdentityRepository(ctrl),
+		nil,
 		sess,
 	)
 
 	id := uc.GetUserIDBySessionID(context.Background(), "session-id")
 	assert.Equal(t, 42, id)
+}
+
+func TestListIdentities(t *testing.T) {
+	t.Parallel()
+
+	dbErr := errors.New("db error")
+
+	tests := []struct {
+		name    string
+		setup   func(idRepo *mocks.MockIdentityRepository)
+		wantErr error
+		wantLen int
+	}{
+		{
+			name: "happy_path",
+			setup: func(idRepo *mocks.MockIdentityRepository) {
+				idRepo.EXPECT().ListByUserID(gomock.Any(), 1).Return([]models.UserIdentity{
+					{ID: 1, Provider: "vk"},
+					{ID: 2, Provider: "google"},
+				}, nil)
+			},
+			wantLen: 2,
+		},
+		{
+			name: "db_error",
+			setup: func(idRepo *mocks.MockIdentityRepository) {
+				idRepo.EXPECT().ListByUserID(gomock.Any(), 1).Return(nil, dbErr)
+			},
+			wantErr: dbErr,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctrl := gomock.NewController(t)
+			idRepo := mocks.NewMockIdentityRepository(ctrl)
+			tt.setup(idRepo)
+
+			uc := NewAuthUsecases(
+				mocks.NewMockAuthRepository(ctrl),
+				idRepo, nil,
+				mocks.NewMockSessionManager(ctrl),
+			)
+
+			result, err := uc.ListIdentities(context.Background(), 1)
+
+			if tt.wantErr != nil {
+				assert.True(t, errors.Is(err, tt.wantErr))
+			} else {
+				assert.NoError(t, err)
+				assert.Len(t, result, tt.wantLen)
+			}
+		})
+	}
+}
+
+func TestLinkIdentity(t *testing.T) {
+	t.Parallel()
+
+	authErr := errors.New("auth error")
+	createErr := errors.New("db create error")
+
+	tests := []struct {
+		name     string
+		provider string
+		setup    func(idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider)
+		wantErr  error
+	}{
+		{
+			name:     "unsupported_provider",
+			provider: "unknown",
+			setup:    func(_ *mocks.MockIdentityRepository, _ *mocks.MockOAuthProvider) {},
+			wantErr:  apperrors.UnsupportedProviderError,
+		},
+		{
+			name:     "authenticate_error",
+			provider: "vk",
+			setup: func(_ *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(nil, authErr)
+			},
+			wantErr: authErr,
+		},
+		{
+			name:     "already_linked_to_other_user",
+			provider: "vk",
+			setup: func(idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(&models.UserIdentity{ID: 10, UserID: 99}, nil)
+			},
+			wantErr: apperrors.IdentityAlreadyLinkedError,
+		},
+		{
+			name:     "already_linked_to_same_user",
+			provider: "vk",
+			setup: func(idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(&models.UserIdentity{ID: 10, UserID: 1}, nil)
+			},
+		},
+		{
+			name:     "create_error",
+			provider: "vk",
+			setup: func(idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				idRepo.EXPECT().CreateIdentity(gomock.Any(), gomock.Any()).Return(createErr)
+			},
+			wantErr: createErr,
+		},
+		{
+			name:     "happy_path",
+			provider: "vk",
+			setup: func(idRepo *mocks.MockIdentityRepository, oauth *mocks.MockOAuthProvider) {
+				oauth.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(validOAuthResult(), nil)
+				idRepo.EXPECT().FindByProvider(gomock.Any(), "vk", "vk-123").
+					Return(nil, apperrors.IdentityNotFoundError)
+				idRepo.EXPECT().CreateIdentity(gomock.Any(), gomock.Any()).Return(nil)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctrl := gomock.NewController(t)
+			idRepo := mocks.NewMockIdentityRepository(ctrl)
+			oauth := mocks.NewMockOAuthProvider(ctrl)
+
+			tt.setup(idRepo, oauth)
+
+			providers := map[string]authinterface.OAuthProvider{"vk": oauth}
+			uc := NewAuthUsecases(
+				mocks.NewMockAuthRepository(ctrl),
+				idRepo, providers,
+				mocks.NewMockSessionManager(ctrl),
+			)
+
+			err := uc.LinkIdentity(context.Background(), 1, tt.provider, &models.LoginRequest{Code: "code"})
+
+			if tt.wantErr != nil {
+				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestUnlinkIdentity(t *testing.T) {
+	t.Parallel()
+
+	dbErr := errors.New("db error")
+	deleteErr := errors.New("delete error")
+
+	tests := []struct {
+		name    string
+		setup   func(idRepo *mocks.MockIdentityRepository)
+		wantErr error
+	}{
+		{
+			name: "list_error",
+			setup: func(idRepo *mocks.MockIdentityRepository) {
+				idRepo.EXPECT().ListByUserID(gomock.Any(), 1).Return(nil, dbErr)
+			},
+			wantErr: dbErr,
+		},
+		{
+			name: "last_identity",
+			setup: func(idRepo *mocks.MockIdentityRepository) {
+				idRepo.EXPECT().ListByUserID(gomock.Any(), 1).Return([]models.UserIdentity{
+					{ID: 1, Provider: "vk"},
+				}, nil)
+			},
+			wantErr: apperrors.LastIdentityError,
+		},
+		{
+			name: "delete_error",
+			setup: func(idRepo *mocks.MockIdentityRepository) {
+				idRepo.EXPECT().ListByUserID(gomock.Any(), 1).Return([]models.UserIdentity{
+					{ID: 1, Provider: "vk"},
+					{ID: 2, Provider: "google"},
+				}, nil)
+				idRepo.EXPECT().DeleteByUserAndProvider(gomock.Any(), 1, "vk").Return(deleteErr)
+			},
+			wantErr: deleteErr,
+		},
+		{
+			name: "happy_path",
+			setup: func(idRepo *mocks.MockIdentityRepository) {
+				idRepo.EXPECT().ListByUserID(gomock.Any(), 1).Return([]models.UserIdentity{
+					{ID: 1, Provider: "vk"},
+					{ID: 2, Provider: "google"},
+				}, nil)
+				idRepo.EXPECT().DeleteByUserAndProvider(gomock.Any(), 1, "vk").Return(nil)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctrl := gomock.NewController(t)
+			idRepo := mocks.NewMockIdentityRepository(ctrl)
+			tt.setup(idRepo)
+
+			uc := NewAuthUsecases(
+				mocks.NewMockAuthRepository(ctrl),
+				idRepo, nil,
+				mocks.NewMockSessionManager(ctrl),
+			)
+
+			err := uc.UnlinkIdentity(context.Background(), 1, "vk")
+
+			if tt.wantErr != nil {
+				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
 }

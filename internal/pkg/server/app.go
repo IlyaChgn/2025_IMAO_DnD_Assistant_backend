@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	authext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/external"
 	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
@@ -86,6 +87,8 @@ func (srv *Server) Run() error {
 	if cfg == nil {
 		log.Fatal("The config wasn`t opened")
 	}
+
+	cfg.IsProd = isProduction
 
 	logger, err := mylogger.New(cfg.Logger.OutputPath, cfg.Logger.ErrPath)
 	if err != nil {
@@ -211,6 +214,7 @@ func (srv *Server) Run() error {
 	maptileRepository := maptilerepo.NewMapTilesStorage(mongoDatabase, mongoMetrics)
 	mapsRepository := mapsrepo.NewMapsStorage(postgresPool, postgresMetrics)
 	authRepository := authrepo.NewAuthStorage(postgresPool, postgresMetrics)
+	identityRepository := authrepo.NewIdentityStorage(postgresPool, postgresMetrics)
 	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
 	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
@@ -224,7 +228,16 @@ func (srv *Server) Run() error {
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
-	authUsecases := authuc.NewAuthUsecases(authRepository, vkClient, sessionManager)
+	googleClient := authext.NewGoogleOAuth(cfg.GoogleOAuth.ClientID, cfg.GoogleOAuth.ClientSecret,
+		cfg.GoogleOAuth.RedirectURI)
+	yandexClient := authext.NewYandexOAuth(cfg.YandexOAuth.ClientID, cfg.YandexOAuth.ClientSecret)
+
+	oauthProviders := map[string]authinterface.OAuthProvider{
+		vkClient.Name():     vkClient,
+		googleClient.Name(): googleClient,
+		yandexClient.Name(): yandexClient,
+	}
+	authUsecases := authuc.NewAuthUsecases(authRepository, identityRepository, oauthProviders, sessionManager)
 	tableUsecases := tableuc.NewTableUsecases(encounterRepository, tableManager,
 		tableuc.NewRandSessionIDGen(), tableuc.NewRealTimerFactory())
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)

@@ -130,7 +130,7 @@ func TestAddGeneratedCreature_BadJSON_Returns400(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/generated", nil)
 	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid json`)))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.AddGeneratedCreature(rr, req)
@@ -198,7 +198,7 @@ func TestGetUserCreaturesList_BadJSON_Returns400(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
 	req.Body = io.NopCloser(bytes.NewReader([]byte(`{invalid json`)))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetUserCreaturesList(rr, req)
@@ -218,7 +218,7 @@ func TestGetUserCreaturesList_StartPosSizeError_Returns400(t *testing.T) {
 	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: -1, Size: 10})
 	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetUserCreaturesList(rr, req)
@@ -238,7 +238,7 @@ func TestGetUserCreaturesList_UnknownDirectionError_Returns400(t *testing.T) {
 	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: 0, Size: 10})
 	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetUserCreaturesList(rr, req)
@@ -258,7 +258,7 @@ func TestGetUserCreaturesList_GenericError_Returns500(t *testing.T) {
 	body := testhelpers.MustJSON(t, models.BestiaryReq{Start: 0, Size: 10})
 	req := httptest.NewRequest(http.MethodPost, "/api/bestiary/user", nil)
 	req.Body = io.NopCloser(bytes.NewReader(body))
-	req = withUser(req, ctxUserKey, &models.User{ID: 1, Name: "Tester"})
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
 
 	rr := httptest.NewRecorder()
 	handler.GetUserCreaturesList(rr, req)
