@@ -36,3 +36,6 @@ internal/pkg/**/mocks/
 .claude/settings.local.json
 docs/TESTING.local.md
 
+# Database backups (contain production data)
+backups/
+
