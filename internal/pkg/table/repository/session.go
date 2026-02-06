@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"encoding/json"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
@@ -11,6 +13,11 @@ import (
 	"sync"
 	"time"
 )
+
+// incomingMessage is used to parse the type field from incoming WebSocket messages
+type incomingMessage struct {
+	Type models.WSMsgType `json:"type"`
+}
 
 type participant struct {
 	models.Participant
@@ -43,11 +50,22 @@ func (s *session) run(ctx context.Context) {
 		case msg := <-s.broadcast:
 			s.mu.Lock()
 
+			// Check if this is a patch message that should be relayed directly
+			var incoming incomingMessage
+			if err := json.Unmarshal(msg, &incoming); err == nil && models.IsPatchMessage(incoming.Type) {
+				// Relay patch message directly to all participants without merging
+				s.relayPatchMessage(l, msg)
+				s.mu.Unlock()
+				continue
+			}
+
+			// Full state message - merge and broadcast
 			var err error
 
 			s.encounterData, err = merger.Merge(s.encounterData, msg)
 			if err != nil {
 				l.RepoError(err, nil)
+				s.mu.Unlock()
 				return
 			}
 
@@ -66,6 +84,22 @@ func (s *session) run(ctx context.Context) {
 
 			s.mu.Unlock()
 		}
+	}
+}
+
+// relayPatchMessage broadcasts a patch message directly to all participants without merging.
+// Must be called with s.mu held.
+func (s *session) relayPatchMessage(l logger.Logger, msg []byte) {
+	for id, p := range s.participants {
+		err := p.Conn.WriteMessage(websocket.TextMessage, msg)
+		if err != nil {
+			l.RepoError(err, nil)
+			p.Conn.Close()
+
+			delete(s.participants, id)
+		}
+
+		s.metrics.IncSentMsgs()
 	}
 }
 
