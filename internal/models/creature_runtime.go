@@ -38,11 +38,11 @@ type ActiveCondition struct {
 	TurnEntityID string       `json:"turnEntityID,omitempty" bson:"turnEntityID,omitempty"` // whose turn triggers end
 
 	// Save to end
-	SaveToEnd   *SaveToEndCondition `json:"saveToEnd,omitempty" bson:"saveToEnd,omitempty"`
+	SaveToEnd *SaveToEndCondition `json:"saveToEnd,omitempty" bson:"saveToEnd,omitempty"`
 
 	// Escape (for grapple/restrain)
-	EscapeDC    int    `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`
-	EscapeType  string `json:"escapeType,omitempty" bson:"escapeType,omitempty"` // "STR", "DEX", "Athletics_vs_Acrobatics"
+	EscapeDC   int    `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`
+	EscapeType string `json:"escapeType,omitempty" bson:"escapeType,omitempty"` // "STR", "DEX", "Athletics_vs_Acrobatics"
 
 	// Extra data (exhaustion level, custom description)
 	Level       int    `json:"level,omitempty" bson:"level,omitempty"` // for exhaustion (1-6)
@@ -53,18 +53,18 @@ type ActiveCondition struct {
 type DurationType string
 
 const (
-	DurationRounds      DurationType = "rounds"       // N rounds
-	DurationUntilTurn   DurationType = "until_turn"   // until start/end of someone's turn
-	DurationUntilSave   DurationType = "until_save"   // until successful save
-	DurationPermanent   DurationType = "permanent"    // until removed (dispel, rest, etc.)
+	DurationRounds        DurationType = "rounds"        // N rounds
+	DurationUntilTurn     DurationType = "until_turn"    // until start/end of someone's turn
+	DurationUntilSave     DurationType = "until_save"    // until successful save
+	DurationPermanent     DurationType = "permanent"     // until removed (dispel, rest, etc.)
 	DurationConcentration DurationType = "concentration" // until caster loses concentration
 )
 
 // SaveToEndCondition describes a repeating save to end a condition.
 type SaveToEndCondition struct {
-	Ability   AbilityType `json:"ability" bson:"ability"` // DEX, CON, WIS
-	DC        int         `json:"dc" bson:"dc"`
-	Timing    string      `json:"timing" bson:"timing"` // "end_of_turn", "start_of_turn"
+	Ability AbilityType `json:"ability" bson:"ability"` // DEX, CON, WIS
+	DC      int         `json:"dc" bson:"dc"`
+	Timing  string      `json:"timing" bson:"timing"` // "end_of_turn", "start_of_turn"
 }
 
 // ResourceState tracks all expendable resources.
@@ -96,11 +96,11 @@ type ResourceState struct {
 
 // ConcentrationState tracks what a creature is concentrating on.
 type ConcentrationState struct {
-	EffectName   string `json:"effectName" bson:"effectName"`     // "Hold Person", "Bless"
-	EffectID     string `json:"effectID,omitempty" bson:"effectID,omitempty"` // reference to spell/ability
+	EffectName   string   `json:"effectName" bson:"effectName"`                   // "Hold Person", "Bless"
+	EffectID     string   `json:"effectID,omitempty" bson:"effectID,omitempty"`   // reference to spell/ability
 	TargetIDs    []string `json:"targetIDs,omitempty" bson:"targetIDs,omitempty"` // affected creatures
-	RoundsActive int    `json:"roundsActive,omitempty" bson:"roundsActive,omitempty"`
-	MaxDuration  int    `json:"maxDuration,omitempty" bson:"maxDuration,omitempty"` // in rounds, 0 = unlimited
+	RoundsActive int      `json:"roundsActive,omitempty" bson:"roundsActive,omitempty"`
+	MaxDuration  int      `json:"maxDuration,omitempty" bson:"maxDuration,omitempty"` // in rounds, 0 = unlimited
 }
 
 // DeathSaveState tracks death saving throws for creatures at 0 HP.
@@ -112,12 +112,12 @@ type DeathSaveState struct {
 
 // StatModifier represents a temporary modification to a creature's stats.
 type StatModifier struct {
-	ID          string           `json:"id" bson:"id"`
-	Name        string           `json:"name" bson:"name"`           // "Bless", "Shield of Faith"
-	SourceID    string           `json:"sourceID,omitempty" bson:"sourceID,omitempty"`
-	Modifiers   []ModifierEffect `json:"modifiers" bson:"modifiers"`
-	Duration    DurationType     `json:"duration" bson:"duration"`
-	RoundsLeft  int              `json:"roundsLeft,omitempty" bson:"roundsLeft,omitempty"`
+	ID         string           `json:"id" bson:"id"`
+	Name       string           `json:"name" bson:"name"` // "Bless", "Shield of Faith"
+	SourceID   string           `json:"sourceID,omitempty" bson:"sourceID,omitempty"`
+	Modifiers  []ModifierEffect `json:"modifiers" bson:"modifiers"`
+	Duration   DurationType     `json:"duration" bson:"duration"`
+	RoundsLeft int              `json:"roundsLeft,omitempty" bson:"roundsLeft,omitempty"`
 }
 
 // ModifierEffect describes a single stat modification.
@@ -138,7 +138,7 @@ const (
 	ModTargetAbilityChecks ModifierTarget = "ability_checks"
 	ModTargetDamage        ModifierTarget = "damage"
 	ModTargetSpeed         ModifierTarget = "speed"
-	ModTargetHP            ModifierTarget = "hp"            // temp HP or max HP
+	ModTargetHP            ModifierTarget = "hp" // temp HP or max HP
 	ModTargetSTR           ModifierTarget = "str"
 	ModTargetDEX           ModifierTarget = "dex"
 	ModTargetCON           ModifierTarget = "con"
@@ -151,21 +151,21 @@ const (
 type ModifierOp string
 
 const (
-	ModOpAdd       ModifierOp = "add"       // +2 to AC
-	ModOpMultiply  ModifierOp = "multiply"  // speed * 2 (Haste)
-	ModOpSet       ModifierOp = "set"       // set speed to 0
-	ModOpAdvantage ModifierOp = "advantage" // advantage on rolls
+	ModOpAdd          ModifierOp = "add"       // +2 to AC
+	ModOpMultiply     ModifierOp = "multiply"  // speed * 2 (Haste)
+	ModOpSet          ModifierOp = "set"       // set speed to 0
+	ModOpAdvantage    ModifierOp = "advantage" // advantage on rolls
 	ModOpDisadvantage ModifierOp = "disadvantage"
-	ModOpDiceBonus ModifierOp = "dice_bonus" // +1d4 (Bless, Guidance)
+	ModOpDiceBonus    ModifierOp = "dice_bonus" // +1d4 (Bless, Guidance)
 )
 
 // ParticipantFull extends the basic Participant with runtime state.
 // This is the complete representation for automation-enabled encounters.
 type ParticipantFull struct {
 	// Basic fields (matching frontend Participant)
-	CreatureID  string `json:"_id" bson:"_id"`   // reference to creature template
-	InstanceID  string `json:"id" bson:"id"`     // unique instance in this encounter
-	Initiative  int    `json:"initiative" bson:"initiative"`
+	CreatureID  string            `json:"_id" bson:"_id"` // reference to creature template
+	InstanceID  string            `json:"id" bson:"id"`   // unique instance in this encounter
+	Initiative  int               `json:"initiative" bson:"initiative"`
 	CellsCoords *CellsCoordinates `json:"cellsCoords,omitempty" bson:"cellsCoords,omitempty"`
 
 	// Display overrides (for when DM renames a goblin to "Goblin Chief")

@@ -74,12 +74,12 @@ type SpellKnown struct {
 // SpellQuickRef contains commonly-needed spell data for quick reference.
 // Full spell details would come from a separate spell database.
 type SpellQuickRef struct {
-	CastingTime   string `json:"castingTime" bson:"castingTime"`     // "1 action", "1 bonus action"
-	Range         string `json:"range" bson:"range"`                 // "60 feet", "Self", "Touch"
-	Duration      string `json:"duration" bson:"duration"`           // "1 minute", "Instantaneous"
+	CastingTime   string `json:"castingTime" bson:"castingTime"` // "1 action", "1 bonus action"
+	Range         string `json:"range" bson:"range"`             // "60 feet", "Self", "Touch"
+	Duration      string `json:"duration" bson:"duration"`       // "1 minute", "Instantaneous"
 	Concentration bool   `json:"concentration" bson:"concentration"`
 	Ritual        bool   `json:"ritual,omitempty" bson:"ritual,omitempty"`
-	Components    string `json:"components" bson:"components"`       // "V, S, M (a bit of fur)"
+	Components    string `json:"components" bson:"components"` // "V, S, M (a bit of fur)"
 }
 
 // SpellSchool represents the eight schools of magic in D&D.
@@ -99,20 +99,20 @@ const (
 // Spell represents a complete spell definition (for spell database).
 // This would be stored separately from creatures, referenced by SpellID.
 type Spell struct {
-	ID          string     `json:"id" bson:"_id"`
-	Name        Name       `json:"name" bson:"name"` // rus/eng names
-	Level       int        `json:"level" bson:"level"`
-	School      SpellSchool `json:"school" bson:"school"`
+	ID     string      `json:"id" bson:"_id"`
+	Name   Name        `json:"name" bson:"name"` // rus/eng names
+	Level  int         `json:"level" bson:"level"`
+	School SpellSchool `json:"school" bson:"school"`
 
 	// Casting
-	CastingTime CastingTime `json:"castingTime" bson:"castingTime"`
-	Range       SpellRange  `json:"range" bson:"range"`
+	CastingTime CastingTime     `json:"castingTime" bson:"castingTime"`
+	Range       SpellRange      `json:"range" bson:"range"`
 	Components  SpellComponents `json:"components" bson:"components"`
-	Duration    SpellDuration `json:"duration" bson:"duration"`
+	Duration    SpellDuration   `json:"duration" bson:"duration"`
 
 	// Effects
-	Description     string `json:"description" bson:"description"`
-	HigherLevels    string `json:"higherLevels,omitempty" bson:"higherLevels,omitempty"`
+	Description  string `json:"description" bson:"description"`
+	HigherLevels string `json:"higherLevels,omitempty" bson:"higherLevels,omitempty"`
 
 	// Automation data
 	Effects []SpellEffect `json:"effects,omitempty" bson:"effects,omitempty"`
@@ -125,7 +125,7 @@ type Spell struct {
 // CastingTime describes how long it takes to cast a spell.
 type CastingTime struct {
 	Type     CastingTimeType `json:"type" bson:"type"`
-	Amount   int             `json:"amount,omitempty" bson:"amount,omitempty"` // for minutes/hours
+	Amount   int             `json:"amount,omitempty" bson:"amount,omitempty"`     // for minutes/hours
 	Reaction string          `json:"reaction,omitempty" bson:"reaction,omitempty"` // trigger for reactions
 }
 
@@ -159,12 +159,12 @@ const (
 
 // SpellComponents describes the components required to cast a spell.
 type SpellComponents struct {
-	Verbal   bool   `json:"verbal" bson:"verbal"`
-	Somatic  bool   `json:"somatic" bson:"somatic"`
-	Material bool   `json:"material" bson:"material"`
-	Materials string `json:"materials,omitempty" bson:"materials,omitempty"` // description
-	MaterialCost int `json:"materialCost,omitempty" bson:"materialCost,omitempty"` // gp, if consumed
-	MaterialConsumed bool `json:"materialConsumed,omitempty" bson:"materialConsumed,omitempty"`
+	Verbal           bool   `json:"verbal" bson:"verbal"`
+	Somatic          bool   `json:"somatic" bson:"somatic"`
+	Material         bool   `json:"material" bson:"material"`
+	Materials        string `json:"materials,omitempty" bson:"materials,omitempty"`       // description
+	MaterialCost     int    `json:"materialCost,omitempty" bson:"materialCost,omitempty"` // gp, if consumed
+	MaterialConsumed bool   `json:"materialConsumed,omitempty" bson:"materialConsumed,omitempty"`
 }
 
 // SpellDuration describes how long a spell lasts.
@@ -180,10 +180,10 @@ type SpellDuration struct {
 type SpellDurationType string
 
 const (
-	DurationInstantaneous SpellDurationType = "instantaneous"
-	DurationTimed         SpellDurationType = "timed"
+	DurationInstantaneous  SpellDurationType = "instantaneous"
+	DurationTimed          SpellDurationType = "timed"
 	DurationUntilDispelled SpellDurationType = "until_dispelled"
-	DurationSpecial       SpellDurationType = "special"
+	DurationSpecial        SpellDurationType = "special"
 )
 
 // SpellEffect describes a mechanical effect of a spell for automation.
@@ -192,8 +192,8 @@ type SpellEffect struct {
 	Trigger SpellEffectTrigger `json:"trigger" bson:"trigger"`
 
 	// Targeting
-	Target     SpellTarget   `json:"target" bson:"target"`
-	Area       *AreaOfEffect `json:"area,omitempty" bson:"area,omitempty"`
+	Target SpellTarget   `json:"target" bson:"target"`
+	Area   *AreaOfEffect `json:"area,omitempty" bson:"area,omitempty"`
 
 	// Effect types (one or more)
 	Damage      *SpellDamage     `json:"damage,omitempty" bson:"damage,omitempty"`
@@ -213,14 +213,14 @@ const (
 	TriggerOnFailedSave SpellEffectTrigger = "on_failed_save"
 	TriggerStartOfTurn  SpellEffectTrigger = "start_of_turn"
 	TriggerEndOfTurn    SpellEffectTrigger = "end_of_turn"
-	TriggerOnEnter      SpellEffectTrigger = "on_enter"      // entering spell area
+	TriggerOnEnter      SpellEffectTrigger = "on_enter" // entering spell area
 	TriggerOnExit       SpellEffectTrigger = "on_exit"
 )
 
 // SpellTarget defines what a spell can target.
 type SpellTarget struct {
 	Type   SpellTargetType `json:"type" bson:"type"`
-	Count  int             `json:"count,omitempty" bson:"count,omitempty"` // number of targets
+	Count  int             `json:"count,omitempty" bson:"count,omitempty"`   // number of targets
 	Filter string          `json:"filter,omitempty" bson:"filter,omitempty"` // "creature", "humanoid", "ally"
 }
 
@@ -228,26 +228,26 @@ type SpellTarget struct {
 type SpellTargetType string
 
 const (
-	TargetSelf       SpellTargetType = "self"
-	TargetCreature   SpellTargetType = "creature"
-	TargetCreatures  SpellTargetType = "creatures"
-	TargetPoint      SpellTargetType = "point"
-	TargetObject     SpellTargetType = "object"
-	TargetArea       SpellTargetType = "area"
-	TargetWilling    SpellTargetType = "willing"
+	TargetSelf      SpellTargetType = "self"
+	TargetCreature  SpellTargetType = "creature"
+	TargetCreatures SpellTargetType = "creatures"
+	TargetPoint     SpellTargetType = "point"
+	TargetObject    SpellTargetType = "object"
+	TargetArea      SpellTargetType = "area"
+	TargetWilling   SpellTargetType = "willing"
 )
 
 // SpellDamage describes damage dealt by a spell.
 type SpellDamage struct {
-	Base       DamageRoll `json:"base" bson:"base"`
-	PerLevel   *DamageRoll `json:"perLevel,omitempty" bson:"perLevel,omitempty"` // additional per spell level
-	CantripsScale bool `json:"cantripsScale,omitempty" bson:"cantripsScale,omitempty"` // scales with caster level
+	Base          DamageRoll  `json:"base" bson:"base"`
+	PerLevel      *DamageRoll `json:"perLevel,omitempty" bson:"perLevel,omitempty"`           // additional per spell level
+	CantripsScale bool        `json:"cantripsScale,omitempty" bson:"cantripsScale,omitempty"` // scales with caster level
 }
 
 // SummonEffect describes a summoning spell.
 type SummonEffect struct {
-	CreatureType string `json:"creatureType" bson:"creatureType"` // "beast", "elemental", etc.
+	CreatureType string `json:"creatureType" bson:"creatureType"`       // "beast", "elemental", etc.
 	CRMax        string `json:"crMax,omitempty" bson:"crMax,omitempty"` // max CR of summoned creature
-	Count        string `json:"count" bson:"count"` // "1", "1d4+1", etc.
+	Count        string `json:"count" bson:"count"`                     // "1", "1d4+1", etc.
 	Duration     string `json:"duration" bson:"duration"`
 }

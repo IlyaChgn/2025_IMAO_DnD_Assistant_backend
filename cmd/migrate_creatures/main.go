@@ -20,10 +20,10 @@ import (
 
 // Command line flags
 var (
-	dryRun    = flag.Bool("dry-run", true, "Run without writing to database")
-	limit     = flag.Int("limit", 0, "Limit number of creatures to process (0 = all)")
-	verbose   = flag.Bool("verbose", false, "Print detailed output for each creature")
-	mongoURI  = flag.String("mongo", "", "MongoDB connection URI (or set MONGODB env var)")
+	dryRun     = flag.Bool("dry-run", true, "Run without writing to database")
+	limit      = flag.Int("limit", 0, "Limit number of creatures to process (0 = all)")
+	verbose    = flag.Bool("verbose", false, "Print detailed output for each creature")
+	mongoURI   = flag.String("mongo", "", "MongoDB connection URI (or set MONGODB env var)")
 	creatureID = flag.String("id", "", "Process single creature by ID")
 )
 
@@ -151,14 +151,14 @@ type SkippedInfo struct {
 
 // MigrationResult contains the result of migrating a single creature
 type MigrationResult struct {
-	Updates         bson.M
-	Movement        *Movement
-	Vision          *Vision
+	Updates           bson.M
+	Movement          *Movement
+	Vision            *Vision
 	StructuredActions []StructuredAction
-	MovementSkipped bool
-	MovementReason  string
-	ActionsSkipped  bool
-	ActionsReason   string
+	MovementSkipped   bool
+	MovementReason    string
+	ActionsSkipped    bool
+	ActionsReason     string
 }
 
 func (r *MigrationResult) HasChanges() bool {
@@ -183,14 +183,14 @@ type Vision struct {
 }
 
 type StructuredAction struct {
-	ID          string       `json:"id" bson:"id"`
-	Name        string       `json:"name" bson:"name"`
-	Description string       `json:"description" bson:"description"`
-	Category    string       `json:"category" bson:"category"`
-	Attack      *AttackData  `json:"attack,omitempty" bson:"attack,omitempty"`
-	SavingThrow *SaveData    `json:"savingThrow,omitempty" bson:"savingThrow,omitempty"`
+	ID          string        `json:"id" bson:"id"`
+	Name        string        `json:"name" bson:"name"`
+	Description string        `json:"description" bson:"description"`
+	Category    string        `json:"category" bson:"category"`
+	Attack      *AttackData   `json:"attack,omitempty" bson:"attack,omitempty"`
+	SavingThrow *SaveData     `json:"savingThrow,omitempty" bson:"savingThrow,omitempty"`
 	Recharge    *RechargeData `json:"recharge,omitempty" bson:"recharge,omitempty"`
-	Effects     []Effect     `json:"effects,omitempty" bson:"effects,omitempty"`
+	Effects     []Effect      `json:"effects,omitempty" bson:"effects,omitempty"`
 }
 
 type AttackData struct {
