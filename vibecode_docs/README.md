@@ -57,9 +57,10 @@ Documentation for evolving the Creature model to support combat automation — s
 | Document | Type | Status | Description |
 |----------|------|--------|-------------|
 | [creature-model-evolution.md](creature-model-automation/creature-model-evolution.md) | Investigation Report | Implemented | Complete evolution guide: Level 1 (Vision/Movement), Level 2 (StructuredActions), Level 3 (RuntimeState), Level 4 (Spellcasting). Includes before/after schemas, examples, migration strategy. |
-| [migration-rules.md](creature-model-automation/migration-rules.md) | Implementation Notes | Draft | Detailed migration rules for converting legacy Speed→Movement, Senses→Vision, llm_parsed_attack→StructuredActions. Includes mapping tables, edge cases, validation checklist. |
+| [migration-rules.md](creature-model-automation/migration-rules.md) | Implementation Notes | Implemented | Detailed migration rules for converting legacy Speed→Movement, Senses→Vision, llm_parsed_attack→StructuredActions. Includes mapping tables, edge cases, validation checklist. |
+| ~~frontend-integration-guide.md~~ | Integration Guide | **Moved** | Moved to frontend repo: `docs/creature-structured-data-integration.md` |
 
-**Related branch:** `feature/maps-api-align-spec`
+**Related branch:** `data-refactor/new-creature-data-system`
 
 ---
 
