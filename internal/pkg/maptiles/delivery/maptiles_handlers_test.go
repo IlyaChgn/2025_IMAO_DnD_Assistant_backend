@@ -18,12 +18,26 @@ import (
 // --- fake usecase ---
 
 type fakeMapTilesUsecases struct {
-	categories []*models.MapTileCategory
-	err        error
+	categories    []*models.MapTileCategory
+	walkability   *models.TileWalkability
+	walkabilities []*models.TileWalkability
+	err           error
 }
 
 func (f *fakeMapTilesUsecases) GetCategories(_ context.Context, _ int) ([]*models.MapTileCategory, error) {
 	return f.categories, f.err
+}
+
+func (f *fakeMapTilesUsecases) GetWalkabilityByTileID(_ context.Context, _ string) (*models.TileWalkability, error) {
+	return f.walkability, f.err
+}
+
+func (f *fakeMapTilesUsecases) GetWalkabilityBySetID(_ context.Context, _ string) ([]*models.TileWalkability, error) {
+	return f.walkabilities, f.err
+}
+
+func (f *fakeMapTilesUsecases) UpsertWalkability(_ context.Context, _ *models.TileWalkability) error {
+	return f.err
 }
 
 const ctxUserKey = "test-user-key"

@@ -11,4 +11,6 @@ var (
 	InvalidPlacementError  = errors.New("invalid placement")
 	MapValidationError     = errors.New("map validation failed")
 	InvalidUserIDError     = errors.New("invalid user ID")
+	InvalidTileIDError     = errors.New("invalid tile ID")
+	InvalidSetIDError      = errors.New("invalid set ID")
 )
