@@ -9,6 +9,7 @@
 | I need to... | Go to |
 |--------------|-------|
 | Understand documentation standards | [DOCS_STANDARDS.md](DOCS_STANDARDS.md) |
+| Understand Creature Model for automation | [creature-model-automation/](#creature-model-automation) |
 | Design/implement Item System | [item-system/](#item-system) |
 | Implement Maps API | [maps-api/](#maps-api) |
 | Understand User Model refactor | [user-model-refactor-and-oauth/](#user-model-refactor-and-oauth) |
@@ -23,6 +24,10 @@
 vibecode_docs/
 ├── DOCS_STANDARDS.md           # Documentation standards and templates
 ├── README.md                   # This file (table of contents)
+│
+├── creature-model-automation/  # Creature model evolution for automation
+│   ├── creature-model-evolution.md
+│   └── migration-rules.md
 │
 ├── item-system/                # Item System feature documentation
 │   └── item-system-design-plan.md
@@ -44,6 +49,19 @@ vibecode_docs/
 ---
 
 ## Document Index
+
+### creature-model-automation/
+
+Documentation for evolving the Creature model to support combat automation — structured actions, runtime state, spellcasting.
+
+| Document | Type | Status | Description |
+|----------|------|--------|-------------|
+| [creature-model-evolution.md](creature-model-automation/creature-model-evolution.md) | Investigation Report | Implemented | Complete evolution guide: Level 1 (Vision/Movement), Level 2 (StructuredActions), Level 3 (RuntimeState), Level 4 (Spellcasting). Includes before/after schemas, examples, migration strategy. |
+| [migration-rules.md](creature-model-automation/migration-rules.md) | Implementation Notes | Draft | Detailed migration rules for converting legacy Speed→Movement, Senses→Vision, llm_parsed_attack→StructuredActions. Includes mapping tables, edge cases, validation checklist. |
+
+**Related branch:** `feature/maps-api-align-spec`
+
+---
 
 ### item-system/
 
@@ -133,3 +151,4 @@ See [DOCS_STANDARDS.md](DOCS_STANDARDS.md) for templates and metadata requiremen
 | 2026-02-05 | Initial README and DOCS_STANDARDS created |
 | 2026-02-05 | Fixed maps-api-backend-implementation-plan.md link/filename mismatch |
 | 2026-02-05 | Normalized all file/folder names to kebab-case |
+| 2026-02-06 | Added creature-model-automation section with creature-model-evolution.md |
