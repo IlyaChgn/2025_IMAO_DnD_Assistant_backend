@@ -20,3 +20,14 @@ type MapTileCategory struct {
 	// Для фильтрации видимости; во внешнем JSON не нужен
 	UserID string `json:"-" bson:"userID"`
 }
+
+// TileWalkability содержит данные проходимости и окклюзии для одного тайла
+type TileWalkability struct {
+	MongoID     primitive.ObjectID `json:"-"           bson:"_id,omitempty"`
+	TileID      string             `json:"tileId"      bson:"tileId"`
+	SetID       string             `json:"setId"       bson:"setId"`
+	Rows        int                `json:"rows"        bson:"rows"`
+	Cols        int                `json:"cols"        bson:"cols"`
+	Walkability [][]int            `json:"walkability" bson:"walkability"`
+	Occlusion   [][]int            `json:"occlusion"   bson:"occlusion"`
+}

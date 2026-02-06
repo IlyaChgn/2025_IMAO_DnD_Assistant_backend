@@ -67,3 +67,98 @@ func (s *mapTilesStorage) GetCategories(ctx context.Context, userID int) ([]*mod
 
 	return categories, nil
 }
+
+func (s *mapTilesStorage) GetWalkabilityByTileID(ctx context.Context, tileID string) (*models.TileWalkability, error) {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection("map_tile_walkability")
+
+	filter := bson.D{{Key: "tileId", Value: tileID}}
+
+	result, err := dbcall.DBCall[*mongo.SingleResult](fnName, s.metrics, func() (*mongo.SingleResult, error) {
+		return collection.FindOne(ctx, filter), nil
+	})
+	if err != nil {
+		l.RepoError(err, nil)
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	var walkability models.TileWalkability
+	if err := result.Decode(&walkability); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			l.RepoWarn(err, map[string]any{"tileId": tileID})
+			return nil, apperrors.NoDocsErr
+		}
+		l.RepoError(err, nil)
+		return nil, apperrors.DecodeMongoDataErr
+	}
+
+	return &walkability, nil
+}
+
+func (s *mapTilesStorage) GetWalkabilityBySetID(ctx context.Context, setID string) ([]*models.TileWalkability, error) {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection("map_tile_walkability")
+
+	filter := bson.D{{Key: "setId", Value: setID}}
+
+	cursor, err := dbcall.DBCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
+		return collection.Find(ctx, filter)
+	})
+	if err != nil {
+		l.RepoError(err, nil)
+		return nil, apperrors.FindMongoDataErr
+	}
+	defer cursor.Close(ctx)
+
+	var walkabilities []*models.TileWalkability
+
+	for cursor.Next(ctx) {
+		var w models.TileWalkability
+		if err := cursor.Decode(&w); err != nil {
+			l.RepoError(err, nil)
+			return nil, apperrors.DecodeMongoDataErr
+		}
+		walkabilities = append(walkabilities, &w)
+	}
+
+	if len(walkabilities) == 0 {
+		l.RepoWarn(apperrors.NoDocsErr, map[string]any{"setId": setID})
+		return nil, apperrors.NoDocsErr
+	}
+
+	return walkabilities, nil
+}
+
+func (s *mapTilesStorage) UpsertWalkability(ctx context.Context, walkability *models.TileWalkability) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection("map_tile_walkability")
+
+	filter := bson.D{{Key: "tileId", Value: walkability.TileID}}
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "tileId", Value: walkability.TileID},
+			{Key: "setId", Value: walkability.SetID},
+			{Key: "rows", Value: walkability.Rows},
+			{Key: "cols", Value: walkability.Cols},
+			{Key: "walkability", Value: walkability.Walkability},
+			{Key: "occlusion", Value: walkability.Occlusion},
+		}},
+	}
+	opts := options.Update().SetUpsert(true)
+
+	_, err := dbcall.DBCall[any](fnName, s.metrics, func() (any, error) {
+		return collection.UpdateOne(ctx, filter, update, opts)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"tileId": walkability.TileID})
+		return apperrors.UpdateMongoDataErr
+	}
+
+	return nil
+}

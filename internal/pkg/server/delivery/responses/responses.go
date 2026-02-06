@@ -14,6 +14,7 @@ const (
 	StatusBadRequest   = 400
 	StatusUnauthorized = 401
 	StatusForbidden    = 403
+	StatusNotFound     = 404
 
 	StatusInternalServerError = 500
 )
@@ -22,6 +23,7 @@ const (
 	ErrInternalServer = "Server error"
 	ErrVKServer       = "VK server error"
 	ErrOAuthProvider  = "OAuth provider error"
+	ErrNotFound       = "Not found"
 
 	ErrBadJSON               = "Wrong JSON format"
 	ErrBadRequest            = "Bad request"
