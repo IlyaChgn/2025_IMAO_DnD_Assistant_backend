@@ -23,12 +23,14 @@ func validMapData() models.MapData {
 	}
 }
 
+func strPtr(s string) *string { return &s }
+
 // --- tests ---
 
 func TestListMaps(t *testing.T) {
 	t.Parallel()
 
-	expected := &models.MapsList{Maps: []models.MapMetadata{}, Total: 0}
+	expected := []models.MapMetadata{}
 	repoErr := errors.New("db failure")
 
 	tests := []struct {
@@ -128,7 +130,7 @@ func TestCreateMap(t *testing.T) {
 				Name: "Test",
 				Data: models.MapData{
 					SchemaVersion: 1,
-					WidthUnits:    7,
+					WidthUnits:    0,
 					HeightUnits:   12,
 				},
 			},
@@ -199,11 +201,11 @@ func TestGetMapByID(t *testing.T) {
 		wantNil bool
 	}{
 		{
-			name: "no permission returns MapPermissionDenied",
+			name: "no permission returns MapNotFoundError",
 			setup: func(repo *mocks.MockMapsRepository) {
 				repo.EXPECT().CheckPermission(gomock.Any(), "map-id", 1).Return(false)
 			},
-			wantErr: apperrors.MapPermissionDenied,
+			wantErr: apperrors.MapNotFoundError,
 			wantNil: true,
 		},
 		{
@@ -273,20 +275,20 @@ func TestUpdateMap(t *testing.T) {
 		wantErr    error
 	}{
 		{
-			name: "no permission returns MapPermissionDenied",
+			name: "no permission returns MapNotFoundError",
 			req: &models.UpdateMapRequest{
-				Name: "Updated",
+				Name: strPtr("Updated"),
 				Data: validMapData(),
 			},
 			setup: func(repo *mocks.MockMapsRepository) {
 				repo.EXPECT().CheckPermission(gomock.Any(), "map-id", 1).Return(false)
 			},
-			wantErr: apperrors.MapPermissionDenied,
+			wantErr: apperrors.MapNotFoundError,
 		},
 		{
-			name: "validation fails after permission check",
+			name: "validation fails on empty name",
 			req: &models.UpdateMapRequest{
-				Name: "",
+				Name: strPtr(""),
 				Data: validMapData(),
 			},
 			setup: func(repo *mocks.MockMapsRepository) {
@@ -297,24 +299,24 @@ func TestUpdateMap(t *testing.T) {
 		{
 			name: "happy path calls repo",
 			req: &models.UpdateMapRequest{
-				Name: "Updated",
+				Name: strPtr("Updated"),
 				Data: validMapData(),
 			},
 			setup: func(repo *mocks.MockMapsRepository) {
 				repo.EXPECT().CheckPermission(gomock.Any(), "map-id", 1).Return(true)
-				repo.EXPECT().UpdateMap(gomock.Any(), 1, "map-id", "Updated", gomock.Any()).
+				repo.EXPECT().UpdateMap(gomock.Any(), 1, "map-id", strPtr("Updated"), gomock.Any()).
 					Return(expectedMap, nil)
 			},
 		},
 		{
 			name: "repo error is propagated",
 			req: &models.UpdateMapRequest{
-				Name: "Updated",
+				Name: strPtr("Updated"),
 				Data: validMapData(),
 			},
 			setup: func(repo *mocks.MockMapsRepository) {
 				repo.EXPECT().CheckPermission(gomock.Any(), "map-id", 1).Return(true)
-				repo.EXPECT().UpdateMap(gomock.Any(), 1, "map-id", "Updated", gomock.Any()).
+				repo.EXPECT().UpdateMap(gomock.Any(), 1, "map-id", strPtr("Updated"), gomock.Any()).
 					Return(nil, repoErr)
 			},
 			wantErr: repoErr,
@@ -357,11 +359,11 @@ func TestDeleteMap(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "no permission returns MapPermissionDenied",
+			name: "no permission returns MapNotFoundError",
 			setup: func(repo *mocks.MockMapsRepository) {
 				repo.EXPECT().CheckPermission(gomock.Any(), "map-id", 1).Return(false)
 			},
-			wantErr: apperrors.MapPermissionDenied,
+			wantErr: apperrors.MapNotFoundError,
 		},
 		{
 			name: "happy path calls repo",
@@ -406,4 +408,44 @@ func TestDeleteMap(t *testing.T) {
 			}
 		})
 	}
+}
+
+// F.1 #6 - No permission (map not found or wrong user) returns 404
+func TestGetMapByID_NoPermission_Returns404(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	repo := mocks.NewMockMapsRepository(ctrl)
+	repo.EXPECT().CheckPermission(gomock.Any(), "550e8400-e29b-41d4-a716-446655440000", 1).
+		Return(false)
+
+	uc := NewMapsUsecases(repo)
+	result, err := uc.GetMapByID(context.Background(), 1, "550e8400-e29b-41d4-a716-446655440000")
+
+	assert.Nil(t, result)
+	assert.True(t, errors.Is(err, apperrors.MapNotFoundError))
+}
+
+// F.1 #11
+func TestUpdateMap_NameOmitted_PreservesOldName(t *testing.T) {
+	t.Parallel()
+
+	expectedMap := &models.MapFull{ID: "uuid-1", Name: "Old Name"}
+
+	ctrl := gomock.NewController(t)
+	repo := mocks.NewMockMapsRepository(ctrl)
+	repo.EXPECT().CheckPermission(gomock.Any(), "map-id", 1).Return(true)
+	// Verify that nil is passed as name to repo (COALESCE will preserve old name)
+	repo.EXPECT().UpdateMap(gomock.Any(), 1, "map-id", (*string)(nil), gomock.Any()).
+		Return(expectedMap, nil)
+
+	uc := NewMapsUsecases(repo)
+	req := &models.UpdateMapRequest{
+		Name: nil,
+		Data: validMapData(),
+	}
+	result, err := uc.UpdateMap(context.Background(), 1, "map-id", req)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "Old Name", result.Name)
 }

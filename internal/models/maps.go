@@ -51,9 +51,11 @@ type CreateMapRequest struct {
 	Data MapData `json:"data"`
 }
 
-// UpdateMapRequest represents the request to update a map
+// UpdateMapRequest represents the request to update a map.
+// Name is a pointer to support partial updates: nil means "keep current name",
+// non-nil value will be validated and applied (SQL uses COALESCE).
 type UpdateMapRequest struct {
-	Name string  `json:"name"`
+	Name *string `json:"name,omitempty"`
 	Data MapData `json:"data"`
 }
 

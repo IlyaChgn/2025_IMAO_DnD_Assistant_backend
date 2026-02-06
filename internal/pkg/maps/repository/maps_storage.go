@@ -31,18 +31,18 @@ func NewMapsStorage(pool serverrepo.PostgresPool, metrics mymetrics.DBMetrics) m
 func (s *mapsStorage) CheckPermission(ctx context.Context, id string, userID int) bool {
 	fnName := utils.GetFunctionName()
 
-	var hasPermission bool
+	var exists bool
 
-	hasPermission, _ = dbcall.DBCall[bool](fnName, s.metrics, func() (bool, error) {
+	_, _ = dbcall.DBCall[bool](fnName, s.metrics, func() (bool, error) {
 		line := s.pool.QueryRow(ctx, CheckMapPermissionQuery, id, userID)
-		if err := line.Scan(&hasPermission); err != nil {
-			return false, nil
+		if err := line.Scan(&exists); err != nil {
+			return false, err
 		}
 
-		return hasPermission, nil
+		return exists, nil
 	})
 
-	return hasPermission
+	return exists
 }
 
 func (s *mapsStorage) CreateMap(ctx context.Context, userID int, name string, data []byte) (*models.MapFull, error) {
@@ -106,7 +106,7 @@ func (s *mapsStorage) GetMapByID(ctx context.Context, userID int, id string) (*m
 	return &mapFull, nil
 }
 
-func (s *mapsStorage) UpdateMap(ctx context.Context, userID int, id string, name string, data []byte) (*models.MapFull, error) {
+func (s *mapsStorage) UpdateMap(ctx context.Context, userID int, id string, name *string, data []byte) (*models.MapFull, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -165,25 +165,10 @@ func (s *mapsStorage) DeleteMap(ctx context.Context, userID int, id string) erro
 	return nil
 }
 
-func (s *mapsStorage) ListMaps(ctx context.Context, userID int, start, size int) (*models.MapsList, error) {
+func (s *mapsStorage) ListMaps(ctx context.Context, userID int, start, size int) ([]models.MapMetadata, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
-	// Get total count first
-	var total int
-	_, err := dbcall.DBCall[int](fnName+"_count", s.metrics, func() (int, error) {
-		line := s.pool.QueryRow(ctx, CountMapsQuery, userID)
-		if err := line.Scan(&total); err != nil {
-			return 0, err
-		}
-		return total, nil
-	})
-	if err != nil {
-		l.RepoError(err, map[string]any{"userID": userID})
-		return nil, apperrors.QueryError
-	}
-
-	// Get paginated list
 	rows, err := dbcall.DBCall[pgx.Rows](fnName, s.metrics, func() (pgx.Rows, error) {
 		return s.pool.Query(ctx, ListMapsQuery, userID, size, start)
 	})
@@ -195,10 +180,7 @@ func (s *mapsStorage) ListMaps(ctx context.Context, userID int, start, size int)
 		defer rows.Close()
 	}
 
-	list := &models.MapsList{
-		Maps:  make([]models.MapMetadata, 0),
-		Total: total,
-	}
+	list := make([]models.MapMetadata, 0)
 
 	if rows == nil {
 		return list, nil
@@ -213,7 +195,7 @@ func (s *mapsStorage) ListMaps(ctx context.Context, userID int, start, size int)
 			return nil, apperrors.ScanError
 		}
 
-		list.Maps = append(list.Maps, mapMeta)
+		list = append(list, mapMeta)
 	}
 
 	return list, nil

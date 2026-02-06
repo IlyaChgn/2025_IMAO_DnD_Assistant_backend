@@ -10,12 +10,12 @@ import (
 func TestValidateMapRequest_ValidInput(t *testing.T) {
 	data := &models.MapData{
 		SchemaVersion: 1,
-		WidthUnits:    78, // 13 tiles * 6 units
-		HeightUnits:   60, // 10 tiles * 6 units
+		WidthUnits:    13,
+		HeightUnits:   7,
 		Placements: []models.Placement{
 			{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 0, Layer: 0},
-			{ID: "cell:0:1", TileID: "stone", X: 6, Y: 0, Rot: 1, Layer: 1},
-			{ID: "cell:1:0", TileID: "water", X: 0, Y: 6, Rot: 2, Layer: 0},
+			{ID: "cell:0:1", TileID: "stone", X: 5, Y: 0, Rot: 1, Layer: 1},
+			{ID: "cell:1:0", TileID: "water", X: 0, Y: 3, Rot: 2, Layer: 0},
 		},
 	}
 
@@ -47,8 +47,8 @@ func TestValidateMapRequest_InvalidName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			data := &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    78, // 13 tiles * 6 units
-				HeightUnits:   60, // 10 tiles * 6 units
+				WidthUnits:    13,
+				HeightUnits:   7,
 				Placements:    []models.Placement{},
 			}
 
@@ -86,8 +86,8 @@ func TestValidateMapRequest_InvalidSchemaVersion(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			data := &models.MapData{
 				SchemaVersion: tt.version,
-				WidthUnits:    78, // 13 tiles * 6 units
-				HeightUnits:   60, // 10 tiles * 6 units
+				WidthUnits:    13,
+				HeightUnits:   7,
 				Placements:    []models.Placement{},
 			}
 
@@ -119,14 +119,11 @@ func TestValidateMapRequest_InvalidDimensions(t *testing.T) {
 		expectWidth  bool
 		expectHeight bool
 	}{
-		{"zero width", 0, 60, true, false},
-		{"negative width", -10, 60, true, false},
-		{"zero height", 78, 0, false, true},
-		{"negative height", 78, -10, false, true},
+		{"zero width", 0, 7, true, false},
+		{"negative width", -10, 7, true, false},
+		{"zero height", 13, 0, false, true},
+		{"negative height", 13, -10, false, true},
 		{"both invalid", 0, 0, true, true},
-		{"width not multiple of 6", 77, 60, true, false},
-		{"height not multiple of 6", 78, 61, false, true},
-		{"both not multiple of 6", 77, 61, true, true},
 	}
 
 	for _, tt := range tests {
@@ -192,16 +189,6 @@ func TestValidateMapRequest_InvalidPlacements(t *testing.T) {
 			expected:  "data.placements[0].y",
 		},
 		{
-			name:      "x not multiple of 6",
-			placement: models.Placement{ID: "cell:0:0", TileID: "grass", X: 7, Y: 0, Rot: 0},
-			expected:  "data.placements[0].x",
-		},
-		{
-			name:      "y not multiple of 6",
-			placement: models.Placement{ID: "cell:0:0", TileID: "grass", X: 0, Y: 5, Rot: 0},
-			expected:  "data.placements[0].y",
-		},
-		{
 			name:      "invalid rotation negative",
 			placement: models.Placement{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: -1},
 			expected:  "data.placements[0].rot",
@@ -211,14 +198,19 @@ func TestValidateMapRequest_InvalidPlacements(t *testing.T) {
 			placement: models.Placement{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 4},
 			expected:  "data.placements[0].rot",
 		},
+		{
+			name:      "negative layer",
+			placement: models.Placement{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 0, Layer: -1},
+			expected:  "data.placements[0].layer",
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			data := &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    78, // 13 tiles * 6 units
-				HeightUnits:   60, // 10 tiles * 6 units
+				WidthUnits:    13,
+				HeightUnits:   7,
 				Placements:    []models.Placement{tt.placement},
 			}
 
@@ -245,12 +237,12 @@ func TestValidateMapRequest_InvalidPlacements(t *testing.T) {
 func TestValidateMapRequest_MultiplePlacements(t *testing.T) {
 	data := &models.MapData{
 		SchemaVersion: 1,
-		WidthUnits:    78, // 13 tiles * 6 units
-		HeightUnits:   60, // 10 tiles * 6 units
+		WidthUnits:    13,
+		HeightUnits:   7,
 		Placements: []models.Placement{
 			{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 0}, // valid
-			{ID: "", TileID: "stone", X: 6, Y: 0, Rot: 1},         // invalid id
-			{ID: "cell:0:2", TileID: "", X: 12, Y: 0, Rot: 2},     // invalid tileId
+			{ID: "", TileID: "stone", X: 5, Y: 0, Rot: 1},         // invalid id
+			{ID: "cell:0:2", TileID: "", X: 9, Y: 0, Rot: 2},      // invalid tileId
 		},
 	}
 
@@ -289,8 +281,8 @@ func TestValidateMapRequest_EdgeCases(t *testing.T) {
 			mapName: "A",
 			data: &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    6, // 1 tile * 6 units
-				HeightUnits:   6, // 1 tile * 6 units
+				WidthUnits:    1,
+				HeightUnits:   1,
 				Placements:    []models.Placement{},
 			},
 			expectErr: false,
@@ -300,8 +292,8 @@ func TestValidateMapRequest_EdgeCases(t *testing.T) {
 			mapName: strings.Repeat("a", 255),
 			data: &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    6, // 1 tile * 6 units
-				HeightUnits:   6, // 1 tile * 6 units
+				WidthUnits:    1,
+				HeightUnits:   1,
 				Placements:    []models.Placement{},
 			},
 			expectErr: false,
@@ -311,8 +303,8 @@ func TestValidateMapRequest_EdgeCases(t *testing.T) {
 			mapName: "Test",
 			data: &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    12, // 2 tiles * 6 units
-				HeightUnits:   12, // 2 tiles * 6 units
+				WidthUnits:    10,
+				HeightUnits:   10,
 				Placements: []models.Placement{
 					{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 0},
 				},
@@ -324,8 +316,8 @@ func TestValidateMapRequest_EdgeCases(t *testing.T) {
 			mapName: "Test",
 			data: &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    12, // 2 tiles * 6 units
-				HeightUnits:   12, // 2 tiles * 6 units
+				WidthUnits:    10,
+				HeightUnits:   10,
 				Placements: []models.Placement{
 					{ID: "cell:0:0", TileID: "grass", X: 0, Y: 0, Rot: 3},
 				},
@@ -337,23 +329,23 @@ func TestValidateMapRequest_EdgeCases(t *testing.T) {
 			mapName: "Test",
 			data: &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    12, // 2 tiles * 6 units
-				HeightUnits:   12, // 2 tiles * 6 units
+				WidthUnits:    10,
+				HeightUnits:   10,
 				Placements:    []models.Placement{},
 			},
 			expectErr: false,
 		},
 		{
-			name:    "placement at non-zero aligned position",
+			name:    "placement at non-aligned position",
 			mapName: "Test",
 			data: &models.MapData{
 				SchemaVersion: 1,
-				WidthUnits:    24, // 4 tiles * 6 units
-				HeightUnits:   24, // 4 tiles * 6 units
+				WidthUnits:    100,
+				HeightUnits:   100,
 				Placements: []models.Placement{
-					{ID: "cell:1:1", TileID: "grass", X: 6, Y: 6, Rot: 0},
-					{ID: "cell:2:2", TileID: "stone", X: 12, Y: 12, Rot: 1},
-					{ID: "cell:3:0", TileID: "water", X: 18, Y: 0, Rot: 2},
+					{ID: "cell:1:1", TileID: "grass", X: 5, Y: 7, Rot: 0},
+					{ID: "cell:2:2", TileID: "stone", X: 13, Y: 11, Rot: 1},
+					{ID: "cell:3:0", TileID: "water", X: 17, Y: 0, Rot: 2},
 				},
 			},
 			expectErr: false,
@@ -372,6 +364,55 @@ func TestValidateMapRequest_EdgeCases(t *testing.T) {
 		})
 	}
 }
+
+// F.1 #1: No divisibility check — already covered by TestValidateMapRequest_ValidInput (widthUnits=13, heightUnits=7)
+
+// F.1 #2: Layer negative — already covered by TestValidateMapRequest_InvalidPlacements "negative layer"
+
+// F.1 #4
+func TestValidateUpdateMapRequest_NameNil_OK(t *testing.T) {
+	validData := &models.MapData{
+		SchemaVersion: 1,
+		WidthUnits:    13,
+		HeightUnits:   7,
+		Placements:    []models.Placement{},
+	}
+
+	errors := ValidateUpdateMapRequest(nil, validData)
+	if len(errors) != 0 {
+		t.Errorf("Expected no errors when name is nil, got %d: %v", len(errors), errors)
+	}
+}
+
+// F.1 #5
+func TestValidateUpdateMapRequest_NameEmpty_Error(t *testing.T) {
+	validData := &models.MapData{
+		SchemaVersion: 1,
+		WidthUnits:    13,
+		HeightUnits:   7,
+		Placements:    []models.Placement{},
+	}
+
+	empty := ""
+	errors := ValidateUpdateMapRequest(&empty, validData)
+	if len(errors) == 0 {
+		t.Error("Expected validation error for empty name")
+		return
+	}
+
+	found := false
+	for _, err := range errors {
+		if err.Field == "name" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Errorf("Expected error for field 'name', got: %v", errors)
+	}
+}
+
+// F.1 #3: CategorizeValidationErrors name → INVALID_NAME — already covered below in TestCategorizeValidationErrors
 
 func TestCategorizeValidationErrors(t *testing.T) {
 	tests := []struct {
@@ -408,11 +449,11 @@ func TestCategorizeValidationErrors(t *testing.T) {
 			expected: "INVALID_PLACEMENT",
 		},
 		{
-			name: "name error (default)",
+			name: "name error returns INVALID_NAME",
 			errors: []models.ValidationError{
-				{Field: "name", Message: "invalid"},
+				{Field: "name", Message: "too short"},
 			},
-			expected: "BAD_REQUEST",
+			expected: "INVALID_NAME",
 		},
 		{
 			name:     "empty errors",

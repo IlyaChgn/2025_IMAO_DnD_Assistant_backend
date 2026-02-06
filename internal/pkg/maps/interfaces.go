@@ -11,9 +11,9 @@ import (
 type MapsRepository interface {
 	CreateMap(ctx context.Context, userID int, name string, data []byte) (*models.MapFull, error)
 	GetMapByID(ctx context.Context, userID int, id string) (*models.MapFull, error)
-	UpdateMap(ctx context.Context, userID int, id string, name string, data []byte) (*models.MapFull, error)
+	UpdateMap(ctx context.Context, userID int, id string, name *string, data []byte) (*models.MapFull, error)
 	DeleteMap(ctx context.Context, userID int, id string) error
-	ListMaps(ctx context.Context, userID int, start, size int) (*models.MapsList, error)
+	ListMaps(ctx context.Context, userID int, start, size int) ([]models.MapMetadata, error)
 	CheckPermission(ctx context.Context, id string, userID int) bool
 }
 
@@ -22,5 +22,5 @@ type MapsUsecases interface {
 	GetMapByID(ctx context.Context, userID int, id string) (*models.MapFull, error)
 	UpdateMap(ctx context.Context, userID int, id string, req *models.UpdateMapRequest) (*models.MapFull, error)
 	DeleteMap(ctx context.Context, userID int, id string) error
-	ListMaps(ctx context.Context, userID int, start, size int) (*models.MapsList, error)
+	ListMaps(ctx context.Context, userID int, start, size int) ([]models.MapMetadata, error)
 }
