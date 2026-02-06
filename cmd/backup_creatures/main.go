@@ -16,7 +16,7 @@ import (
 func main() {
 	uri := os.Getenv("MONGODB")
 	if uri == "" {
-		uri = "mongodb://encounterium_root_user:HfMu8w79hPUEJyrS3RchS2Gs@encounterium.ru:27019/?authSource=admin&tls=true"
+		log.Fatal("MONGODB environment variable is required")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
@@ -67,7 +67,10 @@ func main() {
 	}
 
 	// Get file size
-	info, _ := file.Stat()
+	info, err := file.Stat()
+	if err != nil {
+		log.Fatal("Stat error:", err)
+	}
 	fmt.Printf("Backup saved to: %s\n", filename)
 	fmt.Printf("File size: %.2f MB\n", float64(info.Size())/(1024*1024))
 }

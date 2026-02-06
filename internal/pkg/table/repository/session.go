@@ -19,6 +19,12 @@ type incomingMessage struct {
 	Type models.WSMsgType `json:"type"`
 }
 
+// broadcastMessage carries a WebSocket message together with the sender's user ID.
+type broadcastMessage struct {
+	senderID int
+	data     []byte
+}
+
 type participant struct {
 	models.Participant
 	Conn *websocket.Conn
@@ -33,7 +39,7 @@ type session struct {
 	adminName       string
 	participants    map[int]*participant // Ключ - UserID
 	playersNum      int
-	broadcast       chan []byte
+	broadcast       chan broadcastMessage
 	refreshCallback func(sessionID string) // Вызов обновления таймера
 
 	mu sync.RWMutex
@@ -47,14 +53,16 @@ func (s *session) run(ctx context.Context) {
 
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case msg := <-s.broadcast:
 			s.mu.Lock()
 
 			// Check if this is a patch message that should be relayed directly
 			var incoming incomingMessage
-			if err := json.Unmarshal(msg, &incoming); err == nil && models.IsPatchMessage(incoming.Type) {
-				// Relay patch message directly to all participants without merging
-				s.relayPatchMessage(l, msg)
+			if err := json.Unmarshal(msg.data, &incoming); err == nil && models.IsPatchMessage(incoming.Type) {
+				// Relay patch message directly to all participants except the sender
+				s.relayPatchMessage(l, msg.senderID, msg.data)
 				s.mu.Unlock()
 				continue
 			}
@@ -62,41 +70,53 @@ func (s *session) run(ctx context.Context) {
 			// Full state message - merge and broadcast
 			var err error
 
-			s.encounterData, err = merger.Merge(s.encounterData, msg)
+			s.encounterData, err = merger.Merge(s.encounterData, msg.data)
 			if err != nil {
 				l.RepoError(err, nil)
 				s.mu.Unlock()
-				return
+				continue
 			}
 
-			for id, p := range s.participants {
-				err := responses.SendWSOkResponse(p.Conn, models.BattleInfo,
-					&models.EncounterData{EncounterData: s.encounterData})
-				if err != nil {
-					l.RepoError(err, nil)
-					p.Conn.Close()
-
-					delete(s.participants, id)
-				}
-
-				s.metrics.IncSentMsgs()
-			}
+			s.broadcastState(l)
 
 			s.mu.Unlock()
 		}
 	}
 }
 
-// relayPatchMessage broadcasts a patch message directly to all participants without merging.
+// relayPatchMessage broadcasts a patch message directly to all participants except the sender.
 // Must be called with s.mu held.
-func (s *session) relayPatchMessage(l logger.Logger, msg []byte) {
+func (s *session) relayPatchMessage(l logger.Logger, senderID int, msg []byte) {
 	for id, p := range s.participants {
+		if id == senderID {
+			continue
+		}
+
 		err := p.Conn.WriteMessage(websocket.TextMessage, msg)
 		if err != nil {
 			l.RepoError(err, nil)
 			p.Conn.Close()
 
 			delete(s.participants, id)
+			continue
+		}
+
+		s.metrics.IncSentMsgs()
+	}
+}
+
+// broadcastState sends the current encounter state to all participants.
+// Must be called with s.mu held.
+func (s *session) broadcastState(l logger.Logger) {
+	for id, p := range s.participants {
+		err := responses.SendWSOkResponse(p.Conn, models.BattleInfo,
+			&models.EncounterData{EncounterData: s.encounterData})
+		if err != nil {
+			l.RepoError(err, nil)
+			p.Conn.Close()
+
+			delete(s.participants, id)
+			continue
 		}
 
 		s.metrics.IncSentMsgs()

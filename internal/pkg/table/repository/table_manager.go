@@ -40,7 +40,7 @@ func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, e
 		adminID:         admin.ID,
 		adminName:       admin.DisplayName,
 		participants:    make(map[int]*participant),
-		broadcast:       make(chan []byte),
+		broadcast:       make(chan broadcastMessage),
 		refreshCallback: callback,
 		start:           time.Now(),
 		metrics:         tm.sessionMetrics,
@@ -174,7 +174,7 @@ func (tm *tableManager) AddNewConnection(ctx context.Context, user *models.User,
 			}
 
 			activeSession.refreshCallback(sessionID)
-			activeSession.broadcast <- msg
+			activeSession.broadcast <- broadcastMessage{senderID: user.ID, data: msg}
 			activeSession.metrics.IncReceivedMsgs()
 		}
 	}()

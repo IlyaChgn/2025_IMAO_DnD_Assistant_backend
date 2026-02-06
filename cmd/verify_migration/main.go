@@ -16,7 +16,7 @@ import (
 func main() {
 	uri := os.Getenv("MONGODB")
 	if uri == "" {
-		uri = "mongodb://encounterium_root_user:HfMu8w79hPUEJyrS3RchS2Gs@encounterium.ru:27019/?authSource=admin&tls=true"
+		log.Fatal("MONGODB environment variable is required")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -31,10 +31,22 @@ func main() {
 	coll := client.Database("bestiary_db").Collection("creatures")
 
 	// Stats
-	withMovement, _ := coll.CountDocuments(ctx, bson.M{"movement": bson.M{"$exists": true}})
-	withVision, _ := coll.CountDocuments(ctx, bson.M{"vision": bson.M{"$exists": true}})
-	withActions, _ := coll.CountDocuments(ctx, bson.M{"structuredActions": bson.M{"$exists": true}})
-	total, _ := coll.CountDocuments(ctx, bson.M{})
+	withMovement, err := coll.CountDocuments(ctx, bson.M{"movement": bson.M{"$exists": true}})
+	if err != nil {
+		log.Fatal("CountDocuments error:", err)
+	}
+	withVision, err := coll.CountDocuments(ctx, bson.M{"vision": bson.M{"$exists": true}})
+	if err != nil {
+		log.Fatal("CountDocuments error:", err)
+	}
+	withActions, err := coll.CountDocuments(ctx, bson.M{"structuredActions": bson.M{"$exists": true}})
+	if err != nil {
+		log.Fatal("CountDocuments error:", err)
+	}
+	total, err := coll.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		log.Fatal("CountDocuments error:", err)
+	}
 
 	fmt.Println("=== MIGRATION VERIFICATION ===")
 	fmt.Printf("Total creatures: %d\n", total)
@@ -58,7 +70,10 @@ func main() {
 		"structuredActions": goblin["structuredActions"],
 	}
 
-	jsonBytes, _ := json.MarshalIndent(sample, "", "  ")
+	jsonBytes, err := json.MarshalIndent(sample, "", "  ")
+	if err != nil {
+		log.Fatal("MarshalIndent error:", err)
+	}
 	fmt.Println(string(jsonBytes))
 
 	// Sample with darkvision + fly
@@ -71,7 +86,10 @@ func main() {
 			"movement": pseudo["movement"],
 			"vision":   pseudo["vision"],
 		}
-		jsonBytes2, _ := json.MarshalIndent(sample2, "", "  ")
+		jsonBytes2, err := json.MarshalIndent(sample2, "", "  ")
+		if err != nil {
+			log.Fatal("MarshalIndent error:", err)
+		}
 		fmt.Println(string(jsonBytes2))
 	}
 }

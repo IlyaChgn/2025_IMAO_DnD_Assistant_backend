@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -430,6 +431,9 @@ func convertAttacks(attacks bson.A, originalActions bson.A) []StructuredAction {
 		}
 	}
 
+	// Track used IDs to prevent collisions
+	usedIDs := make(map[string]int)
+
 	for _, a := range attacks {
 		attack, ok := a.(bson.M)
 		if !ok {
@@ -444,8 +448,14 @@ func convertAttacks(attacks bson.A, originalActions bson.A) []StructuredAction {
 		// Parse recharge from name
 		cleanName, recharge := parseRecharge(name)
 
+		id := generateID(cleanName)
+		if count, exists := usedIDs[id]; exists {
+			id = fmt.Sprintf("%s-%d", id, count+1)
+		}
+		usedIDs[id]++
+
 		sa := StructuredAction{
-			ID:          generateID(cleanName),
+			ID:          id,
 			Name:        cleanName,
 			Description: descMap[name], // Original HTML
 			Category:    "action",
@@ -486,8 +496,11 @@ func parseRecharge(name string) (string, *RechargeData) {
 		cleanName := re.ReplaceAllString(name, "")
 		cleanName = strings.TrimSpace(cleanName)
 
-		minRoll := 6 // default
-		fmt.Sscanf(matches[1], "%d", &minRoll)
+		minRoll, err := strconv.Atoi(matches[1])
+		if err != nil {
+			log.Printf("Warning: failed to parse recharge value %q: %v", matches[1], err)
+			minRoll = 6
+		}
 
 		return cleanName, &RechargeData{MinRoll: minRoll}
 	}
@@ -554,7 +567,11 @@ func convertToAttackData(attack bson.M) *AttackData {
 	// Bonus
 	if bonus, ok := attack["attack_bonus"].(string); ok {
 		bonus = strings.TrimPrefix(bonus, "+")
-		fmt.Sscanf(bonus, "%d", &data.Bonus)
+		if v, err := strconv.Atoi(strings.TrimSpace(bonus)); err == nil {
+			data.Bonus = v
+		} else {
+			log.Printf("Warning: failed to parse attack_bonus %q: %v", bonus, err)
+		}
 	}
 
 	// Reach
@@ -695,7 +712,7 @@ func mapAttackType(t string) string {
 	case "ranged":
 		return "ranged_weapon"
 	case "melee/ranged", "ranged/melee", "ranged_or_melee", "both", "either", "versatile":
-		return "melee_weapon"
+		return "melee_or_ranged_weapon"
 	case "touch":
 		return "melee_spell"
 	default:
@@ -810,8 +827,11 @@ func parseDistance(s string) int {
 	re := regexp.MustCompile(`(\d+)\s*(?:фт|фут)`)
 	matches := re.FindStringSubmatch(s)
 	if len(matches) >= 2 {
-		var d int
-		fmt.Sscanf(matches[1], "%d", &d)
+		d, err := strconv.Atoi(matches[1])
+		if err != nil {
+			log.Printf("Warning: failed to parse distance %q: %v", matches[1], err)
+			return 0
+		}
 		return d
 	}
 	return 0
@@ -822,9 +842,12 @@ func parseRange(s string) *RangeData {
 	re := regexp.MustCompile(`(\d+)/(\d+)`)
 	matches := re.FindStringSubmatch(s)
 	if len(matches) >= 3 {
-		var normal, long int
-		fmt.Sscanf(matches[1], "%d", &normal)
-		fmt.Sscanf(matches[2], "%d", &long)
+		normal, err1 := strconv.Atoi(matches[1])
+		long, err2 := strconv.Atoi(matches[2])
+		if err1 != nil || err2 != nil {
+			log.Printf("Warning: failed to parse range %q", s)
+			return nil
+		}
 		return &RangeData{Normal: normal, Long: long}
 	}
 
@@ -832,8 +855,11 @@ func parseRange(s string) *RangeData {
 	re2 := regexp.MustCompile(`(\d+)\s*(?:фт|фут)`)
 	matches2 := re2.FindStringSubmatch(s)
 	if len(matches2) >= 2 {
-		var normal int
-		fmt.Sscanf(matches2[1], "%d", &normal)
+		normal, err := strconv.Atoi(matches2[1])
+		if err != nil {
+			log.Printf("Warning: failed to parse range distance %q: %v", matches2[1], err)
+			return nil
+		}
 		return &RangeData{Normal: normal}
 	}
 
