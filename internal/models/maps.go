@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 // Placement represents a tile placement on the map
 type Placement struct {
@@ -14,10 +17,11 @@ type Placement struct {
 
 // MapData represents the map content stored as JSONB
 type MapData struct {
-	SchemaVersion int         `json:"schemaVersion"`
-	WidthUnits    int         `json:"widthUnits"`
-	HeightUnits   int         `json:"heightUnits"`
-	Placements    []Placement `json:"placements"`
+	SchemaVersion int             `json:"schemaVersion"`
+	WidthUnits    int             `json:"widthUnits"`
+	HeightUnits   int             `json:"heightUnits"`
+	Placements    []Placement     `json:"placements"`
+	Composition   json.RawMessage `json:"composition,omitempty"`
 }
 
 // MapFull represents the complete map with all data
