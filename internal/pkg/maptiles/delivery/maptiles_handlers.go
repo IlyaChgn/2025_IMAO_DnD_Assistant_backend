@@ -162,3 +162,123 @@ func (h *MapTilesHandler) UpsertWalkability(w http.ResponseWriter, r *http.Reque
 
 	responses.SendOkResponse(w, nil)
 }
+
+// POST /api/map-tiles
+func (h *MapTilesHandler) AddTile(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	var req models.CreateTileRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, err, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+		return
+	}
+
+	if err := h.usecases.AddTile(ctx, req.CategoryID, &req.Tile); err != nil {
+		var code int
+		var status string
+
+		switch {
+		case errors.Is(err, apperrors.InvalidIDErr):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
+		case errors.Is(err, apperrors.InvalidTileIDError):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
+		case errors.Is(err, apperrors.NoDocsErr):
+			code = responses.StatusNotFound
+			status = responses.ErrNotFound
+		default:
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
+		}
+
+		l.DeliveryError(ctx, code, status, err, map[string]any{"categoryID": req.CategoryID})
+		responses.SendErrResponse(w, code, status)
+		return
+	}
+
+	responses.SendOkResponse(w, nil)
+}
+
+// PUT /api/map-tiles/{tileId}
+func (h *MapTilesHandler) UpdateTile(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	vars := mux.Vars(r)
+	tileID := vars["tileId"]
+
+	var req models.UpdateTileRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, err, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+		return
+	}
+
+	// URL takes priority
+	req.Tile.ID = tileID
+
+	if err := h.usecases.UpdateTile(ctx, req.CategoryID, &req.Tile); err != nil {
+		var code int
+		var status string
+
+		switch {
+		case errors.Is(err, apperrors.InvalidIDErr):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
+		case errors.Is(err, apperrors.InvalidTileIDError):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
+		case errors.Is(err, apperrors.NoDocsErr):
+			code = responses.StatusNotFound
+			status = responses.ErrNotFound
+		default:
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
+		}
+
+		l.DeliveryError(ctx, code, status, err, map[string]any{"tileId": tileID})
+		responses.SendErrResponse(w, code, status)
+		return
+	}
+
+	responses.SendOkResponse(w, nil)
+}
+
+// DELETE /api/map-tiles/{tileId}?categoryId=...
+func (h *MapTilesHandler) DeleteTile(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	vars := mux.Vars(r)
+	tileID := vars["tileId"]
+	categoryID := r.URL.Query().Get("categoryId")
+
+	if err := h.usecases.DeleteTile(ctx, categoryID, tileID); err != nil {
+		var code int
+		var status string
+
+		switch {
+		case errors.Is(err, apperrors.InvalidIDErr):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
+		case errors.Is(err, apperrors.InvalidTileIDError):
+			code = responses.StatusBadRequest
+			status = responses.ErrInvalidID
+		case errors.Is(err, apperrors.NoDocsErr):
+			code = responses.StatusNotFound
+			status = responses.ErrNotFound
+		default:
+			code = responses.StatusInternalServerError
+			status = responses.ErrInternalServer
+		}
+
+		l.DeliveryError(ctx, code, status, err, map[string]any{"categoryID": categoryID, "tileId": tileID})
+		responses.SendErrResponse(w, code, status)
+		return
+	}
+
+	responses.SendOkResponse(w, nil)
+}

@@ -20,4 +20,9 @@ func ServeMapTilesRouter(
 	subrouter.HandleFunc("/walkability/{tileId}", mapTilesHandler.GetWalkabilityByTileID).Methods("GET")
 	subrouter.HandleFunc("/walkability/{tileId}", mapTilesHandler.UpsertWalkability).Methods("PUT")
 	subrouter.HandleFunc("/walkability", mapTilesHandler.GetWalkabilityBySetID).Methods("GET")
+
+	// CRUD for tile definitions
+	subrouter.HandleFunc("", mapTilesHandler.AddTile).Methods("POST")
+	subrouter.HandleFunc("/{tileId}", mapTilesHandler.UpdateTile).Methods("PUT")
+	subrouter.HandleFunc("/{tileId}", mapTilesHandler.DeleteTile).Methods("DELETE")
 }
