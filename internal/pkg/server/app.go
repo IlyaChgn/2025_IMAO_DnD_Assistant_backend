@@ -44,6 +44,8 @@ import (
 	mapsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/usecases"
 	maptilerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/repository"
 	maptileuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/usecases"
+	spellsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/repository"
+	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/socks5proxy"
 )
 
@@ -243,6 +245,12 @@ func (srv *Server) Run() error {
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)
 	mapsUsecases := mapsuc.NewMapsUsecases(mapsRepository)
 
+	spellsRepository := spellsrepo.NewSpellsStorage(mongoDatabase, mongoMetrics)
+	if err := spellsRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure spell indexes: %v", err)
+	}
+	spellsUsecases := spellsuc.NewSpellsUsecases(spellsRepository)
+
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
@@ -261,6 +269,7 @@ func (srv *Server) Run() error {
 		llmUsecases,
 		maptilesUsecases,
 		mapsUsecases,
+		spellsUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 

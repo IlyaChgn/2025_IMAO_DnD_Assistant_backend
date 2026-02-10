@@ -96,30 +96,109 @@ const (
 	SchoolTransmutation SpellSchool = "transmutation"
 )
 
-// Spell represents a complete spell definition (for spell database).
-// This would be stored separately from creatures, referenced by SpellID.
-type Spell struct {
-	ID     string      `json:"id" bson:"_id"`
-	Name   Name        `json:"name" bson:"name"` // rus/eng names
-	Level  int         `json:"level" bson:"level"`
-	School SpellSchool `json:"school" bson:"school"`
+// SpellDefinition represents a complete spell definition stored in the spell_definitions collection.
+// This is the canonical reference data for spells, referenced by SpellKnown.SpellID.
+type SpellDefinition struct {
+	ID               string      `json:"id" bson:"_id,omitempty"`
+	EngName          string      `json:"engName" bson:"engName"`                                       // unique slug: "fireball"
+	Name             Name        `json:"name" bson:"name"`                                             // bilingual display name
+	Description      Name        `json:"description" bson:"description"`                               // bilingual full text
+	ShortDescription *Name       `json:"shortDescription,omitempty" bson:"shortDescription,omitempty"` // optional brief summary
+	Level            int         `json:"level" bson:"level"`                                           // 0=cantrip, 1-9
+	School           SpellSchool `json:"school" bson:"school"`
+	Ritual           bool        `json:"ritual" bson:"ritual"`
+	Concentration    bool        `json:"concentration" bson:"concentration"`
 
-	// Casting
+	// Casting parameters
 	CastingTime CastingTime     `json:"castingTime" bson:"castingTime"`
 	Range       SpellRange      `json:"range" bson:"range"`
 	Components  SpellComponents `json:"components" bson:"components"`
 	Duration    SpellDuration   `json:"duration" bson:"duration"`
 
-	// Effects
-	Description  string `json:"description" bson:"description"`
-	HigherLevels string `json:"higherLevels,omitempty" bson:"higherLevels,omitempty"`
+	// Who can cast it
+	Classes []string `json:"classes" bson:"classes"`
+
+	// Targeting
+	Targeting SpellTarget `json:"targeting" bson:"targeting"`
+
+	// Resolution: how the spell resolves (attack roll, saving throw, or automatic)
+	Resolution SpellResolution `json:"resolution" bson:"resolution"`
 
 	// Automation data
 	Effects []SpellEffect `json:"effects,omitempty" bson:"effects,omitempty"`
 
+	// Scaling
+	Upcast         *UpcastData     `json:"upcast,omitempty" bson:"upcast,omitempty"`
+	CantripScaling *CantripScaling `json:"cantripScaling,omitempty" bson:"cantripScaling,omitempty"`
+
 	// Metadata
-	Classes []string `json:"classes,omitempty" bson:"classes,omitempty"` // wizard, cleric, etc.
-	Source  Source   `json:"source,omitempty" bson:"source,omitempty"`
+	Source        Source   `json:"source,omitempty" bson:"source,omitempty"`
+	Tags          []string `json:"tags,omitempty" bson:"tags,omitempty"`
+	SchemaVersion int      `json:"schemaVersion" bson:"schemaVersion"`
+}
+
+// SpellResolution describes how a spell resolves mechanically.
+// Type is one of: "attack", "save", "auto".
+type SpellResolution struct {
+	Type   string            `json:"type" bson:"type"` // "attack", "save", "auto"
+	Attack *AttackResolution `json:"attack,omitempty" bson:"attack,omitempty"`
+	Save   *SaveResolution   `json:"save,omitempty" bson:"save,omitempty"`
+}
+
+// AttackResolution describes a spell that uses an attack roll.
+type AttackResolution struct {
+	Type string `json:"type" bson:"type"` // "melee_spell", "ranged_spell"
+}
+
+// SaveResolution describes a spell that requires a saving throw.
+type SaveResolution struct {
+	Ability   AbilityType `json:"ability" bson:"ability"`
+	OnSuccess string      `json:"onSuccess" bson:"onSuccess"` // "half", "none", "special"
+}
+
+// UpcastData describes how a spell improves when cast at higher levels.
+type UpcastData struct {
+	Description Name           `json:"description" bson:"description"` // bilingual upcast text
+	Scaling     []UpcastScaling `json:"scaling,omitempty" bson:"scaling,omitempty"`
+}
+
+// UpcastScaling describes a specific scaling effect per spell level.
+type UpcastScaling struct {
+	Level      int        `json:"level" bson:"level"`                         // spell level threshold
+	Damage     *DamageRoll `json:"damage,omitempty" bson:"damage,omitempty"`   // additional damage dice
+	Targets    int        `json:"targets,omitempty" bson:"targets,omitempty"` // additional targets
+	HealingAdd int        `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`
+}
+
+// CantripScaling describes how a cantrip scales with caster level.
+type CantripScaling struct {
+	DamageDice []CantripScalingTier `json:"damageDice" bson:"damageDice"`
+}
+
+// CantripScalingTier defines a cantrip damage tier at a specific caster level.
+type CantripScalingTier struct {
+	MinLevel  int    `json:"minLevel" bson:"minLevel"`   // caster level threshold (1, 5, 11, 17)
+	DiceCount int    `json:"diceCount" bson:"diceCount"` // number of dice
+	DiceType  string `json:"diceType" bson:"diceType"`   // "d10", "d8", etc.
+}
+
+// SpellFilterParams holds query parameters for filtering spells.
+type SpellFilterParams struct {
+	Class  string
+	Level  *int
+	School string
+	Ritual *bool
+	Search string
+	Page   int
+	Size   int
+}
+
+// SpellListResponse is the paginated response for spell list queries.
+type SpellListResponse struct {
+	Spells []*SpellDefinition `json:"spells"`
+	Total  int64              `json:"total"`
+	Page   int                `json:"page"`
+	Size   int                `json:"size"`
 }
 
 // CastingTime describes how long it takes to cast a spell.
