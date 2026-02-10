@@ -148,6 +148,7 @@ func (s *mapTilesStorage) UpsertWalkability(ctx context.Context, walkability *mo
 			{Key: "cols", Value: walkability.Cols},
 			{Key: "walkability", Value: walkability.Walkability},
 			{Key: "occlusion", Value: walkability.Occlusion},
+			{Key: "edges", Value: walkability.Edges},
 		}},
 	}
 	opts := options.Update().SetUpsert(true)
@@ -158,6 +159,80 @@ func (s *mapTilesStorage) UpsertWalkability(ctx context.Context, walkability *mo
 	if err != nil {
 		l.RepoError(err, map[string]any{"tileId": walkability.TileID})
 		return apperrors.UpdateMongoDataErr
+	}
+
+	return nil
+}
+
+func (s *mapTilesStorage) AddTile(ctx context.Context, categoryID string, tile *models.MapTile) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection("map_tiles")
+	filter := bson.D{{Key: "id", Value: categoryID}}
+	update := bson.D{{Key: "$push", Value: bson.D{{Key: "tiles", Value: tile}}}}
+
+	result, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+		return collection.UpdateOne(ctx, filter, update)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"categoryID": categoryID, "tileID": tile.ID})
+		return apperrors.InsertMongoDataErr
+	}
+	if result.MatchedCount == 0 {
+		return apperrors.NoDocsErr
+	}
+
+	return nil
+}
+
+func (s *mapTilesStorage) UpdateTile(ctx context.Context, categoryID string, tile *models.MapTile) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection("map_tiles")
+	filter := bson.D{
+		{Key: "id", Value: categoryID},
+		{Key: "tiles.id", Value: tile.ID},
+	}
+	update := bson.D{{Key: "$set", Value: bson.D{
+		{Key: "tiles.$.name", Value: tile.Name},
+		{Key: "tiles.$.imageUrl", Value: tile.ImageURL},
+	}}}
+
+	result, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+		return collection.UpdateOne(ctx, filter, update)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"categoryID": categoryID, "tileID": tile.ID})
+		return apperrors.UpdateMongoDataErr
+	}
+	if result.MatchedCount == 0 {
+		return apperrors.NoDocsErr
+	}
+
+	return nil
+}
+
+func (s *mapTilesStorage) DeleteTile(ctx context.Context, categoryID string, tileID string) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection("map_tiles")
+	filter := bson.D{{Key: "id", Value: categoryID}}
+	update := bson.D{{Key: "$pull", Value: bson.D{
+		{Key: "tiles", Value: bson.D{{Key: "id", Value: tileID}}},
+	}}}
+
+	result, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+		return collection.UpdateOne(ctx, filter, update)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"categoryID": categoryID, "tileID": tileID})
+		return apperrors.DeleteMongoDataErr
+	}
+	if result.MatchedCount == 0 {
+		return apperrors.NoDocsErr
 	}
 
 	return nil
