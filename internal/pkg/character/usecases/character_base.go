@@ -51,47 +51,15 @@ func (uc *characterBaseUsecases) GetByID(ctx context.Context, id string, userID 
 }
 
 func (uc *characterBaseUsecases) Update(ctx context.Context, char *models.CharacterBase, expectedVersion int, userID int) error {
-	l := logger.FromContext(ctx)
-
-	// Verify ownership first
-	existing, err := uc.repo.GetByID(ctx, char.ID.Hex())
-	if err != nil {
-		l.UsecasesError(err, userID, map[string]any{"id": char.ID})
-		return err
-	}
-
-	if existing == nil {
-		return apperrors.FindMongoDataErr
-	}
-
-	if existing.UserID != strconv.Itoa(userID) {
-		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"id": char.ID})
-		return apperrors.PermissionDeniedError
-	}
-
+	// Ownership is enforced atomically: the handler sets char.UserID from the
+	// authenticated user, and the repository includes userId in the MongoDB filter.
+	// No separate GetByID check needed — eliminates TOCTOU race.
 	return uc.repo.Update(ctx, char, expectedVersion)
 }
 
 func (uc *characterBaseUsecases) Delete(ctx context.Context, id string, userID int) error {
-	l := logger.FromContext(ctx)
-
-	// Verify ownership first
-	existing, err := uc.repo.GetByID(ctx, id)
-	if err != nil {
-		l.UsecasesError(err, userID, map[string]any{"id": id})
-		return err
-	}
-
-	if existing == nil {
-		return apperrors.FindMongoDataErr
-	}
-
-	if existing.UserID != strconv.Itoa(userID) {
-		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"id": id})
-		return apperrors.PermissionDeniedError
-	}
-
-	return uc.repo.Delete(ctx, id)
+	// Ownership is enforced atomically via userId in the MongoDB delete filter.
+	return uc.repo.Delete(ctx, id, strconv.Itoa(userID))
 }
 
 func (uc *characterBaseUsecases) List(ctx context.Context, userID int, page, size int,

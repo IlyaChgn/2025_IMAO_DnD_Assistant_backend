@@ -3,6 +3,8 @@ package repository
 import (
 	"context"
 	"errors"
+	"log"
+	"regexp"
 	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -44,11 +46,12 @@ func (s *characterBaseStorage) ensureIndexes() {
 	indexes := []mongo.IndexModel{
 		{Keys: bson.D{{Key: "userId", Value: 1}}},
 		{Keys: bson.D{{Key: "classes.className", Value: 1}}},
-		{Keys: bson.D{{Key: "name", Value: "text"}}},
 		{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "updatedAt", Value: -1}}},
 	}
 
-	_, _ = collection.Indexes().CreateMany(ctx, indexes)
+	if _, err := collection.Indexes().CreateMany(ctx, indexes); err != nil {
+		log.Printf("characters_v2: ensureIndexes warning: %v", err)
+	}
 }
 
 func (s *characterBaseStorage) Create(ctx context.Context, char *models.CharacterBase) error {
@@ -116,16 +119,21 @@ func (s *characterBaseStorage) Update(ctx context.Context, char *models.Characte
 
 	filter := bson.M{
 		"_id":     char.ID,
+		"userId":  char.UserID,
 		"version": expectedVersion,
 	}
 
 	now := time.Now().UTC().Format(time.RFC3339)
 	char.UpdatedAt = now
+	char.Version = expectedVersion + 1
 
+	// Temporarily clear ID so $set doesn't include immutable _id field
+	savedID := char.ID
+	char.ID = primitive.ObjectID{}
 	update := bson.M{
 		"$set": char,
-		"$inc": bson.M{"version": 1},
 	}
+	char.ID = savedID
 
 	result, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update)
@@ -142,7 +150,7 @@ func (s *characterBaseStorage) Update(ctx context.Context, char *models.Characte
 	return nil
 }
 
-func (s *characterBaseStorage) Delete(ctx context.Context, id string) error {
+func (s *characterBaseStorage) Delete(ctx context.Context, id string, userID string) error {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -154,12 +162,16 @@ func (s *characterBaseStorage) Delete(ctx context.Context, id string) error {
 		return apperrors.InvalidIDErr
 	}
 
-	_, err = dbcall.DBCall[*mongo.DeleteResult](fnName, s.metrics, func() (*mongo.DeleteResult, error) {
-		return collection.DeleteOne(ctx, bson.M{"_id": objID})
+	result, err := dbcall.DBCall[*mongo.DeleteResult](fnName, s.metrics, func() (*mongo.DeleteResult, error) {
+		return collection.DeleteOne(ctx, bson.M{"_id": objID, "userId": userID})
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"id": id})
 		return apperrors.DeleteMongoDataErr
+	}
+
+	if result.DeletedCount == 0 {
+		return apperrors.PermissionDeniedError
 	}
 
 	return nil
@@ -174,7 +186,7 @@ func (s *characterBaseStorage) List(ctx context.Context, userID string, page, si
 
 	filter := bson.M{"userId": userID}
 	if search != "" {
-		filter["name"] = bson.M{"$regex": search, "$options": "i"}
+		filter["name"] = bson.M{"$regex": regexp.QuoteMeta(search), "$options": "i"}
 	}
 
 	// Count total

@@ -21,6 +21,7 @@ var (
 	dryRun      = flag.Bool("dry-run", true, "Run without writing to database")
 	verbose     = flag.Bool("verbose", false, "Print detailed output for each character")
 	mongoURI    = flag.String("mongo", "", "MongoDB connection URI (or set MONGODB env var)")
+	dbName      = flag.String("db", "bestiary_db", "MongoDB database name")
 	characterID = flag.String("id", "", "Migrate single character by ObjectID")
 )
 
@@ -52,7 +53,7 @@ func main() {
 	}
 	defer client.Disconnect(ctx)
 
-	db := client.Database("bestiary_db")
+	db := client.Database(*dbName)
 	srcColl := db.Collection("characters")
 	dstColl := db.Collection("characters_v2")
 
@@ -123,10 +124,11 @@ func main() {
 
 		// Write to characters_v2
 		if !*dryRun {
-			// Upsert by userId + name (idempotent)
+			// Upsert by userId + name + importSource reference (idempotent, safe for same-name chars)
 			upsertFilter := bson.M{
-				"userId": char.UserID,
-				"name":   char.Name,
+				"userId":                       char.UserID,
+				"name":                         char.Name,
+				"importSource.format":          "lss_v2",
 			}
 
 			update := bson.M{"$set": char}

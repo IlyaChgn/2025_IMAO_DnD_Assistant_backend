@@ -39,6 +39,13 @@ func ConvertLSS(rawJSON []byte, userID string) (*models.CharacterBase, *models.C
 		Version: 1,
 	}
 
+	// Initialize slices to empty (avoid null in JSON output)
+	char.Classes = []models.ClassEntry{}
+	char.Proficiencies.Skills = []string{}
+	char.Proficiencies.SavingThrows = []models.AbilityType{}
+	char.Weapons = []models.WeaponDef{}
+	char.Expertise = []string{}
+
 	// Step 3: Extract identity fields
 	extractIdentity(data, envelope, char, report)
 
@@ -259,27 +266,27 @@ func extractVitality(data map[string]interface{}, char *models.CharacterBase, re
 	}
 
 	// Max HP
-	if hpMax := getNestedNumber2(vitality, "hp-max", "value"); hpMax > 0 {
+	if hpMax := getNestedNumber(vitality, "hp-max", "value"); hpMax > 0 {
 		hp := hpMax
 		char.HitPoints.MaxOverride = &hp
 		report.FieldsCopied++
 	}
 
 	// AC
-	if acVal := getNestedNumberOrString(vitality, "ac", "value"); acVal > 0 {
+	if acVal := getNestedNumber(vitality, "ac", "value"); acVal > 0 {
 		ac := acVal
 		char.ArmorClassOverride = &ac
 		report.FieldsCopied++
 	}
 
 	// Speed
-	if speed := getNestedNumber2(vitality, "speed", "value"); speed > 0 {
+	if speed := getNestedNumber(vitality, "speed", "value"); speed > 0 {
 		char.BaseSpeed = speed
 		report.FieldsCopied++
 	}
 
 	// Hit Die
-	if hdRaw := getNestedValue2(vitality, "hit-die", "value"); hdRaw != "" {
+	if hdRaw := getNestedValue(vitality, "hit-die", "value"); hdRaw != "" {
 		char.HitPoints.HitDie = ParseHitDie(hdRaw)
 		report.FieldsParsed++
 	}
@@ -328,7 +335,7 @@ func extractWeapons(data map[string]interface{}, char *models.CharacterBase, rep
 		// Guess attack type from weapon name
 		lowerName := strings.ToLower(name)
 		if strings.Contains(lowerName, "лук") || strings.Contains(lowerName, "арбалет") ||
-			strings.Contains(lowerName, "дротик") || strings.Contains(lowerName, "праща") {
+			strings.Contains(lowerName, "праща") {
 			w.AttackType = "ranged"
 		}
 
@@ -528,20 +535,6 @@ func getNestedValue2(parent map[string]interface{}, key1, key2 string) string {
 
 // getNestedNumber extracts an int from parent[key1][key2].
 func getNestedNumber(parent map[string]interface{}, key1, key2 string) int {
-	entry, ok := parent[key1].(map[string]interface{})
-	if !ok {
-		return 0
-	}
-	return toInt(entry[key2])
-}
-
-// getNestedNumber2 is an alias for getNestedNumber (for sub-maps).
-func getNestedNumber2(parent map[string]interface{}, key1, key2 string) int {
-	return getNestedNumber(parent, key1, key2)
-}
-
-// getNestedNumberOrString extracts an int from parent[key1][key2], parsing strings if needed.
-func getNestedNumberOrString(parent map[string]interface{}, key1, key2 string) int {
 	entry, ok := parent[key1].(map[string]interface{})
 	if !ok {
 		return 0

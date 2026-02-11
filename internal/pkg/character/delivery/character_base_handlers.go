@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -69,6 +70,7 @@ func (h *CharacterBaseHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	user := ctx.Value(h.ctxUserKey).(*models.User)
 	char.UserID = strconv.Itoa(user.ID)
+	char.ID = primitive.NilObjectID // server assigns ID, ignore client value
 
 	if err := h.usecases.Create(ctx, &char); err != nil {
 		h.handleError(w, r, err)
@@ -96,6 +98,14 @@ func (h *CharacterBaseHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate and parse the URL path ID
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, err, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
 	var req updateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
@@ -103,13 +113,18 @@ func (h *CharacterBaseHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Force the URL path ID onto the character — URL is authoritative
+	req.Character.ID = objID
+
 	user := ctx.Value(h.ctxUserKey).(*models.User)
+	req.Character.UserID = strconv.Itoa(user.ID)
 
 	if err := h.usecases.Update(ctx, &req.Character, req.Version, user.ID); err != nil {
 		h.handleError(w, r, err)
 		return
 	}
 
+	// Return the updated character with correct version
 	responses.SendOkResponse(w, req.Character)
 }
 
@@ -223,7 +238,9 @@ func (h *CharacterBaseHandler) ImportLSS(w http.ResponseWriter, r *http.Request)
 	}
 
 	l.DeliveryInfo(ctx, "imported LSS character", map[string]any{"userId": user.ID, "charName": char.Name})
-	responses.SendOkResponse(w, resp)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(resp)
 }
 
 func (h *CharacterBaseHandler) handleError(w http.ResponseWriter, r *http.Request, err error) {
