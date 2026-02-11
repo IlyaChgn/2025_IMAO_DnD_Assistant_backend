@@ -24,6 +24,7 @@ go.work
 .idea
 
 prod.env
+test.env
 console.env
 console.prod.env
 logs.json
