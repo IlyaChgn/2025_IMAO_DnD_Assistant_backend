@@ -64,6 +64,10 @@ func (uc *spellsUsecases) GetSpells(ctx context.Context, filter models.SpellFilt
 		return nil, err
 	}
 
+	if spells == nil {
+		spells = []*models.SpellDefinition{}
+	}
+
 	return &models.SpellListResponse{
 		Spells: spells,
 		Total:  total,
@@ -108,6 +112,10 @@ func (uc *spellsUsecases) GetSpellsByClass(ctx context.Context, className string
 	if err != nil {
 		l.UsecasesError(err, 0, map[string]any{"className": className})
 		return nil, err
+	}
+
+	if spells == nil {
+		spells = []*models.SpellDefinition{}
 	}
 
 	return spells, nil

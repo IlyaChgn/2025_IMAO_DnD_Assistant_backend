@@ -77,15 +77,6 @@ func (h *SpellsHandler) GetSpells(w http.ResponseWriter, r *http.Request) {
 		case errors.Is(err, apperrors.InvalidSpellSchoolErr):
 			code = responses.StatusBadRequest
 			status = responses.ErrBadRequest
-		case errors.Is(err, apperrors.NoDocsErr):
-			l.DeliveryInfo(ctx, "no spells found", nil)
-			responses.SendOkResponse(w, &models.SpellListResponse{
-				Spells: []*models.SpellDefinition{},
-				Total:  0,
-				Page:   filter.Page,
-				Size:   filter.Size,
-			})
-			return
 		default:
 			code = responses.StatusInternalServerError
 			status = responses.ErrInternalServer
@@ -160,10 +151,6 @@ func (h *SpellsHandler) GetSpellsByClass(w http.ResponseWriter, r *http.Request)
 		case errors.Is(err, apperrors.InvalidSpellLevelErr):
 			code = responses.StatusBadRequest
 			status = responses.ErrBadRequest
-		case errors.Is(err, apperrors.NoDocsErr):
-			l.DeliveryInfo(ctx, "no spells found for class", map[string]any{"class": className})
-			responses.SendOkResponse(w, []*models.SpellDefinition{})
-			return
 		default:
 			code = responses.StatusInternalServerError
 			status = responses.ErrInternalServer
