@@ -39,3 +39,4 @@ docs/TESTING.local.md
 # Database backups (contain production data)
 backups/
 
+/long_story_short_jsons

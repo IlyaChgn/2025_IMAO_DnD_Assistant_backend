@@ -35,6 +35,7 @@ func NewRouter(cfg *config.Config,
 	bestiaryInterface bestiaryinterfaces.BestiaryUsecases,
 	descriptionInterface descriptioninterfaces.DescriptionUsecases,
 	characterInterface characterinterfaces.CharacterUsecases,
+	characterBaseInterface characterinterfaces.CharacterBaseUsecases,
 	encounterInterface encounterinterfaces.EncounterUsecases,
 	authInterface authinterface.AuthUsecases,
 	tableInterface tableinterfaces.TableUsecases,
@@ -45,6 +46,7 @@ func NewRouter(cfg *config.Config,
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
 	characterHandler := characterdel.NewCharacterHandler(characterInterface, cfg.CtxUserKey)
+	characterBaseHandler := characterdel.NewCharacterBaseHandler(characterBaseInterface, cfg.CtxUserKey)
 	encounterHandler := encounterdel.NewEncounterHandler(encounterInterface, cfg.CtxUserKey)
 	authHandler := authdel.NewAuthHandler(authInterface, cfg.Session.Duration, cfg.IsProd, cfg.CtxUserKey)
 	tableHandler := tabledel.NewTableHandler(tableInterface, cfg.CtxUserKey)
@@ -71,6 +73,7 @@ func NewRouter(cfg *config.Config,
 	ServeBestiaryRouter(rootRouter, bestiaryHandler, loginRequiredMiddleware)
 	ServeBattleRouter(rootRouter, descriptionHandler)
 	ServeCharacterRouter(rootRouter, characterHandler, loginRequiredMiddleware)
+	ServeCharacterBaseRouter(rootRouter, characterBaseHandler, loginRequiredMiddleware)
 	ServeEncounteRouter(rootRouter, encounterHandler, loginRequiredMiddleware)
 	ServeAuthRouter(rootRouter, authHandler, loginRequiredMiddleware)
 	ServeTableRouter(rootRouter, tableHandler, loginRequiredMiddleware)

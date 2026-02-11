@@ -22,3 +22,22 @@ type CharacterUsecases interface {
 	GetCharacterByMongoId(ctx context.Context, id string, userID int) (*models.Character, error)
 	AddCharacter(ctx context.Context, file multipart.File, userID int) error
 }
+
+// CharacterBaseRepository provides CRUD for CharacterBase documents in characters_v2 collection.
+type CharacterBaseRepository interface {
+	Create(ctx context.Context, char *models.CharacterBase) error
+	GetByID(ctx context.Context, id string) (*models.CharacterBase, error)
+	Update(ctx context.Context, char *models.CharacterBase, expectedVersion int) error
+	Delete(ctx context.Context, id string) error
+	List(ctx context.Context, userID string, page, size int, search string) ([]*models.CharacterBase, int64, error)
+}
+
+// CharacterBaseUsecases provides business logic for CharacterBase operations.
+type CharacterBaseUsecases interface {
+	Create(ctx context.Context, char *models.CharacterBase) error
+	GetByID(ctx context.Context, id string, userID int) (*models.CharacterBase, error)
+	Update(ctx context.Context, char *models.CharacterBase, expectedVersion int, userID int) error
+	Delete(ctx context.Context, id string, userID int) error
+	List(ctx context.Context, userID int, page, size int, search string) ([]*models.CharacterBase, int64, error)
+	ImportLSS(ctx context.Context, fileData []byte, userID int) (*models.CharacterBase, *models.ConversionReport, error)
+}
