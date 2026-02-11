@@ -10,4 +10,7 @@ var (
 	InvalidJSONError = errors.New("invalid json format")
 
 	UnmarashallingJSONError = errors.New("failed to unmarshal JSON")
+
+	VersionConflictErr    = errors.New("version conflict: document was modified by another request")
+	ConversionFailedError = errors.New("LSS conversion failed")
 )
