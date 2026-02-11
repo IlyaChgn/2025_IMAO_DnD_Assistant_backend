@@ -17,6 +17,8 @@ import (
 	mapsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/delivery"
 	maptilesinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles"
 	maptilesdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/delivery"
+	spellsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells"
+	spellsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
 	myauth "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/auth"
 	mylog "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/log"
@@ -41,7 +43,8 @@ func NewRouter(cfg *config.Config,
 	tableInterface tableinterfaces.TableUsecases,
 	llmInterface bestiaryinterfaces.GenerationUsecases,
 	maptilesInterface maptilesinterfaces.MapTilesUsecases,
-	mapsInterface mapsinterfaces.MapsUsecases) *mux.Router {
+	mapsInterface mapsinterfaces.MapsUsecases,
+	spellsInterface spellsinterfaces.SpellsUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -53,6 +56,7 @@ func NewRouter(cfg *config.Config,
 	llmHandler := bestiarydel.NewLLMHandler(llmInterface)
 	mapTilesHandler := maptilesdel.NewMapTilesHandler(maptilesInterface, cfg.CtxUserKey)
 	mapsHandler := mapsdel.NewMapsHandler(mapsInterface, cfg.CtxUserKey)
+	spellsHandler := spellsdel.NewSpellsHandler(spellsInterface)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -80,6 +84,7 @@ func NewRouter(cfg *config.Config,
 	ServeLLMRouter(rootRouter, llmHandler, loginRequiredMiddleware)
 	ServeMapTilesRouter(rootRouter, mapTilesHandler, loginRequiredMiddleware)
 	ServeMapsRouter(rootRouter, mapsHandler, loginRequiredMiddleware)
+	ServeSpellsRouter(rootRouter, spellsHandler)
 
 	return router
 }
