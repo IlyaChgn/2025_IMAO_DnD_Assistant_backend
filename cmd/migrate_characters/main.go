@@ -85,7 +85,19 @@ func main() {
 
 		stats.Total++
 
-		// Re-marshal the document to JSON for the converter
+		// MongoDB stores `data` as a nested BSON document, but ConvertLSS expects
+		// the LSS file format where `data` is a JSON string (double-encoded).
+		// Re-encode the data sub-document as a JSON string inside the envelope.
+		if dataDoc, ok := rawDoc["data"]; ok {
+			dataJSON, err := json.Marshal(dataDoc)
+			if err != nil {
+				log.Printf("Marshal data error for %v: %v", rawDoc["_id"], err)
+				stats.Errors++
+				continue
+			}
+			rawDoc["data"] = string(dataJSON)
+		}
+
 		rawJSON, err := json.Marshal(rawDoc)
 		if err != nil {
 			log.Printf("Marshal error: %v", err)
