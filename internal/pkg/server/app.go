@@ -28,6 +28,7 @@ import (
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
+	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	bestiarydlv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
 	bestiaryproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery/protobuf"
 	bestiaryext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/external"
@@ -35,6 +36,7 @@ import (
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
 	characteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/usecases"
+	descriptioninterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
 	descriptiondlv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
@@ -79,11 +81,9 @@ func createServer(config serverConfig) *http.Server {
 func (srv *Server) Run() error {
 	cfgPath := os.Getenv("CONFIG_PATH")
 
-	var isProduction bool
-
-	if os.Getenv("SERVER_MODE") == "production" {
-		isProduction = true
-	}
+	serverMode := os.Getenv("SERVER_MODE")
+	isProduction := serverMode == "production"
+	isTestMode := serverMode == "test"
 
 	cfg := config.ReadConfig(cfgPath)
 	if cfg == nil {
@@ -103,45 +103,57 @@ func (srv *Server) Run() error {
 		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
 	}
 
-	descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
+	var descriptionGateway descriptioninterface.DescriptionGateway
+	var actionProcessorGateway bestiaryinterface.ActionProcessorGateway
+	var geminiAPI bestiaryinterface.GeminiAPI
 
-	grpcConnDescription, err := grpc.NewClient(
-		descriptionAddr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatalf("Error occurred while starting grpc connection on description service, %v", err)
+	if isTestMode {
+		descriptionGateway = stubDescriptionGateway{}
+		actionProcessorGateway = stubActionProcessorGateway{}
+		geminiAPI = stubGeminiAPI{}
+	} else {
+		descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
+
+		grpcConnDescription, grpcErr := grpc.NewClient(
+			descriptionAddr,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
+		if grpcErr != nil {
+			log.Fatalf("Error occurred while starting grpc connection on description service, %v", grpcErr)
+		}
+		defer grpcConnDescription.Close()
+
+		descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
+		descriptionGateway = descriptiondlv.NewDescriptionGatewayAdapter(descriptionClient)
+
+		grpcConnActionProcessor, grpcErr := grpcconnection.CreateGRPCConn(
+			cfg.Services.ActionProcessor.Host,
+			cfg.Services.ActionProcessor.Port,
+		)
+		if grpcErr != nil {
+			log.Fatalf("Failed to connect to ActionProcessorService: %v", grpcErr)
+		}
+		defer grpcConnActionProcessor.Close()
+
+		actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
+		actionProcessorGateway = bestiarydlv.NewActionProcessorAdapter(actionProcessorClient)
+
+		proxieAddr := fmt.Sprintf("%s:%s", cfg.Proxies.Socks5Proxie.IP, cfg.Proxies.Socks5Proxie.Port)
+
+		proxyClient, proxyErr := socks5proxy.NewProxiedHttpClient(proxieAddr)
+		if proxyErr != nil {
+			log.Fatalf("failed to create proxy client: %v", proxyErr)
+		}
+
+		geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
+		geminiAPI = bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 	}
-	defer grpcConnDescription.Close()
-
-	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
-
-	grpcConnActionProcessor, err := grpcconnection.CreateGRPCConn(
-		cfg.Services.ActionProcessor.Host,
-		cfg.Services.ActionProcessor.Port,
-	)
-	if err != nil {
-		log.Fatalf("Failed to connect to ActionProcessorService: %v", err)
-	}
-	defer grpcConnActionProcessor.Close()
-
-	actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
-
-	proxieAddr := fmt.Sprintf("%s:%s", cfg.Proxies.Socks5Proxie.IP, cfg.Proxies.Socks5Proxie.Port)
-
-	proxyClient, err := socks5proxy.NewProxiedHttpClient(proxieAddr)
-	if err != nil {
-		log.Fatalf("failed to create proxy client: %v", err)
-	}
-
-	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
-	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 
 	vkClient := authext.NewVKApi(cfg.VKApi.RedirectURI, cfg.VKApi.ClientID, cfg.VKApi.SecretKey, cfg.VKApi.ServiceKey,
 		cfg.VKApi.Exchange, cfg.VKApi.PublicInfo)
 
 	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
-		cfg.Mongo.Port, !isProduction)
+		cfg.Mongo.Port, !isProduction && !isTestMode)
 	mongoDatabase := dbinit.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 	logger.DBInfo(cfg.Mongo.Host, cfg.Mongo.Port, "mongodb", cfg.Mongo.DBName, !isProduction)
 
@@ -151,7 +163,10 @@ func (srv *Server) Run() error {
 	}
 
 	minioURI := dbinit.NewMinioEndpoint(cfg.Minio.Host)
-	minioClient, err := dbinit.ConnectToMinio(minioURI, cfg.Minio.AccessKey, cfg.Minio.SecretKey, true)
+	if isTestMode && cfg.Minio.Port != "" {
+		minioURI = dbinit.NewMinioEndpoint(cfg.Minio.Host, cfg.Minio.Port)
+	}
+	minioClient, err := dbinit.ConnectToMinio(minioURI, cfg.Minio.AccessKey, cfg.Minio.SecretKey, !isTestMode)
 	if err != nil {
 		logger.DBFatal(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true,
 			"Failed to initialize MinIO client", err)
@@ -221,13 +236,11 @@ func (srv *Server) Run() error {
 	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
 	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
-	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
-	actionProcessorGateway := bestiarydlv.NewActionProcessorAdapter(actionProcessorClient)
+	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiAPI)
 	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorGateway)
 	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor(actionProcessorUsecase)
-	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor,
+	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiAPI, generatedCreatureProcessor,
 		bestiaryuc.NewGoRunner(), bestiaryuc.NewUUIDGenerator())
-	descriptionGateway := descriptiondlv.NewDescriptionGatewayAdapter(descriptionClient)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
 	characterBaseUsecases := characteruc.NewCharacterBaseUsecases(characterBaseRepository)
