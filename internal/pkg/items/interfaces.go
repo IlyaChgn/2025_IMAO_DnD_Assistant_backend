@@ -30,6 +30,9 @@ type InventoryRepository interface {
 type ItemUsecases interface {
 	GetItems(ctx context.Context, filter models.ItemFilterParams) (*models.ItemListResponse, error)
 	GetItemByEngName(ctx context.Context, engName string) (*models.ItemDefinition, error)
+	CreateItem(ctx context.Context, item *models.ItemDefinition, userID int) (*models.ItemDefinition, error)
+	UpdateItem(ctx context.Context, item *models.ItemDefinition, userID int) (*models.ItemDefinition, error)
+	DeleteItem(ctx context.Context, id string, userID int) error
 }
 
 type InventoryUsecases interface {

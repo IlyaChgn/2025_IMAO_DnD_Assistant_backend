@@ -50,6 +50,7 @@ import (
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 
 	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
+	itemsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/seed"
 	itemsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/socks5proxy"
 )
@@ -273,12 +274,16 @@ func (srv *Server) Run() error {
 	if err := itemsRepository.EnsureItemDefinitionIndexes(context.Background()); err != nil {
 		log.Printf("Warning: failed to ensure item definition indexes: %v", err)
 	}
+	if n, err := itemsseed.SeedItemDefinitions(context.Background(), itemsRepository); err != nil {
+		log.Printf("Warning: failed to seed item definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d item definitions", n)
+	}
 	inventoryRepository := itemsrepo.NewInventoryStorage(mongoDatabase, mongoMetrics)
 	if err := inventoryRepository.EnsureInventoryContainerIndexes(context.Background()); err != nil {
 		log.Printf("Warning: failed to ensure inventory container indexes: %v", err)
 	}
-	// Usecases created but not wired to router yet (Epic 3)
-	_ = itemsuc.NewItemUsecases(itemsRepository)
+	itemsUsecases := itemsuc.NewItemUsecases(itemsRepository)
 	_ = itemsuc.NewInventoryUsecases(inventoryRepository)
 
 	credentials := handlers.AllowCredentials()
@@ -301,6 +306,7 @@ func (srv *Server) Run() error {
 		maptilesUsecases,
 		mapsUsecases,
 		spellsUsecases,
+		itemsUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
