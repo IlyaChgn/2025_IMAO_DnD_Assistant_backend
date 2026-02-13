@@ -17,6 +17,8 @@ import (
 	mapsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/delivery"
 	maptilesinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles"
 	maptilesdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/delivery"
+	itemsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items"
+	itemsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/delivery"
 	spellsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells"
 	spellsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
@@ -44,7 +46,8 @@ func NewRouter(cfg *config.Config,
 	llmInterface bestiaryinterfaces.GenerationUsecases,
 	maptilesInterface maptilesinterfaces.MapTilesUsecases,
 	mapsInterface mapsinterfaces.MapsUsecases,
-	spellsInterface spellsinterfaces.SpellsUsecases) *mux.Router {
+	spellsInterface spellsinterfaces.SpellsUsecases,
+	itemsInterface itemsinterfaces.ItemUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -57,6 +60,7 @@ func NewRouter(cfg *config.Config,
 	mapTilesHandler := maptilesdel.NewMapTilesHandler(maptilesInterface, cfg.CtxUserKey)
 	mapsHandler := mapsdel.NewMapsHandler(mapsInterface, cfg.CtxUserKey)
 	spellsHandler := spellsdel.NewSpellsHandler(spellsInterface)
+	itemsHandler := itemsdel.NewItemsHandler(itemsInterface, cfg.CtxUserKey)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -85,6 +89,7 @@ func NewRouter(cfg *config.Config,
 	ServeMapTilesRouter(rootRouter, mapTilesHandler, loginRequiredMiddleware)
 	ServeMapsRouter(rootRouter, mapsHandler, loginRequiredMiddleware)
 	ServeSpellsRouter(rootRouter, spellsHandler)
+	ServeItemsRouter(rootRouter, itemsHandler, loginRequiredMiddleware)
 
 	return router
 }
