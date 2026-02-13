@@ -138,9 +138,9 @@ func main() {
 		if !*dryRun {
 			// Upsert by userId + name + importSource reference (idempotent, safe for same-name chars)
 			upsertFilter := bson.M{
-				"userId":                       char.UserID,
-				"name":                         char.Name,
-				"importSource.format":          "lss_v2",
+				"userId":              char.UserID,
+				"name":                char.Name,
+				"importSource.format": "lss_v2",
 			}
 
 			update := bson.M{"$set": char}

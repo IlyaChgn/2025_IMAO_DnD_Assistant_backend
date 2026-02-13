@@ -15,7 +15,7 @@ var classNameMap = map[string]string{
 	"варвар":       "barbarian",
 	"воин":         "fighter",
 	"волшебник":    "wizard",
-	"волшебница":   "wizard",   // feminine form
+	"волшебница":   "wizard", // feminine form
 	"друид":        "druid",
 	"жрец":         "cleric",
 	"изобретатель": "artificer",
@@ -70,12 +70,12 @@ func MapAbilityCode(code string) (models.AbilityType, bool) {
 
 // abilityNameRuMap maps Russian ability names (as used in spellsInfo.base.value) to AbilityType.
 var abilityNameRuMap = map[string]models.AbilityType{
-	"сила":          models.AbilitySTR,
-	"ловкость":      models.AbilityDEX,
-	"телосложение":  models.AbilityCON,
-	"интеллект":     models.AbilityINT,
-	"мудрость":      models.AbilityWIS,
-	"харизма":       models.AbilityCHA,
+	"сила":         models.AbilitySTR,
+	"ловкость":     models.AbilityDEX,
+	"телосложение": models.AbilityCON,
+	"интеллект":    models.AbilityINT,
+	"мудрость":     models.AbilityWIS,
+	"харизма":      models.AbilityCHA,
 }
 
 // MapAbilityNameRu converts a Russian ability name ("Мудрость") to AbilityType ("WIS").

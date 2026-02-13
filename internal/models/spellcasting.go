@@ -158,16 +158,16 @@ type SaveResolution struct {
 
 // UpcastData describes how a spell improves when cast at higher levels.
 type UpcastData struct {
-	Description Name           `json:"description" bson:"description"` // bilingual upcast text
+	Description Name            `json:"description" bson:"description"` // bilingual upcast text
 	Scaling     []UpcastScaling `json:"scaling,omitempty" bson:"scaling,omitempty"`
 }
 
 // UpcastScaling describes a specific scaling effect per spell level.
 type UpcastScaling struct {
-	Level      int        `json:"level" bson:"level"`                         // spell level threshold
+	Level      int         `json:"level" bson:"level"`                         // spell level threshold
 	Damage     *DamageRoll `json:"damage,omitempty" bson:"damage,omitempty"`   // additional damage dice
-	Targets    int        `json:"targets,omitempty" bson:"targets,omitempty"` // additional targets
-	HealingAdd int        `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`
+	Targets    int         `json:"targets,omitempty" bson:"targets,omitempty"` // additional targets
+	HealingAdd int         `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`
 }
 
 // CantripScaling describes how a cantrip scales with caster level.

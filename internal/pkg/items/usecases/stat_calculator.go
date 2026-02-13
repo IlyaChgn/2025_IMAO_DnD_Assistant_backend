@@ -11,14 +11,14 @@ import (
 const (
 	baseAC              = 10
 	placeholderCapacity = 150.0 // STR 10 × 15
-	encumberedThreshold = 5.0  // STR × 5
-	heavyThreshold      = 10.0 // STR × 10
+	encumberedThreshold = 5.0   // STR × 5
+	heavyThreshold      = 10.0  // STR × 10
 
-	modTargetAC          = "ac"
-	modTargetACBase      = "ac_base"
-	modTargetResistance  = "resistance"
-	modTargetImmunity    = "immunity"
-	modTargetVulnerable  = "vulnerability"
+	modTargetAC         = "ac"
+	modTargetACBase     = "ac_base"
+	modTargetResistance = "resistance"
+	modTargetImmunity   = "immunity"
+	modTargetVulnerable = "vulnerability"
 
 	opSet      = "set"
 	opAdd      = "add"
