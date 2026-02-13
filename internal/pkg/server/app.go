@@ -284,7 +284,7 @@ func (srv *Server) Run() error {
 		log.Printf("Warning: failed to ensure inventory container indexes: %v", err)
 	}
 	itemsUsecases := itemsuc.NewItemUsecases(itemsRepository)
-	_ = itemsuc.NewInventoryUsecases(inventoryRepository)
+	inventoryUsecases := itemsuc.NewInventoryUsecases(inventoryRepository, itemsRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
@@ -307,6 +307,7 @@ func (srv *Server) Run() error {
 		mapsUsecases,
 		spellsUsecases,
 		itemsUsecases,
+		inventoryUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 

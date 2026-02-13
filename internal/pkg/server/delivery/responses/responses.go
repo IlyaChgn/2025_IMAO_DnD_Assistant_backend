@@ -15,6 +15,7 @@ const (
 	StatusUnauthorized = 401
 	StatusForbidden    = 403
 	StatusNotFound     = 404
+	StatusConflict     = 409
 
 	StatusInternalServerError = 500
 )
@@ -53,6 +54,9 @@ const (
 	ErrEmptyImage  = "Image not provided"
 	ErrWrongJobID  = "Wrong job ID"
 	ErrWrongBase64 = "Invalid base64 format"
+
+	ErrVersionConflict = "Version conflict"
+	ErrInvalidCommand  = "Invalid command"
 )
 
 func newErrResponse(status string) *models.ErrResponse {

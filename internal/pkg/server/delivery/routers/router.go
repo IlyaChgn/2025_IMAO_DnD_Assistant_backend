@@ -47,7 +47,8 @@ func NewRouter(cfg *config.Config,
 	maptilesInterface maptilesinterfaces.MapTilesUsecases,
 	mapsInterface mapsinterfaces.MapsUsecases,
 	spellsInterface spellsinterfaces.SpellsUsecases,
-	itemsInterface itemsinterfaces.ItemUsecases) *mux.Router {
+	itemsInterface itemsinterfaces.ItemUsecases,
+	inventoryInterface itemsinterfaces.InventoryUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -61,6 +62,7 @@ func NewRouter(cfg *config.Config,
 	mapsHandler := mapsdel.NewMapsHandler(mapsInterface, cfg.CtxUserKey)
 	spellsHandler := spellsdel.NewSpellsHandler(spellsInterface)
 	itemsHandler := itemsdel.NewItemsHandler(itemsInterface, cfg.CtxUserKey)
+	inventoryHandler := itemsdel.NewInventoryHandler(inventoryInterface, cfg.CtxUserKey)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -90,6 +92,7 @@ func NewRouter(cfg *config.Config,
 	ServeMapsRouter(rootRouter, mapsHandler, loginRequiredMiddleware)
 	ServeSpellsRouter(rootRouter, spellsHandler)
 	ServeItemsRouter(rootRouter, itemsHandler, loginRequiredMiddleware)
+	ServeInventoryRouter(rootRouter, inventoryHandler, loginRequiredMiddleware)
 
 	return router
 }

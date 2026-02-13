@@ -24,6 +24,8 @@ type InventoryRepository interface {
 	CreateContainer(ctx context.Context, container *models.InventoryContainer) (*models.InventoryContainer, error)
 	DeleteContainer(ctx context.Context, id string) error
 	UpdateContainer(ctx context.Context, container *models.InventoryContainer) (*models.InventoryContainer, error)
+	UpdateContainerWithVersion(ctx context.Context, container *models.InventoryContainer, expectedVersion int) (*models.InventoryContainer, error)
+	MoveItemAcrossContainers(ctx context.Context, sourceID string, sourceVersion int, targetID string, itemID string, toPlacement models.ItemPlacement) (*models.InventoryContainer, *models.InventoryContainer, error)
 	EnsureInventoryContainerIndexes(ctx context.Context) error
 }
 
@@ -38,4 +40,7 @@ type ItemUsecases interface {
 type InventoryUsecases interface {
 	GetContainer(ctx context.Context, id string) (*models.InventoryContainer, error)
 	GetContainers(ctx context.Context, filter models.ContainerFilterParams) ([]*models.InventoryContainer, error)
+	CreateContainer(ctx context.Context, container *models.InventoryContainer) (*models.InventoryContainer, error)
+	DeleteContainer(ctx context.Context, id string, userID int) error
+	ExecuteCommand(ctx context.Context, req *models.CommandRequest, userID int) (*models.CommandResponse, error)
 }
