@@ -308,6 +308,7 @@ func (srv *Server) Run() error {
 		spellsUsecases,
 		itemsUsecases,
 		inventoryUsecases,
+		tableManager,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 

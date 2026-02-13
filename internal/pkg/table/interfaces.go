@@ -18,6 +18,7 @@ type TableManager interface {
 	GetEncounterData(ctx context.Context, sessionID string) ([]byte, error)
 	AddNewConnection(ctx context.Context, user *models.User, sessionID string, conn *websocket.Conn)
 	HasActiveUsers(ctx context.Context, sessionID string) bool
+	BroadcastToEncounter(ctx context.Context, encounterID string, senderUserID int, msg []byte)
 }
 
 type TableUsecases interface {

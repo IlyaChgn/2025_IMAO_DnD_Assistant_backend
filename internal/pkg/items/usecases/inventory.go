@@ -196,8 +196,9 @@ func (uc *inventoryUsecases) ExecuteCommand(ctx context.Context, req *models.Com
 	}
 
 	resp := &models.CommandResponse{
-		Version: container.Version,
-		Patches: patches,
+		EncounterID: container.EncounterID,
+		Version:     container.Version,
+		Patches:     patches,
 	}
 
 	if container.Kind == models.ContainerKindCharacter && equipmentChanged {
@@ -339,9 +340,15 @@ func (uc *inventoryUsecases) executeCrossContainerMove(ctx context.Context, req 
 		},
 	}
 
+	encounterID := source.EncounterID
+	if encounterID == "" {
+		encounterID = target.EncounterID
+	}
+
 	return &models.CommandResponse{
-		Version: source.Version,
-		Patches: patches,
+		EncounterID: encounterID,
+		Version:     source.Version,
+		Patches:     patches,
 	}, nil
 }
 
