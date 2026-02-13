@@ -15,14 +15,16 @@ import (
 )
 
 type InventoryHandler struct {
-	usecases   itemsinterfaces.InventoryUsecases
-	ctxUserKey string
+	usecases    itemsinterfaces.InventoryUsecases
+	ctxUserKey  string
+	broadcaster itemsinterfaces.SessionBroadcaster
 }
 
-func NewInventoryHandler(usecases itemsinterfaces.InventoryUsecases, ctxUserKey string) *InventoryHandler {
+func NewInventoryHandler(usecases itemsinterfaces.InventoryUsecases, ctxUserKey string, broadcaster itemsinterfaces.SessionBroadcaster) *InventoryHandler {
 	return &InventoryHandler{
-		usecases:   usecases,
-		ctxUserKey: ctxUserKey,
+		usecases:    usecases,
+		ctxUserKey:  ctxUserKey,
+		broadcaster: broadcaster,
 	}
 }
 
@@ -133,6 +135,23 @@ func (h *InventoryHandler) ExecuteCommand(w http.ResponseWriter, r *http.Request
 		l.DeliveryError(ctx, code, status, err, map[string]any{"containerId": req.ContainerID, "command": req.Command.Type})
 		responses.SendErrResponse(w, code, status)
 		return
+	}
+
+	if h.broadcaster != nil && result.EncounterID != "" {
+		wsMsg := models.WSResponse{
+			Type: models.InventoryPatch,
+			Data: models.InventoryPatchMessage{
+				Patches:       result.Patches,
+				Version:       result.Version,
+				ComputedStats: result.ComputedStats,
+			},
+		}
+		data, marshalErr := json.Marshal(wsMsg)
+		if marshalErr != nil {
+			l.DeliveryError(ctx, 0, "inventory_patch_marshal", marshalErr, nil)
+		} else {
+			h.broadcaster.BroadcastToEncounter(ctx, result.EncounterID, user.ID, data)
+		}
 	}
 
 	responses.SendOkResponse(w, result)

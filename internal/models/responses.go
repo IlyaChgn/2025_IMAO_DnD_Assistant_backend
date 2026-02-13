@@ -25,13 +25,17 @@ const (
 	FogHistoryPatch  WSMsgType = "fog_history_patch"
 	WalkabilityPatch WSMsgType = "walkability_patch"
 	OcclusionPatch   WSMsgType = "occlusion_patch"
-	EdgesPatch       WSMsgType = "edges_patch"
+	EdgesPatch     WSMsgType = "edges_patch"
+	// InventoryPatch is injected server-side (HTTP→WS bridge), not sent by WS clients.
+	// Listed here so IsPatchMessage returns true: if a client accidentally sends this type,
+	// it gets relayed harmlessly instead of corrupting encounter state via merger.Merge.
+	InventoryPatch WSMsgType = "inventory_patch"
 )
 
 // IsPatchMessage returns true if the message type is a patch that should be relayed directly
 func IsPatchMessage(msgType WSMsgType) bool {
 	switch msgType {
-	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch:
+	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch, InventoryPatch:
 		return true
 	default:
 		return false

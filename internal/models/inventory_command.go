@@ -77,7 +77,15 @@ type ContainerPatch struct {
 
 // CommandResponse is the response from the command endpoint.
 type CommandResponse struct {
+	EncounterID   string                  `json:"encounterId,omitempty"`
 	Version       int                     `json:"version"`
 	Patches       []ContainerPatch        `json:"patches"`
+	ComputedStats *ComputedCharacterStats `json:"computedStats,omitempty"`
+}
+
+// InventoryPatchMessage is the WS payload broadcast to session participants.
+type InventoryPatchMessage struct {
+	Patches       []ContainerPatch        `json:"patches"`
+	Version       int                     `json:"version"`
 	ComputedStats *ComputedCharacterStats `json:"computedStats,omitempty"`
 }

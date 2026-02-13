@@ -38,6 +38,10 @@ type ItemUsecases interface {
 	DeleteItem(ctx context.Context, id string, userID int) error
 }
 
+type SessionBroadcaster interface {
+	BroadcastToEncounter(ctx context.Context, encounterID string, senderUserID int, msg []byte)
+}
+
 type InventoryUsecases interface {
 	GetContainer(ctx context.Context, id string) (*models.InventoryContainer, error)
 	GetContainers(ctx context.Context, filter models.ContainerFilterParams) ([]*models.InventoryContainer, error)
