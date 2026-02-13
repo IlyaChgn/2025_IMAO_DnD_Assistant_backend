@@ -69,6 +69,8 @@ func (uc *itemUsecases) GetItems(ctx context.Context, filter models.ItemFilterPa
 	return &models.ItemListResponse{
 		Items: items,
 		Total: total,
+		Page:  filter.Page,
+		Size:  filter.Size,
 	}, nil
 }
 

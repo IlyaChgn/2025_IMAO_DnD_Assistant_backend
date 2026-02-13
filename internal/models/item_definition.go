@@ -117,4 +117,6 @@ type ItemFilterParams struct {
 type ItemListResponse struct {
 	Items []*ItemDefinition `json:"items"`
 	Total int64             `json:"total"`
+	Page  int               `json:"page"`
+	Size  int               `json:"size"`
 }

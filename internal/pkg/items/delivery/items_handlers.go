@@ -137,10 +137,8 @@ func (h *ItemsHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 
 		switch {
 		case errors.Is(err, apperrors.InvalidItemCategoryErr),
-			errors.Is(err, apperrors.InvalidItemRarityErr):
-			code = responses.StatusBadRequest
-			status = responses.ErrBadRequest
-		case errors.Is(err, apperrors.DuplicateEngNameErr):
+			errors.Is(err, apperrors.InvalidItemRarityErr),
+			errors.Is(err, apperrors.DuplicateEngNameErr):
 			code = responses.StatusBadRequest
 			status = responses.ErrBadRequest
 		default:
