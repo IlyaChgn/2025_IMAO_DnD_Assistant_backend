@@ -74,7 +74,7 @@ func (uc *inventoryUsecases) generateLootItems(ctx context.Context, tier crTier)
 		}
 	}
 
-	var items []models.ItemInstance
+	items := make([]models.ItemInstance, 0)
 	now := time.Now()
 
 	for rarity, count := range rarityCounts {
