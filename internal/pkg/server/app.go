@@ -46,6 +46,9 @@ import (
 	mapsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/usecases"
 	maptilerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/repository"
 	maptileuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/usecases"
+	featuresrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/repository"
+	featuresseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/seed"
+	featuresuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/usecases"
 	spellsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/repository"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 
@@ -270,6 +273,17 @@ func (srv *Server) Run() error {
 	}
 	spellsUsecases := spellsuc.NewSpellsUsecases(spellsRepository)
 
+	featuresRepository := featuresrepo.NewFeaturesStorage(mongoDatabase, mongoMetrics)
+	if err := featuresRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure feature indexes: %v", err)
+	}
+	if n, err := featuresseed.SeedFeatureDefinitions(context.Background(), featuresRepository); err != nil {
+		log.Printf("Warning: failed to seed feature definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d feature definitions", n)
+	}
+	featuresUsecases := featuresuc.NewFeaturesUsecases(featuresRepository)
+
 	itemsRepository := itemsrepo.NewItemsStorage(mongoDatabase, mongoMetrics)
 	if err := itemsRepository.EnsureItemDefinitionIndexes(context.Background()); err != nil {
 		log.Printf("Warning: failed to ensure item definition indexes: %v", err)
@@ -306,6 +320,7 @@ func (srv *Server) Run() error {
 		maptilesUsecases,
 		mapsUsecases,
 		spellsUsecases,
+		featuresUsecases,
 		itemsUsecases,
 		inventoryUsecases,
 		tableManager,
