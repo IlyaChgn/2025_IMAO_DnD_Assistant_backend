@@ -30,11 +30,14 @@ func (uc *inventoryUsecases) ComputeCharacterStats(ctx context.Context, containe
 	l := logger.FromContext(ctx)
 
 	equipped := collectEquippedItems(container)
-	defs := uc.resolveDefinitions(ctx, equipped, l)
-	modifiers := collectActiveModifiers(equipped, defs)
+	equippedDefs := uc.resolveDefinitions(ctx, equipped, l)
+	modifiers := collectActiveModifiers(equipped, equippedDefs)
+
+	// Resolve definitions for ALL items (weight includes unequipped)
+	allDefs := uc.resolveDefinitions(ctx, container.Items, l)
 
 	ac, breakdown := calculateAC(modifiers)
-	totalWeight := calculateTotalWeight(container.Items, defs)
+	totalWeight := calculateTotalWeight(container.Items, allDefs)
 
 	return &models.ComputedCharacterStats{
 		AC:                ac,

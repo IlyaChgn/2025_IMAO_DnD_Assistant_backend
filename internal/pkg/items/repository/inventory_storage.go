@@ -126,6 +126,10 @@ func (s *inventoryStorage) GetContainers(ctx context.Context, filter models.Cont
 		}
 		containers = append(containers, &c)
 	}
+	if err := cursor.Err(); err != nil {
+		l.RepoError(err, nil)
+		return nil, apperrors.FindMongoDataErr
+	}
 
 	if containers == nil {
 		containers = []*models.InventoryContainer{}
@@ -343,11 +347,15 @@ func (s *inventoryStorage) MoveItemAcrossContainers(
 		movedItem.Placement = toPlacement
 		movedItem.IsEquipped = false
 		movedItem.EquippedSlot = ""
+		targetVersion := target.Version
 		target.Items = append(target.Items, *movedItem)
 		target.Version++
 		target.UpdatedAt = time.Now()
 
-		res, err = collection.ReplaceOne(sc, bson.D{{Key: "_id", Value: targetObjID}}, &target)
+		res, err = collection.ReplaceOne(sc, bson.D{
+			{Key: "_id", Value: targetObjID},
+			{Key: "version", Value: targetVersion},
+		}, &target)
 		if err != nil {
 			return nil, err
 		}

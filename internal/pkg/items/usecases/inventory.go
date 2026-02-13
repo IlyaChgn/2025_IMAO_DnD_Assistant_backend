@@ -25,6 +25,21 @@ var validLayoutTypes = map[models.LayoutType]bool{
 	models.LayoutTypeGrid:      true,
 }
 
+var validEquipmentSlots = map[models.EquipmentSlot]bool{
+	models.SlotHead:      true,
+	models.SlotNeck:      true,
+	models.SlotShoulders: true,
+	models.SlotChest:     true,
+	models.SlotHands:     true,
+	models.SlotWaist:     true,
+	models.SlotLegs:      true,
+	models.SlotFeet:      true,
+	models.SlotRing1:     true,
+	models.SlotRing2:     true,
+	models.SlotMainHand:  true,
+	models.SlotOffHand:   true,
+}
+
 type inventoryUsecases struct {
 	repo     itemsinterfaces.InventoryRepository
 	itemRepo itemsinterfaces.ItemDefinitionRepository
@@ -238,30 +253,30 @@ func (uc *inventoryUsecases) executeRemove(container *models.InventoryContainer,
 		return nil, false, apperrors.ItemNotInContainerErr
 	}
 
-	item := &container.Items[idx]
-	equipmentChanged := item.IsEquipped
+	equipmentChanged := container.Items[idx].IsEquipped
 
 	qty := cmd.Quantity
-	if qty <= 0 || qty >= item.Quantity {
-		// Remove entirely
-		if item.IsEquipped && container.Equipment != nil {
-			container.Equipment.SetSlot(item.EquippedSlot, "")
+	if qty <= 0 || qty >= container.Items[idx].Quantity {
+		// Copy before removal to avoid dangling pointer
+		removedItem := container.Items[idx]
+		if removedItem.IsEquipped && container.Equipment != nil {
+			container.Equipment.SetSlot(removedItem.EquippedSlot, "")
 		}
 		container.Items = append(container.Items[:idx], container.Items[idx+1:]...)
 		return []models.ContainerPatch{{
 			ContainerID: container.ID.Hex(),
 			Version:     container.Version + 1,
 			Op:          models.PatchOpRemove,
-			Item:        item,
+			Item:        &removedItem,
 		}}, equipmentChanged, nil
 	}
 
-	item.Quantity -= qty
+	container.Items[idx].Quantity -= qty
 	return []models.ContainerPatch{{
 		ContainerID: container.ID.Hex(),
 		Version:     container.Version + 1,
 		Op:          models.PatchOpUpdate,
-		Item:        item,
+		Item:        &container.Items[idx],
 	}}, false, nil
 }
 
@@ -418,30 +433,32 @@ func (uc *inventoryUsecases) executeMerge(container *models.InventoryContainer, 
 		return nil, apperrors.ItemNotInContainerErr
 	}
 
-	src := &container.Items[srcIdx]
-	tgt := &container.Items[tgtIdx]
-
-	if src.DefinitionID != tgt.DefinitionID {
+	if container.Items[srcIdx].DefinitionID != container.Items[tgtIdx].DefinitionID {
 		return nil, apperrors.InvalidCommandErr
 	}
 
-	tgt.Quantity += src.Quantity
+	// Copy source before removal, merge quantity into target
+	srcCopy := container.Items[srcIdx]
+	container.Items[tgtIdx].Quantity += srcCopy.Quantity
 
-	// Remove source
+	// Remove source — adjust tgtIdx if it shifts
 	container.Items = append(container.Items[:srcIdx], container.Items[srcIdx+1:]...)
+	if tgtIdx > srcIdx {
+		tgtIdx--
+	}
 
 	return []models.ContainerPatch{
 		{
 			ContainerID: container.ID.Hex(),
 			Version:     container.Version + 1,
 			Op:          models.PatchOpRemove,
-			Item:        src,
+			Item:        &srcCopy,
 		},
 		{
 			ContainerID: container.ID.Hex(),
 			Version:     container.Version + 1,
 			Op:          models.PatchOpUpdate,
-			Item:        tgt,
+			Item:        &container.Items[tgtIdx],
 		},
 	}, nil
 }
@@ -467,6 +484,10 @@ func (uc *inventoryUsecases) executeEquip(ctx context.Context, container *models
 		} else {
 			return nil, apperrors.InvalidCommandErr
 		}
+	}
+
+	if !validEquipmentSlots[slot] {
+		return nil, apperrors.InvalidCommandErr
 	}
 
 	if container.Equipment == nil {
@@ -551,9 +572,7 @@ func (uc *inventoryUsecases) executeUse(ctx context.Context, container *models.I
 		return nil, apperrors.ItemNotInContainerErr
 	}
 
-	item := &container.Items[idx]
-
-	def, err := uc.itemRepo.GetItemByID(ctx, item.DefinitionID)
+	def, err := uc.itemRepo.GetItemByID(ctx, container.Items[idx].DefinitionID)
 	if err != nil {
 		return nil, err
 	}
@@ -563,28 +582,31 @@ func (uc *inventoryUsecases) executeUse(ctx context.Context, container *models.I
 	}
 
 	// Decrement charges if present
+	item := &container.Items[idx]
 	if item.Charges != nil && *item.Charges > 0 {
 		*item.Charges--
 		if *item.Charges <= 0 {
-			// Remove depleted item
+			// Copy before removal to avoid dangling pointer
+			removedItem := container.Items[idx]
 			container.Items = append(container.Items[:idx], container.Items[idx+1:]...)
 			return []models.ContainerPatch{{
 				ContainerID: container.ID.Hex(),
 				Version:     container.Version + 1,
 				Op:          models.PatchOpRemove,
-				Item:        item,
+				Item:        &removedItem,
 			}}, nil
 		}
 	} else {
 		// Decrement quantity
 		item.Quantity--
 		if item.Quantity <= 0 {
+			removedItem := container.Items[idx]
 			container.Items = append(container.Items[:idx], container.Items[idx+1:]...)
 			return []models.ContainerPatch{{
 				ContainerID: container.ID.Hex(),
 				Version:     container.Version + 1,
 				Op:          models.PatchOpRemove,
-				Item:        item,
+				Item:        &removedItem,
 			}}, nil
 		}
 	}
@@ -593,7 +615,7 @@ func (uc *inventoryUsecases) executeUse(ctx context.Context, container *models.I
 		ContainerID: container.ID.Hex(),
 		Version:     container.Version + 1,
 		Op:          models.PatchOpUpdate,
-		Item:        item,
+		Item:        &container.Items[idx],
 	}}, nil
 }
 
@@ -603,16 +625,22 @@ func (uc *inventoryUsecases) executeUpdateCoins(container *models.InventoryConta
 		return nil, apperrors.InvalidCommandErr
 	}
 
-	container.Coins.Cp += cmd.Coins.Cp
-	container.Coins.Sp += cmd.Coins.Sp
-	container.Coins.Ep += cmd.Coins.Ep
-	container.Coins.Gp += cmd.Coins.Gp
-	container.Coins.Pp += cmd.Coins.Pp
+	// Validate before mutating to keep container consistent on error
+	newCp := container.Coins.Cp + cmd.Coins.Cp
+	newSp := container.Coins.Sp + cmd.Coins.Sp
+	newEp := container.Coins.Ep + cmd.Coins.Ep
+	newGp := container.Coins.Gp + cmd.Coins.Gp
+	newPp := container.Coins.Pp + cmd.Coins.Pp
 
-	if container.Coins.Cp < 0 || container.Coins.Sp < 0 || container.Coins.Ep < 0 ||
-		container.Coins.Gp < 0 || container.Coins.Pp < 0 {
+	if newCp < 0 || newSp < 0 || newEp < 0 || newGp < 0 || newPp < 0 {
 		return nil, apperrors.NegativeCoinsErr
 	}
+
+	container.Coins.Cp = newCp
+	container.Coins.Sp = newSp
+	container.Coins.Ep = newEp
+	container.Coins.Gp = newGp
+	container.Coins.Pp = newPp
 
 	return []models.ContainerPatch{{
 		ContainerID: container.ID.Hex(),
