@@ -107,3 +107,11 @@ type ContainerFilterParams struct {
 	OwnerID     string        `json:"ownerId,omitempty"`
 	Kind        ContainerKind `json:"kind,omitempty"`
 }
+
+// GenerateLootRequest holds parameters for procedural loot generation.
+type GenerateLootRequest struct {
+	EncounterID string `json:"encounterId"`
+	CR          int    `json:"cr"`
+	PartySize   int    `json:"partySize,omitempty"`
+	Name        string `json:"name,omitempty"`
+}

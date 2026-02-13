@@ -187,6 +187,39 @@ func (s *itemsStorage) GetItemByID(ctx context.Context, id string) (*models.Item
 	return &item, nil
 }
 
+func (s *itemsStorage) GetRandomItemsByRarity(ctx context.Context, rarity models.ItemRarity, count int) ([]*models.ItemDefinition, error) {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection(itemDefinitionsCollection)
+
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.D{{Key: "rarity", Value: rarity}}}},
+		{{Key: "$sample", Value: bson.D{{Key: "size", Value: count}}}},
+	}
+
+	cursor, err := dbcall.DBCall[*mongo.Cursor](fnName, s.metrics, func() (*mongo.Cursor, error) {
+		return collection.Aggregate(ctx, pipeline)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"rarity": rarity, "count": count})
+		return nil, apperrors.FindMongoDataErr
+	}
+	defer cursor.Close(ctx)
+
+	var items []*models.ItemDefinition
+	for cursor.Next(ctx) {
+		var item models.ItemDefinition
+		if err := cursor.Decode(&item); err != nil {
+			l.RepoError(err, nil)
+			return nil, apperrors.DecodeMongoDataErr
+		}
+		items = append(items, &item)
+	}
+
+	return items, nil
+}
+
 func (s *itemsStorage) CreateItem(ctx context.Context, item *models.ItemDefinition) (*models.ItemDefinition, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()

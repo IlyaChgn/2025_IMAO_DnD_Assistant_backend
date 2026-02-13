@@ -16,4 +16,6 @@ var (
 	EmptyContainerNameErr   = errors.New("container name must not be empty")
 	NegativeCoinsErr        = errors.New("coin amount cannot be negative")
 	ItemNotInContainerErr   = errors.New("item not found in container")
+	MissingEncounterIDErr   = errors.New("chest container requires encounterId")
+	InvalidCRErr            = errors.New("CR must be between 0 and 30")
 )
