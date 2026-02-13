@@ -182,18 +182,3 @@ func (uc *itemUsecases) DeleteItem(ctx context.Context, id string, userID int) e
 	return nil
 }
 
-type inventoryUsecases struct {
-	repo itemsinterfaces.InventoryRepository
-}
-
-func NewInventoryUsecases(repo itemsinterfaces.InventoryRepository) itemsinterfaces.InventoryUsecases {
-	return &inventoryUsecases{repo: repo}
-}
-
-func (uc *inventoryUsecases) GetContainer(_ context.Context, _ string) (*models.InventoryContainer, error) {
-	return nil, apperrors.NotImplementedErr
-}
-
-func (uc *inventoryUsecases) GetContainers(_ context.Context, _ models.ContainerFilterParams) ([]*models.InventoryContainer, error) {
-	return nil, apperrors.NotImplementedErr
-}

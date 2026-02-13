@@ -205,6 +205,68 @@ type EquippedSlots struct {
 	OffHand   string `json:"offHand,omitempty" bson:"offHand,omitempty"`
 }
 
+// GetSlot returns the item ID stored in the given equipment slot.
+func (e *EquippedSlots) GetSlot(slot EquipmentSlot) string {
+	switch slot {
+	case SlotHead:
+		return e.Head
+	case SlotNeck:
+		return e.Neck
+	case SlotShoulders:
+		return e.Shoulders
+	case SlotChest:
+		return e.Chest
+	case SlotHands:
+		return e.Hands
+	case SlotWaist:
+		return e.Waist
+	case SlotLegs:
+		return e.Legs
+	case SlotFeet:
+		return e.Feet
+	case SlotRing1:
+		return e.Ring1
+	case SlotRing2:
+		return e.Ring2
+	case SlotMainHand:
+		return e.MainHand
+	case SlotOffHand:
+		return e.OffHand
+	default:
+		return ""
+	}
+}
+
+// SetSlot sets the item ID for the given equipment slot.
+func (e *EquippedSlots) SetSlot(slot EquipmentSlot, itemID string) {
+	switch slot {
+	case SlotHead:
+		e.Head = itemID
+	case SlotNeck:
+		e.Neck = itemID
+	case SlotShoulders:
+		e.Shoulders = itemID
+	case SlotChest:
+		e.Chest = itemID
+	case SlotHands:
+		e.Hands = itemID
+	case SlotWaist:
+		e.Waist = itemID
+	case SlotLegs:
+		e.Legs = itemID
+	case SlotFeet:
+		e.Feet = itemID
+	case SlotRing1:
+		e.Ring1 = itemID
+	case SlotRing2:
+		e.Ring2 = itemID
+	case SlotMainHand:
+		e.MainHand = itemID
+	case SlotOffHand:
+		e.OffHand = itemID
+	}
+}
+
 // Coins stores currency in copper/silver/electrum/gold/platinum.
 type Coins struct {
 	Cp int `json:"cp" bson:"cp"`
