@@ -50,6 +50,7 @@ import (
 	featuresseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/seed"
 	featuresuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/usecases"
 	spellsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/repository"
+	spellsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 
 	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
@@ -270,6 +271,11 @@ func (srv *Server) Run() error {
 	spellsRepository := spellsrepo.NewSpellsStorage(mongoDatabase, mongoMetrics)
 	if err := spellsRepository.EnsureIndexes(context.Background()); err != nil {
 		log.Printf("Warning: failed to ensure spell indexes: %v", err)
+	}
+	if n, err := spellsseed.SeedSpellDefinitions(context.Background(), spellsRepository); err != nil {
+		log.Printf("Warning: failed to seed spell definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d spell definitions", n)
 	}
 	spellsUsecases := spellsuc.NewSpellsUsecases(spellsRepository)
 

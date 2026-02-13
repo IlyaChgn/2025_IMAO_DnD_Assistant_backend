@@ -10,6 +10,7 @@ type SpellsRepository interface {
 	GetSpells(ctx context.Context, filter models.SpellFilterParams) ([]*models.SpellDefinition, int64, error)
 	GetSpellByID(ctx context.Context, id string) (*models.SpellDefinition, error)
 	GetSpellsByClass(ctx context.Context, className string, level *int) ([]*models.SpellDefinition, error)
+	UpsertSpell(ctx context.Context, spell *models.SpellDefinition) error
 	EnsureIndexes(ctx context.Context) error
 }
 
