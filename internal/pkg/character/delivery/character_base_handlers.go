@@ -228,7 +228,7 @@ func (h *CharacterBaseHandler) ImportLSS(w http.ResponseWriter, r *http.Request)
 	}
 
 	type importResponse struct {
-		Character *models.CharacterBase   `json:"character"`
+		Character *models.CharacterBase    `json:"character"`
 		Report    *models.ConversionReport `json:"report"`
 	}
 

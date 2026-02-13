@@ -74,7 +74,7 @@ type CharacterBase struct {
 
 // ClassEntry represents a single class in a character's class list (supports multiclass).
 type ClassEntry struct {
-	ClassName string `json:"className" bson:"className"`                    // "wizard", "paladin", or custom
+	ClassName string `json:"className" bson:"className"`                   // "wizard", "paladin", or custom
 	Subclass  string `json:"subclass,omitempty" bson:"subclass,omitempty"` // "evocation", "oath_of_devotion"
 	Level     int    `json:"level" bson:"level"`
 }
@@ -91,12 +91,12 @@ type AbilityScores struct {
 
 // Proficiencies stores a character's proficiency lists.
 type Proficiencies struct {
-	Skills       []string      `json:"skills" bson:"skills"`                                   // ["athletics", "perception"]
-	SavingThrows []AbilityType `json:"savingThrows" bson:"savingThrows"`                       // ["WIS", "CHA"] — uses AbilityType
-	Tools        []string      `json:"tools,omitempty" bson:"tools,omitempty"`                 // ["thieves_tools"]
-	Languages    []string      `json:"languages,omitempty" bson:"languages,omitempty"`         // ["common", "elvish"]
-	Armor        []string      `json:"armor,omitempty" bson:"armor,omitempty"`                 // ["light", "medium", "shields"]
-	Weapons      []string      `json:"weapons,omitempty" bson:"weapons,omitempty"`             // ["simple", "martial"]
+	Skills       []string      `json:"skills" bson:"skills"`                           // ["athletics", "perception"]
+	SavingThrows []AbilityType `json:"savingThrows" bson:"savingThrows"`               // ["WIS", "CHA"] — uses AbilityType
+	Tools        []string      `json:"tools,omitempty" bson:"tools,omitempty"`         // ["thieves_tools"]
+	Languages    []string      `json:"languages,omitempty" bson:"languages,omitempty"` // ["common", "elvish"]
+	Armor        []string      `json:"armor,omitempty" bson:"armor,omitempty"`         // ["light", "medium", "shields"]
+	Weapons      []string      `json:"weapons,omitempty" bson:"weapons,omitempty"`     // ["simple", "martial"]
 }
 
 // Appearance stores physical description fields.
@@ -121,10 +121,10 @@ type HitPointsBase struct {
 type WeaponDef struct {
 	ID              string     `json:"id" bson:"id"`
 	Name            string     `json:"name" bson:"name"`
-	AttackType      string     `json:"attackType" bson:"attackType"`                                 // "melee", "ranged", "melee_or_ranged"
-	AbilityOverride string     `json:"abilityOverride,omitempty" bson:"abilityOverride,omitempty"`   // "dex" for finesse
-	DamageDice      string     `json:"damageDice" bson:"damageDice"`                                 // "1d8"
-	DamageType      string     `json:"damageType" bson:"damageType"`                                 // "slashing"
+	AttackType      string     `json:"attackType" bson:"attackType"`                               // "melee", "ranged", "melee_or_ranged"
+	AbilityOverride string     `json:"abilityOverride,omitempty" bson:"abilityOverride,omitempty"` // "dex" for finesse
+	DamageDice      string     `json:"damageDice" bson:"damageDice"`                               // "1d8"
+	DamageType      string     `json:"damageType" bson:"damageType"`                               // "slashing"
 	Properties      []string   `json:"properties,omitempty" bson:"properties,omitempty"`
 	MagicBonus      int        `json:"magicBonus,omitempty" bson:"magicBonus,omitempty"`
 	Range           *RangeData `json:"range,omitempty" bson:"range,omitempty"` // reuses existing RangeData
@@ -159,12 +159,12 @@ type SpellRef struct {
 
 // FeatureInstance represents a character feature (class feature, racial trait, feat, etc.).
 type FeatureInstance struct {
-	ID           string `json:"id" bson:"id"`
-	FeatureDefID string `json:"featureDefId,omitempty" bson:"featureDefId,omitempty"` // ref to future FeatureDefinition
-	Name         string `json:"name" bson:"name"`
-	Description  string `json:"description,omitempty" bson:"description,omitempty"`
-	Source       string `json:"source" bson:"source"`                                 // "class", "race", "feat", "background", "custom"
-	SourceDetail string `json:"sourceDetail,omitempty" bson:"sourceDetail,omitempty"` // e.g. "wizard:evocation"
+	ID           string           `json:"id" bson:"id"`
+	FeatureDefID string           `json:"featureDefId,omitempty" bson:"featureDefId,omitempty"` // ref to future FeatureDefinition
+	Name         string           `json:"name" bson:"name"`
+	Description  string           `json:"description,omitempty" bson:"description,omitempty"`
+	Source       string           `json:"source" bson:"source"`                                 // "class", "race", "feat", "background", "custom"
+	SourceDetail string           `json:"sourceDetail,omitempty" bson:"sourceDetail,omitempty"` // e.g. "wizard:evocation"
 	Resource     *FeatureResource `json:"resource,omitempty" bson:"resource,omitempty"`
 	// Automation fields (empty on LSS import, filled when user configures or FeatureDef is linked).
 	// PassiveModifiers reuses ModifierEffect from creature_runtime.go (same package).
@@ -278,7 +278,7 @@ type Coins struct {
 
 // ImportSource records where a character was imported from.
 type ImportSource struct {
-	Format     string   `json:"format" bson:"format"`         // "lss_v2"
+	Format     string   `json:"format" bson:"format"` // "lss_v2"
 	ImportedAt string   `json:"importedAt" bson:"importedAt"`
 	Warnings   []string `json:"warnings,omitempty" bson:"warnings,omitempty"`
 }

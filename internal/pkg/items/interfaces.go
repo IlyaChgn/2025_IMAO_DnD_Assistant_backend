@@ -12,6 +12,7 @@ type ItemDefinitionRepository interface {
 	GetItems(ctx context.Context, filter models.ItemFilterParams) ([]*models.ItemDefinition, int64, error)
 	GetItemByEngName(ctx context.Context, engName string) (*models.ItemDefinition, error)
 	GetItemByID(ctx context.Context, id string) (*models.ItemDefinition, error)
+	GetRandomItemsByRarity(ctx context.Context, rarity models.ItemRarity, count int) ([]*models.ItemDefinition, error)
 	CreateItem(ctx context.Context, item *models.ItemDefinition) (*models.ItemDefinition, error)
 	UpdateItem(ctx context.Context, item *models.ItemDefinition) (*models.ItemDefinition, error)
 	DeleteItem(ctx context.Context, id string) error
@@ -43,4 +44,5 @@ type InventoryUsecases interface {
 	CreateContainer(ctx context.Context, container *models.InventoryContainer) (*models.InventoryContainer, error)
 	DeleteContainer(ctx context.Context, id string, userID int) error
 	ExecuteCommand(ctx context.Context, req *models.CommandRequest, userID int) (*models.CommandResponse, error)
+	GenerateLoot(ctx context.Context, req *models.GenerateLootRequest, userID int) (*models.InventoryContainer, error)
 }

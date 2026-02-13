@@ -138,6 +138,33 @@ func (h *InventoryHandler) ExecuteCommand(w http.ResponseWriter, r *http.Request
 	responses.SendOkResponse(w, result)
 }
 
+// GenerateLoot handles POST /api/inventory/generate-loot
+func (h *InventoryHandler) GenerateLoot(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	var req models.GenerateLootRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, err, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	result, err := h.usecases.GenerateLoot(ctx, &req, user.ID)
+	if err != nil {
+		code, status := mapInventoryError(err)
+		l.DeliveryError(ctx, code, status, err, map[string]any{"cr": req.CR})
+		responses.SendErrResponse(w, code, status)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(result)
+}
+
 func mapInventoryError(err error) (int, string) {
 	switch {
 	case errors.Is(err, apperrors.ContainerNotFoundErr),
@@ -156,7 +183,9 @@ func mapInventoryError(err error) (int, string) {
 		errors.Is(err, apperrors.ItemNotConsumableErr),
 		errors.Is(err, apperrors.NegativeCoinsErr),
 		errors.Is(err, apperrors.ItemNotInContainerErr),
-		errors.Is(err, apperrors.InvalidIDErr):
+		errors.Is(err, apperrors.InvalidIDErr),
+		errors.Is(err, apperrors.MissingEncounterIDErr),
+		errors.Is(err, apperrors.InvalidCRErr):
 		return responses.StatusBadRequest, responses.ErrInvalidCommand
 	case errors.Is(err, apperrors.ContainerFullErr),
 		errors.Is(err, apperrors.SlotOccupiedErr):

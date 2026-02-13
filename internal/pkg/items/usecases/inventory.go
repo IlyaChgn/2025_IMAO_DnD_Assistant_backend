@@ -89,6 +89,10 @@ func (uc *inventoryUsecases) CreateContainer(ctx context.Context, container *mod
 		l.UsecasesWarn(apperrors.InvalidContainerKindErr, 0, map[string]any{"kind": container.Kind})
 		return nil, apperrors.InvalidContainerKindErr
 	}
+	if container.Kind == models.ContainerKindChest && container.EncounterID == "" {
+		l.UsecasesWarn(apperrors.MissingEncounterIDErr, 0, nil)
+		return nil, apperrors.MissingEncounterIDErr
+	}
 	if container.Layout != "" && !validLayoutTypes[container.Layout] {
 		l.UsecasesWarn(apperrors.InvalidLayoutTypeErr, 0, map[string]any{"layout": container.Layout})
 		return nil, apperrors.InvalidLayoutTypeErr
@@ -668,4 +672,3 @@ func findItem(container *models.InventoryContainer, itemID string) *models.ItemI
 	}
 	return &container.Items[idx]
 }
-

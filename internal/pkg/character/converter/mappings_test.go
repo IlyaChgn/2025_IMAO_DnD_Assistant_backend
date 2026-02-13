@@ -8,9 +8,9 @@ import (
 
 func TestMapClassName(t *testing.T) {
 	tests := []struct {
-		input     string
-		expected  string
-		found     bool
+		input    string
+		expected string
+		found    bool
 	}{
 		{"Следопыт", "ranger", true},
 		{"Волшебник", "wizard", true},
@@ -19,10 +19,10 @@ func TestMapClassName(t *testing.T) {
 		{"Плут", "rogue", true},
 		{"Паладин", "paladin", true},
 		{"Жрец", "cleric", true},
-		{"Литера", "Литера", false},        // unknown class
-		{"  Бард  ", "bard", true},         // with whitespace
-		{"", "", false},                     // empty
-		{"Особый", "Особый", false},         // homebrew
+		{"Литера", "Литера", false}, // unknown class
+		{"  Бард  ", "bard", true},  // with whitespace
+		{"", "", false},             // empty
+		{"Особый", "Особый", false}, // homebrew
 	}
 
 	for _, tt := range tests {
@@ -46,7 +46,7 @@ func TestMapAbilityCode(t *testing.T) {
 		{"int", models.AbilityINT, true},
 		{"wis", models.AbilityWIS, true},
 		{"cha", models.AbilityCHA, true},
-		{"STR", models.AbilitySTR, true},  // case insensitive
+		{"STR", models.AbilitySTR, true},     // case insensitive
 		{"  int  ", models.AbilityINT, true}, // with whitespace
 		{"xyz", "", false},
 	}
@@ -85,9 +85,9 @@ func TestMapAbilityNameRu(t *testing.T) {
 
 func TestParseDamageString(t *testing.T) {
 	tests := []struct {
-		input      string
-		wantDice   string
-		wantType   string
+		input    string
+		wantDice string
+		wantType string
 	}{
 		{"1к10 рубящий", "1d10", "slashing"},
 		{"1к6 колющий", "1d6", "piercing"},

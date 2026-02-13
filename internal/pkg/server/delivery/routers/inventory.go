@@ -15,4 +15,5 @@ func ServeInventoryRouter(router *mux.Router, handler *itemsdel.InventoryHandler
 	sub.HandleFunc("/containers", handler.CreateContainer).Methods("POST")
 	sub.HandleFunc("/containers/{id}", handler.DeleteContainer).Methods("DELETE")
 	sub.HandleFunc("/commands", handler.ExecuteCommand).Methods("POST")
+	sub.HandleFunc("/generate-loot", handler.GenerateLoot).Methods("POST")
 }
