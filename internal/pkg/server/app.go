@@ -48,6 +48,9 @@ import (
 	maptileuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/usecases"
 	spellsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/repository"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
+
+	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
+	itemsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/socks5proxy"
 )
 
@@ -265,6 +268,18 @@ func (srv *Server) Run() error {
 		log.Printf("Warning: failed to ensure spell indexes: %v", err)
 	}
 	spellsUsecases := spellsuc.NewSpellsUsecases(spellsRepository)
+
+	itemsRepository := itemsrepo.NewItemsStorage(mongoDatabase, mongoMetrics)
+	if err := itemsRepository.EnsureItemDefinitionIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure item definition indexes: %v", err)
+	}
+	inventoryRepository := itemsrepo.NewInventoryStorage(mongoDatabase, mongoMetrics)
+	if err := inventoryRepository.EnsureInventoryContainerIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure inventory container indexes: %v", err)
+	}
+	// Usecases created but not wired to router yet (Epic 3)
+	_ = itemsuc.NewItemUsecases(itemsRepository)
+	_ = itemsuc.NewInventoryUsecases(inventoryRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
