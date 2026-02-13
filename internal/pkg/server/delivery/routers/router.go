@@ -12,6 +12,8 @@ import (
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
+	featuresinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features"
+	featuresdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/delivery"
 	itemsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items"
 	itemsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/delivery"
 	mylogger "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
@@ -47,6 +49,7 @@ func NewRouter(cfg *config.Config,
 	maptilesInterface maptilesinterfaces.MapTilesUsecases,
 	mapsInterface mapsinterfaces.MapsUsecases,
 	spellsInterface spellsinterfaces.SpellsUsecases,
+	featuresInterface featuresinterfaces.FeaturesUsecases,
 	itemsInterface itemsinterfaces.ItemUsecases,
 	inventoryInterface itemsinterfaces.InventoryUsecases,
 	broadcaster itemsinterfaces.SessionBroadcaster) *mux.Router {
@@ -62,6 +65,7 @@ func NewRouter(cfg *config.Config,
 	mapTilesHandler := maptilesdel.NewMapTilesHandler(maptilesInterface, cfg.CtxUserKey)
 	mapsHandler := mapsdel.NewMapsHandler(mapsInterface, cfg.CtxUserKey)
 	spellsHandler := spellsdel.NewSpellsHandler(spellsInterface)
+	featuresHandler := featuresdel.NewFeaturesHandler(featuresInterface)
 	itemsHandler := itemsdel.NewItemsHandler(itemsInterface, cfg.CtxUserKey)
 	inventoryHandler := itemsdel.NewInventoryHandler(inventoryInterface, cfg.CtxUserKey, broadcaster)
 
@@ -92,6 +96,7 @@ func NewRouter(cfg *config.Config,
 	ServeMapTilesRouter(rootRouter, mapTilesHandler, loginRequiredMiddleware)
 	ServeMapsRouter(rootRouter, mapsHandler, loginRequiredMiddleware)
 	ServeSpellsRouter(rootRouter, spellsHandler)
+	ServeFeaturesRouter(rootRouter, featuresHandler)
 	ServeItemsRouter(rootRouter, itemsHandler, loginRequiredMiddleware)
 	ServeInventoryRouter(rootRouter, inventoryHandler, loginRequiredMiddleware)
 

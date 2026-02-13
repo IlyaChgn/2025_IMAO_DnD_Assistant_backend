@@ -1,0 +1,394 @@
+[
+  {
+    "engName": "second_wind",
+    "name": { "eng": "Second Wind", "rus": "Второе дыхание" },
+    "description": {
+      "eng": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+      "rus": "У вас есть ограниченный запас выносливости, который вы можете использовать для защиты. В свой ход вы можете бонусным действием восстановить хиты в количестве 1к10 + ваш уровень воина. Использовав эту способность, вы должны завершить короткий или продолжительный отдых, прежде чем сможете использовать её снова."
+    },
+    "source": "class",
+    "sourceDetail": "fighter",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["healing", "bonus_action"]
+  },
+  {
+    "engName": "action_surge",
+    "name": { "eng": "Action Surge", "rus": "Всплеск действий" },
+    "description": {
+      "eng": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
+      "rus": "Начиная со 2-го уровня, вы можете на мгновение превзойти свои обычные возможности. В свой ход вы можете совершить одно дополнительное действие. Использовав эту способность, вы должны завершить короткий или продолжительный отдых, прежде чем сможете использовать её снова. Начиная с 17-го уровня, вы можете использовать её дважды до отдыха, но только один раз в тот же ход."
+    },
+    "source": "class",
+    "sourceDetail": "fighter",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["action_economy"]
+  },
+  {
+    "engName": "extra_attack_fighter",
+    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "description": {
+      "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn. The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
+      "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход. Количество атак увеличивается до трёх на 11-м уровне и до четырёх на 20-м уровне этого класса."
+    },
+    "source": "class",
+    "sourceDetail": "fighter",
+    "level": 5,
+    "tags": ["combat", "attack"]
+  },
+  {
+    "engName": "indomitable",
+    "name": { "eng": "Indomitable", "rus": "Несгибаемый" },
+    "description": {
+      "eng": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest. You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.",
+      "rus": "Начиная с 9-го уровня, вы можете перебросить проваленный спасбросок. Если вы это делаете, вы должны использовать новый результат. Вы не можете использовать эту способность снова, пока не завершите продолжительный отдых. Вы можете использовать эту способность дважды между продолжительными отдыхами начиная с 13-го уровня и трижды начиная с 17-го уровня."
+    },
+    "source": "class",
+    "sourceDetail": "fighter",
+    "level": 9,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["defensive", "saving_throw"]
+  },
+  {
+    "engName": "fighting_style_fighter",
+    "name": { "eng": "Fighting Style", "rus": "Боевой стиль" },
+    "description": {
+      "eng": "You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
+      "rus": "Вы выбираете определённый стиль боя в качестве своей специализации. Выберите один из следующих вариантов. Вы не можете выбрать один и тот же вариант боевого стиля дважды, даже если позднее у вас будет возможность выбрать снова."
+    },
+    "source": "class",
+    "sourceDetail": "fighter",
+    "level": 1,
+    "tags": ["combat", "choice"]
+  },
+  {
+    "engName": "divine_sense",
+    "name": { "eng": "Divine Sense", "rus": "Божественное чувство" },
+    "description": {
+      "eng": "The presence of strong evil registers on your senses like a noxious odor, and powerful good rings like heavenly music in your ears. As an action, you can open your awareness to detect such forces. Until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover.",
+      "rus": "Присутствие сильного зла воспринимается вашими чувствами как неприятный запах, а могущественное добро звучит как небесная музыка. Вы можете действием открыть своё сознание для обнаружения таких сил. До конца вашего следующего хода вы знаете расположение любого небожителя, исчадия или нежити в пределах 60 футов от вас, не находящегося за полным укрытием."
+    },
+    "source": "class",
+    "sourceDetail": "paladin",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["detection", "action"]
+  },
+  {
+    "engName": "lay_on_hands",
+    "name": { "eng": "Lay on Hands", "rus": "Наложение рук" },
+    "description": {
+      "eng": "Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you take a long rest. With that pool, you can restore a total number of hit points equal to your paladin level x 5. As an action, you can touch a creature and draw power from the pool to restore a number of hit points to that creature, up to the maximum amount remaining in your pool.",
+      "rus": "Ваше благословенное касание может исцелять раны. У вас есть запас целительной силы, восстанавливающийся после продолжительного отдыха. Этим запасом вы можете восстановить суммарное количество хитов, равное уровню паладина x 5. Вы можете действием коснуться существа и восстановить ему хиты, потратив любое количество из вашего запаса."
+    },
+    "source": "class",
+    "sourceDetail": "paladin",
+    "level": 1,
+    "tags": ["healing", "action"]
+  },
+  {
+    "engName": "divine_smite",
+    "name": { "eng": "Divine Smite", "rus": "Божественная кара" },
+    "description": {
+      "eng": "Starting at 2nd level, when you hit a creature with a melee weapon attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon's damage. The extra damage is 2d8 for a 1st-level spell slot, plus 1d8 for each spell level higher than 1st, to a maximum of 5d8. The damage increases by 1d8 if the target is an undead or a fiend, to a maximum of 6d8.",
+      "rus": "Начиная со 2-го уровня, когда вы попадаете по существу атакой рукопашным оружием, вы можете потратить одну ячейку заклинаний, чтобы нанести цели урон излучением в дополнение к урону оружия. Дополнительный урон составляет 2к8 для ячейки 1-го уровня, плюс 1к8 за каждый уровень ячейки выше 1-го, максимум 5к8. Урон увеличивается на 1к8, если цель — нежить или исчадие, максимум 6к8."
+    },
+    "source": "class",
+    "sourceDetail": "paladin",
+    "level": 2,
+    "tags": ["combat", "damage", "radiant"]
+  },
+  {
+    "engName": "aura_of_protection",
+    "name": { "eng": "Aura of Protection", "rus": "Аура защиты" },
+    "description": {
+      "eng": "Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus. At 18th level, the range of this aura increases to 30 feet.",
+      "rus": "Начиная с 6-го уровня, каждый раз, когда вы или дружественное существо в пределах 10 футов от вас должны совершить спасбросок, существо получает бонус к спасброску, равный вашему модификатору Харизмы (минимум +1). Вы должны быть в сознании, чтобы предоставлять этот бонус. На 18-м уровне радиус ауры увеличивается до 30 футов."
+    },
+    "source": "class",
+    "sourceDetail": "paladin",
+    "level": 6,
+    "tags": ["defensive", "aura", "saving_throw"]
+  },
+  {
+    "engName": "extra_attack_paladin",
+    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "description": {
+      "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
+      "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход."
+    },
+    "source": "class",
+    "sourceDetail": "paladin",
+    "level": 5,
+    "tags": ["combat", "attack"]
+  },
+  {
+    "engName": "fighting_style_paladin",
+    "name": { "eng": "Fighting Style", "rus": "Боевой стиль" },
+    "description": {
+      "eng": "At 2nd level, you adopt a style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
+      "rus": "На 2-м уровне вы выбираете стиль боя в качестве своей специализации. Выберите один из следующих вариантов. Вы не можете выбрать один и тот же вариант боевого стиля дважды, даже если позднее у вас будет возможность выбрать снова."
+    },
+    "source": "class",
+    "sourceDetail": "paladin",
+    "level": 2,
+    "tags": ["combat", "choice"]
+  },
+  {
+    "engName": "arcane_recovery",
+    "name": { "eng": "Arcane Recovery", "rus": "Магическое восстановление" },
+    "description": {
+      "eng": "You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher.",
+      "rus": "Вы научились восстанавливать часть своей магической энергии, изучая книгу заклинаний. Один раз в день, завершив короткий отдых, вы можете восстановить потраченные ячейки заклинаний. Суммарный уровень ячеек не может превышать половину вашего уровня волшебника (с округлением вверх), и ни одна из ячеек не может быть 6-го уровня или выше."
+    },
+    "source": "class",
+    "sourceDetail": "wizard",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["spell_slots", "recovery"]
+  },
+  {
+    "engName": "spell_mastery",
+    "name": { "eng": "Spell Mastery", "rus": "Мастерство заклинаний" },
+    "description": {
+      "eng": "At 18th level, you have achieved such mastery over certain spells that you can cast them at will. Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook. You can cast those spells at their lowest level without expending a spell slot when you have them prepared.",
+      "rus": "На 18-м уровне вы достигли такого мастерства в определённых заклинаниях, что можете использовать их по желанию. Выберите заклинание волшебника 1-го уровня и заклинание волшебника 2-го уровня из вашей книги заклинаний. Вы можете использовать эти заклинания на их минимальном уровне без траты ячейки заклинаний, если они подготовлены."
+    },
+    "source": "class",
+    "sourceDetail": "wizard",
+    "level": 18,
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "signature_spells",
+    "name": { "eng": "Signature Spells", "rus": "Коронные заклинания" },
+    "description": {
+      "eng": "When you reach 20th level, you gain mastery over two powerful spells and can cast them with little effort. Choose two 3rd-level wizard spells in your spellbook as your signature spells. You always have these spells prepared, they don't count against the number of spells you have prepared, and you can cast each of them once at 3rd level without expending a spell slot.",
+      "rus": "Достигнув 20-го уровня, вы обретаете мастерство над двумя мощными заклинаниями и можете использовать их без особых усилий. Выберите два заклинания волшебника 3-го уровня из вашей книги заклинаний в качестве коронных. Эти заклинания всегда считаются подготовленными и не учитываются в числе подготовленных заклинаний. Вы можете использовать каждое из них один раз на 3-м уровне без траты ячейки заклинаний."
+    },
+    "source": "class",
+    "sourceDetail": "wizard",
+    "level": 20,
+    "resource": { "maxUses": 2, "resetOn": "short_rest" },
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "arcane_tradition",
+    "name": { "eng": "Arcane Tradition", "rus": "Магическая традиция" },
+    "description": {
+      "eng": "When you reach 2nd level, you choose an arcane tradition, shaping your practice of magic through one of the following schools. Your choice grants you features at 2nd level and again at 6th, 10th, and 14th level.",
+      "rus": "Достигнув 2-го уровня, вы выбираете магическую традицию, определяющую вашу практику магии через одну из школ. Ваш выбор даёт вам умения на 2-м уровне, а также на 6-м, 10-м и 14-м уровнях."
+    },
+    "source": "class",
+    "sourceDetail": "wizard",
+    "level": 2,
+    "tags": ["subclass", "choice"]
+  },
+  {
+    "engName": "sneak_attack",
+    "name": { "eng": "Sneak Attack", "rus": "Скрытая атака" },
+    "description": {
+      "eng": "Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra 1d6 damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon. You don't need advantage if another enemy of the target is within 5 feet of it. The extra damage increases as you gain levels in this class.",
+      "rus": "Начиная с 1-го уровня, вы знаете, как наносить точные удары, используя отвлечённость противника. Один раз в ход вы можете нанести дополнительные 1к6 урона одному существу, по которому вы попали атакой, если у вас есть преимущество на бросок атаки. Атака должна использовать фехтовальное или дальнобойное оружие. Преимущество не требуется, если другой враг цели находится в пределах 5 футов от неё. Дополнительный урон увеличивается с ростом уровня в этом классе."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 1,
+    "tags": ["combat", "damage"]
+  },
+  {
+    "engName": "cunning_action",
+    "name": { "eng": "Cunning Action", "rus": "Хитрое действие" },
+    "description": {
+      "eng": "Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action.",
+      "rus": "Начиная со 2-го уровня, ваше быстрое мышление и ловкость позволяют вам быстро двигаться и действовать. Вы можете совершить бонусное действие в каждый свой ход в бою. Это действие может быть использовано только для совершения действий Рывок, Отход или Засада."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 2,
+    "tags": ["action_economy", "bonus_action"]
+  },
+  {
+    "engName": "uncanny_dodge",
+    "name": { "eng": "Uncanny Dodge", "rus": "Уклонение" },
+    "description": {
+      "eng": "Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.",
+      "rus": "Начиная с 5-го уровня, когда видимый вами атакующий попадает по вам атакой, вы можете реакцией уменьшить урон от этой атаки вдвое."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 5,
+    "tags": ["defensive", "reaction"]
+  },
+  {
+    "engName": "evasion_rogue",
+    "name": { "eng": "Evasion", "rus": "Увёртливость" },
+    "description": {
+      "eng": "Beginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or an ice storm spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
+      "rus": "Начиная с 7-го уровня, вы можете ловко уклоняться от определённых эффектов по площади, таких как огненное дыхание красного дракона или заклинание ледяная буря. Когда вы подвергаетесь эффекту, позволяющему совершить спасбросок Ловкости для получения только половины урона, вы вместо этого не получаете урон при успехе и получаете только половину урона при провале."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 7,
+    "tags": ["defensive", "saving_throw"]
+  },
+  {
+    "engName": "reliable_talent",
+    "name": { "eng": "Reliable Talent", "rus": "Надёжный талант" },
+    "description": {
+      "eng": "By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10.",
+      "rus": "К 11-му уровню вы отточили свои навыки до совершенства. Каждый раз, когда вы совершаете проверку характеристики, позволяющую добавить бонус мастерства, вы можете считать результат броска к20, равный 9 или ниже, как 10."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 11,
+    "tags": ["skill"]
+  },
+  {
+    "engName": "thieves_cant",
+    "name": { "eng": "Thieves' Cant", "rus": "Воровской жаргон" },
+    "description": {
+      "eng": "During your rogue training you learned thieves' cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves' cant understands such messages.",
+      "rus": "Во время обучения плутовскому ремеслу вы выучили воровской жаргон — тайную смесь диалекта, жаргона и кода, позволяющую скрывать сообщения в обычном разговоре. Только другое существо, знающее воровской жаргон, понимает такие сообщения."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 1,
+    "tags": ["language", "utility"]
+  },
+  {
+    "engName": "rage",
+    "name": { "eng": "Rage", "rus": "Ярость" },
+    "description": {
+      "eng": "In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain resistance to bludgeoning, piercing, and slashing damage, advantage on Strength checks and Strength saving throws, and a bonus to melee weapon damage rolls. You can rage a number of times equal to your rage uses, and you regain all expended uses when you finish a long rest.",
+      "rus": "В бою вы сражаетесь с первобытной свирепостью. В свой ход вы можете бонусным действием впасть в ярость. Пока вы в ярости, вы получаете сопротивление дробящему, колющему и рубящему урону, преимущество на проверки Силы и спасброски Силы, а также бонус к броскам урона рукопашным оружием. Вы можете впадать в ярость количество раз, равное вашим зарядам ярости, и восстанавливаете все использования после продолжительного отдыха."
+    },
+    "source": "class",
+    "sourceDetail": "barbarian",
+    "level": 1,
+    "resource": { "maxUses": 2, "resetOn": "long_rest" },
+    "tags": ["combat", "bonus_action", "resistance"]
+  },
+  {
+    "engName": "unarmored_defense_barbarian",
+    "name": { "eng": "Unarmored Defense", "rus": "Защита без доспехов" },
+    "description": {
+      "eng": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+      "rus": "Пока вы не носите доспехов, ваш Класс Доспеха равен 10 + модификатор Ловкости + модификатор Телосложения. Вы можете использовать щит и всё равно получать это преимущество."
+    },
+    "source": "class",
+    "sourceDetail": "barbarian",
+    "level": 1,
+    "tags": ["defensive", "armor_class"]
+  },
+  {
+    "engName": "reckless_attack",
+    "name": { "eng": "Reckless Attack", "rus": "Безрассудная атака" },
+    "description": {
+      "eng": "Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
+      "rus": "Начиная со 2-го уровня, вы можете отбросить всю заботу о защите ради яростной атаки. Совершая первую атаку в свой ход, вы можете решить атаковать безрассудно. Это даёт вам преимущество на броски атаки рукопашным оружием с использованием Силы в течение этого хода, но броски атаки против вас получают преимущество до начала вашего следующего хода."
+    },
+    "source": "class",
+    "sourceDetail": "barbarian",
+    "level": 2,
+    "tags": ["combat", "attack", "advantage"]
+  },
+  {
+    "engName": "danger_sense",
+    "name": { "eng": "Danger Sense", "rus": "Чувство опасности" },
+    "description": {
+      "eng": "At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
+      "rus": "На 2-м уровне вы обретаете сверхъестественное чувство, когда что-то рядом с вами не так, как должно быть, что даёт вам преимущество при уклонении от опасности. Вы получаете преимущество на спасброски Ловкости от эффектов, которые вы видите, таких как ловушки и заклинания. Чтобы получить это преимущество, вы не должны быть ослеплены, оглушены или недееспособны."
+    },
+    "source": "class",
+    "sourceDetail": "barbarian",
+    "level": 2,
+    "tags": ["defensive", "saving_throw", "advantage"]
+  },
+  {
+    "engName": "extra_attack_barbarian",
+    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "description": {
+      "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
+      "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход."
+    },
+    "source": "class",
+    "sourceDetail": "barbarian",
+    "level": 5,
+    "tags": ["combat", "attack"]
+  },
+  {
+    "engName": "channel_divinity",
+    "name": { "eng": "Channel Divinity", "rus": "Божественный канал" },
+    "description": {
+      "eng": "At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws.",
+      "rus": "На 2-м уровне вы получаете способность направлять божественную энергию непосредственно от своего божества, используя эту энергию для создания магических эффектов. Используя Божественный канал, вы выбираете, какой эффект создать. Затем вы должны завершить короткий или продолжительный отдых, чтобы снова использовать Божественный канал. Некоторые эффекты Божественного канала требуют спасбросков."
+    },
+    "source": "class",
+    "sourceDetail": "cleric",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "resource"]
+  },
+  {
+    "engName": "turn_undead",
+    "name": { "eng": "Turn Undead", "rus": "Изгнание нежити" },
+    "description": {
+      "eng": "As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.",
+      "rus": "Вы действием демонстрируете свой священный символ и произносите молитву, осуждающую нежить. Каждая нежить, которая может видеть или слышать вас в пределах 30 футов, должна совершить спасбросок Мудрости. При провале существо считается изгнанным на 1 минуту или пока не получит какой-либо урон."
+    },
+    "source": "class",
+    "sourceDetail": "cleric",
+    "level": 2,
+    "tags": ["divine", "action", "undead"]
+  },
+  {
+    "engName": "favored_enemy",
+    "name": { "eng": "Favored Enemy", "rus": "Избранный враг" },
+    "description": {
+      "eng": "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy. Choose a type of favored enemy: aberrations, beasts, celestials, constructs, dragons, elementals, fey, fiends, giants, monstrosities, oozes, plants, or undead.",
+      "rus": "Начиная с 1-го уровня, у вас есть значительный опыт изучения, выслеживания, охоты и даже общения с определённым типом врагов. Выберите тип избранного врага: аберрации, звери, небожители, конструкты, драконы, элементали, феи, исчадия, великаны, чудовища, слизи, растения или нежить."
+    },
+    "source": "class",
+    "sourceDetail": "ranger",
+    "level": 1,
+    "tags": ["exploration", "choice"]
+  },
+  {
+    "engName": "natural_explorer",
+    "name": { "eng": "Natural Explorer", "rus": "Исследователь природы" },
+    "description": {
+      "eng": "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, swamp, or the Underdark.",
+      "rus": "Вы особенно хорошо знакомы с одним типом природной среды и умеете путешествовать и выживать в таких регионах. Выберите один тип избранной местности: арктика, побережье, пустыня, лес, луга, горы, болото или Подземье."
+    },
+    "source": "class",
+    "sourceDetail": "ranger",
+    "level": 1,
+    "tags": ["exploration", "choice"]
+  },
+  {
+    "engName": "fighting_style_ranger",
+    "name": { "eng": "Fighting Style", "rus": "Боевой стиль" },
+    "description": {
+      "eng": "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
+      "rus": "На 2-м уровне вы выбираете определённый стиль боя в качестве своей специализации. Выберите один из следующих вариантов. Вы не можете выбрать один и тот же вариант боевого стиля дважды, даже если позднее у вас будет возможность выбрать снова."
+    },
+    "source": "class",
+    "sourceDetail": "ranger",
+    "level": 2,
+    "tags": ["combat", "choice"]
+  },
+  {
+    "engName": "extra_attack_ranger",
+    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "description": {
+      "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
+      "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход."
+    },
+    "source": "class",
+    "sourceDetail": "ranger",
+    "level": 5,
+    "tags": ["combat", "attack"]
+  }
+]
