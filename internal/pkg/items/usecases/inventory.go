@@ -672,4 +672,3 @@ func findItem(container *models.InventoryContainer, itemID string) *models.ItemI
 	}
 	return &container.Items[idx]
 }
-
