@@ -92,13 +92,16 @@ func BuildCooldownState(
 
 // ConsumeCooldown increments the charge count for a trigger key.
 // Lazy-inits the map if nil. Returns the (possibly new) map.
-// No-op if cooldownStr is empty (trigger has no cooldown).
+// No-op if cooldownStr is empty or malformed (trigger has no valid cooldown).
 func ConsumeCooldown(
 	charges map[string]int,
 	key string,
 	cooldownStr string,
 ) map[string]int {
 	if cooldownStr == "" {
+		return charges
+	}
+	if _, err := ParseCooldown(cooldownStr); err != nil {
 		return charges
 	}
 	if charges == nil {

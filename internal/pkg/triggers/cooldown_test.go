@@ -190,6 +190,21 @@ func TestConsumeCooldown_NilMapEmptyCooldown(t *testing.T) {
 	}
 }
 
+func TestConsumeCooldown_MalformedCooldown(t *testing.T) {
+	charges := map[string]int{"wpn-1:0": 1}
+	result := ConsumeCooldown(charges, "wpn-1:0", "bad")
+	if result["wpn-1:0"] != 1 {
+		t.Errorf("expected charges unchanged for malformed cooldown, got %d", result["wpn-1:0"])
+	}
+}
+
+func TestConsumeCooldown_MalformedCooldown_NilMap(t *testing.T) {
+	result := ConsumeCooldown(nil, "wpn-1:0", "bad")
+	if result != nil {
+		t.Errorf("expected nil map for malformed cooldown, got %v", result)
+	}
+}
+
 func TestResetCooldowns_ByPeriod(t *testing.T) {
 	defs := []models.TriggerEffect{
 		{Trigger: models.ItemTriggerOnHit, Cooldown: "1/turn"},       // idx 0

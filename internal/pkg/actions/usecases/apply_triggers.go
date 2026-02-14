@@ -136,7 +136,7 @@ func applyTriggerResults(
 
 // applyHealToParticipant adds HP to a participant, capped at max for creatures.
 // For PCs, max HP is derived externally — no cap applied here (DM adjusts if needed).
-// TODO(T42): pass max HP for PCs to cap healing properly.
+// TODO: pass max HP for PCs to cap healing properly.
 func applyHealToParticipant(p *models.ParticipantFull, amount int) {
 	if p.CharacterRuntime != nil {
 		p.CharacterRuntime.CurrentHP += amount
