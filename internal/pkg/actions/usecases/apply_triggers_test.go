@@ -8,6 +8,9 @@ import (
 
 // --- helpers ---
 
+func alwaysSucceed() float32 { return 0.0 }
+func alwaysFail() float32   { return 1.0 }
+
 func makeTarget(hp, tempHP int) *models.ParticipantFull {
 	return &models.ParticipantFull{
 		InstanceID: "target-1",
@@ -45,6 +48,20 @@ func flameTongueTrigger() models.TriggerEffect {
 	}
 }
 
+func testOpts() triggerOpts {
+	return triggerOpts{
+		SourceID:   "weapon-1",
+		SourceName: "Flame Tongue",
+		RandFloat:  alwaysSucceed,
+	}
+}
+
+func testOptsWithStats(ts *TargetStats) triggerOpts {
+	o := testOpts()
+	o.TargetStats = ts
+	return o
+}
+
 // --- tests ---
 
 func TestApplyTriggerResults_DealDamage(t *testing.T) {
@@ -52,7 +69,7 @@ func TestApplyTriggerResults_DealDamage(t *testing.T) {
 	attacker := makeAttackerPC(30, 0)
 	triggers := []models.TriggerEffect{flameTongueTrigger()}
 
-	results, changes := applyTriggerResults(triggers, "Flame Tongue", models.ItemTriggerOnHit, false, target, attacker)
+	results, changes := applyTriggerResults(triggers, testOpts(), models.ItemTriggerOnHit, false, target, attacker)
 
 	if len(results) != 1 {
 		t.Fatalf("expected 1 result, got %d", len(results))
@@ -98,7 +115,9 @@ func TestApplyTriggerResults_Heal(t *testing.T) {
 		},
 	}}
 
-	results, changes := applyTriggerResults(triggers, "Vampiric Sword", models.ItemTriggerOnHit, false, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Vampiric Sword"
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 
 	if len(results) != 1 || results[0].Skipped {
 		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
@@ -126,7 +145,9 @@ func TestApplyTriggerResults_GrantTempHP(t *testing.T) {
 		},
 	}}
 
-	results, changes := applyTriggerResults(triggers, "Fiendish Blade", models.ItemTriggerOnHit, false, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Fiendish Blade"
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 
 	if len(results) != 1 || results[0].Skipped {
 		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
@@ -151,7 +172,9 @@ func TestApplyTriggerResults_GrantTempHP_NoStackLower(t *testing.T) {
 		},
 	}}
 
-	_, changes := applyTriggerResults(triggers, "Fiendish Blade", models.ItemTriggerOnHit, false, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Fiendish Blade"
+	_, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 
 	// Temp HP should NOT be replaced (5 < 10)
 	if attacker.CharacterRuntime.TemporaryHP != 10 {
@@ -167,7 +190,7 @@ func TestApplyTriggerResults_NoTriggers(t *testing.T) {
 	target := makeTarget(50, 0)
 	attacker := makeAttackerPC(30, 0)
 
-	results, changes := applyTriggerResults(nil, "Normal Sword", models.ItemTriggerOnHit, false, target, attacker)
+	results, changes := applyTriggerResults(nil, testOpts(), models.ItemTriggerOnHit, false, target, attacker)
 
 	if results != nil {
 		t.Errorf("expected nil results, got %d", len(results))
@@ -192,14 +215,17 @@ func TestApplyTriggerResults_OnCriticalOnly(t *testing.T) {
 		},
 	}}
 
+	opts := testOpts()
+	opts.SourceName = "Holy Avenger"
+
 	// Non-crit: on_critical trigger should not fire
-	results, _ := applyTriggerResults(triggers, "Holy Avenger", models.ItemTriggerOnHit, false, target, attacker)
+	results, _ := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 	if len(results) != 0 {
 		t.Fatalf("expected 0 results on non-crit, got %d", len(results))
 	}
 
 	// Crit: on_critical trigger should fire
-	results, changes := applyTriggerResults(triggers, "Holy Avenger", models.ItemTriggerOnHit, true, target, attacker)
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, true, target, attacker)
 	if len(results) != 1 {
 		t.Fatalf("expected 1 result on crit, got %d", len(results))
 	}
@@ -241,7 +267,9 @@ func TestApplyTriggerResults_CritDispatchesBothEvents(t *testing.T) {
 		},
 	}
 
-	results, changes := applyTriggerResults(triggers, "Holy Flame Blade", models.ItemTriggerOnHit, true, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Holy Flame Blade"
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, true, target, attacker)
 
 	// Both triggers should fire on crit
 	if len(results) != 2 {
@@ -260,6 +288,44 @@ func TestApplyTriggerResults_CritDispatchesBothEvents(t *testing.T) {
 	}
 }
 
+func TestApplyTriggerResults_ChanceSkipped_NoSideEffects(t *testing.T) {
+	target := makeTarget(50, 0)
+	attacker := makeAttackerPC(30, 0)
+	triggers := []models.TriggerEffect{{
+		Trigger: models.ItemTriggerOnHit,
+		Chance:  0.5,
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "2d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	opts := testOpts()
+	opts.RandFloat = alwaysFail // returns 1.0, which is >= 0.5 → skipped
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
+
+	if len(results) != 1 {
+		t.Fatalf("expected 1 result, got %d", len(results))
+	}
+	if !results[0].Skipped {
+		t.Fatal("expected result to be skipped (chance failed)")
+	}
+	if results[0].SkipReason != "chance" {
+		t.Errorf("expected SkipReason 'chance', got %q", results[0].SkipReason)
+	}
+
+	// No side effects
+	if len(changes) != 0 {
+		t.Errorf("expected 0 state changes, got %d", len(changes))
+	}
+	if target.RuntimeState.CurrentHP != 50 {
+		t.Errorf("target HP should be unchanged at 50, got %d", target.RuntimeState.CurrentHP)
+	}
+}
+
 func TestApplyTriggerResults_ApplyCondition_NoHPMutation(t *testing.T) {
 	target := makeTarget(50, 0)
 	attacker := makeAttackerPC(30, 0)
@@ -275,7 +341,9 @@ func TestApplyTriggerResults_ApplyCondition_NoHPMutation(t *testing.T) {
 		},
 	}}
 
-	results, changes := applyTriggerResults(triggers, "Mace of Terror", models.ItemTriggerOnHit, false, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Mace of Terror"
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 
 	if len(results) != 1 || results[0].Skipped {
 		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
@@ -323,7 +391,9 @@ func TestApplyTriggerResults_MultipleTriggers(t *testing.T) {
 		},
 	}
 
-	results, changes := applyTriggerResults(triggers, "Venomous Flame Blade", models.ItemTriggerOnHit, false, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Venomous Flame Blade"
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 
 	// All 3 triggers should fire
 	if len(results) != 3 {
@@ -355,7 +425,7 @@ func TestApplyTriggerResults_CreatureTarget(t *testing.T) {
 	attacker := makeAttackerPC(25, 0)
 	triggers := []models.TriggerEffect{flameTongueTrigger()}
 
-	results, changes := applyTriggerResults(triggers, "Flame Tongue", models.ItemTriggerOnHit, false, target, attacker)
+	results, changes := applyTriggerResults(triggers, testOpts(), models.ItemTriggerOnHit, false, target, attacker)
 
 	if len(results) != 1 || results[0].Skipped {
 		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
@@ -389,10 +459,139 @@ func TestApplyTriggerResults_HealCreatureCapped(t *testing.T) {
 		},
 	}}
 
-	applyTriggerResults(triggers, "Vampiric Blade", models.ItemTriggerOnHit, false, target, attacker)
+	opts := testOpts()
+	opts.SourceName = "Vampiric Blade"
+	applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
 
 	// Creature heal capped at maxHP
 	if attacker.RuntimeState.CurrentHP != 30 {
 		t.Errorf("expected creature HP capped at 30, got %d", attacker.RuntimeState.CurrentHP)
+	}
+}
+
+func TestApplyTriggerResults_DealDamage_FireImmunity(t *testing.T) {
+	target := makeTarget(50, 0)
+	attacker := makeAttackerPC(30, 0)
+	triggers := []models.TriggerEffect{flameTongueTrigger()} // 2d6 fire
+
+	ts := &TargetStats{
+		Name:       "Fire Elemental",
+		AC:         13,
+		Immunities: []string{"fire"},
+	}
+	opts := testOptsWithStats(ts)
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
+
+	if len(results) != 1 || results[0].Skipped {
+		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
+	}
+
+	// Fire immune — 0 damage applied
+	if target.RuntimeState.CurrentHP != 50 {
+		t.Errorf("expected target HP unchanged at 50 (fire immune), got %d", target.RuntimeState.CurrentHP)
+	}
+	if len(changes) != 1 {
+		t.Fatalf("expected 1 state change, got %d", len(changes))
+	}
+	if changes[0].HPDelta != 0 {
+		t.Errorf("expected HPDelta 0 (immunity), got %d", changes[0].HPDelta)
+	}
+}
+
+func TestApplyTriggerResults_DealDamage_Resistance(t *testing.T) {
+	target := makeTarget(50, 0)
+	attacker := makeAttackerPC(30, 0)
+	triggers := []models.TriggerEffect{{
+		Trigger: models.ItemTriggerOnHit,
+		Chance:  1.0,
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "2d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	ts := &TargetStats{
+		Name:        "Red Dragon Wyrmling",
+		AC:          17,
+		Resistances: []string{"fire"},
+	}
+	opts := testOptsWithStats(ts)
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
+
+	if len(results) != 1 || results[0].Skipped {
+		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
+	}
+
+	rawDmg := results[0].DamageResult.Total
+	expectedDmg := rawDmg / 2 // resistance halves, round down
+	expectedHP := 50 - expectedDmg
+	if target.RuntimeState.CurrentHP != expectedHP {
+		t.Errorf("expected target HP %d (resistance: %d raw → %d), got %d",
+			expectedHP, rawDmg, expectedDmg, target.RuntimeState.CurrentHP)
+	}
+	if len(changes) != 1 || changes[0].HPDelta != -expectedDmg {
+		t.Errorf("expected HPDelta %d, got %d", -expectedDmg, changes[0].HPDelta)
+	}
+}
+
+func TestApplyTriggerResults_DealDamage_Vulnerability(t *testing.T) {
+	target := makeTarget(100, 0)
+	attacker := makeAttackerPC(30, 0)
+	triggers := []models.TriggerEffect{{
+		Trigger: models.ItemTriggerOnHit,
+		Chance:  1.0,
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "2d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	ts := &TargetStats{
+		Name:            "Ice Mephit",
+		AC:              11,
+		Vulnerabilities: []string{"fire"},
+	}
+	opts := testOptsWithStats(ts)
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
+
+	rawDmg := results[0].DamageResult.Total
+	expectedDmg := rawDmg * 2 // vulnerability doubles
+	expectedHP := 100 - expectedDmg
+	if target.RuntimeState.CurrentHP != expectedHP {
+		t.Errorf("expected target HP %d (vulnerability: %d raw → %d), got %d",
+			expectedHP, rawDmg, expectedDmg, target.RuntimeState.CurrentHP)
+	}
+	if len(changes) != 1 || changes[0].HPDelta != -expectedDmg {
+		t.Errorf("expected HPDelta %d, got %d", -expectedDmg, changes[0].HPDelta)
+	}
+}
+
+func TestApplyTriggerResults_NilTargetStats_NoCrash(t *testing.T) {
+	target := makeTarget(50, 0)
+	attacker := makeAttackerPC(30, 0)
+	triggers := []models.TriggerEffect{flameTongueTrigger()}
+
+	// No TargetStats — raw damage applied (no resistance check)
+	opts := testOpts()
+	opts.TargetStats = nil
+	results, changes := applyTriggerResults(triggers, opts, models.ItemTriggerOnHit, false, target, attacker)
+
+	if len(results) != 1 || results[0].Skipped {
+		t.Fatalf("expected 1 non-skipped result, got %d", len(results))
+	}
+
+	rawDmg := results[0].DamageResult.Total
+	expectedHP := 50 - rawDmg
+	if target.RuntimeState.CurrentHP != expectedHP {
+		t.Errorf("expected target HP %d (no resistance check), got %d", expectedHP, target.RuntimeState.CurrentHP)
+	}
+	if len(changes) != 1 || changes[0].HPDelta != -rawDmg {
+		t.Errorf("expected raw HPDelta %d, got %d", -rawDmg, changes[0].HPDelta)
 	}
 }

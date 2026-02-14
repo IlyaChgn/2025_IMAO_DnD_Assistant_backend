@@ -3,6 +3,7 @@ package usecases
 import (
 	"context"
 	"fmt"
+	"math/rand/v2"
 	"strings"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -155,7 +156,13 @@ func resolveWeaponAttack(
 	// Evaluate weapon triggers on hit
 	if len(weapon.Triggers) > 0 {
 		triggerResults, triggerChanges := applyTriggerResults(
-			weapon.Triggers, weapon.Name,
+			weapon.Triggers,
+			triggerOpts{
+				SourceID:    weapon.ID,
+				SourceName:  weapon.Name,
+				TargetStats: ts,
+				RandFloat:   func() float32 { return rand.Float32() },
+			},
 			models.ItemTriggerOnHit, isCrit,
 			target, participant,
 		)

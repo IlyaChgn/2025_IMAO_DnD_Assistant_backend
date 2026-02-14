@@ -2,12 +2,19 @@ package usecases
 
 import (
 	"fmt"
-	"math/rand/v2"
 	"strconv"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/triggers"
 )
+
+// triggerOpts carries contextual data for trigger evaluation.
+type triggerOpts struct {
+	SourceID    string                // stable ID for cooldown keys (e.g. weapon.ID)
+	SourceName  string                // display name for descriptions
+	TargetStats *TargetStats          // resistance/immunity/vulnerability lookup (nil = no resistance check)
+	RandFloat   func() float32        // injected RNG for testability
+}
 
 // applyTriggerResults evaluates triggers for the given event(s) and applies
 // side effects (damage, heal, temp HP) to participants. Returns results and
@@ -17,7 +24,7 @@ import (
 // Cooldown state is nil (T42 will add persistence).
 func applyTriggerResults(
 	triggerDefs []models.TriggerEffect,
-	sourceName string,
+	opts triggerOpts,
 	event models.TriggerEvent,
 	isCrit bool,
 	target *models.ParticipantFull,
@@ -32,28 +39,26 @@ func applyTriggerResults(
 	for i, td := range triggerDefs {
 		inputs[i] = triggers.TriggerInput{
 			Trigger:     td,
-			CooldownKey: sourceName + ":" + strconv.Itoa(i),
+			CooldownKey: opts.SourceID + ":" + strconv.Itoa(i),
 		}
 	}
 
 	ctx := triggers.EventContext{
 		Event:      event,
-		SourceName: sourceName,
+		SourceName: opts.SourceName,
 	}
 	if target != nil {
 		ctx.TargetName = participantName(target)
 	}
 
-	randFloat := func() float32 { return rand.Float32() }
-
 	// Evaluate for the primary event (on_hit)
-	results := triggers.Evaluate(inputs, ctx, nil, randFloat)
+	results := triggers.Evaluate(inputs, ctx, nil, opts.RandFloat)
 
 	// On critical hit, also dispatch on_critical triggers
 	if isCrit && event == models.ItemTriggerOnHit {
 		critCtx := ctx
 		critCtx.Event = models.ItemTriggerOnCritical
-		critResults := triggers.Evaluate(inputs, critCtx, nil, randFloat)
+		critResults := triggers.Evaluate(inputs, critCtx, nil, opts.RandFloat)
 		results = append(results, critResults...)
 	}
 
@@ -68,10 +73,14 @@ func applyTriggerResults(
 		switch r.EffectType {
 		case models.EffectDealDamage:
 			if r.DamageResult != nil && target != nil {
-				applyDamageToTarget(target, r.DamageResult.Total)
+				finalDmg := r.DamageResult.Total
+				if opts.TargetStats != nil {
+					finalDmg, _ = applyResistance(finalDmg, r.DamageResult.DamageType, opts.TargetStats)
+				}
+				applyDamageToTarget(target, finalDmg)
 				stateChanges = append(stateChanges, models.StateChange{
 					TargetID:    target.InstanceID,
-					HPDelta:     -r.DamageResult.Total,
+					HPDelta:     -finalDmg,
 					Description: r.Description,
 				})
 			}
@@ -107,6 +116,7 @@ func applyTriggerResults(
 
 // applyHealToParticipant adds HP to a participant, capped at max for creatures.
 // For PCs, max HP is derived externally — no cap applied here (DM adjusts if needed).
+// TODO(T42): pass max HP for PCs to cap healing properly.
 func applyHealToParticipant(p *models.ParticipantFull, amount int) {
 	if p.CharacterRuntime != nil {
 		p.CharacterRuntime.CurrentHP += amount
