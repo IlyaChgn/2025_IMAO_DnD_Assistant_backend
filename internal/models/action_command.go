@@ -34,8 +34,12 @@ type ActionCommand struct {
 	TargetID string `json:"targetId,omitempty"`
 
 	// spell_cast
-	SpellID   string `json:"spellId,omitempty"`
-	SlotLevel int    `json:"slotLevel,omitempty"`
+	SpellID    string   `json:"spellId,omitempty"`
+	SlotLevel  int      `json:"slotLevel,omitempty"`
+	TargetIDs  []string `json:"targetIds,omitempty"`  // multi-target (Chain Lightning, Fireball)
+	IsRitual   bool     `json:"isRitual,omitempty"`   // cast as ritual, skip slot
+	IsPactSlot bool     `json:"isPactSlot,omitempty"` // use pact magic slot
+	TargetSelf bool     `json:"targetSelf,omitempty"` // self-targeting spells
 
 	// use_feature
 	FeatureID string `json:"featureId,omitempty"`
@@ -68,12 +72,22 @@ type StateChange struct {
 	Description string `json:"description"`
 }
 
+// ConditionApplied reports a condition applied to a target for frontend visibility.
+type ConditionApplied struct {
+	TargetID  string `json:"targetId"`
+	Condition string `json:"condition"` // "stunned", "charmed"
+	Duration  string `json:"duration"`  // human-readable
+	SaveEnds  bool   `json:"saveEnds,omitempty"`
+}
+
 // ActionResponse is returned by the action execution endpoint.
 type ActionResponse struct {
-	RollResult     *ActionRollResult  `json:"rollResult,omitempty"`
-	DamageRolls    []ActionRollResult `json:"damageRolls,omitempty"`
-	StateChanges   []StateChange      `json:"stateChanges,omitempty"`
-	TriggerResults []TriggerResult    `json:"triggerResults,omitempty"`
-	Summary        string             `json:"summary"`
-	Hit            *bool              `json:"hit,omitempty"`
+	RollResult       *ActionRollResult  `json:"rollResult,omitempty"`
+	DamageRolls      []ActionRollResult `json:"damageRolls,omitempty"`
+	HealingRolls     []ActionRollResult `json:"healingRolls,omitempty"`
+	ConditionApplied []ConditionApplied `json:"conditionApplied,omitempty"`
+	StateChanges     []StateChange      `json:"stateChanges,omitempty"`
+	TriggerResults   []TriggerResult    `json:"triggerResults,omitempty"`
+	Summary          string             `json:"summary"`
+	Hit              *bool              `json:"hit,omitempty"`
 }
