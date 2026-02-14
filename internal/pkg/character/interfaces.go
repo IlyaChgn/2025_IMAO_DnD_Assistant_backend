@@ -36,6 +36,7 @@ type CharacterBaseRepository interface {
 type CharacterBaseUsecases interface {
 	Create(ctx context.Context, char *models.CharacterBase) error
 	GetByID(ctx context.Context, id string, userID int) (*models.CharacterBase, error)
+	GetComputed(ctx context.Context, id string, userID int) (*models.CharacterBase, *models.DerivedStats, error)
 	Update(ctx context.Context, char *models.CharacterBase, expectedVersion int, userID int) error
 	Delete(ctx context.Context, id string, userID int) error
 	List(ctx context.Context, userID int, page, size int, search string) ([]*models.CharacterBase, int64, error)

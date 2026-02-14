@@ -57,6 +57,37 @@ func (h *CharacterBaseHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	responses.SendOkResponse(w, char)
 }
 
+func (h *CharacterBaseHandler) GetComputed(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	id := mux.Vars(r)["id"]
+	if id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	char, derived, err := h.usecases.GetComputed(ctx, id, user.ID)
+	if err != nil {
+		h.handleError(w, r, err)
+		return
+	}
+
+	if char == nil {
+		l.DeliveryError(ctx, responses.StatusNotFound, responses.ErrCharacterNotFound, nil, nil)
+		responses.SendErrResponse(w, responses.StatusNotFound, responses.ErrCharacterNotFound)
+		return
+	}
+
+	responses.SendOkResponse(w, models.ComputedCharacterResponse{
+		Base:    char,
+		Derived: derived,
+	})
+}
+
 func (h *CharacterBaseHandler) Create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	l := logger.FromContext(ctx)
