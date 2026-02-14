@@ -3,6 +3,7 @@ package usecases
 import (
 	"context"
 	"fmt"
+	"math/rand/v2"
 	"strings"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -20,7 +21,7 @@ func resolveWeaponAttack(
 	encounterID string,
 	charBase *models.CharacterBase,
 	derived *models.DerivedStats,
-	_ *models.ParticipantFull,
+	participant *models.ParticipantFull,
 	ed *EncounterData,
 	userID int,
 ) (*models.ActionResponse, error) {
@@ -151,6 +152,33 @@ func resolveWeaponAttack(
 		HPDelta:     -finalDamage,
 		Description: fmt.Sprintf("%s takes %d %s damage from %s", ts.Name, finalDamage, weapon.DamageType, weapon.Name),
 	}}
+
+	// Evaluate weapon triggers on hit
+	if len(weapon.Triggers) > 0 {
+		triggerResults, triggerChanges := applyTriggerResults(
+			weapon.Triggers,
+			triggerOpts{
+				SourceID:    weapon.ID,
+				SourceName:  weapon.Name,
+				TargetStats: ts,
+				RandFloat:   func() float32 { return rand.Float32() },
+			},
+			models.ItemTriggerOnHit, isCrit,
+			target, participant,
+		)
+		resp.TriggerResults = triggerResults
+		resp.StateChanges = append(resp.StateChanges, triggerChanges...)
+		for _, tr := range triggerResults {
+			if tr.Skipped && tr.SkipReason == "error" {
+				l.UsecasesWarn(fmt.Errorf("trigger error: %s", tr.Description), userID, map[string]any{
+					"weaponID": weapon.ID, "effectType": string(tr.EffectType),
+				})
+			}
+			if !tr.Skipped && tr.Description != "" {
+				resp.Summary += fmt.Sprintf(", %s", tr.Description)
+			}
+		}
+	}
 
 	// Persist encounter data
 	if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {

@@ -70,9 +70,10 @@ type StateChange struct {
 
 // ActionResponse is returned by the action execution endpoint.
 type ActionResponse struct {
-	RollResult   *ActionRollResult  `json:"rollResult,omitempty"`
-	DamageRolls  []ActionRollResult `json:"damageRolls,omitempty"`
-	StateChanges []StateChange      `json:"stateChanges,omitempty"`
-	Summary      string             `json:"summary"`
-	Hit          *bool              `json:"hit,omitempty"`
+	RollResult     *ActionRollResult  `json:"rollResult,omitempty"`
+	DamageRolls    []ActionRollResult `json:"damageRolls,omitempty"`
+	StateChanges   []StateChange      `json:"stateChanges,omitempty"`
+	TriggerResults []TriggerResult    `json:"triggerResults,omitempty"`
+	Summary        string             `json:"summary"`
+	Hit            *bool              `json:"hit,omitempty"`
 }
