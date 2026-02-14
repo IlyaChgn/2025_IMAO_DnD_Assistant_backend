@@ -2,6 +2,8 @@ package router
 
 import (
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
+	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
+	actionsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/delivery"
 	authdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	bestiarydel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
@@ -53,7 +55,8 @@ func NewRouter(cfg *config.Config,
 	featuresInterface featuresinterfaces.FeaturesUsecases,
 	itemsInterface itemsinterfaces.ItemUsecases,
 	inventoryInterface itemsinterfaces.InventoryUsecases,
-	broadcaster itemsinterfaces.SessionBroadcaster) *mux.Router {
+	broadcaster itemsinterfaces.SessionBroadcaster,
+	actionsInterface actionsinterfaces.ActionsUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -70,6 +73,7 @@ func NewRouter(cfg *config.Config,
 	conditionsHandler := conditionsdel.NewConditionsHandler()
 	itemsHandler := itemsdel.NewItemsHandler(itemsInterface, cfg.CtxUserKey)
 	inventoryHandler := itemsdel.NewInventoryHandler(inventoryInterface, cfg.CtxUserKey, broadcaster)
+	actionsHandler := actionsdel.NewActionsHandler(actionsInterface, cfg.CtxUserKey)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -102,6 +106,7 @@ func NewRouter(cfg *config.Config,
 	ServeConditionsRouter(rootRouter, conditionsHandler)
 	ServeItemsRouter(rootRouter, itemsHandler, loginRequiredMiddleware)
 	ServeInventoryRouter(rootRouter, inventoryHandler, loginRequiredMiddleware)
+	ServeActionsRouter(rootRouter, actionsHandler, loginRequiredMiddleware)
 
 	return router
 }
