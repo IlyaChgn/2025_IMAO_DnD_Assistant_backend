@@ -7,6 +7,7 @@ import (
 	bestiarydel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	characterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/delivery"
+	conditionsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/conditions/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/config"
 	descriptioninterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
@@ -66,6 +67,7 @@ func NewRouter(cfg *config.Config,
 	mapsHandler := mapsdel.NewMapsHandler(mapsInterface, cfg.CtxUserKey)
 	spellsHandler := spellsdel.NewSpellsHandler(spellsInterface)
 	featuresHandler := featuresdel.NewFeaturesHandler(featuresInterface)
+	conditionsHandler := conditionsdel.NewConditionsHandler()
 	itemsHandler := itemsdel.NewItemsHandler(itemsInterface, cfg.CtxUserKey)
 	inventoryHandler := itemsdel.NewInventoryHandler(inventoryInterface, cfg.CtxUserKey, broadcaster)
 
@@ -97,6 +99,7 @@ func NewRouter(cfg *config.Config,
 	ServeMapsRouter(rootRouter, mapsHandler, loginRequiredMiddleware)
 	ServeSpellsRouter(rootRouter, spellsHandler)
 	ServeFeaturesRouter(rootRouter, featuresHandler)
+	ServeConditionsRouter(rootRouter, conditionsHandler)
 	ServeItemsRouter(rootRouter, itemsHandler, loginRequiredMiddleware)
 	ServeInventoryRouter(rootRouter, inventoryHandler, loginRequiredMiddleware)
 
