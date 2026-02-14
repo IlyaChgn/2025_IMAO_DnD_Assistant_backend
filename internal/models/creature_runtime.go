@@ -182,6 +182,9 @@ type ParticipantFull struct {
 
 	// Hidden from players (for ambushes, invisible enemies)
 	Hidden bool `json:"hidden,omitempty" bson:"hidden,omitempty"`
+
+	// Player character runtime state (nil for NPCs/monsters)
+	CharacterRuntime *CharacterRuntime `json:"characterRuntime,omitempty" bson:"characterRuntime,omitempty"`
 }
 
 // CellsCoordinates represents position on the battle map grid.
