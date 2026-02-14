@@ -92,6 +92,7 @@ type ItemDefinition struct {
 	Ammo       *AmmoData       `json:"ammo,omitempty" bson:"ammo,omitempty"`
 
 	Modifiers []ItemModifierDef `json:"modifiers,omitempty" bson:"modifiers,omitempty"`
+	Triggers  []TriggerEffect   `json:"triggers,omitempty" bson:"triggers,omitempty"`
 
 	RequiresAttunement bool     `json:"requiresAttunement" bson:"requiresAttunement"`
 	AttunementBy       []string `json:"attunementBy,omitempty" bson:"attunementBy,omitempty"`
