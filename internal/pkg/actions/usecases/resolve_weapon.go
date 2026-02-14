@@ -169,6 +169,11 @@ func resolveWeaponAttack(
 		resp.TriggerResults = triggerResults
 		resp.StateChanges = append(resp.StateChanges, triggerChanges...)
 		for _, tr := range triggerResults {
+			if tr.Skipped && tr.SkipReason == "error" {
+				l.UsecasesWarn(fmt.Errorf("trigger error: %s", tr.Description), userID, map[string]any{
+					"weaponID": weapon.ID, "effectType": string(tr.EffectType),
+				})
+			}
 			if !tr.Skipped && tr.Description != "" {
 				resp.Summary += fmt.Sprintf(", %s", tr.Description)
 			}

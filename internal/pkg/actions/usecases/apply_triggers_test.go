@@ -572,6 +572,30 @@ func TestApplyTriggerResults_DealDamage_Vulnerability(t *testing.T) {
 	}
 }
 
+func TestApplyTriggerResults_NilTarget_DealDamageSkipped(t *testing.T) {
+	attacker := makeAttackerPC(30, 0)
+	triggers := []models.TriggerEffect{flameTongueTrigger()} // deal_damage 2d6 fire
+
+	// target is nil — deal_damage should be silently skipped (no crash)
+	results, changes := applyTriggerResults(triggers, testOpts(), models.ItemTriggerOnHit, false, nil, attacker)
+
+	if len(results) != 1 {
+		t.Fatalf("expected 1 result, got %d", len(results))
+	}
+	// Result still fires (engine doesn't know about target), but no side effects applied
+	if results[0].Skipped {
+		t.Fatal("engine result should not be skipped (it fired successfully)")
+	}
+	// No state changes because target is nil
+	if len(changes) != 0 {
+		t.Errorf("expected 0 state changes (nil target), got %d", len(changes))
+	}
+	// Attacker HP unchanged
+	if attacker.CharacterRuntime.CurrentHP != 30 {
+		t.Errorf("attacker HP should be unchanged at 30, got %d", attacker.CharacterRuntime.CurrentHP)
+	}
+}
+
 func TestApplyTriggerResults_NilTargetStats_NoCrash(t *testing.T) {
 	target := makeTarget(50, 0)
 	attacker := makeAttackerPC(30, 0)
