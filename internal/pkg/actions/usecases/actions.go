@@ -12,20 +12,24 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/compute"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
+	spellsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells"
 )
 
 type actionsUsecases struct {
 	encounterRepo encounterinterfaces.EncounterRepository
 	characterRepo characterinterfaces.CharacterBaseRepository
+	spellsRepo    spellsinterfaces.SpellsRepository
 }
 
 func NewActionsUsecases(
 	encounterRepo encounterinterfaces.EncounterRepository,
 	characterRepo characterinterfaces.CharacterBaseRepository,
+	spellsRepo spellsinterfaces.SpellsRepository,
 ) actionsinterfaces.ActionsUsecases {
 	return &actionsUsecases{
 		encounterRepo: encounterRepo,
 		characterRepo: characterRepo,
+		spellsRepo:    spellsRepo,
 	}
 }
 
