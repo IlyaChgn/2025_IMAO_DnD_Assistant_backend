@@ -102,6 +102,7 @@ type AreaOfEffect struct {
 	Size   int       `json:"size" bson:"size"`                         // radius/length in feet
 	Width  int       `json:"width,omitempty" bson:"width,omitempty"`   // for lines
 	Origin string    `json:"origin,omitempty" bson:"origin,omitempty"` // "self", "point"
+	Count  int       `json:"count,omitempty" bson:"count,omitempty"`   // number of areas (e.g., Fire Storm: 10 cubes)
 }
 
 // AreaShape defines the geometric shape of an area effect.
@@ -156,11 +157,12 @@ type ActionEffect struct {
 
 // ConditionEffect applies a D&D condition to a target.
 type ConditionEffect struct {
-	Condition  ConditionType `json:"condition" bson:"condition"`
-	Duration   string        `json:"duration" bson:"duration"`                         // "1 minute", "until end of next turn"
-	SaveEnds   bool          `json:"saveEnds,omitempty" bson:"saveEnds,omitempty"`     // can repeat save at end of turn
-	EscapeDC   int           `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`     // for grapple/restrain
-	EscapeType string        `json:"escapeType,omitempty" bson:"escapeType,omitempty"` // "STR", "DEX", "STR_or_DEX"
+	Condition   ConditionType `json:"condition" bson:"condition"`
+	Duration    string        `json:"duration" bson:"duration"`                             // "1 minute", "until end of next turn", "until saved"
+	SaveEnds    bool          `json:"saveEnds,omitempty" bson:"saveEnds,omitempty"`         // can repeat save at end of turn
+	SaveAbility AbilityType   `json:"saveAbility,omitempty" bson:"saveAbility,omitempty"`   // ability for repeated save (when saveEnds=true)
+	EscapeDC    int           `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`         // for grapple/restrain
+	EscapeType  string        `json:"escapeType,omitempty" bson:"escapeType,omitempty"`     // "STR", "DEX", "STR_or_DEX"
 }
 
 // ConditionType represents standard D&D 5e conditions.

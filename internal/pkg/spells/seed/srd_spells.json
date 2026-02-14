@@ -1343,20 +1343,7 @@
         "rus": "При использовании ячейки 7+ уровня: блокирует заклинания на 1 уровень выше за каждый уровень ячейки выше 6",
         "eng": "At 7th level or higher: blocks spells of one level higher for each slot level above 6th"
       },
-      "scaling": [
-        {
-          "level": 7,
-          "description": "Blocks spells of 6th level or lower"
-        },
-        {
-          "level": 8,
-          "description": "Blocks spells of 7th level or lower"
-        },
-        {
-          "level": 9,
-          "description": "Blocks spells of 8th level or lower"
-        }
-      ]
+      "scaling": []
     },
     "source": {
       "shortName": "PHB",
@@ -1506,15 +1493,15 @@
       "scaling": [
         {
           "level": 7,
-          "healingAdd": 10
+          "healingAddFlat": 10
         },
         {
           "level": 8,
-          "healingAdd": 20
+          "healingAddFlat": 20
         },
         {
           "level": 9,
-          "healingAdd": 30
+          "healingAddFlat": 30
         }
       ]
     },
@@ -1928,8 +1915,6 @@
       "concentration": false
     },
     "classes": [
-      "bard",
-      "warlock",
       "wizard"
     ],
     "targeting": {
@@ -2020,7 +2005,7 @@
       "eng": "Resurrection"
     },
     "description": {
-      "rus": "Вы касаетесь мёртвого существа, которое было мертво не более ста лет, не умерло от старости и не является нежитью. Если его душа свободна и согласна, существо оживает со всеми хитами. Это заклинание нейтрализует все яды и исцеляет немагические болезни, которые воздействовали на существо в момент смерти. Оно снимает все проклятия, поражающие существо. Заклинание закрывает все смертельные раны и восстанавливает отсутствующие части тела. Возвращение из мёртвых — тяжёлое испытание. Цель получает штраф −4 ко всем броскам атаки, спасброскам и проверкам характеристик. Каждый раз, когда цель заканчивает продолжительный отдых, штраф уменьшается на 1, пока не исчезнет.",
+      "rus": "Вы касаетесь мёртвого существа, которое было мертво не более ста лет, не умерло от старости и не является нежитью. Если его душа свободна и согласна, существо оживает со всеми хитами. Это заклинание нейтрализует все яды и исцеляет немагические болезни, которые воздействовали на существо в момент смерти. Однако оно не снимает магические болезни, проклятия и тому подобное; если эти эффекты не были сняты до произнесения заклинания, они продолжают воздействовать на цель после возвращения к жизни. Заклинание закрывает все смертельные раны и восстанавливает отсутствующие части тела. Возвращение из мёртвых — тяжёлое испытание. Цель получает штраф −4 ко всем броскам атаки, спасброскам и проверкам характеристик. Каждый раз, когда цель заканчивает продолжительный отдых, штраф уменьшается на 1, пока не исчезнет.",
       "eng": "You touch a dead creature that has been dead for no more than a century, that didn't die of old age, and that isn't undead. If its soul is free and willing, the target returns to life with all its hit points. This spell neutralizes any poisons and cures normal diseases affecting the creature when it died. It doesn't, however, remove magical diseases, curses, and the like; if such effects aren't removed prior to casting the spell, they afflict the target on its return to life. This spell closes all mortal wounds and restores any missing body parts. Coming back from the dead is an ordeal. The target takes a −4 penalty to all attack rolls, saving throws, and ability checks. Every time the target finishes a long rest, the penalty is reduced by 1 until it disappears."
     },
     "level": 7,
@@ -2193,15 +2178,7 @@
         "rus": "При использовании ячейки 9 уровня: длительность концентрации до 8 часов",
         "eng": "At 9th level: concentration duration up to 8 hours"
       },
-      "scaling": [
-        {
-          "level": 9,
-          "duration": {
-            "amount": 8,
-            "unit": "hours"
-          }
-        }
-      ]
+      "scaling": []
     },
     "source": {
       "shortName": "PHB",
@@ -2422,6 +2399,7 @@
         },
         "condition": {
           "condition": "stunned",
+          "duration": "until saved",
           "saveEnds": true,
           "saveAbility": "CON"
         }
