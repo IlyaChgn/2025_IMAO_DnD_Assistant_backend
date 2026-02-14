@@ -34,6 +34,10 @@ func Parse(expr string) (count, sides, modifier int, err error) {
 		return 0, 0, 0, fmt.Errorf("invalid dice expression: %s", expr)
 	}
 
+	if count > 100 || sides > 1000 {
+		return 0, 0, 0, fmt.Errorf("dice expression out of bounds: %s (max 100d1000)", expr)
+	}
+
 	return count, sides, modifier, nil
 }
 

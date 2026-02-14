@@ -29,15 +29,15 @@ type ActionCommand struct {
 	Skill   string `json:"skill,omitempty"` // ability_check only
 	DC      int    `json:"dc,omitempty"`    // saving_throw only
 
-	// weapon_attack (PR2)
+	// weapon_attack
 	WeaponID string `json:"weaponId,omitempty"`
 	TargetID string `json:"targetId,omitempty"`
 
-	// spell_cast (PR2)
+	// spell_cast
 	SpellID   string `json:"spellId,omitempty"`
 	SlotLevel int    `json:"slotLevel,omitempty"`
 
-	// use_feature (PR2)
+	// use_feature
 	FeatureID string `json:"featureId,omitempty"`
 }
 

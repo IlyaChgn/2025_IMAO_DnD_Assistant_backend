@@ -3,10 +3,9 @@ package apperrors
 import "errors"
 
 var (
-	InvalidActionTypeErr    = errors.New("invalid action type")
-	MissingAbilityErr       = errors.New("ability field is required")
-	MissingDCErr            = errors.New("dc field is required for saving throw")
-	MissingDiceExprErr      = errors.New("dice field is required for custom roll")
+	InvalidActionTypeErr = errors.New("invalid action type")
+	MissingAbilityErr    = errors.New("ability field is required")
+	MissingDiceExprErr   = errors.New("dice field is required for custom roll")
 	InvalidDiceExprErr      = errors.New("invalid dice expression")
 	MissingCharacterIDErr  = errors.New("characterId is required")
 	ParticipantNotFoundErr = errors.New("participant not found in encounter")

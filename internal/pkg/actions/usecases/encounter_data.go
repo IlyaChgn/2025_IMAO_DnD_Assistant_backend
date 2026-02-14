@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -67,4 +68,63 @@ func (ed *EncounterData) Marshal() (json.RawMessage, error) {
 	}
 
 	return result, nil
+}
+
+// FindParticipantByInstanceID searches by the InstanceID (encounter slot ID),
+// used when targeting a specific creature/character in the encounter.
+func (ed *EncounterData) FindParticipantByInstanceID(instanceID string) (*models.ParticipantFull, int, error) {
+	for i := range ed.Participants {
+		p := &ed.Participants[i]
+		if p.InstanceID == instanceID {
+			return p, i, nil
+		}
+	}
+
+	return nil, -1, apperrors.ParticipantNotFoundErr
+}
+
+// persistEncounterData marshals and saves the mutated encounter data.
+func persistEncounterData(ctx context.Context, uc *actionsUsecases, ed *EncounterData, encounterID string) error {
+	data, err := ed.Marshal()
+	if err != nil {
+		return err
+	}
+
+	return uc.encounterRepo.UpdateEncounter(ctx, data, encounterID)
+}
+
+// applyDamageToTarget subtracts damage from a participant's HP (temp HP first).
+func applyDamageToTarget(target *models.ParticipantFull, damage int) {
+	if target.CharacterRuntime != nil {
+		remaining := damage
+		if target.CharacterRuntime.TemporaryHP > 0 {
+			if target.CharacterRuntime.TemporaryHP >= remaining {
+				target.CharacterRuntime.TemporaryHP -= remaining
+				return
+			}
+			remaining -= target.CharacterRuntime.TemporaryHP
+			target.CharacterRuntime.TemporaryHP = 0
+		}
+		target.CharacterRuntime.CurrentHP -= remaining
+		if target.CharacterRuntime.CurrentHP < 0 {
+			target.CharacterRuntime.CurrentHP = 0
+		}
+
+		return
+	}
+
+	// Creature runtime state path
+	remaining := damage
+	if target.RuntimeState.TempHP > 0 {
+		if target.RuntimeState.TempHP >= remaining {
+			target.RuntimeState.TempHP -= remaining
+			return
+		}
+		remaining -= target.RuntimeState.TempHP
+		target.RuntimeState.TempHP = 0
+	}
+	target.RuntimeState.CurrentHP -= remaining
+	if target.RuntimeState.CurrentHP < 0 {
+		target.RuntimeState.CurrentHP = 0
+	}
 }

@@ -69,7 +69,6 @@ func (h *ActionsHandler) mapError(err error) (int, string) {
 	switch {
 	case errors.Is(err, apperrors.InvalidActionTypeErr),
 		errors.Is(err, apperrors.MissingAbilityErr),
-		errors.Is(err, apperrors.MissingDCErr),
 		errors.Is(err, apperrors.MissingDiceExprErr),
 		errors.Is(err, apperrors.InvalidDiceExprErr),
 		errors.Is(err, apperrors.MissingCharacterIDErr),
@@ -77,7 +76,8 @@ func (h *ActionsHandler) mapError(err error) (int, string) {
 		errors.Is(err, apperrors.MissingSpellIDErr),
 		errors.Is(err, apperrors.MissingFeatureIDErr),
 		errors.Is(err, apperrors.InsufficientSlotsErr),
-		errors.Is(err, apperrors.FeatureUsesExhaustedErr):
+		errors.Is(err, apperrors.FeatureUsesExhaustedErr),
+		errors.Is(err, apperrors.InvalidIDErr):
 		return responses.StatusBadRequest, responses.ErrBadRequest
 
 	case errors.Is(err, apperrors.PermissionDeniedError):
@@ -86,7 +86,8 @@ func (h *ActionsHandler) mapError(err error) (int, string) {
 	case errors.Is(err, apperrors.ParticipantNotFoundErr),
 		errors.Is(err, apperrors.WeaponNotFoundErr),
 		errors.Is(err, apperrors.SpellNotKnownErr),
-		errors.Is(err, apperrors.FeatureNotFoundErr):
+		errors.Is(err, apperrors.FeatureNotFoundErr),
+		errors.Is(err, apperrors.NoDocsErr):
 		return responses.StatusNotFound, responses.ErrNotFound
 
 	default:
