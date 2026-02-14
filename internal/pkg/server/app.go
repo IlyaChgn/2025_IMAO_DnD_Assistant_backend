@@ -307,7 +307,7 @@ func (srv *Server) Run() error {
 	itemsUsecases := itemsuc.NewItemUsecases(itemsRepository)
 	inventoryUsecases := itemsuc.NewInventoryUsecases(inventoryRepository, itemsRepository)
 
-	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository)
+	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository, bestiaryRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)

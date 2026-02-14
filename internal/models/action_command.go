@@ -49,11 +49,14 @@ type ActionRequest struct {
 
 // ActionRollResult describes a single dice roll outcome.
 type ActionRollResult struct {
-	Expression string `json:"expression"`
-	Rolls      []int  `json:"rolls"`
-	Modifier   int    `json:"modifier"`
-	Total      int    `json:"total"`
-	Natural    int    `json:"natural,omitempty"`
+	Expression      string `json:"expression"`
+	Rolls           []int  `json:"rolls"`
+	Modifier        int    `json:"modifier"`
+	Total           int    `json:"total"`
+	Natural         int    `json:"natural,omitempty"`
+	DamageType      string `json:"damageType,omitempty"`
+	AppliedModifier string `json:"appliedModifier,omitempty"` // "normal"|"resistance"|"vulnerability"|"immunity"
+	FinalDamage     *int   `json:"finalDamage,omitempty"`
 }
 
 // StateChange describes a mutation applied to a participant's runtime state.
@@ -71,4 +74,5 @@ type ActionResponse struct {
 	DamageRolls  []ActionRollResult `json:"damageRolls,omitempty"`
 	StateChanges []StateChange      `json:"stateChanges,omitempty"`
 	Summary      string             `json:"summary"`
+	Hit          *bool              `json:"hit,omitempty"`
 }

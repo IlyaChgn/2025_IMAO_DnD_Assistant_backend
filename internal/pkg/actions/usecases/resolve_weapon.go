@@ -12,7 +12,7 @@ import (
 )
 
 // resolveWeaponAttack handles the "weapon_attack" action type.
-// Rolls attack + damage, and if a target is provided mutates the target's HP.
+// Rolls attack + damage, compares vs target AC, applies resistance, and mutates HP.
 func resolveWeaponAttack(
 	ctx context.Context,
 	uc *actionsUsecases,
@@ -55,46 +55,107 @@ func resolveWeaponAttack(
 		Natural:    natural,
 	}
 
-	// Roll damage
+	resp := &models.ActionResponse{
+		RollResult: attackResult,
+	}
+
+	// If no target, just roll attack + damage (no hit check)
+	if cmd.TargetID == "" {
+		damageRoll, err := rollWeaponDamage(weapon, abilityMod, isCrit)
+		if err != nil {
+			return nil, fmt.Errorf("roll weapon damage: %w", err)
+		}
+		damageRoll.DamageType = weapon.DamageType
+
+		resp.DamageRolls = []models.ActionRollResult{*damageRoll}
+		resp.Summary = fmt.Sprintf("%s attacks with %s: %d to hit",
+			charBase.Name, weapon.Name, attackTotal)
+		if isCrit {
+			resp.Summary += " (CRITICAL HIT!)"
+		}
+		resp.Summary += fmt.Sprintf(", %d %s damage", damageRoll.Total, weapon.DamageType)
+
+		return resp, nil
+	}
+
+	// Target provided — resolve hit/miss
+	target, _, err := ed.FindParticipantByInstanceID(cmd.TargetID)
+	if err != nil {
+		// Target not found — still return the rolls, just don't mutate
+		damageRoll, dErr := rollWeaponDamage(weapon, abilityMod, isCrit)
+		if dErr != nil {
+			return nil, fmt.Errorf("roll weapon damage: %w", dErr)
+		}
+		damageRoll.DamageType = weapon.DamageType
+		resp.DamageRolls = []models.ActionRollResult{*damageRoll}
+		resp.Summary = fmt.Sprintf("%s attacks with %s: %d to hit, %d %s damage",
+			charBase.Name, weapon.Name, attackTotal, damageRoll.Total, weapon.DamageType)
+		return resp, nil
+	}
+
+	ts, err := loadTargetStats(ctx, uc, target)
+	if err != nil {
+		// Can't load target stats — fall back to rolling without hit check
+		l.UsecasesWarn(err, userID, map[string]any{"targetID": cmd.TargetID})
+		damageRoll, dErr := rollWeaponDamage(weapon, abilityMod, isCrit)
+		if dErr != nil {
+			return nil, fmt.Errorf("roll weapon damage: %w", dErr)
+		}
+		damageRoll.DamageType = weapon.DamageType
+		resp.DamageRolls = []models.ActionRollResult{*damageRoll}
+		resp.Summary = fmt.Sprintf("%s attacks with %s: %d to hit, %d %s damage",
+			charBase.Name, weapon.Name, attackTotal, damageRoll.Total, weapon.DamageType)
+		return resp, nil
+	}
+
+	// D&D 5e hit rules: nat 1 always misses, nat 20 always hits, otherwise compare vs AC
+	hit := natural != 1 && (isCrit || attackTotal >= ts.AC)
+	resp.Hit = &hit
+
+	if !hit {
+		resp.Summary = fmt.Sprintf("%s attacks %s with %s: %d to hit vs AC %d — MISS",
+			charBase.Name, ts.Name, weapon.Name, attackTotal, ts.AC)
+		return resp, nil
+	}
+
+	// Hit — roll damage
 	damageRoll, err := rollWeaponDamage(weapon, abilityMod, isCrit)
 	if err != nil {
 		return nil, fmt.Errorf("roll weapon damage: %w", err)
 	}
 
-	summary := fmt.Sprintf("%s attacks with %s: %d to hit",
-		charBase.Name, weapon.Name, attackTotal)
+	// Apply resistance/vulnerability/immunity
+	finalDamage, appliedMod := applyResistance(damageRoll.Total, weapon.DamageType, ts)
+	damageRoll.DamageType = weapon.DamageType
+	damageRoll.AppliedModifier = appliedMod
+	damageRoll.FinalDamage = intPtr(finalDamage)
+
+	resp.DamageRolls = []models.ActionRollResult{*damageRoll}
+
+	resp.Summary = fmt.Sprintf("%s attacks %s with %s: %d to hit vs AC %d — HIT",
+		charBase.Name, ts.Name, weapon.Name, attackTotal, ts.AC)
 	if isCrit {
-		summary += " (CRITICAL HIT!)"
+		resp.Summary = fmt.Sprintf("%s attacks %s with %s: %d to hit vs AC %d — CRITICAL HIT!",
+			charBase.Name, ts.Name, weapon.Name, attackTotal, ts.AC)
 	}
-	summary += fmt.Sprintf(", %d %s damage", damageRoll.Total, weapon.DamageType)
-
-	resp := &models.ActionResponse{
-		RollResult:  attackResult,
-		DamageRolls: []models.ActionRollResult{*damageRoll},
-		Summary:     summary,
+	resp.Summary += fmt.Sprintf(", %d %s damage", finalDamage, weapon.DamageType)
+	if appliedMod != "normal" {
+		resp.Summary += fmt.Sprintf(" (%s)", appliedMod)
 	}
 
-	// Apply damage to target if provided
-	if cmd.TargetID != "" {
-		target, _, err := ed.FindParticipantByInstanceID(cmd.TargetID)
-		if err != nil {
-			// Target not found — still return the rolls, just don't mutate
-			return resp, nil
-		}
+	// Apply final damage to target
+	applyDamageToTarget(target, finalDamage)
 
-		applyDamageToTarget(target, damageRoll.Total)
+	resp.StateChanges = []models.StateChange{{
+		TargetID:    cmd.TargetID,
+		HPDelta:     -finalDamage,
+		Description: fmt.Sprintf("%s takes %d %s damage from %s", ts.Name, finalDamage, weapon.DamageType, weapon.Name),
+	}}
 
-		resp.StateChanges = []models.StateChange{{
-			TargetID:    cmd.TargetID,
-			HPDelta:     -damageRoll.Total,
-			Description: fmt.Sprintf("%s takes %d %s damage from %s", target.DisplayName, damageRoll.Total, weapon.DamageType, weapon.Name),
-		}}
-
-		// Persist encounter data
-		if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
-			l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
-			return nil, fmt.Errorf("persist encounter: %w", err)
-		}
+	// Persist encounter data
+	if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
+		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
+		return nil, fmt.Errorf("persist encounter: %w", err)
 	}
 
 	return resp, nil
@@ -176,4 +237,3 @@ func rollWeaponDamage(weapon *models.WeaponDef, abilityMod int, isCrit bool) (*m
 		Total:      totalDamage,
 	}, nil
 }
-

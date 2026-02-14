@@ -71,7 +71,49 @@ func resolveUseFeature(
 
 	// Resolve active action if defined
 	if feature.ActiveAction != nil {
-		resolveActiveAction(cmd, derived, feature.ActiveAction, resp)
+		resolveActiveAction(ctx, uc, cmd, derived, feature.ActiveAction, ed, resp, userID)
+	}
+
+	// Apply damage to target if we have damage rolls and a target
+	if cmd.TargetID != "" && len(resp.DamageRolls) > 0 {
+		// Skip damage application when hit wasn't resolved
+		skipDamage := false
+		if resp.Hit != nil && !*resp.Hit {
+			skipDamage = true // Attack missed
+		}
+		if feature.ActiveAction != nil && feature.ActiveAction.Attack != nil && resp.Hit == nil {
+			skipDamage = true // Attack feature but couldn't determine hit
+		}
+
+		if !skipDamage {
+			target, _, tErr := ed.FindParticipantByInstanceID(cmd.TargetID)
+			if tErr == nil {
+				totalDamage := 0
+				for _, dr := range resp.DamageRolls {
+					if dr.FinalDamage != nil {
+						totalDamage += *dr.FinalDamage
+					} else {
+						totalDamage += dr.Total
+					}
+				}
+
+				if totalDamage > 0 {
+					applyDamageToTarget(target, totalDamage)
+
+					targetName := target.DisplayName
+					if targetName == "" {
+						targetName = cmd.TargetID
+					}
+
+					resp.StateChanges = append(resp.StateChanges, models.StateChange{
+						TargetID:    cmd.TargetID,
+						HPDelta:     -totalDamage,
+						Description: fmt.Sprintf("%s takes %d damage from %s", targetName, totalDamage, feature.Name),
+					})
+					mutated = true
+				}
+			}
+		}
 	}
 
 	// Persist encounter data only if state was mutated
@@ -97,11 +139,31 @@ func findFeature(charBase *models.CharacterBase, featureID string) *models.Featu
 
 // resolveActiveAction resolves a feature's active action (attack roll, save DC, or healing).
 func resolveActiveAction(
+	ctx context.Context,
+	uc *actionsUsecases,
 	cmd *models.ActionCommand,
 	derived *models.DerivedStats,
 	action *models.CharacterActionDef,
+	ed *EncounterData,
 	resp *models.ActionResponse,
+	userID int,
 ) {
+	l := logger.FromContext(ctx)
+
+	// Load target stats if target is provided
+	var ts *TargetStats
+	if cmd.TargetID != "" {
+		target, _, tErr := ed.FindParticipantByInstanceID(cmd.TargetID)
+		if tErr == nil {
+			loaded, lErr := loadTargetStats(ctx, uc, target)
+			if lErr != nil {
+				l.UsecasesWarn(lErr, userID, map[string]any{"targetID": cmd.TargetID})
+			} else {
+				ts = loaded
+			}
+		}
+	}
+
 	// Attack roll
 	if action.Attack != nil {
 		attackBonus := action.Attack.Bonus
@@ -113,7 +175,23 @@ func resolveActiveAction(
 			Total:      total,
 			Natural:    natural,
 		}
-		resp.Summary += fmt.Sprintf(", %d to hit", total)
+
+		if ts != nil {
+			hit := natural != 1 && (natural == 20 || total >= ts.AC)
+			resp.Hit = &hit
+
+			if hit {
+				resp.Summary += fmt.Sprintf(", %d to hit vs AC %d — HIT", total, ts.AC)
+				if natural == 20 {
+					resp.Summary += " (CRITICAL!)"
+				}
+			} else {
+				resp.Summary += fmt.Sprintf(", %d to hit vs AC %d — MISS", total, ts.AC)
+				return // Miss — skip damage
+			}
+		} else {
+			resp.Summary += fmt.Sprintf(", %d to hit", total)
+		}
 
 		// Roll damage
 		for _, dmg := range action.Attack.Damage {
@@ -127,20 +205,118 @@ func resolveActiveAction(
 				if err != nil {
 					continue
 				}
-				resp.DamageRolls = append(resp.DamageRolls, models.ActionRollResult{
+
+				rollResult := models.ActionRollResult{
 					Expression: expr,
 					Rolls:      result.Rolls,
 					Modifier:   result.Modifier,
 					Total:      result.Total,
-				})
-				resp.Summary += fmt.Sprintf(", %d %s damage", result.Total, dmg.DamageType)
+					DamageType: dmg.DamageType,
+				}
+
+				finalDamage := result.Total
+
+				// Apply resistance/vulnerability/immunity
+				if ts != nil && dmg.DamageType != "" {
+					adjusted, appliedMod := applyResistance(finalDamage, dmg.DamageType, ts)
+					rollResult.AppliedModifier = appliedMod
+					rollResult.FinalDamage = intPtr(adjusted)
+					finalDamage = adjusted
+				} else {
+					rollResult.FinalDamage = intPtr(finalDamage)
+				}
+
+				resp.DamageRolls = append(resp.DamageRolls, rollResult)
+				resp.Summary += fmt.Sprintf(", %d %s damage", finalDamage, dmg.DamageType)
+				if rollResult.AppliedModifier != "" && rollResult.AppliedModifier != "normal" {
+					resp.Summary += fmt.Sprintf(" (%s)", rollResult.AppliedModifier)
+				}
 			}
 		}
 	}
 
 	// Saving throw DC
 	if action.SavingThrow != nil {
-		resp.Summary += fmt.Sprintf(", DC %d %s save", action.SavingThrow.DC, action.SavingThrow.Ability)
+		st := action.SavingThrow
+		ability := strings.ToLower(string(st.Ability))
+
+		if ts != nil {
+			// Roll target's saving throw
+			saveBonus := ts.SaveBonuses[ability]
+			saveNatural, saveTotal, saveRolls := dice.RollD20(saveBonus, false, false)
+			saved := saveTotal >= st.DC
+
+			resp.Summary += fmt.Sprintf(", DC %d %s save: %s rolls %d (%d%+d)",
+				st.DC, strings.ToUpper(ability), ts.Name, saveTotal, saveNatural, saveBonus)
+
+			// Add save roll as state change (before potential early return)
+			resp.StateChanges = append(resp.StateChanges, models.StateChange{
+				Description: fmt.Sprintf("%s %s save: %d (1d20%+d = [%s])",
+					ts.Name, strings.ToUpper(ability), saveTotal, saveBonus, formatRolls(saveRolls)),
+			})
+
+			if saved {
+				onSuccess := st.OnSuccess
+				if onSuccess == "half damage" || onSuccess == "half" {
+					resp.Summary += " — SAVES (half damage)"
+				} else {
+					resp.Summary += " — SAVES (no effect)"
+					return // No damage
+				}
+			} else {
+				resp.Summary += " — FAILS"
+			}
+
+			// Roll damage for save-based features
+			if st.Damage != nil {
+				for _, dmg := range st.Damage {
+					diceType := strings.TrimPrefix(dmg.DiceType, "d")
+					if dmg.DiceCount > 0 && diceType != "" {
+						expr := fmt.Sprintf("%dd%s", dmg.DiceCount, diceType)
+						if dmg.Bonus != 0 {
+							expr = fmt.Sprintf("%s%+d", expr, dmg.Bonus)
+						}
+						result, err := dice.Roll(expr)
+						if err != nil {
+							continue
+						}
+
+						rollResult := models.ActionRollResult{
+							Expression: expr,
+							Rolls:      result.Rolls,
+							Modifier:   result.Modifier,
+							Total:      result.Total,
+							DamageType: dmg.DamageType,
+						}
+
+						finalDamage := result.Total
+
+						// Apply half damage on successful save
+						if saved {
+							finalDamage = finalDamage / 2
+						}
+
+						// Apply resistance/vulnerability/immunity
+						if dmg.DamageType != "" {
+							adjusted, appliedMod := applyResistance(finalDamage, dmg.DamageType, ts)
+							rollResult.AppliedModifier = appliedMod
+							rollResult.FinalDamage = intPtr(adjusted)
+							finalDamage = adjusted
+						} else {
+							rollResult.FinalDamage = intPtr(finalDamage)
+						}
+
+						resp.DamageRolls = append(resp.DamageRolls, rollResult)
+						resp.Summary += fmt.Sprintf(", %d %s damage", finalDamage, dmg.DamageType)
+						if rollResult.AppliedModifier != "" && rollResult.AppliedModifier != "normal" {
+							resp.Summary += fmt.Sprintf(" (%s)", rollResult.AppliedModifier)
+						}
+					}
+				}
+			}
+		} else {
+			resp.Summary += fmt.Sprintf(", DC %d %s save", st.DC, st.Ability)
+		}
 	}
 
 	// Healing
@@ -165,5 +341,4 @@ func resolveActiveAction(
 		}
 	}
 
-	_ = derived // available for future use
 }

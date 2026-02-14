@@ -8,6 +8,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/compute"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
@@ -19,17 +20,20 @@ type actionsUsecases struct {
 	encounterRepo encounterinterfaces.EncounterRepository
 	characterRepo characterinterfaces.CharacterBaseRepository
 	spellsRepo    spellsinterfaces.SpellsRepository
+	bestiaryRepo  bestiaryinterfaces.BestiaryRepository
 }
 
 func NewActionsUsecases(
 	encounterRepo encounterinterfaces.EncounterRepository,
 	characterRepo characterinterfaces.CharacterBaseRepository,
 	spellsRepo spellsinterfaces.SpellsRepository,
+	bestiaryRepo bestiaryinterfaces.BestiaryRepository,
 ) actionsinterfaces.ActionsUsecases {
 	return &actionsUsecases{
 		encounterRepo: encounterRepo,
 		characterRepo: characterRepo,
 		spellsRepo:    spellsRepo,
+		bestiaryRepo:  bestiaryRepo,
 	}
 }
 
