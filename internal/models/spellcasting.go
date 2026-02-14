@@ -164,10 +164,11 @@ type UpcastData struct {
 
 // UpcastScaling describes a specific scaling effect per spell level.
 type UpcastScaling struct {
-	Level      int         `json:"level" bson:"level"`                         // spell level threshold
-	Damage     *DamageRoll `json:"damage,omitempty" bson:"damage,omitempty"`   // additional damage dice
-	Targets    int         `json:"targets,omitempty" bson:"targets,omitempty"` // additional targets
-	HealingAdd int         `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`
+	Level          int         `json:"level" bson:"level"`                                     // spell level threshold
+	Damage         *DamageRoll `json:"damage,omitempty" bson:"damage,omitempty"`               // additional damage dice
+	Targets        int         `json:"targets,omitempty" bson:"targets,omitempty"`              // additional targets
+	HealingAdd     int         `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`        // additional healing dice per level
+	HealingAddFlat int         `json:"healingAddFlat,omitempty" bson:"healingAddFlat,omitempty"` // flat HP bonus per level (e.g., Heal: +10)
 }
 
 // CantripScaling describes how a cantrip scales with caster level.

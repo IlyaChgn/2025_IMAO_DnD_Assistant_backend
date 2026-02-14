@@ -1261,5 +1261,1876 @@
     "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
     "tags": ["control", "debuff"],
     "schemaVersion": 1
+  },
+  {
+    "engName": "chain-lightning",
+    "name": {
+      "rus": "Цепная молния",
+      "eng": "Chain Lightning"
+    },
+    "description": {
+      "rus": "Вы создаёте молнию, которая устремляется к выбранной вами цели в пределах дистанции. От этой цели три молнии отлетают к трём другим целям, каждая из которых должна находиться в пределах 30 футов от первой. Целью может быть существо или предмет, и на каждую цель может быть направлена только одна молния. Каждая цель должна совершить спасбросок Ловкости. Цель получает урон электричеством 10d8 при провале или половину этого урона при успехе.",
+      "eng": "You create a bolt of lightning that arcs toward a target of your choice that you can see within range. Three bolts then leap from that target to as many as three other targets, each of which must be within 30 feet of the first target. A target can be a creature or an object and can be targeted by only one of the bolts. A target must make a Dexterity saving throw. The target takes 10d8 lightning damage on a failed save, or half as much damage on a successful one."
+    },
+    "shortDescription": {
+      "rus": "10d8 электричества, DEX save, до 3 дополнительных целей в 30 фт",
+      "eng": "10d8 lightning, DEX save, up to 3 secondary targets within 30 ft"
+    },
+    "level": 6,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 150
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a bit of fur; a piece of amber, glass, or a crystal rod; and three silver pins"
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creatures",
+      "count": 4
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creatures",
+          "count": 4
+        },
+        "damage": {
+          "base": {
+            "diceCount": 10,
+            "diceType": "d8",
+            "damageType": "lightning"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "При использовании ячейки 7+ уровня: +1d8 за каждый уровень выше 6",
+        "eng": "At 7th level or higher: +1d8 for each slot level above 6th"
+      },
+      "scaling": [
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 11,
+            "diceType": "d8",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 12,
+            "diceType": "d8",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 13,
+            "diceType": "d8",
+            "damageType": "lightning"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "lightning"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "disintegrate",
+    "name": {
+      "rus": "Распад",
+      "eng": "Disintegrate"
+    },
+    "description": {
+      "rus": "Тонкий зелёный луч вылетает из вашего указующего пальца к цели в пределах дистанции. Целью может быть существо, предмет или порождение магической силы, например стена, созданная заклинанием Силовая стена. Существо должно совершить спасбросок Ловкости. При провале цель получает урон силовым полем 10d6 + 40. Если этот урон уменьшает хиты цели до 0, цель распадается. Распавшееся существо и всё, что оно несёт и носит, кроме магических предметов, превращается в кучку серой пыли. Существо можно вернуть к жизни только заклинанием Истинное воскрешение или Желание.",
+      "eng": "A thin green ray springs from your pointing finger to a target that you can see within range. The target can be a creature, an object, or a creation of magical force, such as the wall created by wall of force. A creature targeted by this spell must make a Dexterity saving throw. On a failed save, the target takes 10d6 + 40 force damage. If this damage reduces the target to 0 hit points, it is disintegrated. A disintegrated creature and everything it is wearing and carrying, except magic items, are reduced to a pile of fine gray dust. The creature can be restored to life only by means of a true resurrection or a wish spell."
+    },
+    "shortDescription": {
+      "rus": "10d6+40 силового урона, DEX save (0 при успехе), 0 HP = распад",
+      "eng": "10d6+40 force, DEX save (none on success), 0 HP = disintegrated"
+    },
+    "level": 6,
+    "school": "transmutation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a lodestone and a pinch of dust"
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "damage": {
+          "base": {
+            "diceCount": 10,
+            "diceType": "d6",
+            "bonus": 40,
+            "damageType": "force"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "При использовании ячейки 7+ уровня: +3d6 за каждый уровень выше 6",
+        "eng": "At 7th level or higher: +3d6 for each slot level above 6th"
+      },
+      "scaling": [
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 13,
+            "diceType": "d6",
+            "bonus": 40,
+            "damageType": "force"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 16,
+            "diceType": "d6",
+            "bonus": 40,
+            "damageType": "force"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 19,
+            "diceType": "d6",
+            "bonus": 40,
+            "damageType": "force"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "force"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "globe-of-invulnerability",
+    "name": {
+      "rus": "Сфера неуязвимости",
+      "eng": "Globe of Invulnerability"
+    },
+    "description": {
+      "rus": "Неподвижный, слабо мерцающий барьер появляется в сфере с радиусом 10 футов вокруг вас и остаётся на время действия заклинания. Все заклинания 5-го уровня и ниже, произнесённые вне барьера, не могут влиять на существ и предметы внутри него, даже если заклинание использует ячейку более высокого уровня. Такие заклинания могут нацеливаться на существ и предметы внутри барьера, но не оказывают на них никакого эффекта. Область внутри барьера также исключается из областей заклинаний этих уровней.",
+      "eng": "An immobile, faintly shimmering barrier springs into existence in a 10-foot radius around you and remains for the duration. Any spell of 5th level or lower cast from outside the barrier can't affect creatures or objects within it, even if the spell is cast using a higher level spell slot. Such a spell can target creatures and objects within the barrier, but the spell has no effect on them. Similarly, the area within the barrier is excluded from the areas affected by such spells."
+    },
+    "shortDescription": {
+      "rus": "Сфера 10 фт: блокирует заклинания 5-го уровня и ниже извне",
+      "eng": "10 ft sphere: blocks spells of 5th level or lower from outside"
+    },
+    "level": 6,
+    "school": "abjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a glass or crystal bead that shatters when the spell ends"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 10,
+          "origin": "self"
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "При использовании ячейки 7+ уровня: блокирует заклинания на 1 уровень выше за каждый уровень ячейки выше 6",
+        "eng": "At 7th level or higher: blocks spells of one level higher for each slot level above 6th"
+      },
+      "scaling": []
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "defense",
+      "aoe"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "harm",
+    "name": {
+      "rus": "Вред",
+      "eng": "Harm"
+    },
+    "description": {
+      "rus": "Вы высвобождаете вирулентную болезнь на существо, которое видите в пределах дистанции. Цель должна совершить спасбросок Телосложения. При провале она получает урон некротической энергией 14d6, при успехе — половину этого урона. Урон не может уменьшить хиты цели ниже 1. Если цель проваливает спасбросок, её максимум хитов уменьшается на время 1 час на количество, равное полученному урону некротической энергией. Любой эффект, убирающий болезнь, позволяет максимуму хитов существа вернуться к норме до истечения этого времени.",
+      "eng": "You unleash a virulent disease on a creature that you can see within range. The target must make a Constitution saving throw. On a failed save, it takes 14d6 necrotic damage, or half as much damage on a successful save. The damage can't reduce the target's hit points below 1. If the target fails the saving throw, its hit point maximum is reduced for 1 hour by an amount equal to the necrotic damage it took. Any effect that removes a disease allows a creature's hit point maximum to return to normal before that time passes."
+    },
+    "shortDescription": {
+      "rus": "14d6 некротического, CON save, уменьшает макс. хиты",
+      "eng": "14d6 necrotic, CON save, reduces HP maximum"
+    },
+    "level": 6,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "CON",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "damage": {
+          "base": {
+            "diceCount": 14,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "necrotic",
+      "debuff"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "heal",
+    "name": {
+      "rus": "Исцеление",
+      "eng": "Heal"
+    },
+    "description": {
+      "rus": "Выберите существо, которое видите в пределах дистанции. Волна позитивной энергии омывает существо, позволяя ему восстановить 70 хитов. Это заклинание также оканчивает действие слепоты, глухоты и всех болезней, воздействующих на цель. Это заклинание не действует на нежить и конструктов.",
+      "eng": "Choose a creature that you can see within range. A surge of positive energy washes through the creature, causing it to regain 70 hit points. This spell also ends blindness, deafness, and any diseases affecting the target. This spell has no effect on undead or constructs."
+    },
+    "shortDescription": {
+      "rus": "Лечит 70 хитов, снимает слепоту, глухоту и болезни",
+      "eng": "Heals 70 HP, cures blindness, deafness, and diseases"
+    },
+    "level": 6,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "healing": {
+          "bonus": 70
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "При использовании ячейки 7+ уровня: +10 хитов за каждый уровень выше 6",
+        "eng": "At 7th level or higher: +10 HP for each slot level above 6th"
+      },
+      "scaling": [
+        {
+          "level": 7,
+          "healingAddFlat": 10
+        },
+        {
+          "level": 8,
+          "healingAddFlat": 20
+        },
+        {
+          "level": 9,
+          "healingAddFlat": 30
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "healing"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sunbeam",
+    "name": {
+      "rus": "Солнечный луч",
+      "eng": "Sunbeam"
+    },
+    "description": {
+      "rus": "Из вашей руки исходит луч яркого света в линии длиной 60 футов и шириной 5 футов. Все существа на линии должны совершить спасбросок Телосложения. При провале существо получает урон излучением 6d8 и становится ослеплённым до вашего следующего хода. При успехе существо получает половину урона и не ослепляется. Нежить и слизи совершают этот спасбросок с помехой. Вы можете создать новый луч действием в каждый свой ход до окончания заклинания. Пока заклинание активно, от вашей руки исходит яркий свет в радиусе 30 футов и тусклый свет в пределах ещё 30 футов.",
+      "eng": "A beam of brilliant light flashes out from your hand in a 5-foot-wide, 60-foot-long line. Each creature in the line must make a Constitution saving throw. On a failed save, a creature takes 6d8 radiant damage and is blinded until your next turn. On a successful save, it takes half as much damage and isn't blinded by this spell. Undead and oozes have disadvantage on this saving throw. You can create a new beam as your action on any turn until the spell ends. For the duration, a mote of brilliant radiance shines in your hand. It sheds bright light in a 30-foot radius and dim light for an additional 30 feet."
+    },
+    "shortDescription": {
+      "rus": "Линия 60 фт: 6d8 излучения, CON save, ослепление при провале",
+      "eng": "60 ft line: 6d8 radiant, CON save, blinds on failure"
+    },
+    "level": 6,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a magnifying glass"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "CON",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "line",
+          "size": 60,
+          "width": 5,
+          "origin": "self"
+        },
+        "damage": {
+          "base": {
+            "diceCount": 6,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "radiant",
+      "debuff",
+      "aoe"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "true-seeing",
+    "name": {
+      "rus": "Истинное зрение",
+      "eng": "True Seeing"
+    },
+    "description": {
+      "rus": "Это заклинание даёт согласному существу, которого вы касаетесь, способность видеть вещи такими, какие они есть на самом деле. На время действия заклинания существо обладает истинным зрением, замечает тайные двери, скрытые магией, и может видеть в Эфирный план — всё в пределах 120 футов.",
+      "eng": "This spell gives the willing creature you touch the ability to see things as they actually are. For the duration, the creature has truesight, notices secret doors hidden by magic, and can see into the Ethereal Plane, all out to a range of 120 feet."
+    },
+    "shortDescription": {
+      "rus": "Истинное зрение 120 фт на 1 час",
+      "eng": "Truesight 120 ft for 1 hour"
+    },
+    "level": 6,
+    "school": "divination",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "an ointment for the eyes that costs 25 gp; is made from mushroom powder, saffron, and fat; and is consumed by the spell",
+      "materialCost": 25,
+      "materialConsumed": true
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "hours",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "willing",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "utility",
+      "buff"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "eyebite",
+    "name": {
+      "rus": "Злой глаз",
+      "eng": "Eyebite"
+    },
+    "description": {
+      "rus": "На время действия заклинания ваши глаза становятся чернильной пустотой, наделённой ужасающей силой. Одно существо на ваш выбор в пределах 60 футов, которое вы видите, должно преуспеть в спасброске Мудрости, иначе получит один из следующих эффектов на ваш выбор: Уснувший — цель теряет сознание, просыпается при получении урона или если кто-то потратит действие на её пробуждение. Панический — цель напугана вами и должна использовать действие Рывок, чтобы удалиться от вас. Тошнотворный — цель совершает с помехой броски атаки и проверки характеристик. В конце каждого хода она может повторить спасбросок. Каждый ваш ход до окончания заклинания вы можете действием нацелиться на другое существо.",
+      "eng": "For the spell's duration, your eyes become an inky void imbued with dread power. One creature of your choice within 60 feet of you that you can see must succeed on a Wisdom saving throw or be affected by one of the following effects of your choice: Asleep — the target falls unconscious, waking if it takes damage or someone uses an action to wake it. Panicked — the target is frightened of you and must use the Dash action to move away from you. Sickened — the target has disadvantage on attack rolls and ability checks; it can make another Wisdom saving throw at the end of each of its turns. On each of your turns until the spell ends, you can use your action to target another creature."
+    },
+    "shortDescription": {
+      "rus": "WIS save: усыпляет, пугает или вызывает тошноту (выбор каждый ход)",
+      "eng": "WIS save: sleep, panic, or sicken target (choose each turn)"
+    },
+    "level": 6,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "none"
+      }
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "debuff"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "finger-of-death",
+    "name": {
+      "rus": "Перст смерти",
+      "eng": "Finger of Death"
+    },
+    "description": {
+      "rus": "Вы направляете негативную энергию через палец на существо в пределах дистанции, вызывая у него мучительную боль. Цель должна совершить спасбросок Телосложения. При провале она получает урон некротической энергией 7d8 + 30, при успехе — половину этого урона. Гуманоид, убитый этим заклинанием, восстаёт в начале вашего следующего хода в виде зомби, постоянно находящегося под вашим командованием и выполняющего ваши устные приказы в меру своих способностей.",
+      "eng": "You send negative energy coursing through a creature that you can see within range, causing it searing pain. The target must make a Constitution saving throw. It takes 7d8 + 30 necrotic damage on a failed save, or half as much damage on a successful one. A humanoid killed by this spell rises at the start of your next turn as a zombie that is permanently under your command, following your verbal orders to the best of its ability."
+    },
+    "shortDescription": {
+      "rus": "7d8+30 некротического, CON save, убитый гуманоид становится зомби",
+      "eng": "7d8+30 necrotic, CON save, slain humanoid rises as zombie"
+    },
+    "level": 7,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "CON",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "damage": {
+          "base": {
+            "diceCount": 7,
+            "diceType": "d8",
+            "bonus": 30,
+            "damageType": "necrotic"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "necrotic"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "fire-storm",
+    "name": {
+      "rus": "Огненная буря",
+      "eng": "Fire Storm"
+    },
+    "description": {
+      "rus": "Буря бушующего пламени появляется в выбранном вами месте в пределах дистанции. Область бури состоит из десяти кубов с длиной ребра 10 футов, которые вы расставляете как пожелаете. Каждый куб должен иметь хотя бы одну грань, смежную с гранью другого куба. Все существа в этой области должны совершить спасбросок Ловкости. При провале существо получает урон огнём 7d10, при успехе — половину этого урона. Огонь повреждает предметы в области и воспламеняет горючие предметы, которые никто не несёт и не носит. По вашему желанию, растения в области не получают урона.",
+      "eng": "A storm of roaring flame appears in a location you choose within range. The area of the storm consists of up to ten 10-foot cubes, which you can arrange as you wish. Each cube must have at least one face adjacent to the face of another cube. Each creature in the area must make a Dexterity saving throw. It takes 7d10 fire damage on a failed save, or half as much damage on a successful one. The fire damages objects in the area and ignites flammable objects that aren't being worn or carried. If you choose, plant life in the area is unaffected by this spell."
+    },
+    "shortDescription": {
+      "rus": "7d10 огня в 10 кубах 10 фт, DEX save, настраиваемая область",
+      "eng": "7d10 fire in ten 10 ft cubes, DEX save, customizable area"
+    },
+    "level": 7,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 150
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cube",
+          "size": 10,
+          "count": 10
+        },
+        "damage": {
+          "base": {
+            "diceCount": 7,
+            "diceType": "d10",
+            "damageType": "fire"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "fire",
+      "aoe"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "forcecage",
+    "name": {
+      "rus": "Силовая клетка",
+      "eng": "Forcecage"
+    },
+    "description": {
+      "rus": "Неподвижная невидимая тюрьма в форме куба, состоящая из магической силы, появляется вокруг области на ваш выбор в пределах дистанции. Тюрьма может быть клеткой или сплошной коробкой, на ваш выбор. Клетка может быть кубом со стороной до 20 футов, состоящим из прутьев диаметром 1/2 дюйма, расположенных на расстоянии 1/2 дюйма друг от друга. Сплошная коробка может быть кубом со стороной до 10 футов, создающим сплошной барьер, который препятствует прохождению любой материи и выходу заклинаний внутрь или наружу. Существо внутри клетки не может покинуть её немагическими средствами. Если существо пытается использовать телепортацию или межпланарное перемещение, оно должно совершить спасбросок Харизмы. При провале перемещение не удаётся. Заклинание нельзя рассеять Рассеиванием магии.",
+      "eng": "An immobile, invisible, cube-shaped prison composed of magical force springs into existence around an area you choose within range. The prison can be a cage or a solid box, as you choose. A prison in the shape of a cage can be up to 20 feet on a side and is made from 1/2-inch diameter bars spaced 1/2 inch apart. A prison in the shape of a box can be up to 10 feet on a side, creating a solid barrier that prevents any matter from passing through it and blocking any spells cast into or out from the area. When you cast the spell, any creature that is completely inside the cage's area is trapped. A creature inside can't leave it by nonmagical means. If the creature tries to use teleportation or interplanar travel, it must first make a Charisma saving throw. On a failure, the attempt fails. The spell can't be dispelled by dispel magic."
+    },
+    "shortDescription": {
+      "rus": "Невидимая клетка/коробка из силы, нельзя рассеять, 1 час",
+      "eng": "Invisible cage/box of force, can't be dispelled, 1 hour"
+    },
+    "level": 7,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 100
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "ruby dust worth 1,500 gp",
+      "materialCost": 1500,
+      "materialConsumed": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "hours",
+      "concentration": false
+    },
+    "classes": [
+      "wizard"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "plane-shift",
+    "name": {
+      "rus": "Уход в иной мир",
+      "eng": "Plane Shift"
+    },
+    "description": {
+      "rus": "Вы и до восьми согласных существ, взявшихся за руки в кругу, переноситесь на другой план существования. Вы можете указать пункт назначения в общих чертах, и вы появляетесь в указанном месте или рядом с ним. Вы также можете использовать это заклинание, чтобы изгнать несогласное существо на другой план. Выберите существо в пределах вашей досягаемости и совершите рукопашную атаку заклинанием. При попадании существо должно совершить спасбросок Харизмы. При провале существо переносится в случайное место на выбранном вами плане существования.",
+      "eng": "You and up to eight willing creatures who link hands in a circle are transported to a different plane of existence. You can specify a target destination in general terms, and you appear in or near that destination. Alternatively, you can use this spell to banish an unwilling creature to another plane. Choose a creature within your reach and make a melee spell attack against it. On a hit, the creature must make a Charisma saving throw. If the creature fails this save, it is transported to a random location on the plane of existence you specify."
+    },
+    "shortDescription": {
+      "rus": "Переносит группу на другой план или изгоняет существо (CHA save)",
+      "eng": "Transports group to another plane or banishes creature (CHA save)"
+    },
+    "level": 7,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence",
+      "materialCost": 250,
+      "materialConsumed": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creatures",
+      "count": 9
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "CHA",
+        "onSuccess": "none"
+      }
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "teleportation",
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "resurrection",
+    "name": {
+      "rus": "Воскрешение",
+      "eng": "Resurrection"
+    },
+    "description": {
+      "rus": "Вы касаетесь мёртвого существа, которое было мертво не более ста лет, не умерло от старости и не является нежитью. Если его душа свободна и согласна, существо оживает со всеми хитами. Это заклинание нейтрализует все яды и исцеляет немагические болезни, которые воздействовали на существо в момент смерти. Однако оно не снимает магические болезни, проклятия и тому подобное; если эти эффекты не были сняты до произнесения заклинания, они продолжают воздействовать на цель после возвращения к жизни. Заклинание закрывает все смертельные раны и восстанавливает отсутствующие части тела. Возвращение из мёртвых — тяжёлое испытание. Цель получает штраф −4 ко всем броскам атаки, спасброскам и проверкам характеристик. Каждый раз, когда цель заканчивает продолжительный отдых, штраф уменьшается на 1, пока не исчезнет.",
+      "eng": "You touch a dead creature that has been dead for no more than a century, that didn't die of old age, and that isn't undead. If its soul is free and willing, the target returns to life with all its hit points. This spell neutralizes any poisons and cures normal diseases affecting the creature when it died. It doesn't, however, remove magical diseases, curses, and the like; if such effects aren't removed prior to casting the spell, they afflict the target on its return to life. This spell closes all mortal wounds and restores any missing body parts. Coming back from the dead is an ordeal. The target takes a −4 penalty to all attack rolls, saving throws, and ability checks. Every time the target finishes a long rest, the penalty is reduced by 1 until it disappears."
+    },
+    "shortDescription": {
+      "rus": "Оживляет существо (мертво <100 лет), полные хиты, восстанавливает тело",
+      "eng": "Revive creature (dead <100 years), full HP, restores body parts"
+    },
+    "level": 7,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "hours",
+      "amount": 1
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a diamond worth at least 1,000 gp, which the spell consumes",
+      "materialCost": 1000,
+      "materialConsumed": true
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "cleric"
+    ],
+    "targeting": {
+      "type": "willing",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "healing"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "teleport",
+    "name": {
+      "rus": "Телепортация",
+      "eng": "Teleport"
+    },
+    "description": {
+      "rus": "Это заклинание мгновенно переносит вас и до восьми согласных существ на ваш выбор, которых вы видите в пределах дистанции, или один предмет на ваш выбор в пределах дистанции, в выбранное вами место назначения. Если вы нацелены на предмет, он должен целиком помещаться в куб с длиной ребра 10 футов, и его не должно нести и носить несогласное существо. Выбранное вами место назначения должно быть вам знакомо, и оно должно находиться на том же плане существования, что и вы. Ваша осведомлённость о месте назначения определяет вероятность успешного прибытия.",
+      "eng": "This spell instantly transports you and up to eight willing creatures of your choice that you can see within range, or a single object that you can see within range, to a destination you select. If you target an object, it must be able to fit entirely inside a 10-foot cube, and it can't be held or carried by an unwilling creature. The destination you choose must be known to you, and it must be on the same plane of existence as you. Your familiarity with the destination determines whether you arrive there successfully."
+    },
+    "shortDescription": {
+      "rus": "Мгновенная телепортация до 8 существ, точность зависит от знакомства",
+      "eng": "Instant teleport up to 8 creatures, accuracy depends on familiarity"
+    },
+    "level": 7,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 10
+    },
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creatures",
+      "count": 9
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "teleportation",
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "dominate-monster",
+    "name": {
+      "rus": "Подчинение чудовища",
+      "eng": "Dominate Monster"
+    },
+    "description": {
+      "rus": "Вы пытаетесь заворожить существо, которое видите в пределах дистанции. Оно должно преуспеть в спасброске Мудрости, иначе станет очарованным вами на время действия заклинания. Если вы или ваши союзники сражаются с ним, оно совершает спасбросок с преимуществом. Пока существо очаровано, вы имеете с ним телепатическую связь, пока вы оба находитесь на одном плане. Вы можете использовать эту связь для отдачи команд существу, пока вы в сознании, и оно выполняет их в меру своих способностей. Каждый раз, когда цель получает урон, она совершает новый спасбросок Мудрости. При успехе заклинание оканчивается.",
+      "eng": "You attempt to beguile a creature that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw. While the creature is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious, which it does its best to obey. Each time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends."
+    },
+    "shortDescription": {
+      "rus": "WIS save: контроль любого существа, конц. до 1 часа",
+      "eng": "WIS save: control any creature, conc. up to 1 hour"
+    },
+    "level": 8,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "hours",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "condition": {
+          "condition": "charmed",
+          "duration": "1 hour",
+          "saveEnds": true
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "При использовании ячейки 9 уровня: длительность концентрации до 8 часов",
+        "eng": "At 9th level: concentration duration up to 8 hours"
+      },
+      "scaling": []
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "debuff"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "earthquake",
+    "name": {
+      "rus": "Землетрясение",
+      "eng": "Earthquake"
+    },
+    "description": {
+      "rus": "Вы создаёте сейсмическое возмущение в точке на земле, которую видите в пределах дистанции. В течение всего времени действия заклинания интенсивные толчки сотрясают землю в круге с радиусом 100 футов с центром в этой точке. Все существа и строения, стоящие на земле в этой области, сотрясаются. Все существа на земле в этой области должны совершить спасбросок Ловкости. При провале существо сбивается с ног. Концентрация на заклинаниях в этой области требует успешной проверки Телосложения СЛ 15 — при провале заклинание пропадает. На каждом ходу, пока заклинание активно, в земле открываются разломы шириной 1d6 × 10 футов. Существо рядом с разломом должно совершить спасбросок Ловкости или упасть. Строения в области получают 50 дробящего урона в начале каждого вашего хода.",
+      "eng": "You create a seismic disturbance at a point on the ground that you can see within range. For the duration, an intense tremor rips through the ground in a 100-foot-radius circle centered on that point and shakes creatures and structures in contact with the ground in that area. Each creature on the ground in the area must make a Dexterity saving throw. On a failure, the creature is knocked prone. Concentration on spells in the area requires a successful DC 15 Constitution check — on failure the spell is lost. At each of your turns while the spell is active, fissures 1d6 × 10 feet wide open in the ground. A creature near a fissure must succeed on a Dexterity saving throw or fall in. Structures in the area take 50 bludgeoning damage at the start of each of your turns."
+    },
+    "shortDescription": {
+      "rus": "Круг 100 фт: сотрясение, разломы, 50 урона строениям/ход",
+      "eng": "100 ft circle: tremors, fissures, 50 damage to structures/turn"
+    },
+    "level": 8,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 500
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a pinch of dirt, a piece of rock, and a lump of clay"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 100,
+          "origin": "point"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "aoe"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "feeblemind",
+    "name": {
+      "rus": "Слабоумие",
+      "eng": "Feeblemind"
+    },
+    "description": {
+      "rus": "Вы наносите сокрушительный удар по разуму существа, которое видите в пределах дистанции, пытаясь разрушить его интеллект и личность. Цель получает урон психической энергией 4d6 и должна совершить спасбросок Интеллекта. При провале Интеллект и Харизма существа становятся равны 1. Существо не может использовать заклинания, активировать магические предметы и не понимает речь. Однако существо может опознавать друзей, следовать за ними и защищать их. Каждые 30 дней существо может повторять спасбросок. При успехе эффект оканчивается. Заклинание может быть также окончено заклинаниями Высшее восстановление, Исцеление или Желание.",
+      "eng": "You blast the mind of a creature that you can see within range, attempting to shatter its intellect and personality. The target takes 4d6 psychic damage and must make an Intelligence saving throw. On a failed save, the creature's Intelligence and Charisma scores become 1. The creature can't cast spells, activate magic items, understand language, or communicate in any intelligible way. The creature can, however, identify its friends, follow them, and even protect them. At the end of every 30 days, the creature can repeat its saving throw. On a success, the spell ends. The spell can also be ended by greater restoration, heal, or wish."
+    },
+    "shortDescription": {
+      "rus": "4d6 психического, INT save: INT и CHA = 1, нет заклинаний",
+      "eng": "4d6 psychic, INT save: INT and CHA become 1, can't cast"
+    },
+    "level": 8,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 150
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a handful of clay, crystal, glass, or mineral spheres"
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "druid",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "INT",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "damage": {
+          "base": {
+            "diceCount": 4,
+            "diceType": "d6",
+            "damageType": "psychic"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "psychic",
+      "debuff",
+      "control"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "power-word-stun",
+    "name": {
+      "rus": "Слово силы: оглушение",
+      "eng": "Power Word Stun"
+    },
+    "description": {
+      "rus": "Вы произносите слово силы, способное оглушить одно существо, которое видите в пределах дистанции. Если у выбранного существа 150 или менее текущих хитов, оно становится оглушённым. В противном случае заклинание не оказывает эффекта. Оглушённое существо должно совершать спасбросок Телосложения в конце каждого своего хода. При успехе оглушение оканчивается.",
+      "eng": "You speak a word of power that can overwhelm the mind of one creature you can see within range, leaving it dumbfounded. If the target has 150 hit points or fewer, it is stunned. Otherwise, the spell has no effect. The stunned target must make a Constitution saving throw at the end of each of its turns. On a successful save, this stunning effect ends."
+    },
+    "shortDescription": {
+      "rus": "Оглушает существо с <=150 хитов, без спасброска, CON save для снятия",
+      "eng": "Stuns creature with <=150 HP, no save, CON save to end"
+    },
+    "level": 8,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "condition": {
+          "condition": "stunned",
+          "duration": "until saved",
+          "saveEnds": true,
+          "saveAbility": "CON"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sunburst",
+    "name": {
+      "rus": "Солнечный удар",
+      "eng": "Sunburst"
+    },
+    "description": {
+      "rus": "Яркий солнечный свет вспыхивает в радиусе 60 футов с центром в точке, которую вы выбираете в пределах дистанции. Все существа в этой области должны совершить спасбросок Телосложения. При провале существо получает урон излучением 12d6 и становится ослеплённым на 1 минуту. При успехе существо получает половину урона и не ослепляется. Нежить и слизи совершают этот спасбросок с помехой. Ослеплённое существо совершает спасбросок Телосложения в конце каждого своего хода. При успехе ослепление оканчивается. Это заклинание рассеивает любую тьму в области, созданную заклинанием.",
+      "eng": "Brilliant sunlight flashes in a 60-foot radius centered on a point you choose within range. Each creature in that light must make a Constitution saving throw. On a failed save, a creature takes 12d6 radiant damage and is blinded for 1 minute. On a successful save, it takes half as much damage and isn't blinded by this spell. Undead and oozes have disadvantage on this saving throw. A creature blinded by this spell makes another Constitution saving throw at the end of each of its turns. On a successful save, it is no longer blinded. This spell dispels any darkness in its area that was created by a spell."
+    },
+    "shortDescription": {
+      "rus": "Сфера 60 фт: 12d6 излучения, CON save, ослепление на 1 минуту",
+      "eng": "60 ft sphere: 12d6 radiant, CON save, blinds for 1 minute"
+    },
+    "level": 8,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 150
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "fire and a piece of sunstone"
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "CON",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 60
+        },
+        "damage": {
+          "base": {
+            "diceCount": 12,
+            "diceType": "d6",
+            "damageType": "radiant"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "radiant",
+      "debuff",
+      "aoe"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "gate",
+    "name": {
+      "rus": "Врата",
+      "eng": "Gate"
+    },
+    "description": {
+      "rus": "Вы создаёте портал, соединяющий незанятое пространство, которое видите в пределах дистанции, с определённым местом на другом плане существования. Портал представляет собой круглое отверстие диаметром от 5 до 20 футов на ваш выбор. Вы можете ориентировать его в любом направлении. Портал существует, пока заклинание активно. У портала есть лицевая и обратная сторона на каждом плане. Перемещение через портал возможно только с лицевой стороны. Всё, что проходит через портал, мгновенно появляется на другом плане. Вы также можете произнести имя конкретного существа (но не его псевдоним), и если оно находится на другом плане, портал открывается рядом с названным существом и притягивает его через портал.",
+      "eng": "You conjure a portal linking an unoccupied space you can see within range to a precise location on a different plane of existence. The portal is a circular opening, which you can make 5 to 20 feet in diameter. You can orient the portal in any direction you choose. The portal lasts for the duration. The portal has a front and a back on each plane where it appears. Travel through the portal is possible only by moving through its front. Anything that does so is instantly transported to the other plane, appearing in the unoccupied space nearest to the portal. You can also speak the name of a specific creature (not a pseudonym), and if that creature is on a plane other than the one you are on, the portal opens adjacent to the named creature and draws the creature through it."
+    },
+    "shortDescription": {
+      "rus": "Портал на другой план, может призвать конкретное существо по имени",
+      "eng": "Portal to another plane, can summon specific creature by name"
+    },
+    "level": 9,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a diamond worth at least 5,000 gp",
+      "materialCost": 5000,
+      "materialConsumed": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "cleric",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "teleportation",
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "meteor-swarm",
+    "name": {
+      "rus": "Метеоритный дождь",
+      "eng": "Meteor Swarm"
+    },
+    "description": {
+      "rus": "Пылающие шары пламени падают на землю в четырёх различных точках, которые вы видите в пределах дистанции. Все существа в сфере с радиусом 40 футов с центром в каждой выбранной точке должны совершить спасбросок Ловкости. Сферы огибают углы. При провале существо получает урон огнём 20d6 и урон дробящий 20d6. При успехе существо получает половину этого урона. Существо, попавшее в несколько сфер, получает урон только один раз. Заклинание повреждает предметы в области и воспламеняет горючие предметы, которые никто не несёт и не носит.",
+      "eng": "Blazing orbs of fire plummet to the ground at four different points you can see within range. Each creature in a 40-foot-radius sphere centered on each point you choose must make a Dexterity saving throw. The sphere spreads around corners. A creature takes 20d6 fire damage and 20d6 bludgeoning damage on a failed save, or half as much damage on a successful one. A creature in the area of more than one fiery burst is affected only once. The spell damages objects in the area and ignites flammable objects that aren't being worn or carried."
+    },
+    "shortDescription": {
+      "rus": "4 сферы по 40 фт: 20d6 огня + 20d6 дробящего, DEX save",
+      "eng": "4 spheres of 40 ft: 20d6 fire + 20d6 bludgeoning, DEX save"
+    },
+    "level": 9,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 5280
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 40,
+          "count": 4
+        },
+        "damage": {
+          "base": {
+            "diceCount": 20,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        }
+      },
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 40,
+          "count": 4
+        },
+        "damage": {
+          "base": {
+            "diceCount": 20,
+            "diceType": "d6",
+            "damageType": "bludgeoning"
+          }
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "fire",
+      "aoe"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "power-word-kill",
+    "name": {
+      "rus": "Слово силы: смерть",
+      "eng": "Power Word Kill"
+    },
+    "description": {
+      "rus": "Вы произносите слово силы, способное заставить одно существо, которое видите в пределах дистанции, мгновенно умереть. Если у выбранного существа 100 или менее текущих хитов, оно умирает. В противном случае заклинание не оказывает эффекта.",
+      "eng": "You utter a word of power that can compel one creature you can see within range to die instantly. If the creature you choose has 100 hit points or fewer, it dies. Otherwise, the spell has no effect."
+    },
+    "shortDescription": {
+      "rus": "Мгновенно убивает существо с <=100 хитов, без спасброска",
+      "eng": "Instantly kills creature with <=100 HP, no save"
+    },
+    "level": 9,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "true-resurrection",
+    "name": {
+      "rus": "Истинное воскрешение",
+      "eng": "True Resurrection"
+    },
+    "description": {
+      "rus": "Вы касаетесь существа, которое было мертво не более двухсот лет и умерло не от старости. Если душа существа свободна и согласна, существо оживает со всеми хитами. Это заклинание закрывает все раны, нейтрализует все яды, исцеляет все болезни и снимает все проклятия, воздействующие на существо на момент смерти. Заклинание заменяет повреждённые или отсутствующие органы и конечности. Оно может даже создать новое тело, если исходное было полностью уничтожено, в этом случае вы должны произнести имя существа. Существо появляется в свободном пространстве, которое вы выбираете в пределах 10 футов от вас.",
+      "eng": "You touch a creature that has been dead for no longer than 200 years and that died for any reason except old age. If the creature's soul is free and willing, the creature is restored to life with all its hit points. This spell closes all wounds, neutralizes any poison, cures all diseases, and lifts any curses affecting the creature when it died. The spell replaces damaged or missing organs and limbs. The spell can even provide a new body if the original no longer exists, in which case you must speak the creature's name. The creature then appears in an unoccupied space you choose within 10 feet of you."
+    },
+    "shortDescription": {
+      "rus": "Оживляет существо (мертво <200 лет), восстанавливает или создаёт тело",
+      "eng": "Revive creature (dead <200 years), restores or creates new body"
+    },
+    "level": 9,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "hours",
+      "amount": 1
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a sprinkle of holy water and diamonds worth at least 25,000 gp, which the spell consumes",
+      "materialCost": 25000,
+      "materialConsumed": true
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "targeting": {
+      "type": "willing",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "healing"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "wish",
+    "name": {
+      "rus": "Желание",
+      "eng": "Wish"
+    },
+    "description": {
+      "rus": "Желание — самое могущественное заклинание, которое может сотворить смертное существо. Просто произнеся вслух, вы можете изменить самые основы реальности в соответствии со своими желаниями. Самое простое использование этого заклинания — дублирование любого другого заклинания 8-го уровня или ниже. Вам не нужно выполнять какие-либо требования для этого заклинания, включая дорогостоящие компоненты. Заклинание просто вступает в силу. Кроме того, вы можете создать один из следующих эффектов на ваш выбор: создать предмет стоимостью до 25 000 зм; позволить до 20 существам восстановить все хиты и снять все эффекты; дать до 10 существам устойчивость к одному виду урона на 8 часов; дать до 10 существам иммунитет к одному заклинанию на 8 часов; или отменить одно недавнее событие, заставив перебросить любой бросок за последний раунд. Использование заклинания для чего-либо кроме дублирования другого заклинания ослабляет вас и может привести к потере способности использовать Желание навсегда.",
+      "eng": "Wish is the mightiest spell a mortal creature can cast. By simply speaking aloud, you can alter the very foundations of reality in accord with your desires. The basic use of this spell is to duplicate any other spell of 8th level or lower. You don't need to meet any requirements in that spell, including costly components. The spell simply takes effect. Alternatively, you can create one of the following effects of your choice: create an object worth up to 25,000 gp; allow up to 20 creatures to regain all hit points and end all effects; grant up to 10 creatures resistance to one damage type for 8 hours; grant up to 10 creatures immunity to a single spell for 8 hours; or undo a single recent event by forcing a reroll of any roll made within the last round. Using the spell for anything other than duplicating another spell weakens you and risks permanently losing the ability to cast wish."
+    },
+    "shortDescription": {
+      "rus": "Дублирует заклинание 8 уровня или ниже, или произвольный эффект",
+      "eng": "Duplicates any spell of 8th level or lower, or custom effect"
+    },
+    "level": 9,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "self"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "utility"
+    ],
+    "schemaVersion": 1
   }
 ]
