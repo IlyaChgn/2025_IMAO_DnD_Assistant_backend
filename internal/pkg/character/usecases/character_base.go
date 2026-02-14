@@ -7,6 +7,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/compute"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/converter"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 )
@@ -48,6 +49,18 @@ func (uc *characterBaseUsecases) GetByID(ctx context.Context, id string, userID 
 	}
 
 	return char, nil
+}
+
+func (uc *characterBaseUsecases) GetComputed(ctx context.Context, id string, userID int) (*models.CharacterBase, *models.DerivedStats, error) {
+	char, err := uc.GetByID(ctx, id, userID)
+	if err != nil {
+		return nil, nil, err
+	}
+	if char == nil {
+		return nil, nil, nil
+	}
+	derived := compute.ComputeDerived(char)
+	return char, derived, nil
 }
 
 func (uc *characterBaseUsecases) Update(ctx context.Context, char *models.CharacterBase, expectedVersion int, userID int) error {

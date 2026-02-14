@@ -13,6 +13,7 @@ func ServeCharacterBaseRouter(router *mux.Router, handler *characterdel.Characte
 	subrouter.HandleFunc("", handler.List).Methods("GET")
 	subrouter.HandleFunc("", handler.Create).Methods("POST")
 	subrouter.HandleFunc("/import/lss", handler.ImportLSS).Methods("POST")
+	subrouter.HandleFunc("/{id}/computed", handler.GetComputed).Methods("GET")
 	subrouter.HandleFunc("/{id}", handler.GetByID).Methods("GET")
 	subrouter.HandleFunc("/{id}", handler.Update).Methods("PUT")
 	subrouter.HandleFunc("/{id}", handler.Delete).Methods("DELETE")
