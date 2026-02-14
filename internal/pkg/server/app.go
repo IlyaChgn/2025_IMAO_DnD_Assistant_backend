@@ -53,6 +53,7 @@ import (
 	spellsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 
+	actionsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/usecases"
 	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
 	itemsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/seed"
 	itemsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/usecases"
@@ -306,6 +307,8 @@ func (srv *Server) Run() error {
 	itemsUsecases := itemsuc.NewItemUsecases(itemsRepository)
 	inventoryUsecases := itemsuc.NewInventoryUsecases(inventoryRepository, itemsRepository)
 
+	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository)
+
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
@@ -330,6 +333,7 @@ func (srv *Server) Run() error {
 		itemsUsecases,
 		inventoryUsecases,
 		tableManager,
+		actionsUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
