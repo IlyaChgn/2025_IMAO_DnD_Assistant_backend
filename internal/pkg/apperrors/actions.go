@@ -3,13 +3,13 @@ package apperrors
 import "errors"
 
 var (
-	InvalidActionTypeErr = errors.New("invalid action type")
-	MissingAbilityErr    = errors.New("ability field is required")
-	MissingDiceExprErr   = errors.New("dice field is required for custom roll")
+	InvalidActionTypeErr    = errors.New("invalid action type")
+	MissingAbilityErr       = errors.New("ability field is required")
+	MissingDiceExprErr      = errors.New("dice field is required for custom roll")
 	InvalidDiceExprErr      = errors.New("invalid dice expression")
-	MissingCharacterIDErr  = errors.New("characterId is required")
-	ParticipantNotFoundErr = errors.New("participant not found in encounter")
-	MissingWeaponIDErr     = errors.New("weaponId is required for weapon attack")
+	MissingCharacterIDErr   = errors.New("characterId is required")
+	ParticipantNotFoundErr  = errors.New("participant not found in encounter")
+	MissingWeaponIDErr      = errors.New("weaponId is required for weapon attack")
 	InsufficientSlotsErr    = errors.New("insufficient spell slots")
 	WeaponNotFoundErr       = errors.New("weapon not found on character")
 	SpellNotKnownErr        = errors.New("spell not known or prepared")
