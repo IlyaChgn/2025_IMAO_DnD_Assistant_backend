@@ -33,6 +33,12 @@ func NewActionsUsecases(
 	}
 }
 
+// ExecuteAction loads the encounter, validates permissions, computes derived
+// stats, and dispatches to the appropriate resolver.
+//
+// NOTE: the read-modify-write cycle on encounter data is not protected by
+// optimistic locking. Concurrent actions on the same encounter may cause lost
+// updates. This will be addressed when WS-based sync is added (T33).
 func (uc *actionsUsecases) ExecuteAction(
 	ctx context.Context,
 	encounterID string,
@@ -50,7 +56,7 @@ func (uc *actionsUsecases) ExecuteAction(
 	encounter, err := uc.encounterRepo.GetEncounterByID(ctx, encounterID)
 	if err != nil {
 		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
-		return nil, fmt.Errorf("%w: %s", apperrors.EncounterNotFoundErr, err.Error())
+		return nil, err
 	}
 
 	// 3. Permission check: DM (encounter owner) OR participant owner

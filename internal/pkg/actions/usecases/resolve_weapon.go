@@ -154,9 +154,9 @@ func rollWeaponDamage(weapon *models.WeaponDef, abilityMod int, isCrit bool) (*m
 		// Roll extra dice for crit (double the dice, not the modifier)
 		count, sides, _, err := dice.Parse(weapon.DamageDice)
 		if err == nil {
-			_, critExtra := dice.RollDice(count, sides)
-			result.Rolls = append(result.Rolls, critExtra)
-			totalDamage += critExtra
+			critRolls, critTotal := dice.RollDice(count, sides)
+			result.Rolls = append(result.Rolls, critRolls...)
+			totalDamage += critTotal
 		}
 	}
 

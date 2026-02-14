@@ -3,6 +3,7 @@ package usecases
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -42,6 +43,7 @@ func resolveUseFeature(
 	}
 
 	var stateChanges []models.StateChange
+	mutated := false
 
 	// Check and deduct resource uses if the feature is limited-use
 	if feature.Resource != nil && feature.Resource.MaxUses > 0 {
@@ -54,6 +56,7 @@ func resolveUseFeature(
 		}
 
 		runtime.UsedFeatures[cmd.FeatureID]++
+		mutated = true
 		stateChanges = append(stateChanges, models.StateChange{
 			FeatureUsed: cmd.FeatureID,
 			Description: fmt.Sprintf("Used %s (%d/%d uses remaining)",
@@ -71,10 +74,12 @@ func resolveUseFeature(
 		resolveActiveAction(cmd, derived, feature.ActiveAction, resp)
 	}
 
-	// Persist encounter data
-	if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
-		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
-		return nil, fmt.Errorf("persist encounter: %w", err)
+	// Persist encounter data only if state was mutated
+	if mutated {
+		if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
+			l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
+			return nil, fmt.Errorf("persist encounter: %w", err)
+		}
 	}
 
 	return resp, nil
@@ -112,8 +117,9 @@ func resolveActiveAction(
 
 		// Roll damage
 		for _, dmg := range action.Attack.Damage {
-			if dmg.DiceCount > 0 && dmg.DiceType != "" {
-				expr := fmt.Sprintf("%dd%s", dmg.DiceCount, dmg.DiceType)
+			diceType := strings.TrimPrefix(dmg.DiceType, "d")
+			if dmg.DiceCount > 0 && diceType != "" {
+				expr := fmt.Sprintf("%dd%s", dmg.DiceCount, diceType)
 				if dmg.Bonus != 0 {
 					expr = fmt.Sprintf("%s%+d", expr, dmg.Bonus)
 				}
@@ -124,7 +130,7 @@ func resolveActiveAction(
 				resp.DamageRolls = append(resp.DamageRolls, models.ActionRollResult{
 					Expression: expr,
 					Rolls:      result.Rolls,
-					Modifier:   result.Modifier + dmg.Bonus,
+					Modifier:   result.Modifier,
 					Total:      result.Total,
 				})
 				resp.Summary += fmt.Sprintf(", %d %s damage", result.Total, dmg.DamageType)
@@ -140,8 +146,9 @@ func resolveActiveAction(
 	// Healing
 	if action.Healing != nil {
 		h := action.Healing
-		if h.DiceCount > 0 && h.DiceType != "" {
-			expr := fmt.Sprintf("%dd%s", h.DiceCount, h.DiceType)
+		diceType := strings.TrimPrefix(h.DiceType, "d")
+		if h.DiceCount > 0 && diceType != "" {
+			expr := fmt.Sprintf("%dd%s", h.DiceCount, diceType)
 			if h.Bonus != 0 {
 				expr = fmt.Sprintf("%s%+d", expr, h.Bonus)
 			}
@@ -150,7 +157,7 @@ func resolveActiveAction(
 				resp.DamageRolls = append(resp.DamageRolls, models.ActionRollResult{
 					Expression: expr,
 					Rolls:      result.Rolls,
-					Modifier:   result.Modifier + h.Bonus,
+					Modifier:   result.Modifier,
 					Total:      result.Total,
 				})
 				resp.Summary += fmt.Sprintf(", %d healing", result.Total)

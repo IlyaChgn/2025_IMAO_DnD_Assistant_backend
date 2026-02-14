@@ -78,17 +78,16 @@ func (h *ActionsHandler) mapError(err error) (int, string) {
 		errors.Is(err, apperrors.MissingFeatureIDErr),
 		errors.Is(err, apperrors.InsufficientSlotsErr),
 		errors.Is(err, apperrors.FeatureUsesExhaustedErr):
-		return responses.StatusBadRequest, err.Error()
+		return responses.StatusBadRequest, responses.ErrBadRequest
 
 	case errors.Is(err, apperrors.PermissionDeniedError):
 		return responses.StatusForbidden, responses.ErrForbidden
 
 	case errors.Is(err, apperrors.ParticipantNotFoundErr),
-		errors.Is(err, apperrors.EncounterNotFoundErr),
 		errors.Is(err, apperrors.WeaponNotFoundErr),
 		errors.Is(err, apperrors.SpellNotKnownErr),
 		errors.Is(err, apperrors.FeatureNotFoundErr):
-		return responses.StatusNotFound, err.Error()
+		return responses.StatusNotFound, responses.ErrNotFound
 
 	default:
 		return responses.StatusInternalServerError, responses.ErrInternalServer

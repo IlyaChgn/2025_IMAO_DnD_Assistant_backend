@@ -59,6 +59,7 @@ func resolveSpellCast(
 	}
 
 	var stateChanges []models.StateChange
+	mutated := false
 	slotLevel := cmd.SlotLevel
 
 	// Cantrips (level 0) don't require slots
@@ -80,6 +81,7 @@ func resolveSpellCast(
 
 		// Deduct spell slot
 		runtime.SpentSpellSlots[slotLevel]++
+		mutated = true
 		stateChanges = append(stateChanges, models.StateChange{
 			SlotSpent:   slotLevel,
 			Description: fmt.Sprintf("Spent a level %d spell slot (%d/%d remaining)", slotLevel, maxSlots-spent-1, maxSlots),
@@ -99,6 +101,7 @@ func resolveSpellCast(
 			SpellID:   cmd.SpellID,
 			SpellName: spellRef.Name,
 		}
+		mutated = true
 		stateChanges = append(stateChanges, models.StateChange{
 			Description: fmt.Sprintf("Concentrating on %s", spellRef.Name),
 		})
@@ -118,10 +121,12 @@ func resolveSpellCast(
 		resolveSpellMechanics(cmd, charBase, derived, spellDef, resp)
 	}
 
-	// Persist encounter data
-	if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
-		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
-		return nil, fmt.Errorf("persist encounter: %w", err)
+	// Persist encounter data only if state was mutated
+	if mutated {
+		if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
+			l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
+			return nil, fmt.Errorf("persist encounter: %w", err)
+		}
 	}
 
 	return resp, nil
@@ -198,8 +203,9 @@ func resolveSpellMechanics(
 				continue
 			}
 			dmg := effect.Damage.Base
-			if dmg.DiceCount > 0 && dmg.DiceType != "" {
-				expr := fmt.Sprintf("%dd%s", dmg.DiceCount, dmg.DiceType)
+			diceType := strings.TrimPrefix(dmg.DiceType, "d")
+			if dmg.DiceCount > 0 && diceType != "" {
+				expr := fmt.Sprintf("%dd%s", dmg.DiceCount, diceType)
 				if dmg.Bonus != 0 {
 					expr = fmt.Sprintf("%s%+d", expr, dmg.Bonus)
 				}
@@ -210,7 +216,7 @@ func resolveSpellMechanics(
 				resp.DamageRolls = append(resp.DamageRolls, models.ActionRollResult{
 					Expression: expr,
 					Rolls:      result.Rolls,
-					Modifier:   result.Modifier + dmg.Bonus,
+					Modifier:   result.Modifier,
 					Total:      result.Total,
 				})
 				resp.Summary += fmt.Sprintf(", %d %s damage", result.Total, dmg.DamageType)
