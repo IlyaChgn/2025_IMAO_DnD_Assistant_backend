@@ -38,6 +38,19 @@ func TestResolveTargetIDs_NoTargets(t *testing.T) {
 	}
 }
 
+func TestResolveTargetIDs_DeduplicatePreservesOrder(t *testing.T) {
+	cmd := &models.ActionCommand{
+		TargetIDs: []string{"goblin-1", "goblin-2", "goblin-1", "goblin-3", "goblin-2"},
+	}
+	ids := resolveTargetIDs(cmd)
+	if len(ids) != 3 {
+		t.Fatalf("expected 3 unique targets, got %d: %v", len(ids), ids)
+	}
+	if ids[0] != "goblin-1" || ids[1] != "goblin-2" || ids[2] != "goblin-3" {
+		t.Errorf("expected [goblin-1 goblin-2 goblin-3], got %v", ids)
+	}
+}
+
 // --- casterLevel ---
 
 func TestCasterLevel_SingleClass(t *testing.T) {
@@ -252,7 +265,7 @@ func TestBuildActiveCondition_UntilSaved(t *testing.T) {
 		SaveEnds:    true,
 		SaveAbility: "CON",
 	}
-	ac := buildActiveCondition(cond, "wizard-1", "Power Word Stun", 17)
+	ac := buildActiveCondition(cond, "wizard-1", "Power Word Stun", 17, "target-1")
 	if ac.Duration != models.DurationUntilSave {
 		t.Errorf("expected DurationUntilSave, got %q", ac.Duration)
 	}
@@ -275,7 +288,7 @@ func TestBuildActiveCondition_1Minute(t *testing.T) {
 		Condition: models.ConditionFrightened,
 		Duration:  "1 minute",
 	}
-	ac := buildActiveCondition(cond, "bard-1", "Fear", 15)
+	ac := buildActiveCondition(cond, "bard-1", "Fear", 15, "target-1")
 	if ac.Duration != models.DurationRounds {
 		t.Errorf("expected DurationRounds, got %q", ac.Duration)
 	}
@@ -289,7 +302,7 @@ func TestBuildActiveCondition_Concentration(t *testing.T) {
 		Condition: models.ConditionCharmed,
 		Duration:  "concentration, up to 1 minute",
 	}
-	ac := buildActiveCondition(cond, "sorcerer-1", "Hold Person", 14)
+	ac := buildActiveCondition(cond, "sorcerer-1", "Hold Person", 14, "target-1")
 	if ac.Duration != models.DurationConcentration {
 		t.Errorf("expected DurationConcentration, got %q", ac.Duration)
 	}
@@ -300,7 +313,7 @@ func TestBuildActiveCondition_EndOfNextTurn(t *testing.T) {
 		Condition: models.ConditionBlinded,
 		Duration:  "until end of next turn",
 	}
-	ac := buildActiveCondition(cond, "cleric-1", "Color Spray", 0)
+	ac := buildActiveCondition(cond, "cleric-1", "Color Spray", 0, "target-1")
 	if ac.Duration != models.DurationUntilTurn {
 		t.Errorf("expected DurationUntilTurn, got %q", ac.Duration)
 	}
@@ -318,7 +331,7 @@ func TestBuildActiveCondition_WithEscapeDC(t *testing.T) {
 		EscapeDC:   15,
 		EscapeType: "STR_or_DEX",
 	}
-	ac := buildActiveCondition(cond, "druid-1", "Entangle", 13)
+	ac := buildActiveCondition(cond, "druid-1", "Entangle", 13, "target-1")
 	if ac.EscapeDC != 15 {
 		t.Errorf("expected EscapeDC 15, got %d", ac.EscapeDC)
 	}
@@ -328,6 +341,18 @@ func TestBuildActiveCondition_WithEscapeDC(t *testing.T) {
 	// SaveToEnd should use EscapeDC over spell DC
 	if ac.SaveToEnd == nil || ac.SaveToEnd.DC != 15 {
 		t.Errorf("expected SaveToEnd DC = EscapeDC 15, got %+v", ac.SaveToEnd)
+	}
+}
+
+func TestBuildActiveCondition_UniqueIDsPerTarget(t *testing.T) {
+	cond := &models.ConditionEffect{
+		Condition: models.ConditionStunned,
+		Duration:  "1 minute",
+	}
+	ac1 := buildActiveCondition(cond, "wizard-1", "Hold Monster", 17, "goblin-1")
+	ac2 := buildActiveCondition(cond, "wizard-1", "Hold Monster", 17, "goblin-2")
+	if ac1.ID == ac2.ID {
+		t.Errorf("condition IDs should be unique per target, both got %q", ac1.ID)
 	}
 }
 

@@ -65,7 +65,8 @@ func resolveSpellCast(
 	slotLevel := cmd.SlotLevel
 
 	// Upcast validation: slot level must be >= spell level
-	if spellDef != nil && slotLevel > 0 && slotLevel < spellDef.Level {
+	// Skip for pact slots — their level is reassigned later from PactMagic.SlotLevel
+	if spellDef != nil && slotLevel > 0 && slotLevel < spellDef.Level && !cmd.IsPactSlot {
 		return nil, apperrors.InvalidUpcastLevelErr
 	}
 
@@ -125,6 +126,8 @@ func resolveSpellCast(
 		if spellDef == nil || !spellDef.Ritual {
 			return nil, apperrors.SpellNotRitualErr
 		}
+		// Rituals always cast at base spell level — no free upcasting
+		slotLevel = spellDef.Level
 		stateChanges = append(stateChanges, models.StateChange{
 			Description: fmt.Sprintf("Cast %s as a ritual (no slot spent)", spellRef.Name),
 		})
@@ -184,6 +187,7 @@ func resolveSpellCast(
 		for _, targetID := range targetIDs {
 			target, _, tErr := ed.FindParticipantByInstanceID(targetID)
 			if tErr != nil {
+				l.UsecasesWarn(tErr, userID, map[string]any{"targetID": targetID, "phase": "damage"})
 				continue
 			}
 
@@ -194,21 +198,45 @@ func resolveSpellCast(
 				ts, tsErr := loadTargetStats(ctx, uc, target)
 				if tsErr == nil {
 					perTargetSave := resolveSpellSave(derived, spellDef, ts, resp)
-					if perTargetSave != nil {
-						if perTargetSave.noDamage {
-							targetDamage = 0
-						} else if perTargetSave.halfDamage {
-							targetDamage = totalDamage / 2
-						}
-					}
-				}
 
-				// Apply per-target resistance
-				if ts != nil && len(resp.DamageRolls) > 0 {
-					dmgType := resp.DamageRolls[0].DamageType
-					if dmgType != "" {
-						adjusted, _ := applyResistance(targetDamage, dmgType, ts)
-						targetDamage = adjusted
+					// Apply save + per-type resistance for each damage roll
+					adjustedTotal := 0
+					for _, dr := range resp.DamageRolls {
+						rollDmg := dr.Total
+						if dr.FinalDamage != nil {
+							rollDmg = *dr.FinalDamage
+						}
+						if perTargetSave != nil {
+							if perTargetSave.noDamage {
+								rollDmg = 0
+							} else if perTargetSave.halfDamage {
+								rollDmg = rollDmg / 2
+							}
+						}
+						if dr.DamageType != "" && ts != nil {
+							adjusted, _ := applyResistance(rollDmg, dr.DamageType, ts)
+							rollDmg = adjusted
+						}
+						adjustedTotal += rollDmg
+					}
+					targetDamage = adjustedTotal
+
+					// Multi-target conditions: apply based on individual save
+					if perTargetSave != nil && !perTargetSave.saved {
+						for _, eff := range spellDef.Effects {
+							if eff.Condition != nil {
+								durationStr := eff.Condition.Duration
+								if durationStr == "" {
+									durationStr = "until removed"
+								}
+								resp.ConditionApplied = append(resp.ConditionApplied, models.ConditionApplied{
+									TargetID:  targetID,
+									Condition: string(eff.Condition.Condition),
+									Duration:  durationStr,
+									SaveEnds:  eff.Condition.SaveEnds,
+								})
+							}
+						}
 					}
 				}
 			}
@@ -241,6 +269,7 @@ func resolveSpellCast(
 			for _, targetID := range healTargets {
 				target, _, tErr := ed.FindParticipantByInstanceID(targetID)
 				if tErr != nil {
+					l.UsecasesWarn(tErr, userID, map[string]any{"targetID": targetID, "phase": "healing"})
 					continue
 				}
 				applyHealToParticipant(target, totalHealing)
@@ -260,6 +289,7 @@ func resolveSpellCast(
 		for _, ca := range resp.ConditionApplied {
 			target, _, tErr := ed.FindParticipantByInstanceID(ca.TargetID)
 			if tErr != nil {
+				l.UsecasesWarn(tErr, userID, map[string]any{"targetID": ca.TargetID, "phase": "condition"})
 				continue
 			}
 
@@ -280,7 +310,7 @@ func resolveSpellCast(
 			}
 
 			if condEffect != nil {
-				ac := buildActiveCondition(condEffect, participant.InstanceID, spellRef.Name, dc)
+				ac := buildActiveCondition(condEffect, participant.InstanceID, spellRef.Name, dc, ca.TargetID)
 				appendConditionToTarget(target, ac)
 				mutated = true
 			}
@@ -330,15 +360,27 @@ func findSpellRef(charBase *models.CharacterBase, spellID string) *models.SpellR
 	return nil
 }
 
-// resolveTargetIDs unifies legacy TargetID and multi-target TargetIDs.
+// resolveTargetIDs unifies legacy TargetID and multi-target TargetIDs,
+// deduplicating while preserving order.
 func resolveTargetIDs(cmd *models.ActionCommand) []string {
+	var ids []string
 	if len(cmd.TargetIDs) > 0 {
-		return cmd.TargetIDs
-	}
-	if cmd.TargetID != "" {
+		ids = cmd.TargetIDs
+	} else if cmd.TargetID != "" {
 		return []string{cmd.TargetID}
+	} else {
+		return nil
 	}
-	return nil
+
+	seen := make(map[string]struct{}, len(ids))
+	deduped := make([]string, 0, len(ids))
+	for _, id := range ids {
+		if _, ok := seen[id]; !ok {
+			seen[id] = struct{}{}
+			deduped = append(deduped, id)
+		}
+	}
+	return deduped
 }
 
 // casterLevel computes the total character level as the sum of all class levels.
@@ -432,9 +474,10 @@ func resolveUpcastHealing(spellDef *models.SpellDefinition, slotLevel int) (extr
 }
 
 // buildActiveCondition maps a ConditionEffect to a runtime ActiveCondition.
-func buildActiveCondition(cond *models.ConditionEffect, casterID string, spellName string, dc int) models.ActiveCondition {
+// targetID is included in the ID to ensure uniqueness across multiple targets.
+func buildActiveCondition(cond *models.ConditionEffect, casterID string, spellName string, dc int, targetID string) models.ActiveCondition {
 	ac := models.ActiveCondition{
-		ID:        fmt.Sprintf("spell_%s_%s", spellName, string(cond.Condition)),
+		ID:        fmt.Sprintf("spell_%s_%s_%s", spellName, string(cond.Condition), targetID),
 		Condition: cond.Condition,
 		SourceID:  casterID,
 	}
@@ -704,7 +747,9 @@ func rollDamageEffect(
 
 	finalDamage := result.Total
 
-	// Upcast damage scaling
+	// Upcast damage scaling — track dice for crit doubling
+	var upcastDiceCount int
+	var upcastSides string
 	if slotLevel > spellDef.Level {
 		upcastDmg := resolveUpcastDamage(spellDef, slotLevel)
 		if upcastDmg != nil && upcastDmg.DiceCount > 0 {
@@ -712,6 +757,8 @@ func rollDamageEffect(
 			if upDiceType == "" {
 				upDiceType = diceType // inherit from base if not specified
 			}
+			upcastDiceCount = upcastDmg.DiceCount
+			upcastSides = upDiceType
 			upExpr := fmt.Sprintf("%dd%s", upcastDmg.DiceCount, upDiceType)
 			upResult, upErr := dice.Roll(upExpr)
 			if upErr == nil {
@@ -723,14 +770,25 @@ func rollDamageEffect(
 		}
 	}
 
-	// Double dice on critical hit
+	// Double ALL dice on critical hit (base + upcast)
 	if isCrit {
+		// Double base dice
 		sides, pErr := strconv.Atoi(diceType)
 		if pErr == nil {
 			critRolls, critTotal := dice.RollDice(diceCount, sides)
 			rollResult.Rolls = append(rollResult.Rolls, critRolls...)
 			rollResult.Total += critTotal
 			finalDamage += critTotal
+		}
+		// Double upcast dice
+		if upcastDiceCount > 0 {
+			upSides, upErr := strconv.Atoi(upcastSides)
+			if upErr == nil {
+				critRolls, critTotal := dice.RollDice(upcastDiceCount, upSides)
+				rollResult.Rolls = append(rollResult.Rolls, critRolls...)
+				rollResult.Total += critTotal
+				finalDamage += critTotal
+			}
 		}
 	}
 
