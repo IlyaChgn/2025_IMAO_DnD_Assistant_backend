@@ -127,8 +127,9 @@ type WeaponDef struct {
 	DamageType      string     `json:"damageType" bson:"damageType"`                               // "slashing"
 	Properties      []string   `json:"properties,omitempty" bson:"properties,omitempty"`
 	MagicBonus      int        `json:"magicBonus,omitempty" bson:"magicBonus,omitempty"`
-	Range           *RangeData `json:"range,omitempty" bson:"range,omitempty"` // reuses existing RangeData
-	Reach           int        `json:"reach,omitempty" bson:"reach,omitempty"`
+	Range           *RangeData     `json:"range,omitempty" bson:"range,omitempty"` // reuses existing RangeData
+	Reach           int            `json:"reach,omitempty" bson:"reach,omitempty"`
+	Triggers        []TriggerEffect `json:"triggers,omitempty" bson:"triggers,omitempty"`
 }
 
 // CharacterAvatar is defined in character.go (shared with legacy Character model).

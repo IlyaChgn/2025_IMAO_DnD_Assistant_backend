@@ -20,7 +20,7 @@ func resolveWeaponAttack(
 	encounterID string,
 	charBase *models.CharacterBase,
 	derived *models.DerivedStats,
-	_ *models.ParticipantFull,
+	participant *models.ParticipantFull,
 	ed *EncounterData,
 	userID int,
 ) (*models.ActionResponse, error) {
@@ -151,6 +151,22 @@ func resolveWeaponAttack(
 		HPDelta:     -finalDamage,
 		Description: fmt.Sprintf("%s takes %d %s damage from %s", ts.Name, finalDamage, weapon.DamageType, weapon.Name),
 	}}
+
+	// Evaluate weapon triggers on hit
+	if len(weapon.Triggers) > 0 {
+		triggerResults, triggerChanges := applyTriggerResults(
+			weapon.Triggers, weapon.Name,
+			models.ItemTriggerOnHit, isCrit,
+			target, participant,
+		)
+		resp.TriggerResults = triggerResults
+		resp.StateChanges = append(resp.StateChanges, triggerChanges...)
+		for _, tr := range triggerResults {
+			if !tr.Skipped && tr.Description != "" {
+				resp.Summary += fmt.Sprintf(", %s", tr.Description)
+			}
+		}
+	}
 
 	// Persist encounter data
 	if err := persistEncounterData(ctx, uc, ed, encounterID); err != nil {
