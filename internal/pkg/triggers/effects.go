@@ -2,10 +2,19 @@ package triggers
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dice"
 )
+
+// Effect executor param contracts (diverges from design doc § 5.4):
+//
+//	deal_damage:      dice (string, e.g. "2d6"), damageType (string, e.g. "fire")
+//	heal:             dice (string) OR amount (int) — one required
+//	apply_condition:  condition (string), duration (string, optional)
+//	remove_condition: conditions ([]string, non-empty)
+//	grant_temp_hp:    dice (string) OR amount (int) — one required
 
 func executeDealDamage(params map[string]interface{}, source string) (models.TriggerResult, error) {
 	diceExpr, err := getString(params, "dice")
@@ -99,7 +108,7 @@ func executeRemoveCondition(params map[string]interface{}, source string) (model
 
 	return models.TriggerResult{
 		EffectType:  models.EffectRemoveCondition,
-		Description: fmt.Sprintf("%s removes conditions: %v", source, conditions),
+		Description: fmt.Sprintf("%s removes conditions: %s", source, strings.Join(conditions, ", ")),
 		ConditionResult: &models.TriggerConditionResult{
 			Action:     "remove",
 			Conditions: conditions,

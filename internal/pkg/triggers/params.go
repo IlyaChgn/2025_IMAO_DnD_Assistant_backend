@@ -35,20 +35,6 @@ func getInt(params map[string]interface{}, key string) (int, error) {
 	return toInt(v, key)
 }
 
-// getIntOptional extracts an optional integer param.
-// Returns (0, false) if absent, (value, true) if present.
-func getIntOptional(params map[string]interface{}, key string) (int, bool, error) {
-	v, ok := params[key]
-	if !ok {
-		return 0, false, nil
-	}
-	n, err := toInt(v, key)
-	if err != nil {
-		return 0, false, err
-	}
-	return n, true, nil
-}
-
 // getStringSlice extracts a required []string param.
 func getStringSlice(params map[string]interface{}, key string) ([]string, error) {
 	v, ok := params[key]

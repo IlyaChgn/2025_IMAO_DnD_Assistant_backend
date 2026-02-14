@@ -74,30 +74,6 @@ func TestGetInt_WrongType(t *testing.T) {
 	}
 }
 
-func TestGetIntOptional_Present(t *testing.T) {
-	params := map[string]interface{}{"amount": float64(5)}
-	n, found, err := getIntOptional(params, "amount")
-	if err != nil || !found || n != 5 {
-		t.Errorf("expected (5, true, nil), got (%d, %v, %v)", n, found, err)
-	}
-}
-
-func TestGetIntOptional_Missing(t *testing.T) {
-	params := map[string]interface{}{}
-	n, found, err := getIntOptional(params, "amount")
-	if err != nil || found || n != 0 {
-		t.Errorf("expected (0, false, nil), got (%d, %v, %v)", n, found, err)
-	}
-}
-
-func TestGetIntOptional_WrongType(t *testing.T) {
-	params := map[string]interface{}{"amount": "bad"}
-	_, _, err := getIntOptional(params, "amount")
-	if err == nil {
-		t.Error("expected error for wrong type")
-	}
-}
-
 func TestGetStringSlice(t *testing.T) {
 	params := map[string]interface{}{
 		"conditions": []interface{}{"poisoned", "blinded"},
