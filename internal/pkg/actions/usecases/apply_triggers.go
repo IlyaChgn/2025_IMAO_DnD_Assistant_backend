@@ -14,6 +14,7 @@ type triggerOpts struct {
 	SourceName  string                // display name for descriptions
 	TargetStats *TargetStats          // resistance/immunity/vulnerability lookup (nil = no resistance check)
 	RandFloat   func() float32        // injected RNG for testability
+	Owner       *models.ParticipantFull // for charge tracking (nil = no cooldowns)
 }
 
 // applyTriggerResults evaluates triggers for the given event(s) and applies
@@ -21,7 +22,7 @@ type triggerOpts struct {
 // state changes. Reusable by any resolver (weapon, spell, feature).
 //
 // When isCrit is true, both on_hit and on_critical triggers are dispatched.
-// Cooldown state is nil (T42 will add persistence).
+// Cooldown state is built from opts.Owner.TriggerCharges when Owner is set.
 func applyTriggerResults(
 	triggerDefs []models.TriggerEffect,
 	opts triggerOpts,
@@ -43,6 +44,12 @@ func applyTriggerResults(
 		}
 	}
 
+	// Build cooldown state from owner's charges
+	var cooldowns models.CooldownState
+	if opts.Owner != nil {
+		cooldowns = triggers.BuildCooldownState(triggerDefs, opts.SourceID, opts.Owner.TriggerCharges)
+	}
+
 	ctx := triggers.EventContext{
 		Event:      event,
 		SourceName: opts.SourceName,
@@ -52,13 +59,26 @@ func applyTriggerResults(
 	}
 
 	// Evaluate for the primary event (on_hit)
-	results := triggers.Evaluate(inputs, ctx, nil, opts.RandFloat)
+	hitResults := triggers.Evaluate(inputs, ctx, cooldowns, opts.RandFloat)
 
 	// On critical hit, also dispatch on_critical triggers
+	var critResults []models.TriggerResult
 	if isCrit && event == models.ItemTriggerOnHit {
 		critCtx := ctx
 		critCtx.Event = models.ItemTriggerOnCritical
-		critResults := triggers.Evaluate(inputs, critCtx, nil, opts.RandFloat)
+		critResults = triggers.Evaluate(inputs, critCtx, cooldowns, opts.RandFloat)
+	}
+
+	// Consume charges for non-skipped triggers (mutates Owner.TriggerCharges in-place)
+	if opts.Owner != nil {
+		consumeFiredCharges(opts.Owner, triggerDefs, inputs, hitResults, event)
+		if len(critResults) > 0 {
+			consumeFiredCharges(opts.Owner, triggerDefs, inputs, critResults, models.ItemTriggerOnCritical)
+		}
+	}
+
+	results := hitResults
+	if len(critResults) > 0 {
 		results = append(results, critResults...)
 	}
 
@@ -116,7 +136,7 @@ func applyTriggerResults(
 
 // applyHealToParticipant adds HP to a participant, capped at max for creatures.
 // For PCs, max HP is derived externally — no cap applied here (DM adjusts if needed).
-// TODO(T42): pass max HP for PCs to cap healing properly.
+// TODO: pass max HP for PCs to cap healing properly.
 func applyHealToParticipant(p *models.ParticipantFull, amount int) {
 	if p.CharacterRuntime != nil {
 		p.CharacterRuntime.CurrentHP += amount
@@ -145,6 +165,32 @@ func applyTempHP(p *models.ParticipantFull, amount int) bool {
 		return true
 	}
 	return false
+}
+
+// consumeFiredCharges consumes cooldown charges for non-skipped trigger results.
+// Results must correspond to triggers matching the given event (same order as Evaluate).
+func consumeFiredCharges(
+	owner *models.ParticipantFull,
+	defs []models.TriggerEffect,
+	inputs []triggers.TriggerInput,
+	results []models.TriggerResult,
+	event models.TriggerEvent,
+) {
+	rIdx := 0
+	for i := range inputs {
+		if rIdx >= len(results) {
+			break
+		}
+		if inputs[i].Trigger.Trigger != event {
+			continue
+		}
+		if !results[rIdx].Skipped {
+			owner.TriggerCharges = triggers.ConsumeCooldown(
+				owner.TriggerCharges, inputs[i].CooldownKey, defs[i].Cooldown,
+			)
+		}
+		rIdx++
+	}
 }
 
 // participantName returns a display name for a participant.
