@@ -183,6 +183,10 @@ type ParticipantFull struct {
 	// Hidden from players (for ambushes, invisible enemies)
 	Hidden bool `json:"hidden,omitempty" bson:"hidden,omitempty"`
 
+	// Trigger cooldown tracking: cooldownKey -> uses consumed this period.
+	// Derived into CooldownState (bool) at evaluation time.
+	TriggerCharges map[string]int `json:"triggerCharges,omitempty" bson:"triggerCharges,omitempty"`
+
 	// Player character runtime state (nil for NPCs/monsters)
 	CharacterRuntime *CharacterRuntime `json:"characterRuntime,omitempty" bson:"characterRuntime,omitempty"`
 }

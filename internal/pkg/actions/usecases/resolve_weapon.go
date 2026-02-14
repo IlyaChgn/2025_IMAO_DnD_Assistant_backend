@@ -162,6 +162,7 @@ func resolveWeaponAttack(
 				SourceName:  weapon.Name,
 				TargetStats: ts,
 				RandFloat:   func() float32 { return rand.Float32() },
+				Owner:       participant,
 			},
 			models.ItemTriggerOnHit, isCrit,
 			target, participant,

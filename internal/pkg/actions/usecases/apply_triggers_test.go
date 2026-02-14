@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/triggers"
 )
 
 // --- helpers ---
@@ -45,6 +46,12 @@ func flameTongueTrigger() models.TriggerEffect {
 				"damageType": "fire",
 			},
 		},
+	}
+}
+
+func makeOwner() *models.ParticipantFull {
+	return &models.ParticipantFull{
+		InstanceID: "owner-1",
 	}
 }
 
@@ -617,5 +624,244 @@ func TestApplyTriggerResults_NilTargetStats_NoCrash(t *testing.T) {
 	}
 	if len(changes) != 1 || changes[0].HPDelta != -rawDmg {
 		t.Errorf("expected raw HPDelta %d, got %d", -rawDmg, changes[0].HPDelta)
+	}
+}
+
+// --- cooldown integration tests ---
+
+func TestApplyTriggerResults_Cooldown_1PerTurn_FiresThenSkips(t *testing.T) {
+	owner := makeOwner()
+	target := makeTarget(100, 0)
+	attacker := makeAttackerPC(30, 0)
+	trigs := []models.TriggerEffect{{
+		Trigger:  models.ItemTriggerOnHit,
+		Chance:   1.0,
+		Cooldown: "1/turn",
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "2d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	opts := testOpts()
+	opts.Owner = owner
+
+	// First hit: trigger fires
+	results, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target, attacker)
+	if len(results) != 1 {
+		t.Fatalf("expected 1 result, got %d", len(results))
+	}
+	if results[0].Skipped {
+		t.Fatal("expected trigger to fire on first hit")
+	}
+
+	// Owner charges should be consumed
+	if owner.TriggerCharges == nil || owner.TriggerCharges["weapon-1:0"] != 1 {
+		t.Fatalf("expected charges[weapon-1:0]=1, got %v", owner.TriggerCharges)
+	}
+
+	// Second hit with same owner: trigger should be skipped (cooldown)
+	target2 := makeTarget(100, 0)
+	results2, changes2 := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target2, attacker)
+	if len(results2) != 1 {
+		t.Fatalf("expected 1 result, got %d", len(results2))
+	}
+	if !results2[0].Skipped {
+		t.Fatal("expected trigger to be skipped on second hit (cooldown)")
+	}
+	if results2[0].SkipReason != "cooldown" {
+		t.Errorf("expected SkipReason 'cooldown', got %q", results2[0].SkipReason)
+	}
+	// No side effects
+	if len(changes2) != 0 {
+		t.Errorf("expected 0 state changes on cooldown, got %d", len(changes2))
+	}
+}
+
+func TestApplyTriggerResults_Cooldown_MixedWithNoCooldown(t *testing.T) {
+	owner := makeOwner()
+	target := makeTarget(200, 0)
+	attacker := makeAttackerPC(30, 0)
+	trigs := []models.TriggerEffect{
+		// Trigger 0: no cooldown (always fires)
+		flameTongueTrigger(),
+		// Trigger 1: 1/turn cooldown
+		{
+			Trigger:  models.ItemTriggerOnHit,
+			Chance:   1.0,
+			Cooldown: "1/turn",
+			Effect: models.Effect{
+				Type: models.EffectDealDamage,
+				Params: map[string]interface{}{
+					"dice":       "1d8",
+					"damageType": "radiant",
+				},
+			},
+		},
+	}
+
+	opts := testOpts()
+	opts.Owner = owner
+
+	// First hit: both fire
+	results, changes := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target, attacker)
+	if len(results) != 2 {
+		t.Fatalf("expected 2 results, got %d", len(results))
+	}
+	if results[0].Skipped || results[1].Skipped {
+		t.Fatal("both triggers should fire on first hit")
+	}
+	if len(changes) != 2 {
+		t.Fatalf("expected 2 state changes, got %d", len(changes))
+	}
+
+	// Second hit: only non-cooldown fires
+	target2 := makeTarget(200, 0)
+	results2, changes2 := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target2, attacker)
+	if len(results2) != 2 {
+		t.Fatalf("expected 2 results, got %d", len(results2))
+	}
+	if results2[0].Skipped {
+		t.Fatal("non-cooldown trigger should still fire")
+	}
+	if !results2[1].Skipped {
+		t.Fatal("cooldown trigger should be skipped on second hit")
+	}
+	if len(changes2) != 1 {
+		t.Fatalf("expected 1 state change (only non-cooldown), got %d", len(changes2))
+	}
+}
+
+func TestApplyTriggerResults_Cooldown_NilOwner_NoCooldowns(t *testing.T) {
+	target := makeTarget(100, 0)
+	attacker := makeAttackerPC(30, 0)
+	trigs := []models.TriggerEffect{{
+		Trigger:  models.ItemTriggerOnHit,
+		Chance:   1.0,
+		Cooldown: "1/turn",
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "2d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	opts := testOpts()
+	// Owner is nil — no cooldown tracking
+
+	// First hit
+	results, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target, attacker)
+	if len(results) != 1 || results[0].Skipped {
+		t.Fatal("expected trigger to fire without owner")
+	}
+
+	// Second hit — still fires (no cooldown tracking)
+	target2 := makeTarget(100, 0)
+	results2, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target2, attacker)
+	if len(results2) != 1 || results2[0].Skipped {
+		t.Fatal("expected trigger to fire again without owner (no cooldowns)")
+	}
+}
+
+func TestApplyTriggerResults_Cooldown_3PerTurn(t *testing.T) {
+	owner := makeOwner()
+	attacker := makeAttackerPC(30, 0)
+	trigs := []models.TriggerEffect{{
+		Trigger:  models.ItemTriggerOnHit,
+		Chance:   1.0,
+		Cooldown: "3/turn",
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "1d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	opts := testOpts()
+	opts.Owner = owner
+
+	// Hits 1-3: trigger fires each time
+	for i := 1; i <= 3; i++ {
+		target := makeTarget(100, 0)
+		results, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target, attacker)
+		if len(results) != 1 {
+			t.Fatalf("hit %d: expected 1 result, got %d", i, len(results))
+		}
+		if results[0].Skipped {
+			t.Fatalf("hit %d: expected trigger to fire", i)
+		}
+	}
+
+	if owner.TriggerCharges["weapon-1:0"] != 3 {
+		t.Fatalf("expected 3 charges consumed, got %d", owner.TriggerCharges["weapon-1:0"])
+	}
+
+	// Hit 4: trigger should be skipped
+	target := makeTarget(100, 0)
+	results, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target, attacker)
+	if len(results) != 1 {
+		t.Fatalf("hit 4: expected 1 result, got %d", len(results))
+	}
+	if !results[0].Skipped {
+		t.Fatal("hit 4: expected trigger to be skipped (3/turn exhausted)")
+	}
+	if results[0].SkipReason != "cooldown" {
+		t.Errorf("hit 4: expected SkipReason 'cooldown', got %q", results[0].SkipReason)
+	}
+}
+
+func TestApplyTriggerResults_Cooldown_ResetRestoresFiring(t *testing.T) {
+	owner := makeOwner()
+	attacker := makeAttackerPC(30, 0)
+	trigs := []models.TriggerEffect{{
+		Trigger:  models.ItemTriggerOnHit,
+		Chance:   1.0,
+		Cooldown: "1/turn",
+		Effect: models.Effect{
+			Type: models.EffectDealDamage,
+			Params: map[string]interface{}{
+				"dice":       "2d6",
+				"damageType": "fire",
+			},
+		},
+	}}
+
+	opts := testOpts()
+	opts.Owner = owner
+
+	// First hit: fires and consumes charge
+	target := makeTarget(100, 0)
+	results, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target, attacker)
+	if results[0].Skipped {
+		t.Fatal("expected trigger to fire on first hit")
+	}
+
+	// Second hit: skipped (cooldown)
+	target2 := makeTarget(100, 0)
+	results2, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target2, attacker)
+	if !results2[0].Skipped {
+		t.Fatal("expected trigger to be skipped on second hit")
+	}
+
+	// Reset turn cooldowns
+	owner.TriggerCharges = triggers.ResetCooldowns(
+		owner.TriggerCharges, trigs, "weapon-1", triggers.PeriodTurn,
+	)
+
+	// Third hit after reset: fires again
+	target3 := makeTarget(100, 0)
+	results3, _ := applyTriggerResults(trigs, opts, models.ItemTriggerOnHit, false, target3, attacker)
+	if len(results3) != 1 {
+		t.Fatalf("expected 1 result after reset, got %d", len(results3))
+	}
+	if results3[0].Skipped {
+		t.Fatal("expected trigger to fire again after turn reset")
 	}
 }
