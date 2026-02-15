@@ -2814,5 +2814,549 @@
     "tags": [
       "utility"
     ]
+  },
+  {
+    "engName": "detect-magic",
+    "name": { "rus": "Обнаружение магии", "eng": "Detect Magic" },
+    "description": {
+      "rus": "На время действия заклинания вы чувствуете присутствие магии в пределах 30 футов от себя. Если вы чувствуете таким образом магию, вы можете действием увидеть слабую ауру вокруг видимого существа или предмета, несущего на себе магию, а также узнать школу этой магии, если она есть. Заклинание проникает через большинство барьеров, но блокируется 1 футом камня, 1 дюймом обычного металла, тонким листом свинца или 3 футами дерева или земли.",
+      "eng": "For the duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any. The spell can penetrate most barriers, but it is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
+    },
+    "level": 1,
+    "school": "divination",
+    "ritual": true,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "self" },
+    "components": { "verbal": true, "somatic": true, "material": false },
+    "duration": { "type": "timed", "amount": 10, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "bard", "cleric", "druid", "paladin", "ranger"],
+    "targeting": { "type": "self" },
+    "resolution": { "type": "auto" },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["detection", "utility"]
+  },
+  {
+    "engName": "detect-evil-and-good",
+    "name": { "rus": "Обнаружение добра и зла", "eng": "Detect Evil and Good" },
+    "description": {
+      "rus": "На время действия заклинания вы знаете, есть ли в пределах 30 футов от вас аберрация, исчадие, небожитель, нежить, фея или элементаль, а также где это существо находится. Аналогично, вы знаете, есть ли в пределах 30 футов от вас место или предмет, магически освящённый или осквернённый. Заклинание проникает через большинство барьеров, но блокируется 1 футом камня, 1 дюймом обычного металла, тонким листом свинца или 3 футами дерева или земли.",
+      "eng": "For the duration, you know if there is an aberration, celestial, elemental, fey, fiend, or undead within 30 feet of you, as well as where the creature is located. Similarly, you know if there is a place or object within 30 feet of you that has been magically consecrated or desecrated. The spell can penetrate most barriers, but it is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
+    },
+    "level": 1,
+    "school": "divination",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "self" },
+    "components": { "verbal": true, "somatic": true, "material": false },
+    "duration": { "type": "timed", "amount": 10, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["cleric", "paladin"],
+    "targeting": { "type": "self" },
+    "resolution": { "type": "auto" },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["detection", "utility"]
+  },
+  {
+    "engName": "dancing-lights",
+    "name": { "rus": "Пляшущие огоньки", "eng": "Dancing Lights" },
+    "description": {
+      "rus": "Вы создаёте до четырёх огоньков размером с факел в пределах дистанции, придавая им вид факелов, фонарей или светящихся сфер, парящих в воздухе на время действия заклинания. Вы также можете объединить четыре огонька в одну светящуюся отдалённо гуманоидную форму Среднего размера. В каждом из обликов огоньки излучают тусклый свет в радиусе 10 футов. Бонусным действием в свой ход вы можете переместить огоньки на расстояние до 60 футов в новую точку в пределах дистанции. Каждый огонёк должен находиться в пределах 20 футов от другого огонька. Огонёк гаснет, если оказывается за пределами дистанции заклинания.",
+      "eng": "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. Whichever form you choose, each light sheds dim light in a 10-foot radius. As a bonus action on your turn, you can move the lights up to 60 feet to a new spot within range. A light must be within 20 feet of another light created by this spell, and a light winks out if it exceeds the spell's range."
+    },
+    "level": 0,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 120 },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a bit of phosphorus or wychwood, or a glowworm" },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": true, "upTo": false },
+    "classes": ["wizard", "sorcerer", "bard"],
+    "targeting": { "type": "point" },
+    "resolution": { "type": "auto" },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["utility"]
+  },
+  {
+    "engName": "faerie-fire",
+    "name": { "rus": "Огонь фей", "eng": "Faerie Fire" },
+    "description": {
+      "rus": "Все предметы и существа в кубе с длиной ребра 20 футов в пределах дистанции подсвечиваются синим, зелёным или фиолетовым светом (на ваш выбор). Существа в области должны совершить спасбросок Ловкости. При провале существо на время действия заклинания излучает тусклый свет в радиусе 10 футов. Все броски атаки по подсвеченному существу совершаются с преимуществом, и это существо не может быть невидимым.",
+      "eng": "Each object in a 20-foot cube within range is outlined in blue, green, or violet light (your choice). Any creature in the area when the spell is cast is also outlined in light if it fails a Dexterity saving throw. For the duration, objects and affected creatures shed dim light in a 10-foot radius. Any attack roll against an affected creature or object has advantage if the attacker can see it, and the affected creature or object can't benefit from being invisible."
+    },
+    "level": 1,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 60 },
+    "components": { "verbal": true, "somatic": false, "material": false },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": true, "upTo": false },
+    "classes": ["druid", "bard"],
+    "targeting": { "type": "point" },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "DEX", "onSuccess": "none" }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": { "type": "area" },
+        "area": { "shape": "cube", "size": 20 }
+      }
+    ],
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["debuff", "utility"]
+  },
+  {
+    "engName": "darkness",
+    "name": { "rus": "Тьма", "eng": "Darkness" },
+    "description": {
+      "rus": "Магическая тьма расползается от точки, выбранной вами в пределах дистанции, заполняя сферу с радиусом 15 футов на время действия заклинания. Тьма огибает углы. Существо с тёмным зрением не может видеть сквозь эту тьму, и немагический свет не может её осветить. Если выбранная вами точка находится на предмете, который вы держите, несёте или носите, тьма исходит от этого предмета и перемещается вместе с ним. Если полностью накрыть источник тьмы непрозрачным предметом, например, чашей или шлемом, тьма блокируется. Если часть этого заклинания перекрывается областью света, созданного заклинанием 2-го уровня или ниже, то заклинание, создавшее свет, рассеивается.",
+      "eng": "Magical darkness spreads from a point you choose within range to fill a 15-foot-radius sphere for the duration. The darkness spreads around corners. A creature with darkvision can't see through this darkness, and nonmagical light can't illuminate it. If the point you choose is on an object you are holding or one that isn't being worn or carried, the darkness emanates from the object and moves with it. Completely covering the source of the darkness with an opaque object, such as a bowl or a helm, blocks the darkness. If any of this spell's area overlaps with an area of light created by a spell of 2nd level or lower, the spell that created the light is dispelled."
+    },
+    "level": 2,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 60 },
+    "components": { "verbal": true, "somatic": false, "material": true, "materials": "bat fur and a drop of pitch or piece of coal" },
+    "duration": { "type": "timed", "amount": 10, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "warlock"],
+    "targeting": { "type": "point" },
+    "resolution": { "type": "auto" },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": { "type": "area" },
+        "area": { "shape": "sphere", "size": 15 }
+      }
+    ],
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "utility"]
+  },
+  {
+    "engName": "detect-thoughts",
+    "name": { "rus": "Обнаружение мыслей", "eng": "Detect Thoughts" },
+    "description": {
+      "rus": "На время действия заклинания вы можете читать мысли некоторых существ. Когда вы накладываете это заклинание и действием в каждом последующем ходу до окончания заклинания, вы можете сосредоточиться на одном существе, которое видите в пределах 30 футов. Если выбранное существо обладает Интеллектом 3 или ниже или не говорит ни на одном языке, оно не подвержено заклинанию. Сначала вы узнаёте поверхностные мысли существа — то, что занимает его разум в данный момент. Действием вы можете переключить внимание на мысли другого существа или попытаться углубиться в мысли того же существа. При углублении цель должна совершить спасбросок Мудрости. При провале вы получаете понимание её рассуждений (если есть), эмоционального состояния и чего-то, что занимает её мысли больше всего (например, то, о чём она беспокоится, любит или ненавидит). При успехе заклинание оканчивается.",
+      "eng": "For the duration, you can read the thoughts of certain creatures. When you cast this spell and as your action on each turn until the spell ends, you can focus your mind on any one creature that you can see within 30 feet of you. If the creature you choose has an Intelligence of 3 or lower or doesn't speak any language, the creature is unaffected. You initially learn the surface thoughts of the creature—what is most on its mind in that moment. As an action, you can either shift your attention to another creature's thoughts or attempt to probe deeper into the same creature's mind. If you probe deeper, the target must make a Wisdom saving throw. If it fails, you gain insight into its reasoning (if any), its emotional state, and something that looms large in its mind (such as something it worries over, loves, or hates). If it succeeds, the spell ends."
+    },
+    "level": 2,
+    "school": "divination",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "self" },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a copper piece" },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": true, "upTo": false },
+    "classes": ["wizard", "sorcerer", "bard"],
+    "targeting": { "type": "creature", "count": 1 },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "WIS", "onSuccess": "special" }
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["detection", "utility"]
+  },
+  {
+    "engName": "levitate",
+    "name": { "rus": "Левитация", "eng": "Levitate" },
+    "description": {
+      "rus": "Одно выбранное вами существо или предмет в пределах дистанции поднимается вертикально вверх на расстояние до 20 футов и остаётся парить на время действия заклинания. Заклинание может поднять цель весом не более 500 фунтов. Нежелающее существо, преуспевшее в спасброске Телосложения, не подвержено заклинанию. Цель может перемещаться только отталкиваясь и подтягиваясь за твёрдые предметы и поверхности в пределах досягаемости (например, стены или потолок), что позволяет ей перемещаться так, как если бы она лазала. В свой ход вы можете изменить высоту цели на расстояние до 20 футов в любом направлении. Если целью являетесь вы сами, вы можете перемещаться вверх или вниз в рамках своего перемещения. В противном случае вы можете действием переместить цель, которая должна оставаться в пределах дистанции заклинания. Когда заклинание оканчивается, если цель всё ещё находится в воздухе, она мягко опускается на землю.",
+      "eng": "One creature or object of your choice that you can see within range rises vertically, up to 20 feet, and remains suspended there for the duration. The spell can levitate a target that weighs up to 500 pounds. An unwilling creature that succeeds on a Constitution saving throw is unaffected. The target can move only by pushing or pulling against a fixed object or surface within reach (such as a wall or a ceiling), which allows it to move as if it were climbing. You can change the target's altitude by up to 20 feet in either direction on your turn. If you are the target, you can move up or down as part of your move. Otherwise, you can use your action to move the target, which must remain within the spell's range. When the spell ends, the target floats gently to the ground if it is still aloft."
+    },
+    "level": 2,
+    "school": "transmutation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 60 },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end" },
+    "duration": { "type": "timed", "amount": 10, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer"],
+    "targeting": { "type": "creature", "count": 1 },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "CON", "onSuccess": "none" }
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "utility"]
+  },
+  {
+    "engName": "invisibility",
+    "name": { "rus": "Невидимость", "eng": "Invisibility" },
+    "description": {
+      "rus": "Существо, которого вы коснётесь, становится невидимым до окончания заклинания. Всё, что цель несёт и носит, тоже становится невидимым, пока находится при ней. Заклинание оканчивается для цели, если она совершает атаку или накладывает заклинание.",
+      "eng": "A creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person. The spell ends for a target that attacks or casts a spell."
+    },
+    "level": 2,
+    "school": "illusion",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "touch" },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "an eyelash encased in gum arabic" },
+    "duration": { "type": "timed", "amount": 1, "unit": "hours", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "bard", "warlock"],
+    "targeting": { "type": "creature", "count": 1 },
+    "resolution": { "type": "auto" },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": { "type": "creature", "count": 1 },
+        "condition": {
+          "condition": "invisible",
+          "duration": "1 hour"
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 3-го уровня или выше, вы можете сделать невидимым одно дополнительное существо за каждый уровень ячейки выше 2-го.",
+        "eng": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."
+      },
+      "scaling": [
+        { "level": 3, "targets": 2 },
+        { "level": 4, "targets": 3 },
+        { "level": 5, "targets": 4 },
+        { "level": 6, "targets": 5 },
+        { "level": 7, "targets": 6 },
+        { "level": 8, "targets": 7 },
+        { "level": 9, "targets": 8 }
+      ]
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["buff", "utility"]
+  },
+  {
+    "engName": "suggestion",
+    "name": { "rus": "Внушение", "eng": "Suggestion" },
+    "description": {
+      "rus": "Вы внушаете определённый курс действий (ограниченный одним-двумя предложениями) существу, которое видите в пределах дистанции и которое способно слышать и понимать вас. Существа, которые не могут быть очарованы, имеют иммунитет к этому эффекту. Внушение должно быть сформулировано так, чтобы описываемое действие звучало разумно. Просьба заколоть себя, броситься на копьё, сжечь себя или совершить иное явно вредоносное действие автоматически отменяет эффект заклинания. Цель должна совершить спасбросок Мудрости. При провале она следует указанному курсу действий наилучшим доступным способом. Внушённые действия могут продолжаться всё время действия заклинания. Если внушённую деятельность можно выполнить за более короткий срок, заклинание оканчивается после того, как субъект заканчивает то, что ему было внушено. Вы также можете указать условие, которое вызовет определённое действие в течение действия заклинания. Если условие не наступит до окончания заклинания, деятельность не выполняется. Если вы или кто-либо из ваших спутников наносит урон цели, заклинание оканчивается.",
+      "eng": "You suggest a course of activity (limited to a sentence or two) and magically influence a creature you can see within range that can hear and understand you. Creatures that can't be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act ends the spell. The target must make a Wisdom saving throw. On a failed save, it pursues the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do. You can also specify conditions that will trigger a special activity during the duration. If the condition isn't met before the spell expires, the activity isn't performed. If you or any of your companions damage the target, the spell ends."
+    },
+    "level": 2,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 30 },
+    "components": { "verbal": true, "somatic": false, "material": true, "materials": "a snake's tongue and either a bit of honeycomb or a drop of sweet oil" },
+    "duration": { "type": "timed", "amount": 8, "unit": "hours", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "bard", "warlock"],
+    "targeting": { "type": "creature", "count": 1 },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "WIS", "onSuccess": "none" }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": { "type": "creature", "count": 1 },
+        "condition": {
+          "condition": "charmed",
+          "duration": "8 hours"
+        }
+      }
+    ],
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "enchantment"]
+  },
+  {
+    "engName": "charm-person",
+    "name": { "rus": "Очарование личности", "eng": "Charm Person" },
+    "description": {
+      "rus": "Вы пытаетесь очаровать гуманоида, которого видите в пределах дистанции. Он должен совершить спасбросок Мудрости, с преимуществом, если вы или ваши спутники сражаются с ним. При провале он очарован вами, пока заклинание не окончится или пока вы или ваши спутники не причинят ему вред. Очарованное существо считает вас дружественным знакомым. Когда заклинание оканчивается, существо знает, что было очаровано вами.",
+      "eng": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you."
+    },
+    "level": 1,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 30 },
+    "components": { "verbal": true, "somatic": true, "material": false },
+    "duration": { "type": "timed", "amount": 1, "unit": "hours", "concentration": false },
+    "classes": ["wizard", "sorcerer", "bard", "druid", "warlock"],
+    "targeting": { "type": "creature", "count": 1, "filter": "humanoid" },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "WIS", "onSuccess": "none" }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": { "type": "creature", "count": 1, "filter": "humanoid" },
+        "condition": {
+          "condition": "charmed",
+          "duration": "1 hour"
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 2-го уровня или выше, вы можете нацелиться на одного дополнительного гуманоида за каждый уровень ячейки выше 1-го. Существа должны находиться в пределах 30 футов друг от друга.",
+        "eng": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other."
+      },
+      "scaling": [
+        { "level": 2, "targets": 2 },
+        { "level": 3, "targets": 3 },
+        { "level": 4, "targets": 4 },
+        { "level": 5, "targets": 5 },
+        { "level": 6, "targets": 6 },
+        { "level": 7, "targets": 7 },
+        { "level": 8, "targets": 8 },
+        { "level": 9, "targets": 9 }
+      ]
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "enchantment"]
+  },
+  {
+    "engName": "sleep",
+    "name": { "rus": "Усыпление", "eng": "Sleep" },
+    "description": {
+      "rus": "Это заклинание отправляет существ в магический сон. Бросьте 5d8; результат — общее количество хитов существ, которых заклинание может усыпить. Существа в пределах 20 футов от точки, выбранной вами в пределах дистанции, подвергаются действию в порядке возрастания их текущих хитов (игнорируя находящихся без сознания). Начиная с существа с наименьшим количеством текущих хитов, каждое существо, подвергшееся действию заклинания, засыпает на время действия заклинания. Вычтите хиты каждого существа из общей суммы, прежде чем переходить к существу с наибольшим количеством хитов. Существо с хитами, превышающими остаток, не подвергается действию заклинания. Нежить и существа, обладающие иммунитетом к очарованию, не подвергаются действию заклинания.",
+      "eng": "This spell sends creatures into a magical slumber. Roll 5d8; the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures). Starting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature's hit points from the total before moving on to the creature with the next lowest hit points. A creature's hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren't affected by this spell."
+    },
+    "level": 1,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 90 },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a pinch of fine sand, rose petals, or a cricket" },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": false },
+    "classes": ["wizard", "sorcerer", "bard"],
+    "targeting": { "type": "point" },
+    "resolution": { "type": "auto" },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": { "type": "area" },
+        "area": { "shape": "sphere", "size": 20 },
+        "condition": {
+          "condition": "unconscious",
+          "duration": "1 minute"
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 2-го уровня или выше, бросьте дополнительно 2d8 за каждый уровень ячейки выше 1-го.",
+        "eng": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+      }
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "enchantment"]
+  },
+  {
+    "engName": "fear",
+    "name": { "rus": "Страх", "eng": "Fear" },
+    "description": {
+      "rus": "Вы создаёте фантомный образ худшего кошмара каждого существа в конусе с размером 30 футов. Все существа в этой области должны совершить спасбросок Мудрости. При провале существо бросает всё, что держит, и становится испуганным на время действия заклинания. Будучи испуганным этим заклинанием, существо должно в каждый свой ход совершать действие Рывок и перемещаться прочь от вас наиболее безопасным маршрутом, если только ему некуда двигаться. Если существо оканчивает свой ход в месте, откуда не видит вас, оно может совершить спасбросок Мудрости. При успехе заклинание оканчивается для этого существа.",
+      "eng": "You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a Wisdom saving throw or drop whatever it is holding and become frightened for the duration. While frightened by this spell, a creature must take the Dash action and move away from you by the safest available route on each of its turns, unless there is nowhere to move. If the creature ends its turn in a location where it doesn't have line of sight to you, the creature can make a Wisdom saving throw. On a successful save, the spell ends for that creature."
+    },
+    "level": 3,
+    "school": "illusion",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "self" },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a white feather or the heart of a hen" },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "bard", "warlock"],
+    "targeting": { "type": "area" },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "WIS", "onSuccess": "none" }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": { "type": "area" },
+        "area": { "shape": "cone", "size": 30, "origin": "self" },
+        "condition": {
+          "condition": "frightened",
+          "duration": "1 minute",
+          "saveEnds": true,
+          "saveAbility": "WIS"
+        }
+      }
+    ],
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "debuff"]
+  },
+  {
+    "engName": "hold-monster",
+    "name": { "rus": "Удержание чудовища", "eng": "Hold Monster" },
+    "description": {
+      "rus": "Выберите существо, которое вы видите в пределах дистанции. Цель должна преуспеть в спасброске Мудрости, иначе она становится парализованной на время действия заклинания. Это заклинание не действует на нежить. В конце каждого своего хода цель может совершить новый спасбросок Мудрости. При успехе заклинание оканчивается для этой цели.",
+      "eng": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target."
+    },
+    "level": 5,
+    "school": "enchantment",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 90 },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a small, straight piece of iron" },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "bard", "warlock"],
+    "targeting": { "type": "creature", "count": 1 },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "WIS", "onSuccess": "none" }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": { "type": "creature", "count": 1 },
+        "condition": {
+          "condition": "paralyzed",
+          "duration": "1 minute",
+          "saveEnds": true,
+          "saveAbility": "WIS"
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 6-го уровня или выше, вы можете нацелиться на одно дополнительное существо за каждый уровень ячейки выше 5-го. Существа должны находиться в пределах 30 футов друг от друга.",
+        "eng": "When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other."
+      },
+      "scaling": [
+        { "level": 6, "targets": 2 },
+        { "level": 7, "targets": 3 },
+        { "level": 8, "targets": 4 },
+        { "level": 9, "targets": 5 }
+      ]
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["control", "debuff"]
+  },
+  {
+    "engName": "wall-of-fire",
+    "name": { "rus": "Огненная стена", "eng": "Wall of Fire" },
+    "description": {
+      "rus": "Вы создаёте стену из огня на твёрдой поверхности в пределах дистанции. Вы можете сделать стену длиной до 60 футов, высотой 20 футов и толщиной 1 фут, либо кольцевую стену диаметром до 20 футов, высотой 20 футов и толщиной 1 фут. Стена непрозрачна и существует на время действия заклинания. Когда стена появляется, все существа в её области должны совершить спасбросок Ловкости. При провале существо получает урон огнём 5d8, при успехе — половину этого урона. Одна сторона стены, выбранная вами при накладывании заклинания, наносит урон огнём 5d8 каждому существу, оканчивающему свой ход в пределах 10 футов от этой стороны стены или внутри стены. Существо получает такой же урон, когда впервые за ход входит в стену. Другая сторона стены не наносит урон.",
+      "eng": "You create a wall of fire on a solid surface within range. You can make the wall up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration. When the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save. One side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn. The other side of the wall deals no damage."
+    },
+    "level": 4,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": { "type": "action" },
+    "range": { "type": "distance", "distance": 120 },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a small piece of phosphorus" },
+    "duration": { "type": "timed", "amount": 1, "unit": "minutes", "concentration": true, "upTo": true },
+    "classes": ["wizard", "sorcerer", "druid"],
+    "targeting": { "type": "point" },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "DEX", "onSuccess": "half" }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": { "type": "area" },
+        "area": { "shape": "line", "size": 60, "width": 1 },
+        "damage": {
+          "base": { "diceCount": 5, "diceType": "d8", "damageType": "fire" }
+        }
+      },
+      {
+        "trigger": "on_enter",
+        "target": { "type": "area" },
+        "damage": {
+          "base": { "diceCount": 5, "diceType": "d8", "damageType": "fire" }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 5-го уровня или выше, урон увеличивается на 1d8 за каждый уровень ячейки выше 4-го.",
+        "eng": "When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th."
+      },
+      "scaling": [
+        { "level": 5, "damage": { "diceCount": 6, "diceType": "d8", "damageType": "fire" } },
+        { "level": 6, "damage": { "diceCount": 7, "diceType": "d8", "damageType": "fire" } },
+        { "level": 7, "damage": { "diceCount": 8, "diceType": "d8", "damageType": "fire" } },
+        { "level": 8, "damage": { "diceCount": 9, "diceType": "d8", "damageType": "fire" } },
+        { "level": 9, "damage": { "diceCount": 10, "diceType": "d8", "damageType": "fire" } }
+      ]
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["damage", "fire", "control"]
+  },
+  {
+    "engName": "cone-of-cold",
+    "name": { "rus": "Конус холода", "eng": "Cone of Cold" },
+    "description": {
+      "rus": "Из ваших рук вырывается поток холодного воздуха. Все существа в конусе с размером 60 футов должны совершить спасбросок Телосложения. Существо получает урон холодом 8d8 при провале или половину этого урона при успехе. Существо, убитое этим заклинанием, становится замороженной ледяной статуей, пока не растает.",
+      "eng": "A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws."
+    },
+    "level": 5,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": { "type": "action" },
+    "range": { "type": "self" },
+    "components": { "verbal": true, "somatic": true, "material": true, "materials": "a small crystal or glass cone" },
+    "duration": { "type": "instantaneous", "concentration": false },
+    "classes": ["wizard", "sorcerer"],
+    "targeting": { "type": "area" },
+    "resolution": {
+      "type": "save",
+      "save": { "ability": "CON", "onSuccess": "half" }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": { "type": "area" },
+        "area": { "shape": "cone", "size": 60, "origin": "self" },
+        "damage": {
+          "base": { "diceCount": 8, "diceType": "d8", "damageType": "cold" }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 6-го уровня или выше, урон увеличивается на 1d8 за каждый уровень ячейки выше 5-го.",
+        "eng": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th."
+      },
+      "scaling": [
+        { "level": 6, "damage": { "diceCount": 9, "diceType": "d8", "damageType": "cold" } },
+        { "level": 7, "damage": { "diceCount": 10, "diceType": "d8", "damageType": "cold" } },
+        { "level": 8, "damage": { "diceCount": 11, "diceType": "d8", "damageType": "cold" } },
+        { "level": 9, "damage": { "diceCount": 12, "diceType": "d8", "damageType": "cold" } }
+      ]
+    },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["damage", "cold"]
+  },
+  {
+    "engName": "disguise-self",
+    "name": { "rus": "Маскировка", "eng": "Disguise Self" },
+    "description": {
+      "rus": "Вы делаете себя — включая одежду, доспехи, оружие и прочее имущество — другим на вид, пока заклинание не окончится или пока вы не отмените его действием. Вы можете выглядеть на 1 фут ниже или выше и худым, толстым или средним. Вы не можете изменить тип своего тела, поэтому вы должны принять облик, имеющий те же основные расположения конечностей. В остальном, степень иллюзии зависит от вас. Изменения, произведённые этим заклинанием, не выдерживают физической проверки. Например, если вы добавляете шляпу к своему наряду, предметы будут проходить сквозь шляпу, и любой, кто прикоснётся к ней, ничего не почувствует. Чтобы распознать вашу маскировку, существо должно действием изучить вашу внешность и преуспеть в проверке Интеллекта (Расследование) против СЛ вашего заклинания.",
+      "eng": "You make yourself—including your clothing, armor, weapons, and other belongings on your person—look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you. The changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing. To discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC."
+    },
+    "level": 1,
+    "school": "illusion",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": { "type": "action" },
+    "range": { "type": "self" },
+    "components": { "verbal": true, "somatic": true, "material": false },
+    "duration": { "type": "timed", "amount": 1, "unit": "hours", "concentration": false },
+    "classes": ["wizard", "sorcerer", "bard"],
+    "targeting": { "type": "self" },
+    "resolution": { "type": "auto" },
+    "source": { "shortName": "PHB", "name": "Player's Handbook", "group": { "name": "Core Rules", "shortName": "Core" } },
+    "tags": ["utility"]
   }
 ]

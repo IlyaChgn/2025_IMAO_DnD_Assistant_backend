@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	_ "embed"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -13,10 +12,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-)
 
-//go:embed data/spells.json
-var spellsJSON []byte
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
+)
 
 // Command line flags
 var (
@@ -37,13 +35,13 @@ type SeedStats struct {
 func main() {
 	flag.Parse()
 
-	// Parse embedded JSON
+	// Parse spell data from shared seed package (single source of truth)
 	var spells []bson.M
-	if err := json.Unmarshal(spellsJSON, &spells); err != nil {
-		log.Fatal("Failed to parse embedded spells.json:", err)
+	if err := json.Unmarshal(seed.SRDSpellsJSON(), &spells); err != nil {
+		log.Fatal("Failed to parse spells JSON:", err)
 	}
 
-	fmt.Printf("Loaded %d spell definitions from embedded data\n", len(spells))
+	fmt.Printf("Loaded %d spell definitions from seed package\n", len(spells))
 
 	// Resolve MongoDB URI
 	uri := *mongoURI

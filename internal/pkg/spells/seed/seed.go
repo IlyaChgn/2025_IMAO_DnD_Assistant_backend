@@ -12,6 +12,12 @@ import (
 //go:embed srd_spells.json
 var srdSpellsJSON []byte
 
+// SRDSpellsJSON returns the raw embedded SRD spells JSON data.
+// Used by cmd/seed_spells to avoid duplicating the JSON file.
+func SRDSpellsJSON() []byte {
+	return srdSpellsJSON
+}
+
 // SeedSpellDefinitions upserts SRD spell definitions into the database.
 // Returns the number of spells successfully upserted.
 func SeedSpellDefinitions(ctx context.Context, repo spellsinterfaces.SpellsRepository) (int, error) {
