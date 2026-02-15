@@ -30,12 +30,13 @@ const (
 	// Listed here so IsPatchMessage returns true: if a client accidentally sends this type,
 	// it gets relayed harmlessly instead of corrupting encounter state via merger.Merge.
 	InventoryPatch WSMsgType = "inventory_patch"
+	VisionPatch    WSMsgType = "vision_patch"
 )
 
 // IsPatchMessage returns true if the message type is a patch that should be relayed directly
 func IsPatchMessage(msgType WSMsgType) bool {
 	switch msgType {
-	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch, InventoryPatch:
+	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch, InventoryPatch, VisionPatch:
 		return true
 	default:
 		return false
