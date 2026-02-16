@@ -20,6 +20,7 @@ type AuditLogEntry struct {
 
 	RollResult       *ActionRollResult  `json:"rollResult,omitempty" bson:"rollResult,omitempty"`
 	DamageRolls      []ActionRollResult `json:"damageRolls,omitempty" bson:"damageRolls,omitempty"`
+	HealingRolls     []ActionRollResult `json:"healingRolls,omitempty" bson:"healingRolls,omitempty"`
 	StateChanges     []StateChange      `json:"stateChanges,omitempty" bson:"stateChanges,omitempty"`
 	ConditionApplied []ConditionApplied `json:"conditionApplied,omitempty" bson:"conditionApplied,omitempty"`
 	Hit              *bool              `json:"hit,omitempty" bson:"hit,omitempty"`

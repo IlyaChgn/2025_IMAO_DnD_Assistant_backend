@@ -121,5 +121,10 @@ func (s *auditLogStorage) GetByEncounterID(
 		entries = append(entries, &entry)
 	}
 
+	if err := cursor.Err(); err != nil {
+		l.RepoError(err, map[string]any{"encounterId": encounterID})
+		return nil, apperrors.FindMongoDataErr
+	}
+
 	return entries, nil
 }

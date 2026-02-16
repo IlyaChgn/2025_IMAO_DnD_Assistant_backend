@@ -142,6 +142,7 @@ func (uc *actionsUsecases) ExecuteAction(
 		Summary:          resp.Summary,
 		RollResult:       resp.RollResult,
 		DamageRolls:      resp.DamageRolls,
+		HealingRolls:     resp.HealingRolls,
 		StateChanges:     resp.StateChanges,
 		ConditionApplied: resp.ConditionApplied,
 		Hit:              resp.Hit,
