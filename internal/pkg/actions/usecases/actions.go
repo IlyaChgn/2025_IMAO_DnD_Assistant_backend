@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
@@ -21,6 +22,7 @@ type actionsUsecases struct {
 	characterRepo characterinterfaces.CharacterBaseRepository
 	spellsRepo    spellsinterfaces.SpellsRepository
 	bestiaryRepo  bestiaryinterfaces.BestiaryRepository
+	auditLogRepo  actionsinterfaces.AuditLogRepository
 }
 
 func NewActionsUsecases(
@@ -28,12 +30,14 @@ func NewActionsUsecases(
 	characterRepo characterinterfaces.CharacterBaseRepository,
 	spellsRepo spellsinterfaces.SpellsRepository,
 	bestiaryRepo bestiaryinterfaces.BestiaryRepository,
+	auditLogRepo actionsinterfaces.AuditLogRepository,
 ) actionsinterfaces.ActionsUsecases {
 	return &actionsUsecases{
 		encounterRepo: encounterRepo,
 		characterRepo: characterRepo,
 		spellsRepo:    spellsRepo,
 		bestiaryRepo:  bestiaryRepo,
+		auditLogRepo:  auditLogRepo,
 	}
 }
 
@@ -98,26 +102,82 @@ func (uc *actionsUsecases) ExecuteAction(
 
 	// 8. Dispatch to resolver based on action type
 	cmd := &req.Action
+	var resp *models.ActionResponse
+
 	switch cmd.Type {
 	case models.ActionCustomRoll:
-		return resolveCustomRoll(cmd)
+		resp, err = resolveCustomRoll(cmd)
 
 	case models.ActionAbilityCheck:
-		return resolveAbilityCheck(cmd, charBase.Name, derived)
+		resp, err = resolveAbilityCheck(cmd, charBase.Name, derived)
 
 	case models.ActionSavingThrow:
-		return resolveSavingThrow(cmd, charBase.Name, derived)
+		resp, err = resolveSavingThrow(cmd, charBase.Name, derived)
 
 	case models.ActionWeaponAttack:
-		return resolveWeaponAttack(ctx, uc, cmd, encounterID, charBase, derived, participant, ed, userID)
+		resp, err = resolveWeaponAttack(ctx, uc, cmd, encounterID, charBase, derived, participant, ed, userID)
 
 	case models.ActionSpellCast:
-		return resolveSpellCast(ctx, uc, cmd, encounterID, charBase, derived, participant, ed, userID)
+		resp, err = resolveSpellCast(ctx, uc, cmd, encounterID, charBase, derived, participant, ed, userID)
 
 	case models.ActionUseFeature:
-		return resolveUseFeature(ctx, uc, cmd, encounterID, charBase, derived, participant, ed, userID)
+		resp, err = resolveUseFeature(ctx, uc, cmd, encounterID, charBase, derived, participant, ed, userID)
 
 	default:
 		return nil, apperrors.InvalidActionTypeErr
 	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	// 9. Fire-and-forget audit log entry
+	entry := &models.AuditLogEntry{
+		EncounterID:      encounterID,
+		Round:            ed.CurrentRound(),
+		Turn:             ed.CurrentTurnIndex(),
+		ActorID:          req.CharacterID,
+		ActorName:        charBase.Name,
+		ActionType:       cmd.Type,
+		Summary:          resp.Summary,
+		RollResult:       resp.RollResult,
+		DamageRolls:      resp.DamageRolls,
+		HealingRolls:     resp.HealingRolls,
+		StateChanges:     resp.StateChanges,
+		ConditionApplied: resp.ConditionApplied,
+		Hit:              resp.Hit,
+	}
+
+	if insertErr := uc.auditLogRepo.Insert(ctx, entry); insertErr != nil {
+		l.UsecasesWarn(insertErr, userID, map[string]any{
+			"encounterID": encounterID,
+			"action":      "audit_log_insert",
+		})
+	}
+
+	return resp, nil
+}
+
+// GetActionLog retrieves the action log for an encounter.
+func (uc *actionsUsecases) GetActionLog(
+	ctx context.Context,
+	encounterID string,
+	userID int,
+	limit int,
+	before time.Time,
+) ([]*models.AuditLogEntry, error) {
+	l := logger.FromContext(ctx)
+
+	if !uc.encounterRepo.CheckPermission(ctx, encounterID, userID) {
+		l.UsecasesWarn(apperrors.PermissionDeniedError, userID, map[string]any{"encounterID": encounterID})
+		return nil, apperrors.PermissionDeniedError
+	}
+
+	entries, err := uc.auditLogRepo.GetByEncounterID(ctx, encounterID, limit, before)
+	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID})
+		return nil, err
+	}
+
+	return entries, nil
 }

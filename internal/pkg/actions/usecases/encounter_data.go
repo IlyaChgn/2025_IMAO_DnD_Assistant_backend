@@ -70,6 +70,34 @@ func (ed *EncounterData) Marshal() (json.RawMessage, error) {
 	return result, nil
 }
 
+// CurrentRound returns the current combat round from the encounter data blob.
+// Returns 0 if not set or not in combat.
+func (ed *EncounterData) CurrentRound() int {
+	raw, ok := ed.raw["currentRound"]
+	if !ok {
+		return 0
+	}
+	var round int
+	if err := json.Unmarshal(raw, &round); err != nil {
+		return 0
+	}
+	return round
+}
+
+// CurrentTurnIndex returns the current turn index from the encounter data blob.
+// Returns 0 if not set.
+func (ed *EncounterData) CurrentTurnIndex() int {
+	raw, ok := ed.raw["currentTurnIndex"]
+	if !ok {
+		return 0
+	}
+	var turn int
+	if err := json.Unmarshal(raw, &turn); err != nil {
+		return 0
+	}
+	return turn
+}
+
 // FindParticipantByInstanceID searches by the InstanceID (encounter slot ID),
 // used when targeting a specific creature/character in the encounter.
 func (ed *EncounterData) FindParticipantByInstanceID(instanceID string) (*models.ParticipantFull, int, error) {
