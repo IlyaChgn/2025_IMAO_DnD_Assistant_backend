@@ -11,4 +11,5 @@ func ServeActionsRouter(router *mux.Router, actionsHandler *actionsdel.ActionsHa
 	subrouter.Use(loginRequiredMiddleware)
 
 	subrouter.HandleFunc("/{id}/actions", actionsHandler.ExecuteAction).Methods("POST")
+	subrouter.HandleFunc("/{id}/roll-log", actionsHandler.GetActionLog).Methods("GET")
 }

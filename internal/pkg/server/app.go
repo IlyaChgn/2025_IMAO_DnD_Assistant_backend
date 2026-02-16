@@ -53,6 +53,7 @@ import (
 	spellsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 
+	auditlogrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/repository"
 	actionsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/usecases"
 	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
 	itemsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/seed"
@@ -307,7 +308,12 @@ func (srv *Server) Run() error {
 	itemsUsecases := itemsuc.NewItemUsecases(itemsRepository)
 	inventoryUsecases := itemsuc.NewInventoryUsecases(inventoryRepository, itemsRepository)
 
-	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository, bestiaryRepository)
+	auditLogRepository := auditlogrepo.NewAuditLogStorage(mongoDatabase, mongoMetrics)
+	if err := auditLogRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure audit log indexes: %v", err)
+	}
+
+	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository, bestiaryRepository, auditLogRepository)
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)

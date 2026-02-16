@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
@@ -63,6 +65,51 @@ func (h *ActionsHandler) ExecuteAction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.SendOkResponse(w, result)
+}
+
+func (h *ActionsHandler) GetActionLog(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+	vars := mux.Vars(r)
+
+	id, ok := vars["id"]
+	if !ok || id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+	userID := user.ID
+
+	limit := 50
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		if parsed, err := strconv.Atoi(limitStr); err == nil && parsed > 0 {
+			limit = parsed
+		}
+	}
+
+	var before time.Time
+	if beforeStr := r.URL.Query().Get("before"); beforeStr != "" {
+		if parsed, err := time.Parse(time.RFC3339Nano, beforeStr); err == nil {
+			before = parsed
+		}
+	}
+
+	entries, err := h.usecases.GetActionLog(ctx, id, userID, limit, before)
+	if err != nil {
+		code, status := h.mapError(err)
+		l.DeliveryError(ctx, code, status, err, map[string]any{
+			"encounter_id": id,
+			"user_id":      userID,
+		})
+		responses.SendErrResponse(w, code, status)
+
+		return
+	}
+
+	responses.SendOkResponse(w, entries)
 }
 
 func (h *ActionsHandler) mapError(err error) (int, string) {
