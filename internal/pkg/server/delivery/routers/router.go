@@ -5,8 +5,12 @@ import (
 	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
 	actionsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/delivery"
 	authdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
+	backgroundsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds"
+	backgroundsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/delivery"
 	bestiaryinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	bestiarydel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
+	classesinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes"
+	classesdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/delivery"
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	characterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/delivery"
 	conditionsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/conditions/delivery"
@@ -15,6 +19,8 @@ import (
 	descriptiondel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	encounterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter"
 	encounterdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/delivery"
+	featsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats"
+	featsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/delivery"
 	featuresinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features"
 	featuresdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/delivery"
 	itemsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items"
@@ -30,6 +36,8 @@ import (
 	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/metrics"
 	myrecovery "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/recover"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/middleware/reqdata"
+	racesinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races"
+	racesdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/delivery"
 	spellsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells"
 	spellsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/delivery"
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
@@ -56,7 +64,11 @@ func NewRouter(cfg *config.Config,
 	itemsInterface itemsinterfaces.ItemUsecases,
 	inventoryInterface itemsinterfaces.InventoryUsecases,
 	broadcaster itemsinterfaces.SessionBroadcaster,
-	actionsInterface actionsinterfaces.ActionsUsecases) *mux.Router {
+	actionsInterface actionsinterfaces.ActionsUsecases,
+	classesInterface classesinterfaces.ClassesUsecases,
+	racesInterface racesinterfaces.RacesUsecases,
+	backgroundsInterface backgroundsinterfaces.BackgroundsUsecases,
+	featsInterface featsinterfaces.FeatsUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -74,6 +86,10 @@ func NewRouter(cfg *config.Config,
 	itemsHandler := itemsdel.NewItemsHandler(itemsInterface, cfg.CtxUserKey)
 	inventoryHandler := itemsdel.NewInventoryHandler(inventoryInterface, cfg.CtxUserKey, broadcaster)
 	actionsHandler := actionsdel.NewActionsHandler(actionsInterface, cfg.CtxUserKey)
+	classesHandler := classesdel.NewClassesHandler(classesInterface)
+	racesHandler := racesdel.NewRacesHandler(racesInterface)
+	backgroundsHandler := backgroundsdel.NewBackgroundsHandler(backgroundsInterface)
+	featsHandler := featsdel.NewFeatsHandler(featsInterface)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -107,6 +123,10 @@ func NewRouter(cfg *config.Config,
 	ServeItemsRouter(rootRouter, itemsHandler, loginRequiredMiddleware)
 	ServeInventoryRouter(rootRouter, inventoryHandler, loginRequiredMiddleware)
 	ServeActionsRouter(rootRouter, actionsHandler, loginRequiredMiddleware)
+	ServeClassesRouter(rootRouter, classesHandler)
+	ServeRacesRouter(rootRouter, racesHandler)
+	ServeBackgroundsRouter(rootRouter, backgroundsHandler)
+	ServeFeatsRouter(rootRouter, featsHandler)
 
 	return router
 }

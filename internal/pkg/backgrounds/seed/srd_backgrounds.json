@@ -1,0 +1,1563 @@
+[
+  {
+    "engName": "acolyte",
+    "name": {
+      "eng": "Acolyte",
+      "rus": "Прислужник"
+    },
+    "description": {
+      "eng": "You have spent your life in the service of a temple to a specific god or pantheon of gods.",
+      "rus": "Вы провели свою жизнь на службе в храме, посвящённом определённому богу или пантеону богов."
+    },
+    "skillProficiencies": [
+      "insight",
+      "religion"
+    ],
+    "toolProficiencies": [],
+    "languages": {
+      "type": "pick",
+      "pick": 2
+    },
+    "equipment": [
+      {
+        "engName": "holy_symbol",
+        "quantity": 1
+      },
+      {
+        "engName": "prayer_book",
+        "quantity": 1
+      },
+      {
+        "engName": "incense_sticks",
+        "quantity": 5
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_15",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Shelter of the Faithful",
+        "rus": "Приют верующего"
+      },
+      "description": {
+        "eng": "As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith.",
+        "rus": "Будучи прислужником, вы пользуетесь уважением тех, кто разделяет вашу веру, и можете проводить религиозные церемонии своего божества. Вы и ваши спутники можете рассчитывать на бесплатное лечение и уход в храме, святилище или ином месте, связанном с вашей верой."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I idolize a particular hero of my faith, and constantly refer to that person's deeds and example.",
+          "rus": "Я боготворю определённого героя своей веры и постоянно ссылаюсь на его деяния и пример."
+        },
+        {
+          "eng": "I can find common ground between the fiercest enemies, empathizing with them to work towards peace.",
+          "rus": "Я могу найти общий язык между злейшими врагами, сочувствуя им и стремясь к миру."
+        },
+        {
+          "eng": "I quote sacred texts and proverbs in almost every situation.",
+          "rus": "Я цитирую священные тексты и притчи практически в любой ситуации."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Tradition. The ancient traditions of worship and sacrifice must be preserved and upheld.",
+          "rus": "Традиция. Древние традиции поклонения и жертвоприношения должны быть сохранены и соблюдены."
+        },
+        {
+          "eng": "Charity. I always try to help those in need, no matter the personal cost.",
+          "rus": "Милосердие. Я всегда стараюсь помочь нуждающимся, независимо от личных затрат."
+        },
+        {
+          "eng": "Faith. I trust that my deity will guide my actions. I have faith that if I work hard, things will go well.",
+          "rus": "Вера. Я верю, что моё божество направляет мои действия. Я верю, что если усердно трудиться, всё будет хорошо."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I would die to recover an ancient relic of my faith that was lost long ago.",
+          "rus": "Я готов умереть, чтобы вернуть древнюю реликвию своей веры, утраченную давным-давно."
+        },
+        {
+          "eng": "Everything I do is for the common people.",
+          "rus": "Всё, что я делаю, — ради простых людей."
+        },
+        {
+          "eng": "I owe my life to the priest who took me in when my parents died.",
+          "rus": "Я обязан жизнью жрецу, который приютил меня, когда мои родители погибли."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I judge others harshly, and myself even more severely.",
+          "rus": "Я сурово сужу других, а себя — ещё строже."
+        },
+        {
+          "eng": "I put too much trust in those who wield power within my temple's hierarchy.",
+          "rus": "Я слишком доверяю тем, кто обладает властью в иерархии моего храма."
+        },
+        {
+          "eng": "My piety sometimes leads me to blindly trust those that profess faith in my god.",
+          "rus": "Моя набожность иногда заставляет меня слепо доверять тем, кто исповедует веру в моего бога."
+        }
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "religious",
+      "scholarly"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "charlatan",
+    "name": {
+      "eng": "Charlatan",
+      "rus": "Шарлатан"
+    },
+    "description": {
+      "eng": "You have always had a way with people. You know what makes them tick and can tease out their desires after a few minutes of conversation.",
+      "rus": "Вы всегда умели находить подход к людям. Вы знаете, что ими движет, и можете выведать их желания после нескольких минут разговора."
+    },
+    "skillProficiencies": [
+      "deception",
+      "sleight_of_hand"
+    ],
+    "toolProficiencies": [
+      "Disguise kit",
+      "Forgery kit"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "fine_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "disguise_kit",
+        "quantity": 1
+      },
+      {
+        "engName": "con_tools",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_15",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "False Identity",
+        "rus": "Подложная личность"
+      },
+      "description": {
+        "eng": "You have created a second identity that includes documentation, established acquaintances, and disguises that allow you to assume that persona. You can forge documents including official papers and personal letters.",
+        "rus": "Вы создали вторую личность, которая включает документы, знакомства и маскировку, позволяющую вам принимать этот образ. Вы можете подделывать документы, включая официальные бумаги и личные письма."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I fall in and out of love easily, and am always pursuing someone.",
+          "rus": "Я легко влюбляюсь и разочаровываюсь, и всегда за кем-то ухаживаю."
+        },
+        {
+          "eng": "I have a joke for every occasion, especially occasions where humor is inappropriate.",
+          "rus": "У меня есть шутка на каждый случай, особенно на тот, когда юмор неуместен."
+        },
+        {
+          "eng": "Flattery is my preferred trick for getting what I want.",
+          "rus": "Лесть — мой излюбленный приём для получения желаемого."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Independence. I am a free spirit — no one tells me what to do.",
+          "rus": "Независимость. Я свободный дух — никто не указывает мне, что делать."
+        },
+        {
+          "eng": "Creativity. I never run the same con twice.",
+          "rus": "Изобретательность. Я никогда не провожу одну и ту же аферу дважды."
+        },
+        {
+          "eng": "Friendship. Material goods come and go. Bonds of friendship last forever.",
+          "rus": "Дружба. Материальные блага приходят и уходят. Узы дружбы вечны."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I fleeced the wrong person and must work to ensure that they can never get revenge on me.",
+          "rus": "Я обманул не того человека и должен сделать всё, чтобы он никогда не смог мне отомстить."
+        },
+        {
+          "eng": "I owe everything to my mentor — a horrible person who's probably rotting in jail.",
+          "rus": "Я всем обязан своему наставнику — ужасному человеку, который, вероятно, гниёт в тюрьме."
+        },
+        {
+          "eng": "Somewhere out there, I have a child who doesn't know me. I want to make the world better for them.",
+          "rus": "Где-то у меня есть ребёнок, который меня не знает. Я хочу сделать мир лучше для него."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I can't resist a pretty face.",
+          "rus": "Я не могу устоять перед красивым лицом."
+        },
+        {
+          "eng": "I'm always in debt. I spend my ill-gotten gains on decadent luxuries.",
+          "rus": "Я всегда в долгах. Я трачу нечестно нажитое на роскошь."
+        },
+        {
+          "eng": "I'm convinced that no one could ever fool me the way I fool others.",
+          "rus": "Я убеждён, что никто не сможет обмануть меня так, как я обманываю других."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "criminal",
+      "social",
+      "deceptive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "criminal",
+    "name": {
+      "eng": "Criminal",
+      "rus": "Преступник"
+    },
+    "description": {
+      "eng": "You are an experienced criminal with a history of breaking the law. You have spent a lot of time among other criminals and still have contacts within the criminal underworld.",
+      "rus": "Вы опытный преступник с историей нарушения закона. Вы провели много времени среди других преступников и до сих пор имеете связи в криминальном мире."
+    },
+    "skillProficiencies": [
+      "deception",
+      "stealth"
+    ],
+    "toolProficiencies": [
+      "Thieves' tools",
+      "Gaming set"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "crowbar",
+        "quantity": 1
+      },
+      {
+        "engName": "dark_common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_15",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Criminal Contact",
+        "rus": "Криминальный контакт"
+      },
+      "description": {
+        "eng": "You have a reliable and trustworthy contact who acts as your liaison to a network of other criminals. You know how to get messages to and from your contact, even over great distances.",
+        "rus": "У вас есть надёжный и проверенный контакт, который выступает связующим звеном с сетью других преступников. Вы знаете, как передавать и получать сообщения от своего контакта даже на больших расстояниях."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I always have a plan for what to do when things go wrong.",
+          "rus": "У меня всегда есть план на случай, если что-то пойдёт не так."
+        },
+        {
+          "eng": "I am incredibly slow to trust. Those who seem the fairest often have the most to hide.",
+          "rus": "Я невероятно медленно начинаю доверять. Те, кто кажутся самыми честными, часто скрывают больше всего."
+        },
+        {
+          "eng": "The first thing I do in a new place is note the locations of everything valuable — or where such things could be hidden.",
+          "rus": "Первое, что я делаю в новом месте, — замечаю расположение всего ценного или где такие вещи могут быть спрятаны."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Honor. I don't steal from others in the trade.",
+          "rus": "Честь. Я не краду у своих."
+        },
+        {
+          "eng": "Freedom. Chains are meant to be broken, as are those who would forge them.",
+          "rus": "Свобода. Цепи созданы, чтобы их разбивать, как и те, кто их куёт."
+        },
+        {
+          "eng": "Redemption. There's a spark of good in everyone.",
+          "rus": "Искупление. В каждом есть искра добра."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I'm trying to pay off an old debt I owe to a generous benefactor.",
+          "rus": "Я пытаюсь расплатиться со старым долгом щедрому благодетелю."
+        },
+        {
+          "eng": "Someone I loved died because of a mistake I made. That will never happen again.",
+          "rus": "Кто-то, кого я любил, погиб из-за моей ошибки. Это больше никогда не повторится."
+        },
+        {
+          "eng": "My ill-gotten gains go to support my family.",
+          "rus": "Мои нечестно нажитые средства идут на содержание моей семьи."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "When I see something valuable, I can't think about anything but how to steal it.",
+          "rus": "Когда я вижу что-то ценное, я не могу думать ни о чём, кроме как украсть это."
+        },
+        {
+          "eng": "When faced with a choice between money and my friends, I usually choose the money.",
+          "rus": "Когда стоит выбор между деньгами и друзьями, я обычно выбираю деньги."
+        },
+        {
+          "eng": "I turn tail and run when things look bad.",
+          "rus": "Я бегу прочь, когда дела идут плохо."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "criminal",
+      "stealth"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "entertainer",
+    "name": {
+      "eng": "Entertainer",
+      "rus": "Артист"
+    },
+    "description": {
+      "eng": "You thrive in front of an audience. You know how to entrance them, entertain them, and even inspire them.",
+      "rus": "Вы раскрываетесь перед публикой. Вы знаете, как очаровать, развлечь и даже вдохновить зрителей."
+    },
+    "skillProficiencies": [
+      "acrobatics",
+      "performance"
+    ],
+    "toolProficiencies": [
+      "Disguise kit",
+      "Musical instrument"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "musical_instrument",
+        "quantity": 1
+      },
+      {
+        "engName": "favor_of_an_admirer",
+        "quantity": 1
+      },
+      {
+        "engName": "costume",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_15",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "By Popular Demand",
+        "rus": "По многочисленным просьбам"
+      },
+      "description": {
+        "eng": "You can always find a place to perform, usually in an inn or tavern. You receive free lodging and food of a modest standard as long as you perform each night.",
+        "rus": "Вы всегда можете найти место для выступления, обычно в таверне или трактире. Вы получаете бесплатное жильё и еду скромного уровня, пока выступаете каждый вечер."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I know a story relevant to almost every situation.",
+          "rus": "Я знаю историю, подходящую практически к любой ситуации."
+        },
+        {
+          "eng": "Whenever I come to a new place, I collect local rumors and spread gossip.",
+          "rus": "Попадая в новое место, я собираю местные слухи и распространяю сплетни."
+        },
+        {
+          "eng": "I love a good insult, even one directed at me.",
+          "rus": "Я люблю хорошую колкость, даже если она направлена на меня."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Beauty. When I perform, I make the world better than it was.",
+          "rus": "Красота. Когда я выступаю, я делаю мир лучше, чем он был."
+        },
+        {
+          "eng": "Creativity. The world is in need of new ideas and bold action.",
+          "rus": "Творчество. Мир нуждается в новых идеях и смелых поступках."
+        },
+        {
+          "eng": "People. I like seeing the smiles on people's faces when I perform.",
+          "rus": "Люди. Мне нравится видеть улыбки на лицах людей, когда я выступаю."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "My instrument is my most treasured possession, and it reminds me of someone I love.",
+          "rus": "Мой инструмент — моя самая ценная вещь, и он напоминает мне о том, кого я люблю."
+        },
+        {
+          "eng": "I want to be famous, whatever it takes.",
+          "rus": "Я хочу стать знаменитым любой ценой."
+        },
+        {
+          "eng": "A powerful person killed someone I love. Some day soon, I'll have my revenge.",
+          "rus": "Влиятельный человек убил того, кого я любил. Скоро я отомщу."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I'll do anything to win fame and renown.",
+          "rus": "Я сделаю что угодно ради славы и известности."
+        },
+        {
+          "eng": "I'm a sucker for a pretty face.",
+          "rus": "Я падок на красивые лица."
+        },
+        {
+          "eng": "I have trouble keeping my true feelings hidden. My sharp tongue lands me in trouble.",
+          "rus": "Мне трудно скрывать свои истинные чувства. Мой острый язык втягивает меня в неприятности."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "social",
+      "performance",
+      "artistic"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "folk_hero",
+    "name": {
+      "eng": "Folk Hero",
+      "rus": "Народный герой"
+    },
+    "description": {
+      "eng": "You come from a humble social rank, but you are destined for so much more. The people of your home village regard you as their champion.",
+      "rus": "Вы происходите из скромного сословия, но предназначены для гораздо большего. Жители вашей родной деревни считают вас своим защитником."
+    },
+    "skillProficiencies": [
+      "animal_handling",
+      "survival"
+    ],
+    "toolProficiencies": [
+      "Artisan's tools",
+      "Vehicles (land)"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "artisans_tools",
+        "quantity": 1
+      },
+      {
+        "engName": "shovel",
+        "quantity": 1
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_10",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Rustic Hospitality",
+        "rus": "Деревенское гостеприимство"
+      },
+      "description": {
+        "eng": "Since you come from the ranks of the common folk, you fit in among them with ease. You can find a place to hide, rest, or recuperate among commoners, unless you have shown yourself to be a danger to them.",
+        "rus": "Поскольку вы из простого народа, вы легко вписываетесь в его среду. Вы можете найти место, чтобы спрятаться, отдохнуть или восстановиться среди простолюдинов, если только вы не показали себя опасным для них."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I judge people by their actions, not their words.",
+          "rus": "Я сужу людей по их поступкам, а не по словам."
+        },
+        {
+          "eng": "If someone is in trouble, I'm always ready to lend help.",
+          "rus": "Если кто-то в беде, я всегда готов помочь."
+        },
+        {
+          "eng": "When I set my mind to something, I follow through no matter what gets in my way.",
+          "rus": "Когда я что-то задумал, я довожу дело до конца, несмотря ни на что."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Respect. People deserve to be treated with dignity and respect.",
+          "rus": "Уважение. Люди заслуживают того, чтобы к ним относились с достоинством и уважением."
+        },
+        {
+          "eng": "Sincerity. There's no good in pretending to be something I'm not.",
+          "rus": "Искренность. Нет ничего хорошего в том, чтобы притворяться тем, кем я не являюсь."
+        },
+        {
+          "eng": "Destiny. Nothing and no one can steer me away from my higher calling.",
+          "rus": "Судьба. Ничто и никто не может отвлечь меня от моего высокого предназначения."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I have a family, but I have no idea where they are. I hope to find them one day.",
+          "rus": "У меня есть семья, но я понятия не имею, где они. Надеюсь однажды найти их."
+        },
+        {
+          "eng": "I protect those who cannot protect themselves.",
+          "rus": "Я защищаю тех, кто не может защитить себя."
+        },
+        {
+          "eng": "My tools are symbols of my past life, and I carry them so I never forget my roots.",
+          "rus": "Мои инструменты — символы моей прошлой жизни, и я ношу их, чтобы никогда не забывать свои корни."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I have a weakness for the vices of the city, especially hard drink.",
+          "rus": "У меня есть слабость к порокам города, особенно к крепким напиткам."
+        },
+        {
+          "eng": "I'm convinced of the significance of my destiny, and blind to my shortcomings.",
+          "rus": "Я убеждён в значимости своей судьбы и слеп к своим недостаткам."
+        },
+        {
+          "eng": "The tyrant who rules my land will stop at nothing to see me killed.",
+          "rus": "Тиран, правящий моей землёй, не остановится ни перед чем, чтобы меня убить."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "rural",
+      "heroic",
+      "common_folk"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "guild_artisan",
+    "name": {
+      "eng": "Guild Artisan",
+      "rus": "Гильдейский ремесленник"
+    },
+    "description": {
+      "eng": "You are a member of an artisan's guild, skilled in a particular field and closely associated with other artisans.",
+      "rus": "Вы являетесь членом ремесленной гильдии, мастером в определённой области и тесно связаны с другими ремесленниками."
+    },
+    "skillProficiencies": [
+      "insight",
+      "persuasion"
+    ],
+    "toolProficiencies": [
+      "Artisan's tools"
+    ],
+    "languages": {
+      "type": "pick",
+      "pick": 1
+    },
+    "equipment": [
+      {
+        "engName": "artisans_tools",
+        "quantity": 1
+      },
+      {
+        "engName": "letter_of_introduction",
+        "quantity": 1
+      },
+      {
+        "engName": "travelers_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_15",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Guild Membership",
+        "rus": "Членство в гильдии"
+      },
+      "description": {
+        "eng": "As an established member of a guild, you can rely on certain benefits that membership provides. Your fellow guild members will provide you with lodging and food if necessary and pay for your funeral if needed.",
+        "rus": "Будучи полноправным членом гильдии, вы можете рассчитывать на определённые привилегии членства. Ваши собратья по гильдии обеспечат вас жильём и едой при необходимости и оплатят ваши похороны, если потребуется."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I believe that anything worth doing is worth doing right. I can't help it — I'm a perfectionist.",
+          "rus": "Я считаю, что всё, что стоит делать, стоит делать хорошо. Ничего не могу поделать — я перфекционист."
+        },
+        {
+          "eng": "I'm well known for my work, and I want to make sure everyone appreciates it.",
+          "rus": "Я хорошо известен своей работой и хочу, чтобы все её ценили."
+        },
+        {
+          "eng": "I'm full of witty aphorisms and have a proverb for every occasion.",
+          "rus": "Я полон остроумных афоризмов и знаю пословицу на каждый случай."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Community. It is the duty of all civilized people to strengthen the bonds of community.",
+          "rus": "Община. Долг всех цивилизованных людей — укреплять общинные связи."
+        },
+        {
+          "eng": "Generosity. My talents were given to me so that I could use them to benefit the world.",
+          "rus": "Щедрость. Мои таланты были даны мне, чтобы я мог использовать их на благо мира."
+        },
+        {
+          "eng": "Aspiration. I work hard to be the best there is at my craft.",
+          "rus": "Стремление. Я упорно тружусь, чтобы стать лучшим в своём ремесле."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "The workshop where I learned my trade is the most important place in the world to me.",
+          "rus": "Мастерская, где я обучился ремеслу, — самое важное место в мире для меня."
+        },
+        {
+          "eng": "I owe my guild a great debt for forging me into the person I am today.",
+          "rus": "Я в большом долгу перед гильдией за то, что она сделала меня тем, кто я есть."
+        },
+        {
+          "eng": "One day I will return to my guild and prove that I am the greatest artisan of them all.",
+          "rus": "Однажды я вернусь в гильдию и докажу, что я величайший мастер из всех."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I'll do anything to get my hands on something rare or priceless.",
+          "rus": "Я сделаю что угодно, чтобы заполучить что-то редкое или бесценное."
+        },
+        {
+          "eng": "I'm quick to assume that someone is trying to cheat me.",
+          "rus": "Я быстро начинаю подозревать, что кто-то пытается меня обмануть."
+        },
+        {
+          "eng": "I'm never satisfied with what I have — I always want more.",
+          "rus": "Я никогда не доволен тем, что имею — мне всегда нужно больше."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "trade",
+      "social",
+      "urban"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "hermit",
+    "name": {
+      "eng": "Hermit",
+      "rus": "Отшельник"
+    },
+    "description": {
+      "eng": "You lived in seclusion for a formative part of your life — either in a sheltered community or entirely alone. You found quiet, solitude, and perhaps some of the answers you were looking for.",
+      "rus": "Вы жили в уединении значительную часть своей жизни — либо в закрытой общине, либо совершенно один. Вы нашли покой, одиночество и, возможно, некоторые ответы, которые искали."
+    },
+    "skillProficiencies": [
+      "medicine",
+      "religion"
+    ],
+    "toolProficiencies": [
+      "Herbalism kit"
+    ],
+    "languages": {
+      "type": "pick",
+      "pick": 1
+    },
+    "equipment": [
+      {
+        "engName": "scroll_case_with_notes",
+        "quantity": 1
+      },
+      {
+        "engName": "winter_blanket",
+        "quantity": 1
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "herbalism_kit",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_5",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Discovery",
+        "rus": "Открытие"
+      },
+      "description": {
+        "eng": "The quiet seclusion of your extended hermitage gave you access to a unique and powerful discovery. It might be a great truth, a hidden site, a long-forgotten fact, or unearthed some relic of the past.",
+        "rus": "Тихое уединение вашего длительного отшельничества дало вам доступ к уникальному и могущественному открытию. Это может быть великая истина, скрытое место, давно забытый факт или извлечённая реликвия прошлого."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I've been isolated for so long that I rarely speak, preferring gestures and the occasional grunt.",
+          "rus": "Я так долго был в изоляции, что редко говорю, предпочитая жесты и случайное бормотание."
+        },
+        {
+          "eng": "I am utterly serene, even in the face of disaster.",
+          "rus": "Я совершенно безмятежен, даже перед лицом катастрофы."
+        },
+        {
+          "eng": "I feel tremendous empathy for all who suffer.",
+          "rus": "Я испытываю огромное сочувствие ко всем страдающим."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Knowledge. The path to power and self-improvement is through knowledge.",
+          "rus": "Знание. Путь к силе и самосовершенствованию лежит через знания."
+        },
+        {
+          "eng": "Free Thinking. Inquiry and curiosity are the pillars of progress.",
+          "rus": "Свободомыслие. Пытливость и любопытство — столпы прогресса."
+        },
+        {
+          "eng": "Self-Knowledge. If you know yourself, there's nothing left to know.",
+          "rus": "Самопознание. Если ты знаешь себя, больше нечего познавать."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "Nothing is more important than the other members of my hermitage, order, or association.",
+          "rus": "Нет ничего важнее других членов моей обители, ордена или объединения."
+        },
+        {
+          "eng": "I entered seclusion to hide from those who might still be hunting me.",
+          "rus": "Я ушёл в уединение, чтобы скрыться от тех, кто, возможно, всё ещё охотится на меня."
+        },
+        {
+          "eng": "I'm still seeking the enlightenment I pursued in my seclusion, and it still eludes me.",
+          "rus": "Я всё ещё ищу просветление, к которому стремился в уединении, и оно по-прежнему ускользает от меня."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "Now that I've returned to the world, I enjoy its delights a little too much.",
+          "rus": "Теперь, когда я вернулся в мир, я слишком наслаждаюсь его удовольствиями."
+        },
+        {
+          "eng": "I harbor dark, bloodthirsty thoughts that my isolation failed to quell.",
+          "rus": "Я таю тёмные, кровожадные мысли, которые моё уединение не смогло усмирить."
+        },
+        {
+          "eng": "I let my need to win arguments overshadow friendships and harmony.",
+          "rus": "Я позволяю своей потребности побеждать в спорах затмевать дружбу и гармонию."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "religious",
+      "scholarly",
+      "reclusive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "noble",
+    "name": {
+      "eng": "Noble",
+      "rus": "Благородный"
+    },
+    "description": {
+      "eng": "You understand wealth, power, and privilege. You carry a noble title, and your family owns land, collects taxes, and wields significant political influence.",
+      "rus": "Вы понимаете богатство, власть и привилегии. Вы носите дворянский титул, и ваша семья владеет землёй, собирает налоги и обладает значительным политическим влиянием."
+    },
+    "skillProficiencies": [
+      "history",
+      "persuasion"
+    ],
+    "toolProficiencies": [
+      "Gaming set"
+    ],
+    "languages": {
+      "type": "pick",
+      "pick": 1
+    },
+    "equipment": [
+      {
+        "engName": "fine_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "signet_ring",
+        "quantity": 1
+      },
+      {
+        "engName": "scroll_of_pedigree",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_25",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Position of Privilege",
+        "rus": "Привилегированное положение"
+      },
+      "description": {
+        "eng": "Thanks to your noble birth, people are inclined to think the best of you. You are welcome in high society, and common folk make every effort to accommodate you and avoid your displeasure.",
+        "rus": "Благодаря вашему благородному происхождению люди склонны думать о вас лучшее. Вас рады видеть в высшем обществе, а простолюдины делают всё возможное, чтобы угодить вам и избежать вашего неудовольствия."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "My eloquent flattery makes everyone I talk to feel like the most wonderful person in the world.",
+          "rus": "Моя красноречивая лесть заставляет каждого собеседника чувствовать себя самым замечательным человеком в мире."
+        },
+        {
+          "eng": "Despite my noble birth, I do not place myself above other folk.",
+          "rus": "Несмотря на моё благородное происхождение, я не ставлю себя выше других."
+        },
+        {
+          "eng": "If you do me an injury, I will crush you, ruin your name, and salt your fields.",
+          "rus": "Если вы причините мне вред, я уничтожу вас, разрушу вашу репутацию и засолю ваши поля."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Responsibility. It is my duty to respect the authority of those above me, just as those below me must respect mine.",
+          "rus": "Ответственность. Мой долг — уважать авторитет тех, кто выше меня, как и те, кто ниже, должны уважать мой."
+        },
+        {
+          "eng": "Noble Obligation. It is my duty to protect and care for the people beneath me.",
+          "rus": "Благородный долг. Моя обязанность — защищать и заботиться о людях, находящихся подо мной."
+        },
+        {
+          "eng": "Power. If I can attain more power, no one will tell me what to do.",
+          "rus": "Власть. Если я обрету больше власти, никто не будет указывать мне, что делать."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I will face any challenge to win the approval of my family.",
+          "rus": "Я приму любой вызов, чтобы заслужить одобрение своей семьи."
+        },
+        {
+          "eng": "My family's alliance with another noble family must be sustained at all costs.",
+          "rus": "Союз моей семьи с другим благородным родом должен быть сохранён любой ценой."
+        },
+        {
+          "eng": "The common folk must see me as a hero of the people.",
+          "rus": "Простой народ должен видеть во мне героя."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I secretly believe that everyone is beneath me.",
+          "rus": "Я втайне считаю, что все ниже меня."
+        },
+        {
+          "eng": "I hide a truly scandalous secret that could ruin my family forever.",
+          "rus": "Я скрываю поистине скандальную тайну, которая может навсегда погубить мою семью."
+        },
+        {
+          "eng": "I too often hear veiled insults and threats in every word addressed to me.",
+          "rus": "Я слишком часто слышу скрытые оскорбления и угрозы в каждом обращённом ко мне слове."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "noble",
+      "social",
+      "political"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "outlander",
+    "name": {
+      "eng": "Outlander",
+      "rus": "Чужеземец"
+    },
+    "description": {
+      "eng": "You grew up in the wilds, far from civilization and the comforts of town and technology. The wilds are in your blood.",
+      "rus": "Вы выросли в дикой местности, вдали от цивилизации и удобств города. Дикая природа у вас в крови."
+    },
+    "skillProficiencies": [
+      "athletics",
+      "survival"
+    ],
+    "toolProficiencies": [
+      "Musical instrument"
+    ],
+    "languages": {
+      "type": "pick",
+      "pick": 1
+    },
+    "equipment": [
+      {
+        "engName": "staff",
+        "quantity": 1
+      },
+      {
+        "engName": "hunting_trap",
+        "quantity": 1
+      },
+      {
+        "engName": "trophy_from_animal",
+        "quantity": 1
+      },
+      {
+        "engName": "travelers_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_10",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Wanderer",
+        "rus": "Странник"
+      },
+      "description": {
+        "eng": "You have an excellent memory for maps and geography, and you can always recall the general layout of terrain, settlements, and other features around you. You can find food and fresh water for yourself and up to five other people each day.",
+        "rus": "У вас отличная память на карты и географию, и вы всегда можете вспомнить общую планировку местности, поселений и других объектов вокруг. Вы можете добывать еду и пресную воду для себя и до пяти других людей каждый день."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I'm driven by a wanderlust that led me away from home.",
+          "rus": "Мной движет жажда странствий, которая увела меня из дома."
+        },
+        {
+          "eng": "I watch over my friends as if they were a litter of newborn pups.",
+          "rus": "Я присматриваю за друзьями, как за выводком новорождённых щенков."
+        },
+        {
+          "eng": "I was, in fact, raised by wolves.",
+          "rus": "Меня, по сути, вырастили волки."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Nature. The natural world is more important than all the constructs of civilization.",
+          "rus": "Природа. Мир природы важнее всех порождений цивилизации."
+        },
+        {
+          "eng": "Glory. I must earn glory in battle, for myself and my clan.",
+          "rus": "Слава. Я должен заслужить славу в бою — для себя и своего клана."
+        },
+        {
+          "eng": "Change. Life is like the seasons, in constant change, and we must change with it.",
+          "rus": "Перемены. Жизнь подобна временам года, в постоянном изменении, и мы должны меняться вместе с ней."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "My family, clan, or tribe is the most important thing in my life, even when they are far from me.",
+          "rus": "Моя семья, клан или племя — самое важное в моей жизни, даже когда они далеко от меня."
+        },
+        {
+          "eng": "I suffer awful visions of a coming disaster and will do anything to prevent it.",
+          "rus": "Меня мучают ужасные видения грядущей катастрофы, и я сделаю всё, чтобы её предотвратить."
+        },
+        {
+          "eng": "An injury to the unspoiled wilderness of my home is an injury to me.",
+          "rus": "Ущерб нетронутой дикой природе моего дома — это ущерб мне."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I am slow to trust members of other races, tribes, and societies.",
+          "rus": "Я медленно начинаю доверять представителям других рас, племён и обществ."
+        },
+        {
+          "eng": "Violence is my answer to almost any challenge.",
+          "rus": "Насилие — мой ответ практически на любой вызов."
+        },
+        {
+          "eng": "I am too enamored of ale, wine, and other intoxicants.",
+          "rus": "Я слишком увлекаюсь элем, вином и другими хмельными напитками."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "wilderness",
+      "exploration",
+      "tribal"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sage",
+    "name": {
+      "eng": "Sage",
+      "rus": "Мудрец"
+    },
+    "description": {
+      "eng": "You spent years learning the lore of the multiverse. You scoured manuscripts, studied scrolls, and listened to the greatest experts on the subjects that interest you.",
+      "rus": "Вы годами изучали знания о мультивселенной. Вы перечитывали рукописи, изучали свитки и слушали величайших экспертов по интересующим вас темам."
+    },
+    "skillProficiencies": [
+      "arcana",
+      "history"
+    ],
+    "toolProficiencies": [],
+    "languages": {
+      "type": "pick",
+      "pick": 2
+    },
+    "equipment": [
+      {
+        "engName": "bottle_of_ink",
+        "quantity": 1
+      },
+      {
+        "engName": "quill",
+        "quantity": 1
+      },
+      {
+        "engName": "small_knife",
+        "quantity": 1
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_10",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Researcher",
+        "rus": "Исследователь"
+      },
+      "description": {
+        "eng": "When you attempt to learn or recall a piece of lore, if you do not know that information, you often know where and from whom you can obtain it. Usually, this comes from a library, scriptorium, university, or a sage or other learned person.",
+        "rus": "Когда вы пытаетесь узнать или вспомнить какие-либо сведения, если вы не знаете этой информации, вы часто знаете, где и от кого её можно получить. Обычно это библиотека, скрипторий, университет или мудрец либо другой учёный человек."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I use polysyllabic words that convey the impression of great erudition.",
+          "rus": "Я использую многосложные слова, создающие впечатление великой эрудиции."
+        },
+        {
+          "eng": "I've read every book in the world's greatest libraries — or I like to boast that I have.",
+          "rus": "Я прочитал все книги в величайших библиотеках мира — или мне нравится этим хвастаться."
+        },
+        {
+          "eng": "There's nothing I like more than a good mystery.",
+          "rus": "Нет ничего, что я люблю больше, чем хорошую загадку."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Knowledge. The path to power and self-improvement is through knowledge.",
+          "rus": "Знание. Путь к силе и самосовершенствованию лежит через знания."
+        },
+        {
+          "eng": "Logic. Emotions must not cloud our sense of what is right and true.",
+          "rus": "Логика. Эмоции не должны затуманивать наше понимание того, что правильно и истинно."
+        },
+        {
+          "eng": "No Limits. Nothing should fetter the infinite possibility inherent in all existence.",
+          "rus": "Без границ. Ничто не должно ограничивать бесконечные возможности, присущие всему сущему."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "It is my duty to protect my students.",
+          "rus": "Мой долг — защищать моих учеников."
+        },
+        {
+          "eng": "I have an ancient text that holds terrible secrets that must not fall into the wrong hands.",
+          "rus": "У меня есть древний текст, хранящий ужасные секреты, которые не должны попасть в чужие руки."
+        },
+        {
+          "eng": "I work to preserve a library, university, scriptorium, or monastery.",
+          "rus": "Я тружусь ради сохранения библиотеки, университета, скриптория или монастыря."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I am easily distracted by the promise of information.",
+          "rus": "Меня легко отвлечь обещанием информации."
+        },
+        {
+          "eng": "Most people scream and run when they see a demon. I stop and take notes on its anatomy.",
+          "rus": "Большинство людей кричат и бегут, увидев демона. Я останавливаюсь и делаю заметки о его анатомии."
+        },
+        {
+          "eng": "Unlocking an ancient mystery is worth the price of a civilization.",
+          "rus": "Разгадка древней тайны стоит гибели цивилизации."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "scholarly",
+      "academic"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sailor",
+    "name": {
+      "eng": "Sailor",
+      "rus": "Моряк"
+    },
+    "description": {
+      "eng": "You sailed on a seagoing vessel for years. You've faced down mighty storms, monsters of the deep, and those who wanted to sink your craft to the bottomless depths.",
+      "rus": "Вы годами плавали на морском судне. Вы противостояли мощным штормам, чудовищам глубин и тем, кто хотел потопить ваш корабль."
+    },
+    "skillProficiencies": [
+      "athletics",
+      "perception"
+    ],
+    "toolProficiencies": [
+      "Navigator's tools",
+      "Vehicles (water)"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "belaying_pin",
+        "quantity": 1
+      },
+      {
+        "engName": "silk_rope_50ft",
+        "quantity": 1
+      },
+      {
+        "engName": "lucky_charm",
+        "quantity": 1
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_10",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Ship's Passage",
+        "rus": "Морской проезд"
+      },
+      "description": {
+        "eng": "When you need to, you can secure free passage on a sailing ship for yourself and your companions. In return for your free passage, you and your companions are expected to assist the crew during the voyage.",
+        "rus": "При необходимости вы можете обеспечить бесплатный проезд на парусном судне для себя и своих спутников. В обмен на бесплатный проезд от вас и ваших спутников ожидается помощь команде во время плавания."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "My friends know they can rely on me, no matter what.",
+          "rus": "Мои друзья знают, что могут на меня положиться, что бы ни случилось."
+        },
+        {
+          "eng": "I work hard so that I can play hard when the work is done.",
+          "rus": "Я усердно работаю, чтобы потом как следует отдохнуть."
+        },
+        {
+          "eng": "I stretch the truth for the sake of a good story.",
+          "rus": "Я приукрашиваю правду ради хорошей истории."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Fairness. We all do the work, so we all share in the rewards.",
+          "rus": "Справедливость. Мы все работаем, значит, все разделяем награду."
+        },
+        {
+          "eng": "Freedom. The sea is freedom — the freedom to go anywhere and do anything.",
+          "rus": "Свобода. Море — это свобода: свобода плыть куда угодно и делать что угодно."
+        },
+        {
+          "eng": "Mastery. I'm a predator, and the other ships on the sea are my prey.",
+          "rus": "Мастерство. Я хищник, а другие корабли в море — моя добыча."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I'm loyal to my captain first, everything else second.",
+          "rus": "Я верен прежде всего своему капитану, а всё остальное — потом."
+        },
+        {
+          "eng": "The ship is most important — crewmates and captains come and go.",
+          "rus": "Корабль — главное; команды и капитаны приходят и уходят."
+        },
+        {
+          "eng": "I was cheated out of my fair share of the profits, and I want to get my due.",
+          "rus": "Меня обманули с моей справедливой долей прибыли, и я хочу получить причитающееся."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "I follow orders, even if I think they're wrong.",
+          "rus": "Я выполняю приказы, даже если считаю их неправильными."
+        },
+        {
+          "eng": "Once someone questions my courage, I never back down no matter how dangerous the situation.",
+          "rus": "Стоит кому-то усомниться в моей храбрости, и я не отступлю, как бы опасна ни была ситуация."
+        },
+        {
+          "eng": "I can't help but pocket loose coins and other trinkets I come across.",
+          "rus": "Я не могу удержаться, чтобы не прикарманить случайные монеты и безделушки."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "nautical",
+      "adventurous"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "soldier",
+    "name": {
+      "eng": "Soldier",
+      "rus": "Солдат"
+    },
+    "description": {
+      "eng": "War has been your life for as long as you care to remember. You trained as a youth, studied the use of weapons and armor, and learned basic survival techniques.",
+      "rus": "Война была вашей жизнью, сколько вы себя помните. Вы тренировались с юности, изучали владение оружием и доспехами и освоили основы выживания."
+    },
+    "skillProficiencies": [
+      "athletics",
+      "intimidation"
+    ],
+    "toolProficiencies": [
+      "Gaming set",
+      "Vehicles (land)"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "insignia_of_rank",
+        "quantity": 1
+      },
+      {
+        "engName": "trophy_from_fallen_enemy",
+        "quantity": 1
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_10",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "Military Rank",
+        "rus": "Воинское звание"
+      },
+      "description": {
+        "eng": "You have a military rank from your career as a soldier. Soldiers loyal to your former military organization still recognize your authority and influence, and they defer to you if they are of a lower rank.",
+        "rus": "У вас есть воинское звание из вашей карьеры солдата. Солдаты, верные вашей бывшей военной организации, по-прежнему признают ваш авторитет и влияние и подчиняются вам, если они ниже по рангу."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I'm always polite and respectful.",
+          "rus": "Я всегда вежлив и уважителен."
+        },
+        {
+          "eng": "I can stare down a hell hound without flinching.",
+          "rus": "Я могу смотреть в глаза адскому псу, не моргнув."
+        },
+        {
+          "eng": "I've lost too many friends, and I'm slow to make new ones.",
+          "rus": "Я потерял слишком много друзей и неохотно завожу новых."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Greater Good. Our lot is to lay down our lives in defense of others.",
+          "rus": "Всеобщее благо. Наш удел — отдавать свои жизни на защиту других."
+        },
+        {
+          "eng": "Nation. My city, nation, or people are all that matter.",
+          "rus": "Нация. Мой город, моя страна или мой народ — всё, что имеет значение."
+        },
+        {
+          "eng": "Might. In life as in war, the stronger force wins.",
+          "rus": "Сила. В жизни, как и на войне, побеждает более сильный."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "I would still lay down my life for the people I served with.",
+          "rus": "Я по-прежнему готов отдать жизнь за тех, с кем служил."
+        },
+        {
+          "eng": "Someone saved my life on the battlefield. To this day, I will never leave a friend behind.",
+          "rus": "Кто-то спас мне жизнь на поле боя. С тех пор я никогда не брошу друга."
+        },
+        {
+          "eng": "My honor is my life.",
+          "rus": "Моя честь — моя жизнь."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "The monstrous enemy we faced in battle still leaves me quivering with fear.",
+          "rus": "Чудовищный враг, с которым мы столкнулись в бою, до сих пор заставляет меня дрожать от страха."
+        },
+        {
+          "eng": "I have little respect for anyone who is not a proven warrior.",
+          "rus": "Я мало уважаю тех, кто не проявил себя воином."
+        },
+        {
+          "eng": "I'd rather eat my armor than admit when I'm wrong.",
+          "rus": "Я лучше съем свой доспех, чем признаю, что неправ."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "military",
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "urchin",
+    "name": {
+      "eng": "Urchin",
+      "rus": "Беспризорник"
+    },
+    "description": {
+      "eng": "You grew up on the streets alone, orphaned and poor. You had no one to watch over you or to provide for you, so you learned to provide for yourself.",
+      "rus": "Вы выросли на улицах в одиночестве, сиротой и бедняком. Некому было присматривать за вами или обеспечивать вас, поэтому вы научились заботиться о себе сами."
+    },
+    "skillProficiencies": [
+      "sleight_of_hand",
+      "stealth"
+    ],
+    "toolProficiencies": [
+      "Disguise kit",
+      "Thieves' tools"
+    ],
+    "languages": {
+      "type": "fixed",
+      "languages": []
+    },
+    "equipment": [
+      {
+        "engName": "small_knife",
+        "quantity": 1
+      },
+      {
+        "engName": "map_of_home_city",
+        "quantity": 1
+      },
+      {
+        "engName": "pet_mouse",
+        "quantity": 1
+      },
+      {
+        "engName": "common_clothes",
+        "quantity": 1
+      },
+      {
+        "engName": "belt_pouch",
+        "quantity": 1
+      },
+      {
+        "engName": "gold_10",
+        "quantity": 1
+      }
+    ],
+    "feature": {
+      "name": {
+        "eng": "City Secrets",
+        "rus": "Тайны города"
+      },
+      "description": {
+        "eng": "You know the secret patterns and flow to cities and can find passages through the urban sprawl that others would miss. When you are not in combat, you and your companions can travel between any two locations in the city twice as fast as normal.",
+        "rus": "Вы знаете тайные закономерности и потоки городов и можете находить проходы через городские кварталы, которые другие пропустили бы. Вне боя вы и ваши спутники можете перемещаться между любыми двумя точками города вдвое быстрее обычного."
+      }
+    },
+    "suggestedCharacteristics": {
+      "personalityTraits": [
+        {
+          "eng": "I hide scraps of food and trinkets away in my pockets.",
+          "rus": "Я прячу объедки и безделушки по своим карманам."
+        },
+        {
+          "eng": "I bluntly say what other people are hinting at or hiding.",
+          "rus": "Я прямо говорю то, на что другие только намекают или что скрывают."
+        },
+        {
+          "eng": "I ask a lot of questions.",
+          "rus": "Я задаю много вопросов."
+        }
+      ],
+      "ideals": [
+        {
+          "eng": "Respect. All people, rich or poor, deserve respect.",
+          "rus": "Уважение. Все люди, богатые или бедные, заслуживают уважения."
+        },
+        {
+          "eng": "Community. We have to take care of each other, because no one else is going to do it.",
+          "rus": "Община. Мы должны заботиться друг о друге, потому что больше никто этого не сделает."
+        },
+        {
+          "eng": "Change. The low are lifted up, and the high and mighty are brought down. Change is the nature of things.",
+          "rus": "Перемены. Низшие возвышаются, а высокие и могущественные низвергаются. Перемены — природа вещей."
+        }
+      ],
+      "bonds": [
+        {
+          "eng": "My town or city is my home, and I'll fight to defend it.",
+          "rus": "Мой город — мой дом, и я буду сражаться, чтобы его защитить."
+        },
+        {
+          "eng": "No one else should have to endure the hardships I've been through.",
+          "rus": "Никто другой не должен терпеть те лишения, через которые прошёл я."
+        },
+        {
+          "eng": "I sponsor an orphanage to keep others from enduring what I was forced to endure.",
+          "rus": "Я содержу приют, чтобы другие не терпели то, что пришлось вынести мне."
+        }
+      ],
+      "flaws": [
+        {
+          "eng": "If I'm outnumbered, I will run away from a fight.",
+          "rus": "Если противников больше, я убегу из боя."
+        },
+        {
+          "eng": "Gold seems like a lot of money to me, and I'll do just about anything for more of it.",
+          "rus": "Золото кажется мне огромным богатством, и я сделаю почти всё ради него."
+        },
+        {
+          "eng": "It's not stealing if I need it more than someone else.",
+          "rus": "Это не воровство, если мне это нужнее, чем кому-то другому."
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "urban",
+      "street",
+      "survival"
+    ],
+    "schemaVersion": 1
+  }
+]

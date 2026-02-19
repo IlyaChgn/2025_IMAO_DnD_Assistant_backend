@@ -46,9 +46,21 @@ import (
 	mapsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/usecases"
 	maptilerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/repository"
 	maptileuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/usecases"
+	backgroundsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/repository"
+	backgroundsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/seed"
+	backgroundsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/usecases"
+	classesrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/repository"
+	classesseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/seed"
+	classesuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/usecases"
+	featsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/repository"
+	featsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/seed"
+	featsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/usecases"
 	featuresrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/repository"
 	featuresseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/seed"
 	featuresuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/usecases"
+	racesrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/repository"
+	racesseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/seed"
+	racesuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/usecases"
 	spellsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/repository"
 	spellsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
@@ -292,6 +304,50 @@ func (srv *Server) Run() error {
 	}
 	featuresUsecases := featuresuc.NewFeaturesUsecases(featuresRepository)
 
+	classesRepository := classesrepo.NewClassesStorage(mongoDatabase, mongoMetrics)
+	if err := classesRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure class indexes: %v", err)
+	}
+	if n, err := classesseed.SeedClassDefinitions(context.Background(), classesRepository); err != nil {
+		log.Printf("Warning: failed to seed class definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d class definitions", n)
+	}
+	classesUsecases := classesuc.NewClassesUsecases(classesRepository)
+
+	racesRepository := racesrepo.NewRacesStorage(mongoDatabase, mongoMetrics)
+	if err := racesRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure race indexes: %v", err)
+	}
+	if n, err := racesseed.SeedRaceDefinitions(context.Background(), racesRepository); err != nil {
+		log.Printf("Warning: failed to seed race definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d race definitions", n)
+	}
+	racesUsecases := racesuc.NewRacesUsecases(racesRepository)
+
+	backgroundsRepository := backgroundsrepo.NewBackgroundsStorage(mongoDatabase, mongoMetrics)
+	if err := backgroundsRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure background indexes: %v", err)
+	}
+	if n, err := backgroundsseed.SeedBackgroundDefinitions(context.Background(), backgroundsRepository); err != nil {
+		log.Printf("Warning: failed to seed background definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d background definitions", n)
+	}
+	backgroundsUsecases := backgroundsuc.NewBackgroundsUsecases(backgroundsRepository)
+
+	featsRepository := featsrepo.NewFeatsStorage(mongoDatabase, mongoMetrics)
+	if err := featsRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure feat indexes: %v", err)
+	}
+	if n, err := featsseed.SeedFeatDefinitions(context.Background(), featsRepository); err != nil {
+		log.Printf("Warning: failed to seed feat definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d feat definitions", n)
+	}
+	featsUsecases := featsuc.NewFeatsUsecases(featsRepository)
+
 	itemsRepository := itemsrepo.NewItemsStorage(mongoDatabase, mongoMetrics)
 	if err := itemsRepository.EnsureItemDefinitionIndexes(context.Background()); err != nil {
 		log.Printf("Warning: failed to ensure item definition indexes: %v", err)
@@ -340,6 +396,10 @@ func (srv *Server) Run() error {
 		inventoryUsecases,
 		tableManager,
 		actionsUsecases,
+		classesUsecases,
+		racesUsecases,
+		backgroundsUsecases,
+		featsUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 

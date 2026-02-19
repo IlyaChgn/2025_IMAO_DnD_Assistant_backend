@@ -1,0 +1,3623 @@
+[
+  {
+    "engName": "barbarian",
+    "name": {
+      "eng": "Barbarian",
+      "rus": "Варвар"
+    },
+    "description": {
+      "eng": "A fierce warrior who can enter a battle rage, drawing on primal ferocity to overpower foes.",
+      "rus": "Свирепый воин, способный впадать в боевую ярость, черпая первобытную свирепость для сокрушения врагов."
+    },
+    "hitDie": "d12",
+    "proficiencies": {
+      "armor": [
+        "light",
+        "medium",
+        "shields"
+      ],
+      "weapons": [
+        "simple",
+        "martial"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "str",
+        "con"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "animal_handling",
+          "athletics",
+          "intimidation",
+          "nature",
+          "perception",
+          "survival"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "greataxe",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "martial_melee_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "handaxe",
+              "quantity": 1
+            },
+            {
+              "engName": "handaxe",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "explorers_pack",
+            "quantity": 1
+          },
+          {
+            "engName": "javelin",
+            "quantity": 4
+          }
+        ]
+      }
+    ],
+    "spellcasting": null,
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Primal Path",
+      "rus": "Путь"
+    },
+    "subclasses": [
+      {
+        "engName": "berserker",
+        "name": {
+          "eng": "Path of the Berserker",
+          "rus": "Путь Берсерка"
+        },
+        "description": {
+          "eng": "A path of untrammeled fury, soaked in blood, that thrills in the chaos of battle.",
+          "rus": "Путь необузданной ярости, упоение хаосом сражения."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "frenzy"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "mindless_rage"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "intimidating_presence"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "retaliation"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "rage",
+          "unarmored_defense_barbarian"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "reckless_attack",
+          "danger_sense"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "primal_path"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "extra_attack",
+          "fast_movement"
+        ]
+      },
+      {
+        "level": 7,
+        "features": [
+          "feral_instinct"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "brutal_critical_1"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "relentless_rage"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 13,
+        "features": [
+          "brutal_critical_2"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "persistent_rage"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "brutal_critical_3"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "indomitable_might"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "primal_champion"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "str": 13
+      },
+      "proficienciesGained": [
+        "shields",
+        "simple weapons",
+        "martial weapons"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "martial",
+      "melee",
+      "tank",
+      "damage"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "bard",
+    "name": {
+      "eng": "Bard",
+      "rus": "Бард"
+    },
+    "description": {
+      "eng": "An inspiring magician whose power echoes the music of creation, weaving spells through words and music.",
+      "rus": "Вдохновляющий маг, чья сила отражает музыку творения, вплетая заклинания в слова и мелодии."
+    },
+    "hitDie": "d8",
+    "proficiencies": {
+      "armor": [
+        "light"
+      ],
+      "weapons": [
+        "simple",
+        "hand crossbow",
+        "longsword",
+        "rapier",
+        "shortsword"
+      ],
+      "tools": [
+        {
+          "type": "pick",
+          "pick": 3,
+          "from": [
+            "lute",
+            "drum",
+            "flute",
+            "lyre",
+            "horn",
+            "dulcimer",
+            "viol",
+            "pan_flute",
+            "shawm",
+            "bagpipes"
+          ]
+        }
+      ],
+      "savingThrows": [
+        "dex",
+        "cha"
+      ],
+      "skills": {
+        "pick": 3,
+        "from": [
+          "acrobatics",
+          "animal_handling",
+          "arcana",
+          "athletics",
+          "deception",
+          "history",
+          "insight",
+          "intimidation",
+          "investigation",
+          "medicine",
+          "nature",
+          "perception",
+          "performance",
+          "persuasion",
+          "religion",
+          "sleight_of_hand",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "rapier",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "longsword",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "diplomats_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "entertainers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "lute",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "musical_instrument",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "leather_armor",
+            "quantity": 1
+          },
+          {
+            "engName": "dagger",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "casterType": "full",
+      "preparationType": "known",
+      "ritualCasting": "from_prepared",
+      "castingStartLevel": 1,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "spellsKnownTable": [
+        0,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        15,
+        16,
+        18,
+        18,
+        19,
+        20,
+        22,
+        22,
+        22
+      ]
+    },
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Bard College",
+      "rus": "Коллегия бардов"
+    },
+    "subclasses": [
+      {
+        "engName": "lore",
+        "name": {
+          "eng": "College of Lore",
+          "rus": "Коллегия Знаний"
+        },
+        "description": {
+          "eng": "Bards of the College of Lore pursue beauty and truth, gathering knowledge from diverse sources.",
+          "rus": "Барды Коллегии Знаний стремятся к красоте и истине, собирая знания из разнообразных источников."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "bonus_proficiencies_lore",
+              "cutting_words"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "additional_magical_secrets"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "peerless_skill"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "spellcasting_bard",
+          "bardic_inspiration_d6"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "jack_of_all_trades",
+          "song_of_rest_d6"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "bard_college",
+          "expertise_bard"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "bardic_inspiration_d8",
+          "font_of_inspiration"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "countercharm"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "song_of_rest_d8"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "bardic_inspiration_d10",
+          "expertise_bard_2",
+          "magical_secrets"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 13,
+        "features": [
+          "song_of_rest_d10"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "magical_secrets_2"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "bardic_inspiration_d12"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "song_of_rest_d12"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "magical_secrets_3"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "superior_inspiration"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "cha": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "one skill of your choice",
+        "one musical instrument of your choice"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "caster",
+      "support",
+      "utility",
+      "face"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "cleric",
+    "name": {
+      "eng": "Cleric",
+      "rus": "Жрец"
+    },
+    "description": {
+      "eng": "A priestly champion who wields divine magic in service of a higher power.",
+      "rus": "Жреческий заступник, владеющий божественной магией во служение высшей силе."
+    },
+    "hitDie": "d8",
+    "proficiencies": {
+      "armor": [
+        "light",
+        "medium",
+        "shields"
+      ],
+      "weapons": [
+        "simple"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "wis",
+        "cha"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "history",
+          "insight",
+          "medicine",
+          "persuasion",
+          "religion"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "mace",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "warhammer",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "scale_mail",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "leather_armor",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "chain_mail",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "light_crossbow",
+              "quantity": 1
+            },
+            {
+              "engName": "bolt",
+              "quantity": 20
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "priests_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "shield",
+            "quantity": 1
+          },
+          {
+            "engName": "holy_symbol",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "casterType": "full",
+      "preparationType": "prepared",
+      "ritualCasting": "from_prepared",
+      "preparedCountFormula": "ability_mod_plus_level",
+      "castingStartLevel": 1,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    "subclassLevel": 1,
+    "subclassName": {
+      "eng": "Divine Domain",
+      "rus": "Божественный домен"
+    },
+    "subclasses": [
+      {
+        "engName": "life",
+        "name": {
+          "eng": "Life Domain",
+          "rus": "Домен Жизни"
+        },
+        "description": {
+          "eng": "The Life domain focuses on the vibrant positive energy that sustains all life, granting potent healing spells.",
+          "rus": "Домен Жизни сосредоточен на живительной позитивной энергии, поддерживающей всё живое, и дарует мощные целительные заклинания."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 1,
+            "features": [
+              "bonus_proficiency_life",
+              "disciple_of_life"
+            ]
+          },
+          {
+            "level": 2,
+            "features": [
+              "channel_divinity_preserve_life"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "blessed_healer"
+            ]
+          },
+          {
+            "level": 8,
+            "features": [
+              "divine_strike_life"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "supreme_healing"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "spellcasting_cleric",
+          "divine_domain"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "channel_divinity_1",
+          "channel_divinity_turn_undead"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "destroy_undead_cr_half"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "channel_divinity_2"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement",
+          "destroy_undead_cr_1"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "divine_intervention"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "destroy_undead_cr_2"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "destroy_undead_cr_3"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "destroy_undead_cr_4"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "channel_divinity_3"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "divine_intervention_improved"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "wis": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "medium armor",
+        "shields"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "caster",
+      "healer",
+      "support",
+      "divine"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "druid",
+    "name": {
+      "eng": "Druid",
+      "rus": "Друид"
+    },
+    "description": {
+      "eng": "A priest of the Old Faith, wielding the powers of nature and adopting animal forms.",
+      "rus": "Жрец Старой Веры, повелевающий силами природы и принимающий звериные обличья."
+    },
+    "hitDie": "d8",
+    "proficiencies": {
+      "armor": [
+        "light",
+        "medium",
+        "shields"
+      ],
+      "weapons": [
+        "club",
+        "dagger",
+        "dart",
+        "javelin",
+        "mace",
+        "quarterstaff",
+        "scimitar",
+        "sickle",
+        "sling",
+        "spear"
+      ],
+      "tools": [
+        {
+          "type": "fixed",
+          "tools": [
+            "herbalism_kit"
+          ]
+        }
+      ],
+      "savingThrows": [
+        "int",
+        "wis"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "arcana",
+          "animal_handling",
+          "insight",
+          "medicine",
+          "nature",
+          "perception",
+          "religion",
+          "survival"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "wooden_shield",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "scimitar",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "simple_melee_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "leather_armor",
+            "quantity": 1
+          },
+          {
+            "engName": "explorers_pack",
+            "quantity": 1
+          },
+          {
+            "engName": "druidic_focus",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "casterType": "full",
+      "preparationType": "prepared",
+      "ritualCasting": "from_prepared",
+      "preparedCountFormula": "ability_mod_plus_level",
+      "castingStartLevel": 1,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "subclassLevel": 2,
+    "subclassName": {
+      "eng": "Druid Circle",
+      "rus": "Круг друидов"
+    },
+    "subclasses": [
+      {
+        "engName": "land",
+        "name": {
+          "eng": "Circle of the Land",
+          "rus": "Круг Земли"
+        },
+        "description": {
+          "eng": "Druids of the Circle of the Land are mystics and sages who safeguard ancient knowledge and rites through oral tradition.",
+          "rus": "Друиды Круга Земли — мистики и мудрецы, хранящие древние знания и обряды через устную традицию."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "bonus_cantrip_land",
+              "natural_recovery"
+            ]
+          },
+          {
+            "level": 3,
+            "features": [
+              "circle_spells"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "lands_stride"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "natures_ward"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "natures_sanctuary"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "druidic",
+          "spellcasting_druid"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "wild_shape",
+          "druid_circle"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "wild_shape_improvement_cr_half",
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "wild_shape_improvement_cr_1",
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "timeless_body_druid",
+          "beast_spells"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "archdruid"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "wis": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "medium armor",
+        "shields"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "caster",
+      "healer",
+      "shapeshifter",
+      "nature"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "fighter",
+    "name": {
+      "eng": "Fighter",
+      "rus": "Воин"
+    },
+    "description": {
+      "eng": "A master of martial combat, skilled with a variety of weapons and armor.",
+      "rus": "Мастер воинского искусства, искусно владеющий разнообразным оружием и доспехами."
+    },
+    "hitDie": "d10",
+    "proficiencies": {
+      "armor": [
+        "light",
+        "medium",
+        "heavy",
+        "shields"
+      ],
+      "weapons": [
+        "simple",
+        "martial"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "str",
+        "con"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "acrobatics",
+          "animal_handling",
+          "athletics",
+          "history",
+          "insight",
+          "intimidation",
+          "perception",
+          "survival"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "chain_mail",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "leather_armor",
+              "quantity": 1
+            },
+            {
+              "engName": "longbow",
+              "quantity": 1
+            },
+            {
+              "engName": "arrow",
+              "quantity": 20
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "martial_weapon",
+              "quantity": 1
+            },
+            {
+              "engName": "shield",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "martial_weapon",
+              "quantity": 1
+            },
+            {
+              "engName": "martial_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "light_crossbow",
+              "quantity": 1
+            },
+            {
+              "engName": "bolt",
+              "quantity": 20
+            }
+          ],
+          [
+            {
+              "engName": "handaxe",
+              "quantity": 1
+            },
+            {
+              "engName": "handaxe",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "dungeoneers_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      }
+    ],
+    "spellcasting": null,
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Martial Archetype",
+      "rus": "Воинский архетип"
+    },
+    "subclasses": [
+      {
+        "engName": "champion",
+        "name": {
+          "eng": "Champion",
+          "rus": "Чемпион"
+        },
+        "description": {
+          "eng": "The archetypal Champion focuses on raw physical power, honing to deadly perfection.",
+          "rus": "Архетипичный Чемпион сосредоточен на грубой физической силе, отточенной до смертоносного совершенства."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "improved_critical"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "remarkable_athlete"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "additional_fighting_style"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "superior_critical"
+            ]
+          },
+          {
+            "level": 18,
+            "features": [
+              "survivor"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "fighting_style_fighter",
+          "second_wind"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "action_surge_1"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "martial_archetype"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "extra_attack_1"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "indomitable_1"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "extra_attack_2"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 13,
+        "features": [
+          "indomitable_2"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "action_surge_2",
+          "indomitable_3"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "extra_attack_3"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "str": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "medium armor",
+        "shields",
+        "simple weapons",
+        "martial weapons"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "martial",
+      "melee",
+      "ranged",
+      "tank",
+      "damage"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "monk",
+    "name": {
+      "eng": "Monk",
+      "rus": "Монах"
+    },
+    "description": {
+      "eng": "A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.",
+      "rus": "Мастер боевых искусств, обуздывающий силу тела в стремлении к физическому и духовному совершенству."
+    },
+    "hitDie": "d8",
+    "proficiencies": {
+      "armor": [],
+      "weapons": [
+        "simple",
+        "shortsword"
+      ],
+      "tools": [
+        {
+          "type": "pick",
+          "pick": 1,
+          "from": [
+            "artisans_tools",
+            "musical_instrument"
+          ]
+        }
+      ],
+      "savingThrows": [
+        "str",
+        "dex"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "acrobatics",
+          "athletics",
+          "history",
+          "insight",
+          "religion",
+          "stealth"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "shortsword",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "dungeoneers_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "dart",
+            "quantity": 10
+          }
+        ]
+      }
+    ],
+    "spellcasting": null,
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Monastic Tradition",
+      "rus": "Монастырская традиция"
+    },
+    "subclasses": [
+      {
+        "engName": "open_hand",
+        "name": {
+          "eng": "Way of the Open Hand",
+          "rus": "Путь Открытой Ладони"
+        },
+        "description": {
+          "eng": "Monks of the Way of the Open Hand are the ultimate masters of martial arts combat.",
+          "rus": "Монахи Пути Открытой Ладони — непревзойдённые мастера рукопашного боя."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "open_hand_technique"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "wholeness_of_body"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "tranquility"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "quivering_palm"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "unarmored_defense_monk",
+          "martial_arts"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "ki",
+          "flurry_of_blows",
+          "patient_defense",
+          "step_of_the_wind",
+          "unarmored_movement"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "monastic_tradition",
+          "deflect_missiles"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement",
+          "slow_fall"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "extra_attack",
+          "stunning_strike"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "ki_empowered_strikes"
+        ]
+      },
+      {
+        "level": 7,
+        "features": [
+          "evasion_monk",
+          "stillness_of_mind"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "unarmored_movement_improvement"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "purity_of_body"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 13,
+        "features": [
+          "tongue_of_the_sun_and_moon"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "diamond_soul"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "timeless_body_monk"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "empty_body"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "perfect_self"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "dex": 13,
+        "wis": 13
+      },
+      "proficienciesGained": [
+        "simple weapons",
+        "shortswords"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "martial",
+      "melee",
+      "mobile",
+      "striker"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "paladin",
+    "name": {
+      "eng": "Paladin",
+      "rus": "Паладин"
+    },
+    "description": {
+      "eng": "A holy warrior bound to a sacred oath, combining martial prowess with divine spellcasting.",
+      "rus": "Священный воитель, связанный священной клятвой, сочетающий воинскую доблесть с божественным колдовством."
+    },
+    "hitDie": "d10",
+    "proficiencies": {
+      "armor": [
+        "light",
+        "medium",
+        "heavy",
+        "shields"
+      ],
+      "weapons": [
+        "simple",
+        "martial"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "wis",
+        "cha"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "athletics",
+          "insight",
+          "intimidation",
+          "medicine",
+          "persuasion",
+          "religion"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "martial_weapon",
+              "quantity": 1
+            },
+            {
+              "engName": "shield",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "martial_weapon",
+              "quantity": 1
+            },
+            {
+              "engName": "martial_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "javelin",
+              "quantity": 5
+            }
+          ],
+          [
+            {
+              "engName": "simple_melee_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "priests_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "chain_mail",
+            "quantity": 1
+          },
+          {
+            "engName": "holy_symbol",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "casterType": "half",
+      "preparationType": "prepared",
+      "ritualCasting": "none",
+      "preparedCountFormula": "ability_mod_plus_half_level",
+      "castingStartLevel": 2,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Sacred Oath",
+      "rus": "Священная клятва"
+    },
+    "subclasses": [
+      {
+        "engName": "devotion",
+        "name": {
+          "eng": "Oath of Devotion",
+          "rus": "Клятва Преданности"
+        },
+        "description": {
+          "eng": "The Oath of Devotion binds a paladin to the loftiest ideals of justice, virtue, and order.",
+          "rus": "Клятва Преданности связывает паладина с высочайшими идеалами справедливости, добродетели и порядка."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "oath_spells_devotion",
+              "channel_divinity_sacred_weapon",
+              "channel_divinity_turn_the_unholy"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "aura_of_devotion"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "purity_of_spirit"
+            ]
+          },
+          {
+            "level": 20,
+            "features": [
+              "holy_nimbus"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "divine_sense",
+          "lay_on_hands"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "fighting_style_paladin",
+          "spellcasting_paladin",
+          "divine_smite"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "divine_health",
+          "sacred_oath"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "extra_attack"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "aura_of_protection"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "aura_of_courage"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "improved_divine_smite"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "cleansing_touch"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "aura_improvements"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "sacred_oath_capstone"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "str": 13,
+        "cha": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "medium armor",
+        "shields",
+        "simple weapons",
+        "martial weapons"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "martial",
+      "caster",
+      "melee",
+      "tank",
+      "healer",
+      "divine"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "ranger",
+    "name": {
+      "eng": "Ranger",
+      "rus": "Следопыт"
+    },
+    "description": {
+      "eng": "A warrior who combats threats on the edges of civilization using martial prowess and nature magic.",
+      "rus": "Воин, противостоящий угрозам на рубежах цивилизации, сочетая боевое мастерство и магию природы."
+    },
+    "hitDie": "d10",
+    "proficiencies": {
+      "armor": [
+        "light",
+        "medium",
+        "shields"
+      ],
+      "weapons": [
+        "simple",
+        "martial"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "str",
+        "dex"
+      ],
+      "skills": {
+        "pick": 3,
+        "from": [
+          "animal_handling",
+          "athletics",
+          "insight",
+          "investigation",
+          "nature",
+          "perception",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "scale_mail",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "leather_armor",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "shortsword",
+              "quantity": 1
+            },
+            {
+              "engName": "shortsword",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "simple_melee_weapon",
+              "quantity": 1
+            },
+            {
+              "engName": "simple_melee_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "dungeoneers_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "longbow",
+            "quantity": 1
+          },
+          {
+            "engName": "quiver_of_arrows",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "casterType": "half",
+      "preparationType": "known",
+      "ritualCasting": "none",
+      "castingStartLevel": 2,
+      "usesFocus": false,
+      "cantripsKnownTable": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "spellsKnownTable": [
+        0,
+        0,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        7,
+        7,
+        8,
+        8,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11
+      ]
+    },
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Ranger Archetype",
+      "rus": "Архетип следопыта"
+    },
+    "subclasses": [
+      {
+        "engName": "hunter",
+        "name": {
+          "eng": "Hunter",
+          "rus": "Охотник"
+        },
+        "description": {
+          "eng": "Emulating the Hunter archetype means accepting your place as a bulwark between civilization and the terrors of the wilderness.",
+          "rus": "Архетип Охотника означает принятие роли оплота между цивилизацией и ужасами дикой природы."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "hunters_prey"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "defensive_tactics"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "multiattack_hunter"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "superior_hunters_defense"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "favored_enemy",
+          "natural_explorer"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "fighting_style_ranger",
+          "spellcasting_ranger"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "ranger_archetype",
+          "primeval_awareness"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "extra_attack"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "favored_enemy_improvement",
+          "natural_explorer_improvement"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement",
+          "lands_stride_ranger"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "natural_explorer_improvement_2",
+          "hide_in_plain_sight"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "favored_enemy_improvement_2",
+          "vanish"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "feral_senses"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "foe_slayer"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "dex": 13,
+        "wis": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "medium armor",
+        "shields",
+        "simple weapons",
+        "martial weapons",
+        "one skill from the class's skill list"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "martial",
+      "caster",
+      "ranged",
+      "nature",
+      "scout"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "rogue",
+    "name": {
+      "eng": "Rogue",
+      "rus": "Плут"
+    },
+    "description": {
+      "eng": "A scoundrel who uses stealth and trickery to overcome obstacles and enemies.",
+      "rus": "Пройдоха, использующий скрытность и хитрость для преодоления препятствий и врагов."
+    },
+    "hitDie": "d8",
+    "proficiencies": {
+      "armor": [
+        "light"
+      ],
+      "weapons": [
+        "simple",
+        "hand crossbow",
+        "longsword",
+        "rapier",
+        "shortsword"
+      ],
+      "tools": [
+        {
+          "type": "fixed",
+          "tools": [
+            "thieves_tools"
+          ]
+        }
+      ],
+      "savingThrows": [
+        "dex",
+        "int"
+      ],
+      "skills": {
+        "pick": 4,
+        "from": [
+          "acrobatics",
+          "athletics",
+          "deception",
+          "insight",
+          "intimidation",
+          "investigation",
+          "perception",
+          "performance",
+          "persuasion",
+          "sleight_of_hand",
+          "stealth"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "rapier",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "shortsword",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "shortbow",
+              "quantity": 1
+            },
+            {
+              "engName": "quiver_of_arrows",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "shortsword",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "burglars_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "dungeoneers_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "leather_armor",
+            "quantity": 1
+          },
+          {
+            "engName": "dagger",
+            "quantity": 2
+          },
+          {
+            "engName": "thieves_tools",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": null,
+    "subclassLevel": 3,
+    "subclassName": {
+      "eng": "Roguish Archetype",
+      "rus": "Плутовской архетип"
+    },
+    "subclasses": [
+      {
+        "engName": "thief",
+        "name": {
+          "eng": "Thief",
+          "rus": "Вор"
+        },
+        "description": {
+          "eng": "Thieves hone their skills in the larcenous arts — agility, stealth, and sleight of hand.",
+          "rus": "Воры оттачивают навыки в воровском искусстве — ловкость, скрытность и ловкость рук."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "fast_hands",
+              "second_story_work"
+            ]
+          },
+          {
+            "level": 9,
+            "features": [
+              "supreme_sneak"
+            ]
+          },
+          {
+            "level": 13,
+            "features": [
+              "use_magic_device"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "thiefs_reflexes"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "expertise_rogue",
+          "sneak_attack",
+          "thieves_cant"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "cunning_action"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "roguish_archetype"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "uncanny_dodge"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "expertise_rogue_2"
+        ]
+      },
+      {
+        "level": 7,
+        "features": [
+          "evasion_rogue"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "reliable_talent"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "blindsense"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "slippery_mind"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "elusive"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "stroke_of_luck"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "dex": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "thieves' tools",
+        "one skill from the class's skill list"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "martial",
+      "melee",
+      "stealth",
+      "striker",
+      "skill-monkey"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sorcerer",
+    "name": {
+      "eng": "Sorcerer",
+      "rus": "Чародей"
+    },
+    "description": {
+      "eng": "A spellcaster who draws on inherent magic from a gift or bloodline.",
+      "rus": "Заклинатель, черпающий врождённую магию из дара или кровного наследия."
+    },
+    "hitDie": "d6",
+    "proficiencies": {
+      "armor": [],
+      "weapons": [
+        "dagger",
+        "dart",
+        "sling",
+        "quarterstaff",
+        "light crossbow"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "con",
+        "cha"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "arcana",
+          "deception",
+          "insight",
+          "intimidation",
+          "persuasion",
+          "religion"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "light_crossbow",
+              "quantity": 1
+            },
+            {
+              "engName": "bolt",
+              "quantity": 20
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "component_pouch",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "arcane_focus",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "dungeoneers_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "dagger",
+            "quantity": 2
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "casterType": "full",
+      "preparationType": "known",
+      "ritualCasting": "none",
+      "castingStartLevel": 1,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "spellsKnownTable": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        12,
+        13,
+        13,
+        14,
+        14,
+        15,
+        15,
+        15,
+        15
+      ]
+    },
+    "subclassLevel": 1,
+    "subclassName": {
+      "eng": "Sorcerous Origin",
+      "rus": "Происхождение чародея"
+    },
+    "subclasses": [
+      {
+        "engName": "draconic",
+        "name": {
+          "eng": "Draconic Bloodline",
+          "rus": "Наследие дракона"
+        },
+        "description": {
+          "eng": "Your innate magic comes from draconic magic that was mingled with your blood or that of your ancestors.",
+          "rus": "Ваша врождённая магия происходит от драконьей магии, смешавшейся с вашей кровью или кровью ваших предков."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 1,
+            "features": [
+              "dragon_ancestor",
+              "draconic_resilience"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "elemental_affinity"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "dragon_wings"
+            ]
+          },
+          {
+            "level": 18,
+            "features": [
+              "draconic_presence"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "spellcasting_sorcerer",
+          "sorcerous_origin"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "font_of_magic"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "metamagic"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "metamagic_2"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "metamagic_3"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "sorcerous_restoration"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "cha": 13
+      },
+      "proficienciesGained": []
+    },
+    "source": "srd",
+    "tags": [
+      "caster",
+      "arcane",
+      "damage",
+      "blaster"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "warlock",
+    "name": {
+      "eng": "Warlock",
+      "rus": "Колдун"
+    },
+    "description": {
+      "eng": "A wielder of magic derived from a bargain with an extraplanar entity.",
+      "rus": "Обладатель магии, полученной по договору с потусторонней сущностью."
+    },
+    "hitDie": "d8",
+    "proficiencies": {
+      "armor": [
+        "light"
+      ],
+      "weapons": [
+        "simple"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "wis",
+        "cha"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "arcana",
+          "deception",
+          "history",
+          "intimidation",
+          "investigation",
+          "nature",
+          "religion"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "light_crossbow",
+              "quantity": 1
+            },
+            {
+              "engName": "bolt",
+              "quantity": 20
+            }
+          ],
+          [
+            {
+              "engName": "simple_weapon",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "component_pouch",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "arcane_focus",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "scholars_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "dungeoneers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "leather_armor",
+            "quantity": 1
+          },
+          {
+            "engName": "simple_weapon",
+            "quantity": 1
+          },
+          {
+            "engName": "dagger",
+            "quantity": 2
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "casterType": "pact",
+      "preparationType": "known",
+      "ritualCasting": "none",
+      "castingStartLevel": 1,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "spellsKnownTable": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        10,
+        11,
+        11,
+        12,
+        12,
+        13,
+        13,
+        14,
+        14,
+        15,
+        15
+      ]
+    },
+    "subclassLevel": 1,
+    "subclassName": {
+      "eng": "Otherworldly Patron",
+      "rus": "Потусторонний покровитель"
+    },
+    "subclasses": [
+      {
+        "engName": "fiend",
+        "name": {
+          "eng": "The Fiend",
+          "rus": "Исчадие"
+        },
+        "description": {
+          "eng": "You have made a pact with a fiend from the lower planes of existence, gaining power through dark bargains.",
+          "rus": "Вы заключили договор с исчадием из нижних планов бытия, обретая силу через тёмные сделки."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 1,
+            "features": [
+              "dark_ones_blessing"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "dark_ones_own_luck"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "fiendish_resilience"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "hurl_through_hell"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "otherworldly_patron",
+          "pact_magic"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "eldritch_invocations"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "pact_boon"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "eldritch_invocations_2"
+        ]
+      },
+      {
+        "level": 7,
+        "features": [
+          "eldritch_invocations_3"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "eldritch_invocations_4"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "mystic_arcanum_6th"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 13,
+        "features": [
+          "mystic_arcanum_7th"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "mystic_arcanum_8th"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "mystic_arcanum_9th"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "eldritch_master"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "cha": 13
+      },
+      "proficienciesGained": [
+        "light armor",
+        "simple weapons"
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "caster",
+      "arcane",
+      "damage",
+      "pact"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "wizard",
+    "name": {
+      "eng": "Wizard",
+      "rus": "Волшебник"
+    },
+    "description": {
+      "eng": "A scholarly magic-user capable of manipulating the structures of reality through careful study of arcane lore.",
+      "rus": "Учёный маг, способный управлять структурами реальности благодаря тщательному изучению тайных знаний."
+    },
+    "hitDie": "d6",
+    "proficiencies": {
+      "armor": [],
+      "weapons": [
+        "dagger",
+        "dart",
+        "sling",
+        "quarterstaff",
+        "light crossbow"
+      ],
+      "tools": [],
+      "savingThrows": [
+        "int",
+        "wis"
+      ],
+      "skills": {
+        "pick": 2,
+        "from": [
+          "arcana",
+          "history",
+          "insight",
+          "investigation",
+          "medicine",
+          "religion"
+        ]
+      }
+    },
+    "startingEquipment": [
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "quarterstaff",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "dagger",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "component_pouch",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "arcane_focus",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "choice",
+        "options": [
+          [
+            {
+              "engName": "scholars_pack",
+              "quantity": 1
+            }
+          ],
+          [
+            {
+              "engName": "explorers_pack",
+              "quantity": 1
+            }
+          ]
+        ]
+      },
+      {
+        "type": "fixed",
+        "items": [
+          {
+            "engName": "spellbook",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "casterType": "full",
+      "preparationType": "spellbook",
+      "ritualCasting": "from_spellbook",
+      "preparedCountFormula": "ability_mod_plus_level",
+      "castingStartLevel": 1,
+      "usesFocus": true,
+      "cantripsKnownTable": [
+        0,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    "subclassLevel": 2,
+    "subclassName": {
+      "eng": "Arcane Tradition",
+      "rus": "Тайная традиция"
+    },
+    "subclasses": [
+      {
+        "engName": "evocation",
+        "name": {
+          "eng": "School of Evocation",
+          "rus": "Школа Воплощения"
+        },
+        "description": {
+          "eng": "You focus your study on magic that creates powerful elemental effects such as bitter cold, searing flame, and crackling lightning.",
+          "rus": "Вы сосредоточили изучение на магии, создающей мощные стихийные эффекты — лютый холод, обжигающее пламя и трескучую молнию."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "evocation_savant",
+              "sculpt_spells"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "potent_cantrip"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "empowered_evocation"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "overchannel"
+            ]
+          }
+        ]
+      }
+    ],
+    "features": [
+      {
+        "level": 1,
+        "features": [
+          "spellcasting_wizard",
+          "arcane_recovery"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "arcane_tradition"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "spell_mastery"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "signature_spells"
+        ]
+      }
+    ],
+    "multiclassRequirements": {
+      "abilities": {
+        "int": 13
+      },
+      "proficienciesGained": []
+    },
+    "source": "srd",
+    "tags": [
+      "caster",
+      "arcane",
+      "utility",
+      "blaster",
+      "control"
+    ],
+    "schemaVersion": 1
+  }
+]

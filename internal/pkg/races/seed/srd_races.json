@@ -1,0 +1,1223 @@
+[
+  {
+    "engName": "human",
+    "name": {
+      "eng": "Human",
+      "rus": "Человек"
+    },
+    "description": {
+      "eng": "Humans are the most adaptable and ambitious of the common races. They are widely varied in their tastes, morals, and customs.",
+      "rus": "Люди — самая приспособляемая и амбициозная из распространённых рас. Они сильно различаются по вкусам, нравам и обычаям."
+    },
+    "abilityBonuses": {
+      "str": 1,
+      "dex": 1,
+      "con": 1,
+      "int": 1,
+      "wis": 1,
+      "cha": 1
+    },
+    "size": "medium",
+    "speed": 30,
+    "languages": [
+      "common",
+      "one_extra"
+    ],
+    "features": [
+      {
+        "engName": "extra-language",
+        "name": {
+          "eng": "Extra Language",
+          "rus": "Дополнительный язык"
+        },
+        "description": {
+          "eng": "You can speak, read, and write one extra language of your choice.",
+          "rus": "Вы можете говорить, читать и писать на одном дополнительном языке по вашему выбору."
+        }
+      }
+    ],
+    "subraces": [],
+    "source": "srd",
+    "tags": [
+      "versatile",
+      "adaptable"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "elf",
+    "name": {
+      "eng": "Elf",
+      "rus": "Эльф"
+    },
+    "description": {
+      "eng": "Elves are a magical people of otherworldly grace, living in places of ethereal beauty. They love nature and magic, art and artistry, music and poetry.",
+      "rus": "Эльфы — волшебный народ неземной грации, живущий в местах воздушной красоты. Они любят природу и магию, искусство и мастерство, музыку и поэзию."
+    },
+    "abilityBonuses": {
+      "dex": 2
+    },
+    "size": "medium",
+    "speed": 30,
+    "darkvision": 60,
+    "languages": [
+      "common",
+      "elvish"
+    ],
+    "proficiencies": {
+      "skills": {
+        "pick": 1,
+        "from": [
+          "perception"
+        ]
+      }
+    },
+    "features": [
+      {
+        "engName": "darkvision",
+        "name": {
+          "eng": "Darkvision",
+          "rus": "Тёмное зрение"
+        },
+        "description": {
+          "eng": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+          "rus": "Вы видите в тусклом свете в пределах 60 футов так, как будто это яркий свет, а в темноте — как в тусклом свете."
+        }
+      },
+      {
+        "engName": "keen-senses",
+        "name": {
+          "eng": "Keen Senses",
+          "rus": "Обострённые чувства"
+        },
+        "description": {
+          "eng": "You have proficiency in the Perception skill.",
+          "rus": "Вы владеете навыком Внимательность."
+        }
+      },
+      {
+        "engName": "fey-ancestry",
+        "name": {
+          "eng": "Fey Ancestry",
+          "rus": "Наследие фей"
+        },
+        "description": {
+          "eng": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+          "rus": "Вы совершаете с преимуществом спасброски от очарования, и вас нельзя магически усыпить."
+        },
+        "mechanics": {
+          "type": "advantage",
+          "on": "saves_vs_charmed"
+        }
+      },
+      {
+        "engName": "trance",
+        "name": {
+          "eng": "Trance",
+          "rus": "Транс"
+        },
+        "description": {
+          "eng": "Elves don't need to sleep. Instead, they meditate deeply for 4 hours a day, gaining the same benefit a human does from 8 hours of sleep.",
+          "rus": "Эльфы не нуждаются во сне. Вместо этого они глубоко медитируют 4 часа в день, получая тот же эффект, что человек от 8 часов сна."
+        }
+      }
+    ],
+    "subraces": [
+      {
+        "engName": "high-elf",
+        "name": {
+          "eng": "High Elf",
+          "rus": "Высший эльф"
+        },
+        "description": {
+          "eng": "High elves have a keen mind and a mastery of at least the basics of magic. They gain a wizard cantrip and an extra language.",
+          "rus": "Высшие эльфы обладают острым умом и как минимум базовым владением магией. Они получают заговор волшебника и дополнительный язык."
+        },
+        "abilityBonuses": {
+          "int": 1
+        },
+        "features": [
+          {
+            "engName": "elf-weapon-training",
+            "name": {
+              "eng": "Elf Weapon Training",
+              "rus": "Владение эльфийским оружием"
+            },
+            "description": {
+              "eng": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+              "rus": "Вы владеете длинным мечом, коротким мечом, коротким луком и длинным луком."
+            }
+          },
+          {
+            "engName": "cantrip",
+            "name": {
+              "eng": "Cantrip",
+              "rus": "Заговор"
+            },
+            "description": {
+              "eng": "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it.",
+              "rus": "Вы знаете один заговор по вашему выбору из списка заклинаний волшебника. Интеллект — ваша базовая характеристика для него."
+            },
+            "mechanics": {
+              "type": "cantrip",
+              "spellEngName": "wizard_cantrip_choice",
+              "ability": "int"
+            }
+          },
+          {
+            "engName": "extra-language",
+            "name": {
+              "eng": "Extra Language",
+              "rus": "Дополнительный язык"
+            },
+            "description": {
+              "eng": "You can speak, read, and write one extra language of your choice.",
+              "rus": "Вы можете говорить, читать и писать на одном дополнительном языке по вашему выбору."
+            }
+          }
+        ],
+        "proficiencies": {
+          "weapons": [
+            "longsword",
+            "shortsword",
+            "shortbow",
+            "longbow"
+          ]
+        },
+        "source": "srd"
+      },
+      {
+        "engName": "wood-elf",
+        "name": {
+          "eng": "Wood Elf",
+          "rus": "Лесной эльф"
+        },
+        "description": {
+          "eng": "Wood elves have keen senses and intuition, and their fleet feet carry them quickly through their native forests.",
+          "rus": "Лесные эльфы обладают обострёнными чувствами и интуицией, а их быстрые ноги несут их через родные леса."
+        },
+        "abilityBonuses": {
+          "wis": 1
+        },
+        "features": [
+          {
+            "engName": "elf-weapon-training",
+            "name": {
+              "eng": "Elf Weapon Training",
+              "rus": "Владение эльфийским оружием"
+            },
+            "description": {
+              "eng": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+              "rus": "Вы владеете длинным мечом, коротким мечом, коротким луком и длинным луком."
+            }
+          },
+          {
+            "engName": "fleet-of-foot",
+            "name": {
+              "eng": "Fleet of Foot",
+              "rus": "Быстроногий"
+            },
+            "description": {
+              "eng": "Your base walking speed increases to 35 feet.",
+              "rus": "Ваша базовая скорость ходьбы увеличивается до 35 футов."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "base_speed_35"
+            }
+          },
+          {
+            "engName": "mask-of-the-wild",
+            "name": {
+              "eng": "Mask of the Wild",
+              "rus": "Маска дикой природы"
+            },
+            "description": {
+              "eng": "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena.",
+              "rus": "Вы можете попытаться спрятаться, даже если вы лишь слегка заслонены листвой, сильным дождём, снегопадом, туманом и другими природными явлениями."
+            }
+          }
+        ],
+        "proficiencies": {
+          "weapons": [
+            "longsword",
+            "shortsword",
+            "shortbow",
+            "longbow"
+          ]
+        },
+        "source": "phb"
+      },
+      {
+        "engName": "drow",
+        "name": {
+          "eng": "Drow",
+          "rus": "Дроу"
+        },
+        "description": {
+          "eng": "Descended from an earlier subrace of dark-skinned elves, the drow were banished to the Underdark for following the goddess Lolth.",
+          "rus": "Произошедшие от более ранней подрасы темнокожих эльфов, дроу были изгнаны в Подземье за служение богине Лолс."
+        },
+        "abilityBonuses": {
+          "cha": 1
+        },
+        "features": [
+          {
+            "engName": "superior-darkvision",
+            "name": {
+              "eng": "Superior Darkvision",
+              "rus": "Превосходное тёмное зрение"
+            },
+            "description": {
+              "eng": "Your darkvision has a radius of 120 feet.",
+              "rus": "Радиус вашего тёмного зрения составляет 120 футов."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "darkvision_120"
+            }
+          },
+          {
+            "engName": "sunlight-sensitivity",
+            "name": {
+              "eng": "Sunlight Sensitivity",
+              "rus": "Чувствительность к солнцу"
+            },
+            "description": {
+              "eng": "You have disadvantage on attack rolls and Perception checks that rely on sight when you or your target is in direct sunlight.",
+              "rus": "Вы совершаете с помехой броски атаки и проверки Внимательности, основанные на зрении, когда вы или ваша цель находитесь под прямыми солнечными лучами."
+            }
+          },
+          {
+            "engName": "drow-magic",
+            "name": {
+              "eng": "Drow Magic",
+              "rus": "Магия дроу"
+            },
+            "description": {
+              "eng": "You know the dancing lights cantrip. At 3rd level you can cast faerie fire once per day. At 5th level you can cast darkness once per day. Charisma is your spellcasting ability.",
+              "rus": "Вы знаете заговор «Пляшущие огоньки». На 3-м уровне вы можете произносить «Огонь фей» один раз в день. На 5-м уровне — «Тьму» один раз в день. Харизма — ваша базовая характеристика."
+            },
+            "mechanics": {
+              "type": "cantrip",
+              "spellEngName": "dancing_lights",
+              "ability": "cha"
+            }
+          },
+          {
+            "engName": "drow-magic-faerie-fire",
+            "name": {
+              "eng": "Drow Magic: Faerie Fire",
+              "rus": "Магия дроу: Огонь фей"
+            },
+            "description": {
+              "eng": "At 3rd level, you can cast faerie fire once per day. Charisma is your spellcasting ability.",
+              "rus": "На 3-м уровне вы можете произносить «Огонь фей» один раз в день. Харизма — ваша базовая характеристика."
+            },
+            "mechanics": {
+              "type": "spell",
+              "spellEngName": "faerie_fire",
+              "ability": "cha",
+              "minLevel": 3,
+              "usesPerDay": 1
+            }
+          },
+          {
+            "engName": "drow-magic-darkness",
+            "name": {
+              "eng": "Drow Magic: Darkness",
+              "rus": "Магия дроу: Тьма"
+            },
+            "description": {
+              "eng": "At 5th level, you can cast darkness once per day. Charisma is your spellcasting ability.",
+              "rus": "На 5-м уровне вы можете произносить «Тьму» один раз в день. Харизма — ваша базовая характеристика."
+            },
+            "mechanics": {
+              "type": "spell",
+              "spellEngName": "darkness",
+              "ability": "cha",
+              "minLevel": 5,
+              "usesPerDay": 1
+            }
+          },
+          {
+            "engName": "drow-weapon-training",
+            "name": {
+              "eng": "Drow Weapon Training",
+              "rus": "Владение оружием дроу"
+            },
+            "description": {
+              "eng": "You have proficiency with rapiers, shortswords, and hand crossbows.",
+              "rus": "Вы владеете рапирами, короткими мечами и ручными арбалетами."
+            }
+          }
+        ],
+        "proficiencies": {
+          "weapons": [
+            "rapier",
+            "shortsword",
+            "hand_crossbow"
+          ]
+        },
+        "source": "phb"
+      }
+    ],
+    "source": "srd",
+    "tags": [
+      "fey",
+      "graceful",
+      "magical"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "dwarf",
+    "name": {
+      "eng": "Dwarf",
+      "rus": "Дварф"
+    },
+    "description": {
+      "eng": "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. They stand well under 5 feet tall but are broad and compact.",
+      "rus": "Смелые и выносливые, дварфы известны как искусные воины, шахтёры и мастера камня и металла. Их рост менее 5 футов, но они широкоплечи и крепки."
+    },
+    "abilityBonuses": {
+      "con": 2
+    },
+    "size": "medium",
+    "speed": 25,
+    "darkvision": 60,
+    "languages": [
+      "common",
+      "dwarvish"
+    ],
+    "proficiencies": {
+      "weapons": [
+        "battleaxe",
+        "handaxe",
+        "light_hammer",
+        "warhammer"
+      ],
+      "tools": [
+        "smiths_tools",
+        "brewers_supplies",
+        "masons_tools"
+      ]
+    },
+    "features": [
+      {
+        "engName": "darkvision",
+        "name": {
+          "eng": "Darkvision",
+          "rus": "Тёмное зрение"
+        },
+        "description": {
+          "eng": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+          "rus": "Вы видите в тусклом свете в пределах 60 футов так, как будто это яркий свет, а в темноте — как в тусклом свете."
+        }
+      },
+      {
+        "engName": "dwarven-resilience",
+        "name": {
+          "eng": "Dwarven Resilience",
+          "rus": "Дварфийская стойкость"
+        },
+        "description": {
+          "eng": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
+          "rus": "Вы совершаете с преимуществом спасброски от яда и обладаете сопротивлением к урону ядом."
+        },
+        "mechanics": {
+          "type": "resistance",
+          "damageType": "poison"
+        }
+      },
+      {
+        "engName": "dwarven-resilience-advantage",
+        "name": {
+          "eng": "Dwarven Resilience: Poison Saves",
+          "rus": "Дварфийская стойкость: спасброски от яда"
+        },
+        "description": {
+          "eng": "You have advantage on saving throws against poison.",
+          "rus": "Вы совершаете с преимуществом спасброски от яда."
+        },
+        "mechanics": {
+          "type": "advantage",
+          "on": "saves_vs_poison"
+        }
+      },
+      {
+        "engName": "dwarven-combat-training",
+        "name": {
+          "eng": "Dwarven Combat Training",
+          "rus": "Дварфийская боевая подготовка"
+        },
+        "description": {
+          "eng": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+          "rus": "Вы владеете боевым топором, ручным топором, лёгким молотом и боевым молотом."
+        }
+      },
+      {
+        "engName": "tool-proficiency",
+        "name": {
+          "eng": "Tool Proficiency",
+          "rus": "Владение инструментами"
+        },
+        "description": {
+          "eng": "You gain proficiency with one of the following artisan's tools: smith's tools, brewer's supplies, or mason's tools.",
+          "rus": "Вы получаете владение одним из следующих инструментов ремесленника: инструменты кузнеца, пивовара или каменщика."
+        }
+      },
+      {
+        "engName": "stonecunning",
+        "name": {
+          "eng": "Stonecunning",
+          "rus": "Знание камня"
+        },
+        "description": {
+          "eng": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient and add double your proficiency bonus.",
+          "rus": "Каждый раз, когда вы совершаете проверку Интеллекта (История), связанную с происхождением каменной кладки, вы считаетесь владеющим навыком и добавляете удвоенный бонус мастерства."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "double_proficiency_history_stonework"
+        }
+      }
+    ],
+    "subraces": [
+      {
+        "engName": "hill-dwarf",
+        "name": {
+          "eng": "Hill Dwarf",
+          "rus": "Холмовой дварф"
+        },
+        "description": {
+          "eng": "Hill dwarves have keen senses, deep intuition, and remarkable resilience. They gain extra hit points as they level up.",
+          "rus": "Холмовые дварфы обладают обострёнными чувствами, глубокой интуицией и выдающейся стойкостью. Они получают дополнительные хиты при повышении уровня."
+        },
+        "abilityBonuses": {
+          "wis": 1
+        },
+        "features": [
+          {
+            "engName": "dwarven-toughness",
+            "name": {
+              "eng": "Dwarven Toughness",
+              "rus": "Дварфийская крепость"
+            },
+            "description": {
+              "eng": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+              "rus": "Максимум ваших хитов увеличивается на 1, и увеличивается на 1 каждый раз, когда вы получаете уровень."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "plus_1_hp_per_level"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "mountain-dwarf",
+        "name": {
+          "eng": "Mountain Dwarf",
+          "rus": "Горный дварф"
+        },
+        "description": {
+          "eng": "Mountain dwarves are strong and hardy, accustomed to a difficult life in rugged terrain. They gain proficiency with medium armor.",
+          "rus": "Горные дварфы сильны и выносливы, привычны к трудной жизни в суровых краях. Они получают владение средними доспехами."
+        },
+        "abilityBonuses": {
+          "str": 2
+        },
+        "features": [
+          {
+            "engName": "dwarven-armor-training",
+            "name": {
+              "eng": "Dwarven Armor Training",
+              "rus": "Дварфийская подготовка к доспехам"
+            },
+            "description": {
+              "eng": "You have proficiency with light and medium armor.",
+              "rus": "Вы владеете лёгкими и средними доспехами."
+            }
+          }
+        ],
+        "proficiencies": {
+          "armor": [
+            "light",
+            "medium"
+          ]
+        },
+        "source": "phb"
+      }
+    ],
+    "source": "srd",
+    "tags": [
+      "sturdy",
+      "resilient",
+      "craftsman"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "halfling",
+    "name": {
+      "eng": "Halfling",
+      "rus": "Полурослик"
+    },
+    "description": {
+      "eng": "The diminutive halflings survive in a world full of larger creatures by avoiding notice or, barring that, avoiding offense. They are practical and down-to-earth.",
+      "rus": "Миниатюрные полурослики выживают в мире, полном более крупных существ, избегая внимания или, на крайний случай, конфликтов. Они практичны и приземлённы."
+    },
+    "abilityBonuses": {
+      "dex": 2
+    },
+    "size": "small",
+    "speed": 25,
+    "languages": [
+      "common",
+      "halfling"
+    ],
+    "features": [
+      {
+        "engName": "lucky",
+        "name": {
+          "eng": "Lucky",
+          "rus": "Везучий"
+        },
+        "description": {
+          "eng": "When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
+          "rus": "Когда вы выбрасываете 1 на к20 при броске атаки, проверке характеристики или спасброске, вы можете перебросить кость и должны использовать новый результат."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "reroll_nat_1_on_d20"
+        }
+      },
+      {
+        "engName": "brave",
+        "name": {
+          "eng": "Brave",
+          "rus": "Храбрый"
+        },
+        "description": {
+          "eng": "You have advantage on saving throws against being frightened.",
+          "rus": "Вы совершаете с преимуществом спасброски от испуга."
+        },
+        "mechanics": {
+          "type": "advantage",
+          "on": "saves_vs_frightened"
+        }
+      },
+      {
+        "engName": "halfling-nimbleness",
+        "name": {
+          "eng": "Halfling Nimbleness",
+          "rus": "Проворство полурослика"
+        },
+        "description": {
+          "eng": "You can move through the space of any creature that is of a size larger than yours.",
+          "rus": "Вы можете перемещаться сквозь пространство любого существа, чей размер больше вашего."
+        }
+      }
+    ],
+    "subraces": [
+      {
+        "engName": "lightfoot",
+        "name": {
+          "eng": "Lightfoot",
+          "rus": "Легконогий"
+        },
+        "description": {
+          "eng": "Lightfoot halflings are adept at blending into crowds and slipping out of sight. They can hide behind creatures larger than themselves.",
+          "rus": "Легконогие полурослики умеют растворяться в толпе и исчезать из виду. Они могут прятаться за существами крупнее себя."
+        },
+        "abilityBonuses": {
+          "cha": 1
+        },
+        "features": [
+          {
+            "engName": "naturally-stealthy",
+            "name": {
+              "eng": "Naturally Stealthy",
+              "rus": "Врождённая скрытность"
+            },
+            "description": {
+              "eng": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.",
+              "rus": "Вы можете попытаться спрятаться, даже если вас заслоняет только существо, чей размер как минимум на одну категорию больше вашего."
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "stout",
+        "name": {
+          "eng": "Stout",
+          "rus": "Коренастый"
+        },
+        "description": {
+          "eng": "Stout halflings are hardier than average and have some resistance to poison. Some say they have dwarven blood.",
+          "rus": "Коренастые полурослики выносливее среднего и обладают некоторой устойчивостью к яду. Поговаривают, что в них течёт дварфийская кровь."
+        },
+        "abilityBonuses": {
+          "con": 1
+        },
+        "features": [
+          {
+            "engName": "stout-resilience",
+            "name": {
+              "eng": "Stout Resilience",
+              "rus": "Коренастая стойкость"
+            },
+            "description": {
+              "eng": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
+              "rus": "Вы совершаете с преимуществом спасброски от яда и обладаете сопротивлением к урону ядом."
+            },
+            "mechanics": {
+              "type": "resistance",
+              "damageType": "poison"
+            }
+          }
+        ],
+        "source": "phb"
+      }
+    ],
+    "source": "srd",
+    "tags": [
+      "small",
+      "lucky",
+      "nimble"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "gnome",
+    "name": {
+      "eng": "Gnome",
+      "rus": "Гном"
+    },
+    "description": {
+      "eng": "A gnome's energy and enthusiasm for living shines through every inch of their tiny body. Gnomes are curious and impulsive, with an irrepressible sense of humor.",
+      "rus": "Энергия и энтузиазм гнома к жизни сквозит в каждом дюйме его крошечного тела. Гномы любопытны и импульсивны, с неудержимым чувством юмора."
+    },
+    "abilityBonuses": {
+      "int": 2
+    },
+    "size": "small",
+    "speed": 25,
+    "darkvision": 60,
+    "languages": [
+      "common",
+      "gnomish"
+    ],
+    "features": [
+      {
+        "engName": "darkvision",
+        "name": {
+          "eng": "Darkvision",
+          "rus": "Тёмное зрение"
+        },
+        "description": {
+          "eng": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+          "rus": "Вы видите в тусклом свете в пределах 60 футов так, как будто это яркий свет, а в темноте — как в тусклом свете."
+        }
+      },
+      {
+        "engName": "gnome-cunning",
+        "name": {
+          "eng": "Gnome Cunning",
+          "rus": "Гномья хитрость"
+        },
+        "description": {
+          "eng": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+          "rus": "Вы совершаете с преимуществом все спасброски Интеллекта, Мудрости и Харизмы против магии."
+        },
+        "mechanics": {
+          "type": "advantage",
+          "on": "int_wis_cha_saves_vs_magic"
+        }
+      }
+    ],
+    "subraces": [
+      {
+        "engName": "forest-gnome",
+        "name": {
+          "eng": "Forest Gnome",
+          "rus": "Лесной гном"
+        },
+        "description": {
+          "eng": "Forest gnomes have a natural knack for illusion and an innate ability to communicate with small beasts.",
+          "rus": "Лесные гномы обладают природным талантом к иллюзиям и врождённой способностью общаться с мелкими зверями."
+        },
+        "abilityBonuses": {
+          "dex": 1
+        },
+        "features": [
+          {
+            "engName": "natural-illusionist",
+            "name": {
+              "eng": "Natural Illusionist",
+              "rus": "Прирождённый иллюзионист"
+            },
+            "description": {
+              "eng": "You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.",
+              "rus": "Вы знаете заговор «Малая иллюзия». Интеллект — ваша базовая характеристика для него."
+            },
+            "mechanics": {
+              "type": "cantrip",
+              "spellEngName": "minor_illusion",
+              "ability": "int"
+            }
+          },
+          {
+            "engName": "speak-with-small-beasts",
+            "name": {
+              "eng": "Speak with Small Beasts",
+              "rus": "Речь малых зверей"
+            },
+            "description": {
+              "eng": "Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts.",
+              "rus": "С помощью звуков и жестов вы можете передавать простые идеи Маленьким и ещё более мелким зверям."
+            }
+          }
+        ],
+        "source": "phb"
+      },
+      {
+        "engName": "rock-gnome",
+        "name": {
+          "eng": "Rock Gnome",
+          "rus": "Скальный гном"
+        },
+        "description": {
+          "eng": "Rock gnomes are natural inventors and have a special affinity for mechanical devices. They can create tiny clockwork devices.",
+          "rus": "Скальные гномы — прирождённые изобретатели и питают особую страсть к механическим устройствам. Они могут создавать крошечные заводные механизмы."
+        },
+        "abilityBonuses": {
+          "con": 1
+        },
+        "features": [
+          {
+            "engName": "artificers-lore",
+            "name": {
+              "eng": "Artificer's Lore",
+              "rus": "Знания ремесленника"
+            },
+            "description": {
+              "eng": "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you add double your proficiency bonus.",
+              "rus": "Каждый раз, когда вы совершаете проверку Интеллекта (История), связанную с магическими предметами, алхимическими объектами или технологическими устройствами, вы добавляете удвоенный бонус мастерства."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "double_proficiency_history_magic_items_tech"
+            }
+          },
+          {
+            "engName": "tinker",
+            "name": {
+              "eng": "Tinker",
+              "rus": "Жестянщик"
+            },
+            "description": {
+              "eng": "You have proficiency with artisan's tools (tinker's tools). Using them, you can spend 1 hour and 10 gp to construct a Tiny clockwork device.",
+              "rus": "Вы владеете ремесленными инструментами (инструменты жестянщика). Используя их, вы можете потратить 1 час и 10 зм, чтобы сконструировать Крошечный заводной механизм."
+            }
+          }
+        ],
+        "proficiencies": {
+          "tools": [
+            "tinkers_tools"
+          ]
+        },
+        "source": "srd"
+      }
+    ],
+    "source": "srd",
+    "tags": [
+      "small",
+      "clever",
+      "inventive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "half-elf",
+    "name": {
+      "eng": "Half-Elf",
+      "rus": "Полуэльф"
+    },
+    "description": {
+      "eng": "Half-elves combine the best qualities of their elf and human parents: human curiosity, inventiveness, and ambition tempered by the refined senses and love of nature of the elves.",
+      "rus": "Полуэльфы сочетают лучшие качества своих эльфийских и человеческих родителей: людскую любознательность, изобретательность и амбициозность, смягчённые утончёнными чувствами и любовью к природе эльфов."
+    },
+    "abilityBonuses": {
+      "cha": 2
+    },
+    "abilityBonusChoice": {
+      "pick": 2,
+      "amount": 1,
+      "exclude": [
+        "cha"
+      ]
+    },
+    "size": "medium",
+    "speed": 30,
+    "darkvision": 60,
+    "languages": [
+      "common",
+      "elvish",
+      "one_extra"
+    ],
+    "proficiencies": {
+      "skills": {
+        "pick": 2,
+        "from": [
+          "acrobatics",
+          "animal_handling",
+          "arcana",
+          "athletics",
+          "deception",
+          "history",
+          "insight",
+          "intimidation",
+          "investigation",
+          "medicine",
+          "nature",
+          "perception",
+          "performance",
+          "persuasion",
+          "religion",
+          "sleight_of_hand",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "features": [
+      {
+        "engName": "darkvision",
+        "name": {
+          "eng": "Darkvision",
+          "rus": "Тёмное зрение"
+        },
+        "description": {
+          "eng": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+          "rus": "Вы видите в тусклом свете в пределах 60 футов так, как будто это яркий свет, а в темноте — как в тусклом свете."
+        }
+      },
+      {
+        "engName": "fey-ancestry",
+        "name": {
+          "eng": "Fey Ancestry",
+          "rus": "Наследие фей"
+        },
+        "description": {
+          "eng": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+          "rus": "Вы совершаете с преимуществом спасброски от очарования, и вас нельзя магически усыпить."
+        },
+        "mechanics": {
+          "type": "advantage",
+          "on": "saves_vs_charmed"
+        }
+      },
+      {
+        "engName": "skill-versatility",
+        "name": {
+          "eng": "Skill Versatility",
+          "rus": "Универсальность навыков"
+        },
+        "description": {
+          "eng": "You gain proficiency in two skills of your choice.",
+          "rus": "Вы получаете владение двумя навыками по вашему выбору."
+        }
+      }
+    ],
+    "subraces": [],
+    "source": "srd",
+    "tags": [
+      "versatile",
+      "charismatic",
+      "fey"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "half-orc",
+    "name": {
+      "eng": "Half-Orc",
+      "rus": "Полуорк"
+    },
+    "description": {
+      "eng": "Half-orcs exhibit a blend of orcish and human characteristics, varying greatly in appearance. They are known for their endurance and raw physical power.",
+      "rus": "Полуорки демонстрируют смесь орочьих и человеческих черт, сильно различаясь внешне. Они известны своей выносливостью и грубой физической силой."
+    },
+    "abilityBonuses": {
+      "str": 2,
+      "con": 1
+    },
+    "size": "medium",
+    "speed": 30,
+    "darkvision": 60,
+    "languages": [
+      "common",
+      "orc"
+    ],
+    "proficiencies": {
+      "skills": {
+        "pick": 1,
+        "from": [
+          "intimidation"
+        ]
+      }
+    },
+    "features": [
+      {
+        "engName": "darkvision",
+        "name": {
+          "eng": "Darkvision",
+          "rus": "Тёмное зрение"
+        },
+        "description": {
+          "eng": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+          "rus": "Вы видите в тусклом свете в пределах 60 футов так, как будто это яркий свет, а в темноте — как в тусклом свете."
+        }
+      },
+      {
+        "engName": "menacing",
+        "name": {
+          "eng": "Menacing",
+          "rus": "Угрожающий"
+        },
+        "description": {
+          "eng": "You gain proficiency in the Intimidation skill.",
+          "rus": "Вы получаете владение навыком Запугивание."
+        }
+      },
+      {
+        "engName": "relentless-endurance",
+        "name": {
+          "eng": "Relentless Endurance",
+          "rus": "Неукротимая стойкость"
+        },
+        "description": {
+          "eng": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.",
+          "rus": "Когда ваши хиты опускаются до 0, но вы не убиты наповал, вы можете вместо этого остаться с 1 хитом. Вы не можете использовать эту способность повторно до завершения длинного отдыха."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "drop_to_1_hp_once_per_long_rest"
+        }
+      },
+      {
+        "engName": "savage-attacks",
+        "name": {
+          "eng": "Savage Attacks",
+          "rus": "Дикие атаки"
+        },
+        "description": {
+          "eng": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage.",
+          "rus": "Когда вы совершаете критическое попадание рукопашной атакой оружием, вы можете бросить одну из костей урона оружия ещё один раз и добавить к дополнительному урону."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "extra_damage_die_on_melee_crit"
+        }
+      }
+    ],
+    "subraces": [],
+    "source": "srd",
+    "tags": [
+      "strong",
+      "tough",
+      "fierce"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "tiefling",
+    "name": {
+      "eng": "Tiefling",
+      "rus": "Тифлинг"
+    },
+    "description": {
+      "eng": "Tieflings are derived from human bloodlines touched by the power of the Nine Hells. They bear the mark of their infernal heritage with horns, tails, and unusual skin tones.",
+      "rus": "Тифлинги происходят от человеческих родов, затронутых силой Девяти Преисподних. Они несут печать своего инфернального наследия в виде рогов, хвостов и необычного цвета кожи."
+    },
+    "abilityBonuses": {
+      "cha": 2,
+      "int": 1
+    },
+    "size": "medium",
+    "speed": 30,
+    "darkvision": 60,
+    "languages": [
+      "common",
+      "infernal"
+    ],
+    "features": [
+      {
+        "engName": "darkvision",
+        "name": {
+          "eng": "Darkvision",
+          "rus": "Тёмное зрение"
+        },
+        "description": {
+          "eng": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+          "rus": "Вы видите в тусклом свете в пределах 60 футов так, как будто это яркий свет, а в темноте — как в тусклом свете."
+        }
+      },
+      {
+        "engName": "hellish-resistance",
+        "name": {
+          "eng": "Hellish Resistance",
+          "rus": "Адское сопротивление"
+        },
+        "description": {
+          "eng": "You have resistance to fire damage.",
+          "rus": "Вы обладаете сопротивлением к урону огнём."
+        },
+        "mechanics": {
+          "type": "resistance",
+          "damageType": "fire"
+        }
+      },
+      {
+        "engName": "infernal-legacy-thaumaturgy",
+        "name": {
+          "eng": "Infernal Legacy: Thaumaturgy",
+          "rus": "Инфернальное наследие: Чудотворство"
+        },
+        "description": {
+          "eng": "You know the thaumaturgy cantrip. Charisma is your spellcasting ability for it.",
+          "rus": "Вы знаете заговор «Чудотворство». Харизма — ваша базовая характеристика для него."
+        },
+        "mechanics": {
+          "type": "cantrip",
+          "spellEngName": "thaumaturgy",
+          "ability": "cha"
+        }
+      },
+      {
+        "engName": "infernal-legacy-hellish-rebuke",
+        "name": {
+          "eng": "Infernal Legacy: Hellish Rebuke",
+          "rus": "Инфернальное наследие: Адское возмездие"
+        },
+        "description": {
+          "eng": "At 3rd level, you can cast hellish rebuke as a 2nd-level spell once per day. Charisma is your spellcasting ability.",
+          "rus": "На 3-м уровне вы можете произнести «Адское возмездие» как заклинание 2-го уровня один раз в день. Харизма — ваша базовая характеристика."
+        },
+        "mechanics": {
+          "type": "spell",
+          "spellEngName": "hellish_rebuke",
+          "ability": "cha",
+          "minLevel": 3,
+          "usesPerDay": 1
+        }
+      },
+      {
+        "engName": "infernal-legacy-darkness",
+        "name": {
+          "eng": "Infernal Legacy: Darkness",
+          "rus": "Инфернальное наследие: Тьма"
+        },
+        "description": {
+          "eng": "At 5th level, you can cast darkness once per day. Charisma is your spellcasting ability.",
+          "rus": "На 5-м уровне вы можете произнести «Тьму» один раз в день. Харизма — ваша базовая характеристика."
+        },
+        "mechanics": {
+          "type": "spell",
+          "spellEngName": "darkness",
+          "ability": "cha",
+          "minLevel": 5,
+          "usesPerDay": 1
+        }
+      }
+    ],
+    "subraces": [],
+    "source": "srd",
+    "tags": [
+      "infernal",
+      "charismatic",
+      "resistant"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "dragonborn",
+    "name": {
+      "eng": "Dragonborn",
+      "rus": "Драконорождённый"
+    },
+    "description": {
+      "eng": "Born of dragons, dragonborn walk proudly through a world that greets them with fearful incomprehension. Shaped by their draconic ancestry, they possess breath weapons and elemental resistance.",
+      "rus": "Рождённые от драконов, драконорождённые гордо шагают по миру, который встречает их с испуганным непониманием. Сформированные своим драконьим наследием, они обладают оружием дыхания и стихийным сопротивлением."
+    },
+    "abilityBonuses": {
+      "str": 2,
+      "cha": 1
+    },
+    "size": "medium",
+    "speed": 30,
+    "languages": [
+      "common",
+      "draconic"
+    ],
+    "features": [
+      {
+        "engName": "draconic-ancestry",
+        "name": {
+          "eng": "Draconic Ancestry",
+          "rus": "Драконье наследие"
+        },
+        "description": {
+          "eng": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type.",
+          "rus": "Вы обладаете драконьим наследием. Выберите один тип дракона из таблицы Драконьего наследия. Ваше оружие дыхания и сопротивление к урону определяются типом дракона."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "choose_dragon_type_for_breath_and_resistance"
+        }
+      },
+      {
+        "engName": "breath-weapon",
+        "name": {
+          "eng": "Breath Weapon",
+          "rus": "Оружие дыхания"
+        },
+        "description": {
+          "eng": "You can use your action to exhale destructive energy. The damage type and area are determined by your draconic ancestry. Each creature in the area must make a saving throw (DC = 8 + CON mod + proficiency). Damage is 2d6, increasing at levels 6, 11, and 16. Usable once per short or long rest.",
+          "rus": "Вы можете действием выдохнуть разрушительную энергию. Тип урона и область определяются вашим драконьим наследием. Каждое существо в области должно совершить спасбросок (Сл = 8 + модификатор ТЕЛ + бонус мастерства). Урон — 2к6, возрастающий на 6, 11 и 16 уровнях. Используется один раз за короткий или длинный отдых."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "breath_weapon_2d6_scaling_con_dc_once_per_short_rest"
+        }
+      },
+      {
+        "engName": "damage-resistance",
+        "name": {
+          "eng": "Damage Resistance",
+          "rus": "Сопротивление урону"
+        },
+        "description": {
+          "eng": "You have resistance to the damage type associated with your draconic ancestry.",
+          "rus": "Вы обладаете сопротивлением к типу урона, связанному с вашим драконьим наследием."
+        },
+        "mechanics": {
+          "type": "custom",
+          "effect": "resistance_matching_draconic_ancestry"
+        }
+      }
+    ],
+    "subraces": [],
+    "source": "srd",
+    "tags": [
+      "draconic",
+      "strong",
+      "breath_weapon"
+    ],
+    "schemaVersion": 1
+  }
+]
