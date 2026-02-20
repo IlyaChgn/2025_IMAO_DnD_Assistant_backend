@@ -9,6 +9,7 @@
 | I need to... | Go to |
 |--------------|-------|
 | Understand documentation standards | [DOCS_STANDARDS.md](DOCS_STANDARDS.md) |
+| Design/implement Combat AI | [combat-ai/](#combat-ai) |
 | Understand Creature Model for automation | [creature-model-automation/](#creature-model-automation) |
 | Design/implement Item System | [item-system/](#item-system) |
 | Implement Maps API | [maps-api/](#maps-api) |
@@ -24,6 +25,9 @@
 vibecode_docs/
 ├── DOCS_STANDARDS.md           # Documentation standards and templates
 ├── README.md                   # This file (table of contents)
+│
+├── combat-ai/                 # Rule-based combat AI for NPC automation
+│   └── combat-ai-design-plan.md
 │
 ├── creature-model-automation/  # Creature model evolution for automation
 │   ├── creature-model-evolution.md
@@ -49,6 +53,18 @@ vibecode_docs/
 ---
 
 ## Document Index
+
+### combat-ai/
+
+Rule-based combat AI module for automated NPC turns in encounters.
+
+| Document | Type | Status | Description |
+|----------|------|--------|-------------|
+| [combat-ai-design-plan.md](combat-ai/combat-ai-design-plan.md) | Feature Plan | Draft | Comprehensive design: creature role classification, target/action selection, expected value calculations, 3-phase roadmap (MVP → Tactics → Movement), service-boundary-ready interface for future RL extraction |
+
+**Related branch:** TBD (`feature/combat-ai-mvp`)
+
+---
 
 ### creature-model-automation/
 
@@ -153,3 +169,4 @@ See [DOCS_STANDARDS.md](DOCS_STANDARDS.md) for templates and metadata requiremen
 | 2026-02-05 | Fixed maps-api-backend-implementation-plan.md link/filename mismatch |
 | 2026-02-05 | Normalized all file/folder names to kebab-case |
 | 2026-02-06 | Added creature-model-automation section with creature-model-evolution.md |
+| 2026-02-20 | Added combat-ai section with combat-ai-design-plan.md |
