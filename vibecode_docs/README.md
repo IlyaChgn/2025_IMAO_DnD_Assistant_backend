@@ -27,7 +27,8 @@ vibecode_docs/
 ├── README.md                   # This file (table of contents)
 │
 ├── combat-ai/                 # Rule-based combat AI for NPC automation
-│   └── combat-ai-design-plan.md
+│   ├── combat-ai-design-plan.md
+│   └── combat-ai-backlog.md
 │
 ├── creature-model-automation/  # Creature model evolution for automation
 │   ├── creature-model-evolution.md
@@ -61,6 +62,7 @@ Rule-based combat AI module for automated NPC turns in encounters.
 | Document | Type | Status | Description |
 |----------|------|--------|-------------|
 | [combat-ai-design-plan.md](combat-ai/combat-ai-design-plan.md) | Feature Plan | Draft | Comprehensive design: creature role classification, target/action selection, expected value calculations, 3-phase roadmap (MVP → Tactics → Movement), service-boundary-ready interface for future RL extraction |
+| [combat-ai-backlog.md](combat-ai/combat-ai-backlog.md) | Implementation Backlog | Draft | Task backlog: PR-0 (action pipeline extension) + PR-1..PR-7 (Phase 1 MVP) with scope, key files, acceptance criteria |
 
 **Related branch:** TBD (`feature/combat-ai-mvp`)
 
@@ -170,3 +172,4 @@ See [DOCS_STANDARDS.md](DOCS_STANDARDS.md) for templates and metadata requiremen
 | 2026-02-05 | Normalized all file/folder names to kebab-case |
 | 2026-02-06 | Added creature-model-automation section with creature-model-evolution.md |
 | 2026-02-20 | Added combat-ai section with combat-ai-design-plan.md |
+| 2026-02-21 | Added combat-ai-backlog.md (Phase 1 task backlog with PR-0..PR-7) |
