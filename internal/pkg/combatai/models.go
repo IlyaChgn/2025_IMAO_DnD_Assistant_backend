@@ -35,6 +35,7 @@ type TurnInput struct {
 // Abstracts the difference between NPC (Creature) and PC (CharacterBase + DerivedStats).
 // Built by the usecases layer when constructing TurnInput.
 type CombatantStats struct {
+	MaxHP           int            // maximum hit points (for HP% calculations, 0 = unknown)
 	AC              int            // ArmorClass (including StatModifiers)
 	SaveBonuses     map[string]int // ability type ("STR","DEX",...) → total save bonus
 	Resistances     []string       // damage types: "fire", "cold", etc.
