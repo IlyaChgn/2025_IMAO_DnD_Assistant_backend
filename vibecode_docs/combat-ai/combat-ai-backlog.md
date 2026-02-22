@@ -155,7 +155,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-2: Core Interfaces, Models, Intelligence System
 
-**Status:** Planned
+**Status:** Done ✅ (PR #32, merged 2026-02-22)
 **Dependencies:** PR-1
 **Branch:** `feature/combat-ai-core`
 
@@ -209,7 +209,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-3: Role Classifier + Expected Value Calculator
 
-**Status:** Planned
+**Status:** Done ✅ (PR #33, merged 2026-02-22)
 **Dependencies:** PR-2
 **Branch:** `feature/combat-ai-classifier-ev`
 
@@ -283,7 +283,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-4: Target Selector + Action Selector + Multiattack Evaluator
 
-**Status:** Planned
+**Status:** Done ✅ (PR #34, merged 2026-02-22)
 **Dependencies:** PR-3
 **Branch:** `feature/combat-ai-selectors`
 
@@ -362,7 +362,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-5: AI Engine + Universal Actions (Dodge)
 
-**Status:** Planned
+**Status:** Done ✅ (PR #36)
 **Dependencies:** PR-4
 **Branch:** `feature/combat-ai-engine`
 

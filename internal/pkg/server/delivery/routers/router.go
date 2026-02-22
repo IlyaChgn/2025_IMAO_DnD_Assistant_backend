@@ -4,6 +4,8 @@ import (
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
 	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
 	actionsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/delivery"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai"
+	combataideliv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai/delivery"
 	authdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
 	backgroundsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds"
 	backgroundsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/delivery"
@@ -68,7 +70,8 @@ func NewRouter(cfg *config.Config,
 	classesInterface classesinterfaces.ClassesUsecases,
 	racesInterface racesinterfaces.RacesUsecases,
 	backgroundsInterface backgroundsinterfaces.BackgroundsUsecases,
-	featsInterface featsinterfaces.FeatsUsecases) *mux.Router {
+	featsInterface featsinterfaces.FeatsUsecases,
+	combatAIInterface combatai.CombatAIUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -90,6 +93,7 @@ func NewRouter(cfg *config.Config,
 	racesHandler := racesdel.NewRacesHandler(racesInterface)
 	backgroundsHandler := backgroundsdel.NewBackgroundsHandler(backgroundsInterface)
 	featsHandler := featsdel.NewFeatsHandler(featsInterface)
+	combatAIHandler := combataideliv.NewCombatAIHandler(combatAIInterface, cfg.CtxUserKey)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -127,6 +131,7 @@ func NewRouter(cfg *config.Config,
 	ServeRacesRouter(rootRouter, racesHandler)
 	ServeBackgroundsRouter(rootRouter, backgroundsHandler)
 	ServeFeatsRouter(rootRouter, featsHandler)
+	ServeCombatAIRouter(rootRouter, combatAIHandler, loginRequiredMiddleware)
 
 	return router
 }

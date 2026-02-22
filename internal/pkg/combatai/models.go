@@ -94,6 +94,14 @@ type ReactionRule struct {
 	Condition string // human-readable condition
 }
 
+// AITurnResult is the response from ExecuteAITurn — the AI's decision plus
+// the action pipeline results from executing that decision.
+type AITurnResult struct {
+	NpcInstanceID string                   `json:"npcInstanceId"`
+	Decision      *TurnDecision            `json:"decision"`
+	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
+}
+
 // CreatureRole classifies a creature's combat behavior archetype.
 type CreatureRole string
 

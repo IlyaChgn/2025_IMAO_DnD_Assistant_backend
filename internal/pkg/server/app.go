@@ -67,6 +67,8 @@ import (
 
 	auditlogrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/repository"
 	actionsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/usecases"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai"
+	combataiuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai/usecases"
 	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
 	itemsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/seed"
 	itemsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/usecases"
@@ -372,6 +374,12 @@ func (srv *Server) Run() error {
 
 	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository, bestiaryRepository, auditLogRepository)
 
+	combatAIEngine := combatai.NewRuleBasedAI()
+	combatAIUsecases := combataiuc.NewCombatAIUsecases(
+		combatAIEngine, encounterRepository, bestiaryRepository,
+		characterBaseRepository, actionsUsecases, auditLogRepository, tableManager,
+	)
+
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
@@ -401,6 +409,7 @@ func (srv *Server) Run() error {
 		racesUsecases,
 		backgroundsUsecases,
 		featsUsecases,
+		combatAIUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
