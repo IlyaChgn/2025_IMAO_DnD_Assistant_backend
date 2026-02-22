@@ -19,4 +19,12 @@ var (
 	InvalidUpcastLevelErr    = errors.New("slot level must be >= spell level")
 	SpellNotRitualErr        = errors.New("spell cannot be cast as a ritual")
 	InsufficientPactSlotsErr = errors.New("insufficient pact magic slots")
+
+	// NPC action errors
+	ActionNotFoundErr            = errors.New("action not found on creature")
+	NpcSpellNotKnownErr          = errors.New("spell not known by creature")
+	RechargeNotReadyErr          = errors.New("recharge ability not ready")
+	NpcSpellSlotsExhaustedErr    = errors.New("NPC spell slots exhausted")
+	LegendaryActionsExhaustedErr = errors.New("legendary actions exhausted")
+	InnateUsesExhaustedErr       = errors.New("innate spellcasting uses exhausted")
 )

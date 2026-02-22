@@ -77,10 +77,14 @@ func (uc *actionsUsecases) ExecuteAction(
 		return nil, fmt.Errorf("parse encounter data: %w", err)
 	}
 
-	// 5. Find participant
+	// 5. Find participant (unified: try PC lookup first, then NPC by InstanceID)
 	participant, _, err := ed.FindParticipant(req.CharacterID)
 	if err != nil {
-		return nil, err
+		// Not a PC — try by InstanceID (covers NPCs)
+		participant, _, err = ed.FindParticipantByInstanceID(req.CharacterID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// If not DM, verify the caller owns this participant
@@ -89,6 +93,15 @@ func (uc *actionsUsecases) ExecuteAction(
 			return nil, apperrors.PermissionDeniedError
 		}
 	}
+
+	cmd := &req.Action
+
+	// NPC branch: dispatch to NPC-specific resolvers
+	if !participant.IsPlayerCharacter {
+		return uc.executeNpcAction(ctx, encounterID, req, cmd, participant, ed, userID)
+	}
+
+	// --- PC path (unchanged) ---
 
 	// 6. Load character base
 	charBase, err := uc.characterRepo.GetByID(ctx, req.CharacterID)
@@ -101,7 +114,6 @@ func (uc *actionsUsecases) ExecuteAction(
 	derived := compute.ComputeDerived(charBase)
 
 	// 8. Dispatch to resolver based on action type
-	cmd := &req.Action
 	var resp *models.ActionResponse
 
 	switch cmd.Type {
@@ -132,13 +144,91 @@ func (uc *actionsUsecases) ExecuteAction(
 	}
 
 	// 9. Fire-and-forget audit log entry
+	uc.writeAuditLog(ctx, encounterID, req.CharacterID, charBase.Name, cmd.Type, ed, resp, userID)
+
+	return resp, nil
+}
+
+// executeNpcAction loads the creature template and dispatches to NPC-specific resolvers.
+func (uc *actionsUsecases) executeNpcAction(
+	ctx context.Context,
+	encounterID string,
+	req *models.ActionRequest,
+	cmd *models.ActionCommand,
+	participant *models.ParticipantFull,
+	ed *EncounterData,
+	userID int,
+) (*models.ActionResponse, error) {
+	l := logger.FromContext(ctx)
+
+	// Load creature template
+	creature, err := uc.bestiaryRepo.GetCreatureByID(ctx, participant.CreatureID)
+	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"creatureID": participant.CreatureID})
+		return nil, fmt.Errorf("load creature: %w", err)
+	}
+	if creature == nil {
+		return nil, fmt.Errorf("creature not found: %s", participant.CreatureID)
+	}
+
+	actorName := npcActorName(participant, creature)
+
+	// Dispatch to NPC resolvers
+	var resp *models.ActionResponse
+
+	switch cmd.Type {
+	case models.ActionCustomRoll:
+		resp, err = resolveCustomRoll(cmd)
+
+	case models.ActionAbilityCheck:
+		resp, err = resolveNpcAbilityCheck(cmd, actorName, creature)
+
+	case models.ActionSavingThrow:
+		resp, err = resolveNpcSavingThrow(cmd, actorName, creature)
+
+	case models.ActionWeaponAttack:
+		resp, err = resolveNpcWeaponAttack(ctx, uc, cmd, encounterID, creature, actorName, participant, ed, userID)
+
+	case models.ActionSpellCast:
+		resp, err = resolveNpcSpellCast(ctx, uc, cmd, encounterID, creature, actorName, participant, ed, userID)
+
+	case models.ActionUseFeature:
+		resp, err = resolveNpcUseFeature(ctx, uc, cmd, encounterID, creature, actorName, participant, ed, userID)
+
+	default:
+		return nil, apperrors.InvalidActionTypeErr
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Audit log for NPC actions
+	uc.writeAuditLog(ctx, encounterID, participant.InstanceID, actorName, cmd.Type, ed, resp, userID)
+
+	return resp, nil
+}
+
+// writeAuditLog writes a fire-and-forget audit log entry.
+func (uc *actionsUsecases) writeAuditLog(
+	ctx context.Context,
+	encounterID string,
+	actorID string,
+	actorName string,
+	actionType models.ActionType,
+	ed *EncounterData,
+	resp *models.ActionResponse,
+	userID int,
+) {
+	l := logger.FromContext(ctx)
+
 	entry := &models.AuditLogEntry{
 		EncounterID:      encounterID,
 		Round:            ed.CurrentRound(),
 		Turn:             ed.CurrentTurnIndex(),
-		ActorID:          req.CharacterID,
-		ActorName:        charBase.Name,
-		ActionType:       cmd.Type,
+		ActorID:          actorID,
+		ActorName:        actorName,
+		ActionType:       actionType,
 		Summary:          resp.Summary,
 		RollResult:       resp.RollResult,
 		DamageRolls:      resp.DamageRolls,
@@ -154,8 +244,6 @@ func (uc *actionsUsecases) ExecuteAction(
 			"action":      "audit_log_insert",
 		})
 	}
-
-	return resp, nil
 }
 
 // GetActionLog retrieves the action log for an encounter.
