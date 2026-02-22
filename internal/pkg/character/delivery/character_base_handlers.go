@@ -274,6 +274,75 @@ func (h *CharacterBaseHandler) ImportLSS(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(resp)
 }
 
+func (h *CharacterBaseHandler) UploadAvatar(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	id := mux.Vars(r)["id"]
+	if id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	err := r.ParseMultipartForm(512 << 10) // 512 KB max
+	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrWrongFileSize, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrWrongFileSize)
+		return
+	}
+
+	file, _, err := r.FormFile("avatar")
+	if err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, "Avatar file required", err, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, "Avatar file required")
+		return
+	}
+	defer file.Close()
+
+	fileData, err := io.ReadAll(file)
+	if err != nil {
+		l.DeliveryError(ctx, responses.StatusInternalServerError, responses.ErrInternalServer, err, nil)
+		responses.SendErrResponse(w, responses.StatusInternalServerError, responses.ErrInternalServer)
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	avatarURL, err := h.usecases.UploadAvatar(ctx, id, user.ID, fileData)
+	if err != nil {
+		h.handleError(w, r, err)
+		return
+	}
+
+	type avatarResponse struct {
+		AvatarURL string `json:"avatarUrl"`
+	}
+
+	responses.SendOkResponse(w, avatarResponse{AvatarURL: avatarURL})
+}
+
+func (h *CharacterBaseHandler) DeleteAvatar(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	id := mux.Vars(r)["id"]
+	if id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	if err := h.usecases.DeleteAvatar(ctx, id, user.ID); err != nil {
+		h.handleError(w, r, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (h *CharacterBaseHandler) handleError(w http.ResponseWriter, r *http.Request, err error) {
 	ctx := r.Context()
 	l := logger.FromContext(ctx)
@@ -297,6 +366,12 @@ func (h *CharacterBaseHandler) handleError(w http.ResponseWriter, r *http.Reques
 	case errors.Is(err, apperrors.InvalidJSONError):
 		code = responses.StatusBadRequest
 		status = responses.ErrBadJSON
+	case errors.Is(err, apperrors.AvatarTooLargeErr):
+		code = http.StatusRequestEntityTooLarge
+		status = responses.ErrWrongFileSize
+	case errors.Is(err, apperrors.AvatarUploadErr), errors.Is(err, apperrors.AvatarDeleteErr):
+		code = responses.StatusInternalServerError
+		status = responses.ErrInternalServer
 	default:
 		code = responses.StatusInternalServerError
 		status = responses.ErrInternalServer

@@ -222,3 +222,71 @@ func (s *characterBaseStorage) List(ctx context.Context, userID string, page, si
 
 	return chars, total, nil
 }
+
+func (s *characterBaseStorage) UpdateAvatarURL(ctx context.Context, id string, userID string, avatarURL string) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection(charactersV2Collection)
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		l.RepoWarn(err, map[string]any{"id": id})
+		return apperrors.InvalidIDErr
+	}
+
+	filter := bson.M{"_id": objID, "userId": userID}
+	update := bson.M{
+		"$set": bson.M{
+			"avatar.url": avatarURL,
+			"updatedAt":  time.Now().UTC().Format(time.RFC3339),
+		},
+	}
+
+	result, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+		return collection.UpdateOne(ctx, filter, update)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
+		return apperrors.UpdateMongoDataErr
+	}
+
+	if result.MatchedCount == 0 {
+		return apperrors.PermissionDeniedError
+	}
+
+	return nil
+}
+
+func (s *characterBaseStorage) ClearAvatar(ctx context.Context, id string, userID string) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection(charactersV2Collection)
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		l.RepoWarn(err, map[string]any{"id": id})
+		return apperrors.InvalidIDErr
+	}
+
+	filter := bson.M{"_id": objID, "userId": userID}
+	update := bson.M{
+		"$unset": bson.M{"avatar": ""},
+		"$set":   bson.M{"updatedAt": time.Now().UTC().Format(time.RFC3339)},
+	}
+
+	result, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+		return collection.UpdateOne(ctx, filter, update)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
+		return apperrors.UpdateMongoDataErr
+	}
+
+	if result.MatchedCount == 0 {
+		return apperrors.PermissionDeniedError
+	}
+
+	return nil
+}
