@@ -46,3 +46,9 @@ type CharacterBaseUsecases interface {
 	UploadAvatar(ctx context.Context, id string, userID int, fileData []byte) (string, error)
 	DeleteAvatar(ctx context.Context, id string, userID int) error
 }
+
+// AvatarS3Manager handles avatar upload/delete operations in S3.
+type AvatarS3Manager interface {
+	UploadAvatar(ctx context.Context, data []byte, objectName string) (string, error)
+	DeleteAvatar(ctx context.Context, objectName string) error
+}

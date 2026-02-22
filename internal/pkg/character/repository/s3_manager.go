@@ -5,22 +5,17 @@ import (
 	"context"
 	"fmt"
 
+	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 	"github.com/minio/minio-go/v7"
 )
-
-// AvatarS3Manager handles avatar upload/delete operations in Minio S3.
-type AvatarS3Manager interface {
-	UploadAvatar(ctx context.Context, data []byte, objectName string) (string, error)
-	DeleteAvatar(ctx context.Context, objectName string) error
-}
 
 type avatarS3Manager struct {
 	client     *minio.Client
 	bucketName string
 }
 
-func NewAvatarS3Manager(client *minio.Client, bucket string) AvatarS3Manager {
+func NewAvatarS3Manager(client *minio.Client, bucket string) characterinterfaces.AvatarS3Manager {
 	return &avatarS3Manager{
 		client:     client,
 		bucketName: bucket,

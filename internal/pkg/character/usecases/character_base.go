@@ -12,7 +12,6 @@ import (
 	characterinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/compute"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/converter"
-	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 )
 
@@ -20,10 +19,10 @@ const maxAvatarSize = 500 * 1024 // 500 KB
 
 type characterBaseUsecases struct {
 	repo      characterinterfaces.CharacterBaseRepository
-	s3Manager characterrepo.AvatarS3Manager
+	s3Manager characterinterfaces.AvatarS3Manager
 }
 
-func NewCharacterBaseUsecases(repo characterinterfaces.CharacterBaseRepository, s3Manager characterrepo.AvatarS3Manager) characterinterfaces.CharacterBaseUsecases {
+func NewCharacterBaseUsecases(repo characterinterfaces.CharacterBaseRepository, s3Manager characterinterfaces.AvatarS3Manager) characterinterfaces.CharacterBaseUsecases {
 	return &characterBaseUsecases{repo: repo, s3Manager: s3Manager}
 }
 
