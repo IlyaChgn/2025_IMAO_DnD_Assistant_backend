@@ -12,4 +12,5 @@ func ServeCombatAIRouter(router *mux.Router, handler *combataideliv.CombatAIHand
 	subrouter.Use(loginRequiredMiddleware)
 
 	subrouter.HandleFunc("/{id}/ai-turn", handler.AITurn).Methods("POST")
+	subrouter.HandleFunc("/{id}/ai-round", handler.AIRound).Methods("POST")
 }

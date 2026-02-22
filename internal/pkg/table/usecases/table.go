@@ -42,7 +42,8 @@ func NewTableUsecases(encounterRepo encounterinterfaces.EncounterRepository,
 	}
 }
 
-func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, encounterID string) (string, error) {
+func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, encounterID string,
+	opts tableinterfaces.SessionOptions) (string, error) {
 	l := logger.FromContext(ctx)
 
 	encounterData, err := uc.encounterRepo.GetEncounterByID(ctx, encounterID)
@@ -58,7 +59,7 @@ func (uc *tableUsecases) CreateSession(ctx context.Context, admin *models.User, 
 
 	sessionID := uc.idGen.NewSessionID()
 
-	uc.tableManager.CreateSession(ctx, admin, encounterData, sessionID, uc.refreshSession)
+	uc.tableManager.CreateSession(ctx, admin, encounterData, sessionID, uc.refreshSession, opts)
 
 	uc.mu.Lock()
 

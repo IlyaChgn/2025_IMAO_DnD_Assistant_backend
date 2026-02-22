@@ -12,6 +12,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/responses"
+	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/testhelpers"
 	"github.com/gorilla/mux"
@@ -28,7 +29,8 @@ type fakeTableUsecases struct {
 	tableErr  error
 }
 
-func (f *fakeTableUsecases) CreateSession(_ context.Context, _ *models.User, _ string) (string, error) {
+func (f *fakeTableUsecases) CreateSession(_ context.Context, _ *models.User, _ string,
+	_ tableinterfaces.SessionOptions) (string, error) {
 	return f.sessionID, f.createErr
 }
 func (f *fakeTableUsecases) GetTableData(_ context.Context, _ string) (*models.TableData, error) {

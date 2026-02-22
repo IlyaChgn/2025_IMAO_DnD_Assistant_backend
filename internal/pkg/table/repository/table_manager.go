@@ -33,7 +33,7 @@ func NewTableManager(metrics metrics.WSMetrics, sessionMetrics metrics.WSSession
 }
 
 func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, encounter *models.Encounter,
-	sessionID string, callback func(sessionID string)) {
+	sessionID string, callback func(sessionID string), opts tableinterfaces.SessionOptions) {
 	l := logger.FromContext(ctx)
 	newSession := &session{
 		encounterID:     encounter.UUID,
@@ -44,6 +44,8 @@ func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, e
 		participants:    make(map[int]*participant),
 		broadcast:       make(chan broadcastMessage),
 		refreshCallback: callback,
+		aiAutoPlay:      opts.AIAutoPlay,
+		aiDifficultyMod: opts.AIDifficultyMod,
 		start:           time.Now(),
 		metrics:         tm.sessionMetrics,
 	}

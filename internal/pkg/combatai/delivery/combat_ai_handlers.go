@@ -77,6 +77,40 @@ func (h *CombatAIHandler) AITurn(w http.ResponseWriter, r *http.Request) {
 	responses.SendOkResponse(w, result)
 }
 
+// AIRound handles POST /encounter/{id}/ai-round.
+// Executes all NPC turns in initiative order for the current round.
+func (h *CombatAIHandler) AIRound(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	// 1. Parse encounter ID from URL.
+	vars := mux.Vars(r)
+	encounterID, ok := vars["id"]
+	if !ok || encounterID == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	// 2. Extract user from context.
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	// 3. Execute AI round.
+	result, err := h.usecases.ExecuteAIRound(ctx, encounterID, user.ID)
+	if err != nil {
+		code, status := mapAITurnError(err)
+		l.DeliveryError(ctx, code, status, err, map[string]any{
+			"encounterID": encounterID,
+			"userID":      user.ID,
+		})
+		responses.SendErrResponse(w, code, status)
+		return
+	}
+
+	// 4. Send success response.
+	responses.SendOkResponse(w, result)
+}
+
 // mapAITurnError maps usecase errors to HTTP status codes.
 func mapAITurnError(err error) (int, string) {
 	switch {

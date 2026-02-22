@@ -35,7 +35,7 @@ func (ai *RuleBasedAI) DecideTurn(input *TurnInput) (*TurnDecision, error) {
 	}
 
 	// 2. Incapacitated → skip turn.
-	if isIncapacitated(&input.ActiveNPC) {
+	if IsIncapacitated(&input.ActiveNPC) {
 		return &TurnDecision{Reasoning: "Incapacitated — skip"}, nil
 	}
 
@@ -60,9 +60,9 @@ func (ai *RuleBasedAI) DecideTurn(input *TurnInput) (*TurnDecision, error) {
 	}, nil
 }
 
-// isIncapacitated checks if the NPC has a condition that prevents taking actions.
+// IsIncapacitated checks if the NPC has a condition that prevents taking actions.
 // In D&D 5e, stunned/paralyzed/petrified/unconscious all imply incapacitated.
-func isIncapacitated(p *models.ParticipantFull) bool {
+func IsIncapacitated(p *models.ParticipantFull) bool {
 	for _, c := range p.RuntimeState.Conditions {
 		switch c.Condition {
 		case models.ConditionIncapacitated, models.ConditionStunned,

@@ -42,6 +42,10 @@ type session struct {
 	broadcast       chan broadcastMessage
 	refreshCallback func(sessionID string) // Вызов обновления таймера
 
+	// AI auto-play settings (Phase 1: stored for future use).
+	aiAutoPlay      bool
+	aiDifficultyMod float64
+
 	mu sync.RWMutex
 
 	start   time.Time

@@ -31,12 +31,18 @@ const (
 	// it gets relayed harmlessly instead of corrupting encounter state via merger.Merge.
 	InventoryPatch WSMsgType = "inventory_patch"
 	VisionPatch    WSMsgType = "vision_patch"
+
+	// Combat AI message types - relayed directly
+	YourTurn        WSMsgType = "your_turn"
+	CombatEnd       WSMsgType = "combat_end"
+	AITurnResultMsg WSMsgType = "ai_turn_result"
 )
 
 // IsPatchMessage returns true if the message type is a patch that should be relayed directly
 func IsPatchMessage(msgType WSMsgType) bool {
 	switch msgType {
-	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch, InventoryPatch, VisionPatch:
+	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch, InventoryPatch, VisionPatch,
+		AITurnResultMsg, YourTurn, CombatEnd:
 		return true
 	default:
 		return false

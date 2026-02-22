@@ -414,7 +414,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-6: HTTP Endpoint `ai-turn` + Usecases Glue
 
-**Status:** Planned
+**Status:** Done ✅ (PR #37)
 **Dependencies:** PR-5, PR-0
 **Branch:** `feature/combat-ai-endpoint`
 
@@ -544,9 +544,9 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-7: Auto-Play Mode + Turn Manager + `ai-round`
 
-**Status:** Planned
+**Status:** Done ✅ (PR #38, merged 2026-02-23)
 **Dependencies:** PR-6
-**Branch:** `feature/combat-ai-autoplay`
+**Branch:** `feature/ai-round-endpoint`
 
 **Контекст — архитектура table/session:**
 

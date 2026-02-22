@@ -13,4 +13,5 @@ type CombatAI interface {
 // calls CombatAI.DecideTurn, and executes the resulting action through the pipeline.
 type CombatAIUsecases interface {
 	ExecuteAITurn(ctx context.Context, encounterID string, npcInstanceID string, userID int) (*AITurnResult, error)
+	ExecuteAIRound(ctx context.Context, encounterID string, userID int) (*AIRoundResult, error)
 }

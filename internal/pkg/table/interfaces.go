@@ -10,9 +10,15 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// SessionOptions carries optional settings for a new table session.
+type SessionOptions struct {
+	AIAutoPlay      bool
+	AIDifficultyMod float64
+}
+
 type TableManager interface {
 	CreateSession(ctx context.Context, admin *models.User, encounter *models.Encounter, sessionID string,
-		callback func(sessionID string))
+		callback func(sessionID string), opts SessionOptions)
 	RemoveSession(ctx context.Context, sessionID string)
 	GetTableData(ctx context.Context, sessionID string) (*models.TableData, error)
 	GetEncounterData(ctx context.Context, sessionID string) ([]byte, error)
@@ -22,7 +28,7 @@ type TableManager interface {
 }
 
 type TableUsecases interface {
-	CreateSession(ctx context.Context, admin *models.User, encounterID string) (string, error)
+	CreateSession(ctx context.Context, admin *models.User, encounterID string, opts SessionOptions) (string, error)
 	GetTableData(ctx context.Context, sessionID string) (*models.TableData, error)
 	AddNewConnection(ctx context.Context, user *models.User, sessionID string, conn *websocket.Conn)
 }

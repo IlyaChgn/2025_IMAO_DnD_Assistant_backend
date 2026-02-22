@@ -102,6 +102,24 @@ type AITurnResult struct {
 	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
 }
 
+// AIRoundResult is the response from ExecuteAIRound — all NPC turns in one round.
+type AIRoundResult struct {
+	Round        int           `json:"round"`
+	Turns        []AIRoundTurn `json:"turns"`
+	CombatEnded  bool          `json:"combatEnded"`
+	CombatResult string        `json:"combatResult,omitempty"`
+}
+
+// AIRoundTurn is one NPC's turn within an ai-round execution.
+type AIRoundTurn struct {
+	NpcID         string                  `json:"npcID"`
+	NpcName       string                  `json:"npcName"`
+	Decision      *TurnDecision           `json:"decision"`
+	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
+	Skipped       bool                    `json:"skipped"`
+	SkipReason    string                  `json:"skipReason,omitempty"`
+}
+
 // CreatureRole classifies a creature's combat behavior archetype.
 type CreatureRole string
 
