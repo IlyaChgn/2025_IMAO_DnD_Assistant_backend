@@ -94,8 +94,18 @@ func selectTierNormal(input *TurnInput, enemies []*models.ParticipantFull, actio
 	return nearestEnemy(input, enemies)
 }
 
-// selectTierSmart picks targets with bonuses for concentration and low HP.
+// selectTierSmart uses threat assessment to pick the best target.
+// Considers concentration, HP%, distance, damage type matchup.
 func selectTierSmart(input *TurnInput, enemies []*models.ParticipantFull, action *models.StructuredAction) *models.ParticipantFull {
+	threats := AssessThreats(input)
+
+	// Build lookup: TargetID → threat score.
+	scoreMap := make(map[string]float64, len(threats))
+	for _, t := range threats {
+		scoreMap[t.TargetID] = t.Score
+	}
+
+	// Pick highest-scoring enemy that is in range for this action.
 	var best *models.ParticipantFull
 	bestScore := math.Inf(-1)
 
@@ -103,16 +113,7 @@ func selectTierSmart(input *TurnInput, enemies []*models.ParticipantFull, action
 		if !inRange(input, e, action) {
 			continue
 		}
-		stats := input.CombatantStats[e.InstanceID]
-		score := -float64(GetCurrentHP(e)) // lower HP = higher score
-
-		if e.RuntimeState.Concentration != nil {
-			score += 1000
-		}
-		if hpPercent(e, stats) < 0.25 {
-			score += 500
-		}
-
+		score := scoreMap[e.InstanceID]
 		if score > bestScore {
 			bestScore = score
 			best = e

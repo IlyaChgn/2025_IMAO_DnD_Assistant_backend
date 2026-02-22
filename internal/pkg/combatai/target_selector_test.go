@@ -219,3 +219,145 @@ func TestSelectTarget_AllDead(t *testing.T) {
 		t.Errorf("all dead: got %v, want nil", targets)
 	}
 }
+
+// makeFireMeleeAction creates a melee attack that deals fire damage.
+func makeFireMeleeAction() *models.StructuredAction {
+	return &models.StructuredAction{
+		ID:       "flame_tongue",
+		Name:     "Flame Tongue",
+		Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type:  models.AttackRollMeleeWeapon,
+			Bonus: 5,
+			Reach: 5,
+			Damage: []models.DamageRoll{
+				{DiceCount: 2, DiceType: "d6", Bonus: 3, DamageType: "fire"},
+			},
+		},
+	}
+}
+
+func TestSelectTarget_SmartAvoidsImmune(t *testing.T) {
+	t.Parallel()
+
+	// NPC deals fire damage. pc1 is immune to fire, pc2 is not.
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+			StructuredActions: []models.StructuredAction{
+				*makeFireMeleeAction(),
+			},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 1, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, Immunities: []string{"fire"}},
+			"pc2": {MaxHP: 50, AC: 15},
+		},
+		Intelligence: 0.70,
+	}
+
+	targets := SelectTarget(input, makeFireMeleeAction())
+	if len(targets) != 1 || targets[0] != "pc2" {
+		t.Errorf("smart avoids immune: got %v, want [pc2]", targets)
+	}
+}
+
+func TestSelectTarget_SmartPrefersVulnerable(t *testing.T) {
+	t.Parallel()
+
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+			StructuredActions: []models.StructuredAction{
+				*makeFireMeleeAction(),
+			},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 1, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15},
+			"pc2": {MaxHP: 50, AC: 15, Vulnerabilities: []string{"fire"}},
+		},
+		Intelligence: 0.70,
+	}
+
+	targets := SelectTarget(input, makeFireMeleeAction())
+	if len(targets) != 1 || targets[0] != "pc2" {
+		t.Errorf("smart prefers vulnerable: got %v, want [pc2]", targets)
+	}
+}
+
+func TestSelectTarget_SmartDistancePenalty(t *testing.T) {
+	t.Parallel()
+
+	// pc1 nearby, pc2 far away. Both same stats otherwise.
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+			StructuredActions: []models.StructuredAction{
+				*makeMeleeAction(),
+			},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),  // 5ft away
+			makeParticipant("pc2", true, 50, 20, 0), // 100ft away
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15},
+			"pc2": {MaxHP: 50, AC: 15},
+		},
+		Intelligence: 0.70,
+	}
+
+	// Using a ranged action so both targets are in range.
+	targets := SelectTarget(input, makeRangedAction())
+	if len(targets) != 1 || targets[0] != "pc1" {
+		t.Errorf("smart distance penalty: got %v, want [pc1] (nearby)", targets)
+	}
+}
+
+func TestSelectTarget_SmartConcentrationOverridesDistance(t *testing.T) {
+	t.Parallel()
+
+	// pc1 nearby, pc2 far but concentrating. Concentration (+30) > distance penalty (-15).
+	// pc2 at 15 cells = 75ft (within 80ft ranged range, but > 30+5=35 movement+reach → penalty).
+	pc2 := makeParticipant("pc2", true, 50, 15, 0)
+	pc2.RuntimeState.Concentration = &models.ConcentrationState{EffectName: "Haste"}
+
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+			StructuredActions: []models.StructuredAction{
+				*makeMeleeAction(),
+			},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),
+			pc2,
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15},
+			"pc2": {MaxHP: 50, AC: 15},
+		},
+		Intelligence: 0.70,
+	}
+
+	// Ranged action so both are in range (80ft range, pc2 at 75ft).
+	targets := SelectTarget(input, makeRangedAction())
+	if len(targets) != 1 || targets[0] != "pc2" {
+		t.Errorf("smart concentration > distance: got %v, want [pc2] (concentrating)", targets)
+	}
+}
