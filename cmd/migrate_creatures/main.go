@@ -156,6 +156,7 @@ type MigrationResult struct {
 	Movement          *Movement
 	Vision            *Vision
 	StructuredActions []StructuredAction
+	Multiattacks      []MultiattackGroup
 	MovementSkipped   bool
 	MovementReason    string
 	ActionsSkipped    bool
@@ -237,6 +238,17 @@ type ConditionEffect struct {
 	EscapeDC  int    `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`
 }
 
+type MultiattackGroup struct {
+	ID      string             `json:"id" bson:"id"`
+	Name    string             `json:"name" bson:"name"`
+	Actions []MultiattackEntry `json:"actions" bson:"actions"`
+}
+
+type MultiattackEntry struct {
+	ActionID string `json:"actionId" bson:"actionId"`
+	Count    int    `json:"count" bson:"count"`
+}
+
 // migrateCreature processes a single creature document
 func migrateCreature(creature bson.M) *MigrationResult {
 	result := &MigrationResult{
@@ -272,10 +284,14 @@ func migrateCreature(creature bson.M) *MigrationResult {
 			originalActions = actions
 		}
 
-		structuredActions := convertAttacks(attacks, originalActions)
+		structuredActions, multiattacks := convertAttacks(attacks, originalActions)
 		if len(structuredActions) > 0 {
 			result.StructuredActions = structuredActions
 			result.Updates["structuredActions"] = structuredActions
+		}
+		if len(multiattacks) > 0 {
+			result.Multiattacks = multiattacks
+			result.Updates["multiattacks"] = multiattacks
 		}
 	} else {
 		// Check if has actions but no llm_parsed_attack
@@ -417,8 +433,8 @@ func convertSenses(senses bson.M) *Vision {
 	return vision
 }
 
-// convertAttacks converts llm_parsed_attack to StructuredActions
-func convertAttacks(attacks bson.A, originalActions bson.A) []StructuredAction {
+// convertAttacks converts llm_parsed_attack to StructuredActions and MultiattackGroups.
+func convertAttacks(attacks bson.A, originalActions bson.A) ([]StructuredAction, []MultiattackGroup) {
 	var result []StructuredAction
 
 	// Build map of original action descriptions
@@ -442,6 +458,11 @@ func convertAttacks(attacks bson.A, originalActions bson.A) []StructuredAction {
 
 		name, _ := attack["name"].(string)
 		if name == "" {
+			continue
+		}
+
+		// Skip multiattack containers — they are processed in extractMultiattacks
+		if subAttacks, ok := attack["attacks"].(bson.A); ok && len(subAttacks) > 0 {
 			continue
 		}
 
@@ -484,7 +505,101 @@ func convertAttacks(attacks bson.A, originalActions bson.A) []StructuredAction {
 		result = append(result, sa)
 	}
 
-	return result
+	// Second pass: extract multiattack groups from attacks that have "attacks" sub-field
+	multiattacks := extractMultiattacks(attacks, result)
+
+	return result, multiattacks
+}
+
+// extractMultiattacks scans llm_parsed_attack entries for multiattack containers
+// (entries with non-empty "attacks" sub-field) and resolves references to StructuredActions.
+func extractMultiattacks(attacks bson.A, actions []StructuredAction) []MultiattackGroup {
+	var groups []MultiattackGroup
+
+	for _, a := range attacks {
+		attack, ok := a.(bson.M)
+		if !ok {
+			continue
+		}
+
+		subAttacks, ok := attack["attacks"].(bson.A)
+		if !ok || len(subAttacks) == 0 {
+			continue
+		}
+
+		name, _ := attack["name"].(string)
+		if name == "" {
+			name = "Мультиатака"
+		}
+		cleanName, _ := parseRecharge(name)
+
+		var entries []MultiattackEntry
+		for _, sa := range subAttacks {
+			sub, ok := sa.(bson.M)
+			if !ok {
+				continue
+			}
+
+			typeName, _ := sub["type"].(string)
+			if typeName == "" {
+				continue
+			}
+
+			count := 1
+			if c, ok := sub["count"].(int32); ok {
+				count = int(c)
+			} else if c, ok := sub["count"].(int64); ok {
+				count = int(c)
+			} else if c, ok := sub["count"].(float64); ok {
+				count = int(c)
+			}
+
+			// Match type name against StructuredAction names
+			actionID := matchActionByName(typeName, actions)
+			if actionID == "" {
+				log.Printf("Warning: multiattack sub-entry %q not matched to any StructuredAction", typeName)
+				continue
+			}
+
+			entries = append(entries, MultiattackEntry{
+				ActionID: actionID,
+				Count:    count,
+			})
+		}
+
+		if len(entries) > 0 {
+			groups = append(groups, MultiattackGroup{
+				ID:      generateID(cleanName),
+				Name:    cleanName,
+				Actions: entries,
+			})
+		}
+	}
+
+	return groups
+}
+
+// matchActionByName finds a StructuredAction by name, using case-insensitive exact match
+// first, then substring fallback.
+func matchActionByName(typeName string, actions []StructuredAction) string {
+	lower := strings.ToLower(typeName)
+
+	// Exact case-insensitive match
+	for _, sa := range actions {
+		if strings.EqualFold(sa.Name, typeName) {
+			return sa.ID
+		}
+	}
+
+	// Substring fallback: action name contains the type name or vice versa
+	for _, sa := range actions {
+		saLower := strings.ToLower(sa.Name)
+		if strings.Contains(saLower, lower) || strings.Contains(lower, saLower) {
+			return sa.ID
+		}
+	}
+
+	return ""
 }
 
 // parseRecharge extracts recharge info from action name
@@ -899,6 +1014,16 @@ func printResult(creature bson.M, result *MigrationResult) {
 		}
 	} else if result.ActionsSkipped {
 		fmt.Printf("StructuredActions: SKIPPED (%s)\n", result.ActionsReason)
+	}
+
+	if len(result.Multiattacks) > 0 {
+		fmt.Printf("Multiattacks: %d group(s)\n", len(result.Multiattacks))
+		for i, mg := range result.Multiattacks {
+			fmt.Printf("  [%d] %s (id=%s)\n", i, mg.Name, mg.ID)
+			for _, entry := range mg.Actions {
+				fmt.Printf("      %s ×%d\n", entry.ActionID, entry.Count)
+			}
+		}
 	}
 }
 

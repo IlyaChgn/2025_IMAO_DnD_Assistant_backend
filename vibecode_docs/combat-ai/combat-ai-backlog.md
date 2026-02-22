@@ -26,7 +26,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ### PR-0: Action Pipeline Extension for NPC Actions
 
-**Status:** Planned
+**Status:** Done ✅ (PR #30, merged 2026-02-22)
 **Dependencies:** None (can be done in parallel with PR-1 through PR-5)
 **Branch:** `feature/action-pipeline-npc-actions`
 
@@ -41,21 +41,21 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 Добавить NPC-ветку в `ExecuteAction()` dispatcher. Определять NPC/PC по `participant.IsPlayerCharacter`:
 
-- [ ] **NPC branch в dispatcher (actions.go):**
+- [x] **NPC branch в dispatcher (actions.go):**
   - Если `participant.IsPlayerCharacter == false`:
     - Загрузить `Creature` template по `participant.CreatureID` из `bestiaryRepo` (уже инжектирован в `actionsUsecases`)
     - Передать `creature` вместо `charBase`/`derived` в NPC-resolvers
   - Если `participant.IsPlayerCharacter == true`:
     - Существующая PC-логика без изменений
 
-- [ ] **resolveNPCWeaponAttack (новый файл: resolve_npc_weapon.go):**
+- [x] **resolveNPCWeaponAttack (новый файл: resolve_npc_weapon.go):**
   - Найти `StructuredAction` по `cmd.WeaponID` == `StructuredAction.ID` в `creature.StructuredActions`
   - Бросок атаки: d20 + `AttackRollData.Bonus`
   - Бросок урона: для каждого `AttackRollData.Damage[]` → `DiceCount` × `DiceType` + `Bonus`
   - Применить урон к цели (переиспользовать `applyDamageToTarget()` — он уже различает NPC/PC target)
   - Формат `ActionResponse` идентичен PC-атакам
 
-- [ ] **resolveNPCUseFeature (новый файл: resolve_npc_feature.go):**
+- [x] **resolveNPCUseFeature (новый файл: resolve_npc_feature.go):**
   - Найти `StructuredAction` по `cmd.FeatureID` == `StructuredAction.ID`
   - Если `StructuredAction.SavingThrow != nil` (дыхание дракона):
     - Для каждой цели: бросок спасброска d20 + save bonus vs DC
@@ -65,7 +65,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
   - Если `StructuredAction.Recharge != nil` → сбросить `RuntimeState.Resources.RechargeReady[actionID] = false`
   - Применить `ActionEffect[]` (conditions, ongoing damage, movement)
 
-- [ ] **resolveNPCSpellCast (новый файл: resolve_npc_spell.go):**
+- [x] **resolveNPCSpellCast (новый файл: resolve_npc_spell.go):**
   - Phase 1 (минимальная реализация):
     - Найти spell по `cmd.SpellID` в `creature.Spellcasting.SpellsByLevel` или `creature.Spellcasting.Spells`
     - Использовать `Spellcasting.SpellAttackBonus` для spell attacks
@@ -75,8 +75,8 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
     - Иначе — записать в log "spell cast" без автоматического урона (DM разрешит вручную)
   - Phase 2: полная интеграция с SpellDefinition
 
-- [ ] **Не ломать PC pipeline:** все существующие resolve-функции остаются без изменений
-- [ ] **Audit log:** NPC-действия записываются аналогично PC-действиям
+- [x] **Не ломать PC pipeline:** все существующие resolve-функции остаются без изменений
+- [x] **Audit log:** NPC-действия записываются аналогично PC-действиям
 - [ ] **Unit tests:** NPC weapon attack, NPC use_feature (breath weapon), PC weapon attack (regression)
 
 **Key files:**
@@ -90,14 +90,14 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 - `internal/models/creature.go` — `Creature.StructuredActions`, `Creature.Spellcasting`
 
 **Acceptance criteria:**
-- [ ] `ExecuteAction()` с `weapon_attack` type для NPC → находит `StructuredAction` по ID, бросает d20 + bonus, считает урон
-- [ ] `ExecuteAction()` с `use_feature` type для NPC → обрабатывает SavingThrow-based abilities (дыхание дракона)
-- [ ] `ExecuteAction()` с `spell_cast` type для NPC → использует `Spellcasting.SpellAttackBonus/SpellSaveDC`, тратит слот
-- [ ] PC weapon/spell/feature attacks continue to work (no regression)
-- [ ] `applyDamageToTarget()` корректно мутирует HP для NPC и PC targets (уже работает)
-- [ ] Recharge-способность после использования: `RechargeReady[actionID] = false`
-- [ ] Limited-use способность: `AbilityUses[actionID]` уменьшается
-- [ ] Audit log записывает NPC-действия
+- [x] `ExecuteAction()` с `weapon_attack` type для NPC → находит `StructuredAction` по ID, бросает d20 + bonus, считает урон
+- [x] `ExecuteAction()` с `use_feature` type для NPC → обрабатывает SavingThrow-based abilities (дыхание дракона)
+- [x] `ExecuteAction()` с `spell_cast` type для NPC → использует `Spellcasting.SpellAttackBonus/SpellSaveDC`, тратит слот
+- [x] PC weapon/spell/feature attacks continue to work (no regression)
+- [x] `applyDamageToTarget()` корректно мутирует HP для NPC и PC targets (уже работает)
+- [x] Recharge-способность после использования: `RechargeReady[actionID] = false`
+- [x] Limited-use способность: `AbilityUses[actionID]` уменьшается
+- [x] Audit log записывает NPC-действия
 
 ---
 

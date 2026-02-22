@@ -177,6 +177,7 @@ type Creature struct {
 	Environment           []string            `json:"environment,omitempty" bson:"environment,omitempty"`
 	LLMParsedAttack       []AttackLLM         `bson:"llm_parsed_attack,omitempty" json:"attacksLLM,omitempty"`
 	StructuredActions     []StructuredAction  `json:"structuredActions,omitempty" bson:"structuredActions,omitempty"`   // machine-readable actions for automation
+	Multiattacks          []MultiattackGroup  `json:"multiattacks,omitempty" bson:"multiattacks,omitempty"`             // grouped attacks (bite + 2 claws)
 	Spellcasting          *Spellcasting       `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`             // regular spellcasting (spell slots)
 	InnateSpellcasting    *InnateSpellcasting `json:"innateSpellcasting,omitempty" bson:"innateSpellcasting,omitempty"` // at-will and X/day spells
 	UserID                string              `bson:"userID,omitempty" json:"userID,omitempty"`
