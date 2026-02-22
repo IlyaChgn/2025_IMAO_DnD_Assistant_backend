@@ -250,6 +250,7 @@ func (srv *Server) Run() error {
 	llmInmemoryStorage := bestiaryrepo.NewInMemoryLLMRepo()
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase, mongoMetrics)
 	characterBaseRepository := characterrepo.NewCharacterBaseStorage(mongoDatabase, mongoMetrics)
+	characterAvatarS3Manager := characterrepo.NewAvatarS3Manager(minioClient, "character-avatars")
 	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool, postgresMetrics)
 	maptileRepository := maptilerepo.NewMapTilesStorage(mongoDatabase, mongoMetrics)
 	mapsRepository := mapsrepo.NewMapsStorage(postgresPool, postgresMetrics)
@@ -265,7 +266,7 @@ func (srv *Server) Run() error {
 		bestiaryuc.NewGoRunner(), bestiaryuc.NewUUIDGenerator())
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
-	characterBaseUsecases := characteruc.NewCharacterBaseUsecases(characterBaseRepository)
+	characterBaseUsecases := characteruc.NewCharacterBaseUsecases(characterBaseRepository, characterAvatarS3Manager)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 	googleClient := authext.NewGoogleOAuth(cfg.GoogleOAuth.ClientID, cfg.GoogleOAuth.ClientSecret,
 		cfg.GoogleOAuth.RedirectURI)

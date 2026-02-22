@@ -2,7 +2,10 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
@@ -12,12 +15,15 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
 )
 
+const maxAvatarSize = 500 * 1024 // 500 KB
+
 type characterBaseUsecases struct {
-	repo characterinterfaces.CharacterBaseRepository
+	repo      characterinterfaces.CharacterBaseRepository
+	s3Manager characterinterfaces.AvatarS3Manager
 }
 
-func NewCharacterBaseUsecases(repo characterinterfaces.CharacterBaseRepository) characterinterfaces.CharacterBaseUsecases {
-	return &characterBaseUsecases{repo: repo}
+func NewCharacterBaseUsecases(repo characterinterfaces.CharacterBaseRepository, s3Manager characterinterfaces.AvatarS3Manager) characterinterfaces.CharacterBaseUsecases {
+	return &characterBaseUsecases{repo: repo, s3Manager: s3Manager}
 }
 
 func (uc *characterBaseUsecases) Create(ctx context.Context, char *models.CharacterBase) error {
@@ -103,4 +109,83 @@ func (uc *characterBaseUsecases) ImportLSS(ctx context.Context, fileData []byte,
 	}
 
 	return char, report, nil
+}
+
+func (uc *characterBaseUsecases) UploadAvatar(ctx context.Context, id string, userID int, fileData []byte) (string, error) {
+	l := logger.FromContext(ctx)
+
+	if len(fileData) > maxAvatarSize {
+		l.UsecasesWarn(apperrors.AvatarTooLargeErr, userID, map[string]any{"size": len(fileData)})
+		return "", apperrors.AvatarTooLargeErr
+	}
+
+	// Fetch character to validate existence/ownership and get old avatar URL for cleanup.
+	char, err := uc.GetByID(ctx, id, userID)
+	if err != nil {
+		return "", err
+	}
+	if char == nil {
+		return "", apperrors.CharacterNotFoundErr
+	}
+
+	objectName := fmt.Sprintf("%s-%d.webp", id, time.Now().UnixMilli())
+
+	avatarURL, err := uc.s3Manager.UploadAvatar(ctx, fileData, objectName)
+	if err != nil {
+		l.UsecasesError(err, userID, map[string]any{"id": id})
+		return "", apperrors.AvatarUploadErr
+	}
+
+	// Ownership is enforced atomically via userId in the MongoDB update filter.
+	if err := uc.repo.UpdateAvatarURL(ctx, id, strconv.Itoa(userID), avatarURL); err != nil {
+		l.UsecasesError(err, userID, map[string]any{"id": id})
+		// Best-effort cleanup: delete the just-uploaded S3 object to avoid orphan.
+		if delErr := uc.s3Manager.DeleteAvatar(ctx, objectName); delErr != nil {
+			l.UsecasesError(delErr, userID, map[string]any{"id": id, "orphanedObject": objectName})
+		}
+		return "", err
+	}
+
+	// Best-effort cleanup: delete old S3 avatar object if it existed.
+	if char.Avatar != nil && char.Avatar.Url != "" {
+		parts := strings.Split(char.Avatar.Url, "/")
+		if len(parts) > 0 {
+			oldObjectName := parts[len(parts)-1]
+			if delErr := uc.s3Manager.DeleteAvatar(ctx, oldObjectName); delErr != nil {
+				l.UsecasesError(delErr, userID, map[string]any{"id": id, "oldObject": oldObjectName})
+				// Non-fatal: old object leaked but new avatar is live.
+			}
+		}
+	}
+
+	return avatarURL, nil
+}
+
+func (uc *characterBaseUsecases) DeleteAvatar(ctx context.Context, id string, userID int) error {
+	l := logger.FromContext(ctx)
+
+	// Need to fetch character to get the current avatar URL for S3 deletion.
+	char, err := uc.GetByID(ctx, id, userID)
+	if err != nil {
+		return err
+	}
+	if char == nil {
+		return apperrors.CharacterNotFoundErr
+	}
+
+	// Delete from S3 if avatar URL exists
+	if char.Avatar != nil && char.Avatar.Url != "" {
+		// Extract object name from URL: https://encounterium.ru/character-avatars/{objectName}
+		parts := strings.Split(char.Avatar.Url, "/")
+		if len(parts) > 0 {
+			objectName := parts[len(parts)-1]
+			if err := uc.s3Manager.DeleteAvatar(ctx, objectName); err != nil {
+				l.UsecasesError(err, userID, map[string]any{"id": id, "objectName": objectName})
+				// Continue to clear DB even if S3 delete fails — avoid orphaned DB state
+			}
+		}
+	}
+
+	// Ownership is enforced atomically via userId in the MongoDB update filter.
+	return uc.repo.ClearAvatar(ctx, id, strconv.Itoa(userID))
 }

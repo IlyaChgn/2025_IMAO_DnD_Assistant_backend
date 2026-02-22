@@ -13,4 +13,10 @@ var (
 
 	VersionConflictErr    = errors.New("version conflict: document was modified by another request")
 	ConversionFailedError = errors.New("LSS conversion failed")
+
+	CharacterNotFoundErr = errors.New("character not found")
+
+	AvatarTooLargeErr = errors.New("avatar file exceeds maximum size")
+	AvatarUploadErr   = errors.New("failed to upload avatar")
+	AvatarDeleteErr   = errors.New("failed to delete avatar")
 )
