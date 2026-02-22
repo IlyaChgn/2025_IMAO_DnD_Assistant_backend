@@ -120,6 +120,15 @@ func (uc *characterBaseUsecases) UploadAvatar(ctx context.Context, id string, us
 		return "", apperrors.AvatarTooLargeErr
 	}
 
+	// Fetch character to validate existence/ownership and get old avatar URL for cleanup.
+	char, err := uc.GetByID(ctx, id, userID)
+	if err != nil {
+		return "", err
+	}
+	if char == nil {
+		return "", apperrors.CharacterNotFoundErr
+	}
+
 	objectName := fmt.Sprintf("%s-%d.webp", id, time.Now().UnixMilli())
 
 	avatarURL, err := uc.s3Manager.UploadAvatar(ctx, fileData, objectName)
@@ -131,7 +140,23 @@ func (uc *characterBaseUsecases) UploadAvatar(ctx context.Context, id string, us
 	// Ownership is enforced atomically via userId in the MongoDB update filter.
 	if err := uc.repo.UpdateAvatarURL(ctx, id, strconv.Itoa(userID), avatarURL); err != nil {
 		l.UsecasesError(err, userID, map[string]any{"id": id})
+		// Best-effort cleanup: delete the just-uploaded S3 object to avoid orphan.
+		if delErr := uc.s3Manager.DeleteAvatar(ctx, objectName); delErr != nil {
+			l.UsecasesError(delErr, userID, map[string]any{"id": id, "orphanedObject": objectName})
+		}
 		return "", err
+	}
+
+	// Best-effort cleanup: delete old S3 avatar object if it existed.
+	if char.Avatar != nil && char.Avatar.Url != "" {
+		parts := strings.Split(char.Avatar.Url, "/")
+		if len(parts) > 0 {
+			oldObjectName := parts[len(parts)-1]
+			if delErr := uc.s3Manager.DeleteAvatar(ctx, oldObjectName); delErr != nil {
+				l.UsecasesError(delErr, userID, map[string]any{"id": id, "oldObject": oldObjectName})
+				// Non-fatal: old object leaked but new avatar is live.
+			}
+		}
 	}
 
 	return avatarURL, nil
@@ -146,7 +171,7 @@ func (uc *characterBaseUsecases) DeleteAvatar(ctx context.Context, id string, us
 		return err
 	}
 	if char == nil {
-		return apperrors.InvalidInputError
+		return apperrors.CharacterNotFoundErr
 	}
 
 	// Delete from S3 if avatar URL exists

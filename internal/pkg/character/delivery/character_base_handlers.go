@@ -354,6 +354,9 @@ func (h *CharacterBaseHandler) handleError(w http.ResponseWriter, r *http.Reques
 	case errors.Is(err, apperrors.InvalidInputError) || errors.Is(err, apperrors.InvalidIDErr):
 		code = responses.StatusBadRequest
 		status = responses.ErrInvalidID
+	case errors.Is(err, apperrors.CharacterNotFoundErr):
+		code = responses.StatusNotFound
+		status = responses.ErrCharacterNotFound
 	case errors.Is(err, apperrors.PermissionDeniedError):
 		code = responses.StatusForbidden
 		status = responses.ErrForbidden
