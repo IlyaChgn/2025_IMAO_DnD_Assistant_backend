@@ -133,26 +133,7 @@ func resolveSpellCast(
 		})
 	}
 
-	// Handle concentration
-	if spellDef != nil && spellDef.Concentration {
-		// Clear existing concentration
-		if runtime.Concentration != nil {
-			stateChanges = append(stateChanges, models.StateChange{
-				Description: fmt.Sprintf("Dropped concentration on %s", runtime.Concentration.SpellName),
-			})
-		}
-
-		runtime.Concentration = &models.CharacterConcentration{
-			SpellID:   cmd.SpellID,
-			SpellName: spellRef.Name,
-		}
-		mutated = true
-		stateChanges = append(stateChanges, models.StateChange{
-			Description: fmt.Sprintf("Concentrating on %s", spellRef.Name),
-		})
-	}
-
-	// Resolve spell mechanics
+	// Build response before Counterspell check (concentration handled after).
 	resp := &models.ActionResponse{
 		StateChanges: stateChanges,
 		Summary:      fmt.Sprintf("%s casts %s", charBase.Name, spellRef.Name),
@@ -164,8 +145,52 @@ func resolveSpellCast(
 		resp.Summary += fmt.Sprintf(" (level %d slot)", slotLevel)
 	}
 
+	// Evaluate Counterspell reaction against PC spell.
+	// Must happen BEFORE concentration swap — a countered spell never takes effect,
+	// so the caster should keep their existing concentration.
+	// Rituals cannot be counterspelled (D&D 5e: casting time is 10+ minutes).
+	if uc.reactionEval != nil && spellDef != nil && spellDef.Level > 0 && !cmd.IsRitual {
+		csResult, csErr := uc.reactionEval.EvaluateCounterspell(ctx, ed, participant.InstanceID, slotLevel)
+		if csErr != nil {
+			l.UsecasesWarn(csErr, userID, map[string]any{"casterID": participant.InstanceID, "reaction": "counterspell"})
+		}
+		if csErr == nil && csResult != nil {
+			applyCounterspellReaction(csResult, ed)
+			resp.ReactionSummary = append(resp.ReactionSummary, buildCounterspellSummary(csResult))
+			mutated = true
+			if csResult.Success {
+				resp.Summary += fmt.Sprintf(" — COUNTERED by %s!", csResult.ReactorName)
+				if pErr := persistEncounterData(ctx, uc, ed, encounterID); pErr != nil {
+					l.UsecasesError(pErr, userID, map[string]any{"encounterID": encounterID})
+					return nil, fmt.Errorf("persist encounter: %w", pErr)
+				}
+				return resp, nil
+			}
+		}
+	}
+
+	// Handle concentration (after Counterspell — countered spells don't swap concentration).
+	if spellDef != nil && spellDef.Concentration {
+		if runtime.Concentration != nil {
+			resp.StateChanges = append(resp.StateChanges, models.StateChange{
+				Description: fmt.Sprintf("Dropped concentration on %s", runtime.Concentration.SpellName),
+			})
+		}
+
+		runtime.Concentration = &models.CharacterConcentration{
+			SpellID:   cmd.SpellID,
+			SpellName: spellRef.Name,
+		}
+		mutated = true
+		resp.StateChanges = append(resp.StateChanges, models.StateChange{
+			Description: fmt.Sprintf("Concentrating on %s", spellRef.Name),
+		})
+	}
+
 	if spellDef != nil {
-		resolveSpellMechanics(ctx, uc, cmd, charBase, derived, spellDef, slotLevel, ed, resp, userID)
+		if resolveSpellMechanics(ctx, uc, cmd, charBase, derived, spellDef, slotLevel, ed, resp, userID) {
+			mutated = true
+		}
 	}
 
 	// Apply effects to targets
@@ -612,6 +637,7 @@ type spellSaveResult struct {
 
 // resolveSpellMechanics adds roll results based on the spell definition's resolution type.
 // Handles damage (with upcast and cantrip scaling), healing, and conditions.
+// Returns true if encounter data was mutated (e.g., Shield reaction fired).
 func resolveSpellMechanics(
 	ctx context.Context,
 	uc *actionsUsecases,
@@ -623,7 +649,7 @@ func resolveSpellMechanics(
 	ed *EncounterData,
 	resp *models.ActionResponse,
 	userID int,
-) {
+) bool {
 	l := logger.FromContext(ctx)
 
 	// Load target stats for single-target resolution
@@ -646,12 +672,45 @@ func resolveSpellMechanics(
 
 	var saveRes *spellSaveResult
 	isCrit := false
+	mechanicsMutated := false
 
 	switch spellDef.Resolution.Type {
 	case "attack":
 		resolveSpellAttack(cmd, derived, ts, resp)
+
+		// Shield reaction for spell attacks against NPC targets.
+		// Skip on natural 20 (auto-hit) and natural 1 (auto-miss) — Shield has no effect.
+		if uc.reactionEval != nil && isSingleTarget && len(targetIDs) == 1 && resp.RollResult != nil && resp.RollResult.Natural != 20 && resp.RollResult.Natural != 1 {
+			target, _, tErr := ed.FindParticipantByInstanceID(targetIDs[0])
+			if tErr == nil && !target.IsPlayerCharacter {
+				shieldResult, sErr := uc.reactionEval.EvaluateShield(ctx, ed, targetIDs[0], resp.RollResult.Total)
+				if sErr != nil {
+					l.UsecasesWarn(sErr, userID, map[string]any{"targetID": targetIDs[0], "reaction": "shield"})
+				}
+				if sErr == nil && shieldResult != nil {
+					applyShieldReaction(shieldResult, ed)
+					resp.ReactionSummary = append(resp.ReactionSummary, buildShieldSummary(shieldResult))
+					mechanicsMutated = true
+					// Re-evaluate hit with new AC.
+					if ts != nil {
+						oldAC := ts.AC
+						ts.AC = shieldResult.NewEffectiveAC
+						natural := resp.RollResult.Natural
+						hit := natural != 1 && (natural == 20 || resp.RollResult.Total >= ts.AC)
+						resp.Hit = &hit
+						// Fix Summary: replace stale "HIT" + old AC with "MISS" + new AC.
+						if !hit {
+							oldSuffix := fmt.Sprintf(", %d to hit vs AC %d — HIT", resp.RollResult.Total, oldAC)
+							newSuffix := fmt.Sprintf(", %d to hit vs AC %d — MISS", resp.RollResult.Total, ts.AC)
+							resp.Summary = strings.Replace(resp.Summary, oldSuffix, newSuffix, 1)
+						}
+					}
+				}
+			}
+		}
+
 		if resp.Hit != nil && !*resp.Hit {
-			return // Miss — skip damage
+			return mechanicsMutated // Miss — skip damage
 		}
 		isCrit = resp.RollResult != nil && resp.RollResult.Natural == 20
 
@@ -661,10 +720,10 @@ func resolveSpellMechanics(
 			saveRes = resolveSpellSave(derived, spellDef, ts, resp)
 			if saveRes != nil && saveRes.noDamage {
 				// For save-none spells, conditions don't apply on success either
-				return
+				return false
 			}
 			if saveRes == nil && spellDef.Resolution.Save != nil {
-				return
+				return false
 			}
 		} else {
 			// Multi-target: announce DC in summary, per-target saves handled in resolveSpellCast
@@ -695,6 +754,7 @@ func resolveSpellMechanics(
 			resolveConditionEffect(effect.Condition, spellDef, saveRes, targetIDs, resp)
 		}
 	}
+	return mechanicsMutated
 }
 
 // rollDamageEffect rolls damage for a single spell damage effect,

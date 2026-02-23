@@ -80,6 +80,14 @@ type ConditionApplied struct {
 	SaveEnds  bool   `json:"saveEnds,omitempty"`
 }
 
+// ReactionSummary describes an NPC reaction that fired during action resolution.
+type ReactionSummary struct {
+	ReactorID   string `json:"reactorId"`
+	ReactorName string `json:"reactorName"`
+	Type        string `json:"type"`        // "shield", "counterspell", "parry"
+	Description string `json:"description"` // human-readable
+}
+
 // ActionResponse is returned by the action execution endpoint.
 type ActionResponse struct {
 	RollResult       *ActionRollResult  `json:"rollResult,omitempty"`
@@ -88,6 +96,7 @@ type ActionResponse struct {
 	ConditionApplied []ConditionApplied `json:"conditionApplied,omitempty"`
 	StateChanges     []StateChange      `json:"stateChanges,omitempty"`
 	TriggerResults   []TriggerResult    `json:"triggerResults,omitempty"`
+	ReactionSummary  []ReactionSummary  `json:"reactionSummary,omitempty"`
 	Summary          string             `json:"summary"`
 	Hit              *bool              `json:"hit,omitempty"`
 }

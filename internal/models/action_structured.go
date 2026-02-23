@@ -51,10 +51,12 @@ type AttackRollData struct {
 type AttackRollType string
 
 const (
-	AttackRollMeleeWeapon  AttackRollType = "melee_weapon"
-	AttackRollRangedWeapon AttackRollType = "ranged_weapon"
-	AttackRollMeleeSpell   AttackRollType = "melee_spell"
-	AttackRollRangedSpell  AttackRollType = "ranged_spell"
+	AttackRollMeleeWeapon          AttackRollType = "melee_weapon"
+	AttackRollRangedWeapon         AttackRollType = "ranged_weapon"
+	AttackRollMeleeSpell           AttackRollType = "melee_spell"
+	AttackRollRangedSpell          AttackRollType = "ranged_spell"
+	AttackRollMeleeOrRangedWeapon  AttackRollType = "melee_or_ranged_weapon"
+	AttackRollMeleeOrRangedSpell   AttackRollType = "melee_or_ranged_spell"
 )
 
 // RangeData describes normal and long range for ranged attacks.

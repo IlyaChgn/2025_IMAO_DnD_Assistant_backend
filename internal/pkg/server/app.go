@@ -65,6 +65,7 @@ import (
 	spellsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
 	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
 
+	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
 	auditlogrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/repository"
 	actionsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai"
@@ -379,6 +380,14 @@ func (srv *Server) Run() error {
 		combatAIEngine, encounterRepository, bestiaryRepository,
 		characterBaseRepository, actionsUsecases, auditLogRepository, tableManager,
 	)
+
+	// Inject reaction evaluator into actions usecases (breaks circular DI).
+	reactionEval := combataiuc.NewReactionEvaluator(bestiaryRepository)
+	if setter, ok := actionsUsecases.(actionsinterfaces.ReactionEvaluatorSetter); ok {
+		setter.SetReactionEvaluator(reactionEval)
+	} else {
+		log.Fatal("actionsUsecases does not implement ReactionEvaluatorSetter — DI wiring is broken")
+	}
 
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)

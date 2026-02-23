@@ -109,6 +109,22 @@ func resolveWeaponAttack(
 		return resp, nil
 	}
 
+	// Evaluate Shield reaction for NPC targets.
+	// Skip on natural 20 (auto-hit) and natural 1 (auto-miss) — Shield has no effect.
+	reactionMutated := false
+	if uc.reactionEval != nil && !target.IsPlayerCharacter && !isCrit && natural != 1 {
+		shieldResult, sErr := uc.reactionEval.EvaluateShield(ctx, ed, cmd.TargetID, attackTotal)
+		if sErr != nil {
+			l.UsecasesWarn(sErr, userID, map[string]any{"targetID": cmd.TargetID, "reaction": "shield"})
+		}
+		if sErr == nil && shieldResult != nil {
+			applyShieldReaction(shieldResult, ed)
+			ts.AC = shieldResult.NewEffectiveAC
+			resp.ReactionSummary = append(resp.ReactionSummary, buildShieldSummary(shieldResult))
+			reactionMutated = true
+		}
+	}
+
 	// D&D 5e hit rules: nat 1 always misses, nat 20 always hits, otherwise compare vs AC
 	hit := natural != 1 && (isCrit || attackTotal >= ts.AC)
 	resp.Hit = &hit
@@ -116,6 +132,13 @@ func resolveWeaponAttack(
 	if !hit {
 		resp.Summary = fmt.Sprintf("%s attacks %s with %s: %d to hit vs AC %d — MISS",
 			charBase.Name, ts.Name, weapon.Name, attackTotal, ts.AC)
+		// Persist if Shield fired (reaction used, slot spent, StatModifier added).
+		if reactionMutated {
+			if pErr := persistEncounterData(ctx, uc, ed, encounterID); pErr != nil {
+				l.UsecasesError(pErr, userID, map[string]any{"encounterID": encounterID})
+				return nil, fmt.Errorf("persist encounter: %w", pErr)
+			}
+		}
 		return resp, nil
 	}
 
@@ -133,6 +156,25 @@ func resolveWeaponAttack(
 
 	resp.DamageRolls = []models.ActionRollResult{*damageRoll}
 
+	// Evaluate Parry reaction for NPC targets (melee attacks only per D&D 5e).
+	isMeleeAttack := weapon.AttackType == "melee" || weapon.AttackType == "melee_or_ranged"
+	if uc.reactionEval != nil && !target.IsPlayerCharacter && finalDamage > 0 && isMeleeAttack {
+		parryResult, pErr := uc.reactionEval.EvaluateParry(ctx, ed, cmd.TargetID, finalDamage)
+		if pErr != nil {
+			l.UsecasesWarn(pErr, userID, map[string]any{"targetID": cmd.TargetID, "reaction": "parry"})
+		}
+		if pErr == nil && parryResult != nil {
+			finalDamage -= parryResult.DamageReduction
+			if finalDamage < 0 {
+				finalDamage = 0
+			}
+			// Update DamageRolls to reflect post-Parry damage.
+			resp.DamageRolls[0].FinalDamage = intPtr(finalDamage)
+			applyParryReaction(parryResult, ed)
+			resp.ReactionSummary = append(resp.ReactionSummary, buildParrySummary(parryResult))
+		}
+	}
+
 	resp.Summary = fmt.Sprintf("%s attacks %s with %s: %d to hit vs AC %d — HIT",
 		charBase.Name, ts.Name, weapon.Name, attackTotal, ts.AC)
 	if isCrit {
@@ -145,13 +187,14 @@ func resolveWeaponAttack(
 	}
 
 	// Apply final damage to target
-	applyDamageToTarget(target, finalDamage)
-
-	resp.StateChanges = []models.StateChange{{
-		TargetID:    cmd.TargetID,
-		HPDelta:     -finalDamage,
-		Description: fmt.Sprintf("%s takes %d %s damage from %s", ts.Name, finalDamage, weapon.DamageType, weapon.Name),
-	}}
+	if finalDamage > 0 {
+		applyDamageToTarget(target, finalDamage)
+		resp.StateChanges = []models.StateChange{{
+			TargetID:    cmd.TargetID,
+			HPDelta:     -finalDamage,
+			Description: fmt.Sprintf("%s takes %d %s damage from %s", ts.Name, finalDamage, weapon.DamageType, weapon.Name),
+		}}
+	}
 
 	// Evaluate weapon triggers on hit
 	if len(weapon.Triggers) > 0 {

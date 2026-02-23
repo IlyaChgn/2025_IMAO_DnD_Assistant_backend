@@ -50,8 +50,9 @@ func resolveNpcSpellCast(
 	// Slot/use deduction
 	if source.IsInnate {
 		if !source.IsAtWill && source.PerDayLimit > 0 {
-			// Innate per-day spell — track in AbilityUses
-			resourceKey := fmt.Sprintf("innate:%s", cmd.SpellID)
+			// Innate per-day spell — track in AbilityUses.
+			// Lowercase to match the reaction engine's key format (SpellIDOrName).
+			resourceKey := fmt.Sprintf("innate:%s", strings.ToLower(cmd.SpellID))
 			if resources.AbilityUses == nil {
 				resources.AbilityUses = make(map[string]int)
 			}
@@ -110,25 +111,7 @@ func resolveNpcSpellCast(
 		}
 	}
 
-	// Concentration handling
-	if spellDef != nil && spellDef.Concentration {
-		if participant.RuntimeState.Concentration != nil {
-			stateChanges = append(stateChanges, models.StateChange{
-				Description: fmt.Sprintf("Dropped concentration on %s",
-					participant.RuntimeState.Concentration.EffectName),
-			})
-		}
-		participant.RuntimeState.Concentration = &models.ConcentrationState{
-			EffectName: source.Spell.Name,
-			EffectID:   cmd.SpellID,
-		}
-		mutated = true
-		stateChanges = append(stateChanges, models.StateChange{
-			Description: fmt.Sprintf("Concentrating on %s", source.Spell.Name),
-		})
-	}
-
-	// Build response
+	// Build response before Counterspell check (concentration handled after).
 	resp := &models.ActionResponse{
 		StateChanges: stateChanges,
 		Summary:      fmt.Sprintf("%s casts %s", actorName, source.Spell.Name),
@@ -140,9 +123,33 @@ func resolveNpcSpellCast(
 		resp.Summary += " (at will)"
 	}
 
+	// NOTE: Counterspell against NPC spells is NOT evaluated here.
+	// EvaluateCounterspell only automates NPC reactions to PC spells.
+	// Countering NPC spells would require player input (PC reaction), not AI automation.
+
+	// Concentration handling.
+	if spellDef != nil && spellDef.Concentration {
+		if participant.RuntimeState.Concentration != nil {
+			resp.StateChanges = append(resp.StateChanges, models.StateChange{
+				Description: fmt.Sprintf("Dropped concentration on %s",
+					participant.RuntimeState.Concentration.EffectName),
+			})
+		}
+		participant.RuntimeState.Concentration = &models.ConcentrationState{
+			EffectName: source.Spell.Name,
+			EffectID:   cmd.SpellID,
+		}
+		mutated = true
+		resp.StateChanges = append(resp.StateChanges, models.StateChange{
+			Description: fmt.Sprintf("Concentrating on %s", source.Spell.Name),
+		})
+	}
+
 	// Resolve spell mechanics if we have a definition
 	if spellDef != nil {
-		resolveNpcSpellMechanics(ctx, uc, cmd, source, spellDef, slotLevel, ed, resp, userID)
+		if resolveNpcSpellMechanics(ctx, uc, cmd, source, spellDef, slotLevel, ed, resp, userID) {
+			mutated = true
+		}
 	}
 
 	// Apply damage/healing/conditions to targets
@@ -296,6 +303,7 @@ func resolveNpcSpellCast(
 }
 
 // resolveNpcSpellMechanics resolves spell mechanics using NPC-specific spell stats.
+// Returns true if encounter data was mutated (e.g., Shield reaction fired).
 func resolveNpcSpellMechanics(
 	ctx context.Context,
 	uc *actionsUsecases,
@@ -306,7 +314,7 @@ func resolveNpcSpellMechanics(
 	ed *EncounterData,
 	resp *models.ActionResponse,
 	userID int,
-) {
+) bool {
 	l := logger.FromContext(ctx)
 
 	targetIDs := resolveTargetIDs(cmd)
@@ -327,12 +335,45 @@ func resolveNpcSpellMechanics(
 
 	var saveRes *spellSaveResult
 	isCrit := false
+	mechanicsMutated := false
 
 	switch spellDef.Resolution.Type {
 	case "attack":
 		resolveNpcSpellAttack(cmd, source.SpellAttackBonus, ts, resp)
+
+		// Shield reaction for spell attacks against NPC targets.
+		// Skip on natural 20 (auto-hit) and natural 1 (auto-miss) — Shield has no effect.
+		if uc.reactionEval != nil && isSingleTarget && len(targetIDs) == 1 && resp.RollResult != nil && resp.RollResult.Natural != 20 && resp.RollResult.Natural != 1 {
+			target, _, tErr := ed.FindParticipantByInstanceID(targetIDs[0])
+			if tErr == nil && !target.IsPlayerCharacter {
+				shieldResult, sErr := uc.reactionEval.EvaluateShield(ctx, ed, targetIDs[0], resp.RollResult.Total)
+				if sErr != nil {
+					l.UsecasesWarn(sErr, userID, map[string]any{"targetID": targetIDs[0], "reaction": "shield"})
+				}
+				if sErr == nil && shieldResult != nil {
+					applyShieldReaction(shieldResult, ed)
+					resp.ReactionSummary = append(resp.ReactionSummary, buildShieldSummary(shieldResult))
+					mechanicsMutated = true
+					// Re-evaluate hit with new AC.
+					if ts != nil {
+						oldAC := ts.AC
+						ts.AC = shieldResult.NewEffectiveAC
+						natural := resp.RollResult.Natural
+						hit := natural != 1 && (natural == 20 || resp.RollResult.Total >= ts.AC)
+						resp.Hit = &hit
+						// Fix Summary: replace stale "HIT" + old AC with "MISS" + new AC.
+						if !hit {
+							oldSuffix := fmt.Sprintf(", %d to hit vs AC %d — HIT", resp.RollResult.Total, oldAC)
+							newSuffix := fmt.Sprintf(", %d to hit vs AC %d — MISS", resp.RollResult.Total, ts.AC)
+							resp.Summary = strings.Replace(resp.Summary, oldSuffix, newSuffix, 1)
+						}
+					}
+				}
+			}
+		}
+
 		if resp.Hit != nil && !*resp.Hit {
-			return
+			return mechanicsMutated
 		}
 		isCrit = resp.RollResult != nil && resp.RollResult.Natural == 20
 
@@ -340,10 +381,10 @@ func resolveNpcSpellMechanics(
 		if isSingleTarget {
 			saveRes = resolveNpcSpellSave(source.SpellSaveDC, spellDef, ts, resp)
 			if saveRes != nil && saveRes.noDamage {
-				return
+				return false
 			}
 			if saveRes == nil && spellDef.Resolution.Save != nil {
-				return
+				return false
 			}
 		} else {
 			if spellDef.Resolution.Save != nil {
@@ -372,6 +413,7 @@ func resolveNpcSpellMechanics(
 			resolveConditionEffect(effect.Condition, spellDef, saveRes, targetIDs, resp)
 		}
 	}
+	return mechanicsMutated
 }
 
 // resolveNpcSpellAttack handles attack-type spell resolution for NPCs.

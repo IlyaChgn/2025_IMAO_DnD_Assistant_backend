@@ -128,6 +128,21 @@ func resolveNpcWeaponAttack(
 		return resp, nil
 	}
 
+	// Evaluate Shield reaction for NPC targets.
+	// Skip on natural 20 (auto-hit) and natural 1 (auto-miss) — Shield has no effect.
+	if uc.reactionEval != nil && !target.IsPlayerCharacter && !isCrit && natural != 1 {
+		shieldResult, sErr := uc.reactionEval.EvaluateShield(ctx, ed, cmd.TargetID, attackTotal)
+		if sErr != nil {
+			l.UsecasesWarn(sErr, userID, map[string]any{"targetID": cmd.TargetID, "reaction": "shield"})
+		}
+		if sErr == nil && shieldResult != nil {
+			applyShieldReaction(shieldResult, ed)
+			ts.AC = shieldResult.NewEffectiveAC
+			resp.ReactionSummary = append(resp.ReactionSummary, buildShieldSummary(shieldResult))
+			mutated = true
+		}
+	}
+
 	// D&D 5e hit rules: nat 1 always misses, nat 20 always hits, otherwise compare vs AC
 	hit := natural != 1 && (isCrit || attackTotal >= ts.AC)
 	resp.Hit = &hit
@@ -150,6 +165,27 @@ func resolveNpcWeaponAttack(
 	damageRolls, totalDamage := rollNpcDamage(action.Attack.Damage, isCrit, ts)
 	resp.DamageRolls = damageRolls
 
+	// Evaluate Parry reaction for NPC targets (melee attacks only per D&D 5e).
+	// D&D 5e Parry: only melee weapon attacks can be parried (not spell attacks).
+	isMeleeAttack := action.Attack != nil && (action.Attack.Type == models.AttackRollMeleeWeapon || action.Attack.Type == models.AttackRollMeleeOrRangedWeapon)
+	if uc.reactionEval != nil && !target.IsPlayerCharacter && totalDamage > 0 && isMeleeAttack {
+		parryResult, pErr := uc.reactionEval.EvaluateParry(ctx, ed, cmd.TargetID, totalDamage)
+		if pErr != nil {
+			l.UsecasesWarn(pErr, userID, map[string]any{"targetID": cmd.TargetID, "reaction": "parry"})
+		}
+		if pErr == nil && parryResult != nil {
+			totalDamage -= parryResult.DamageReduction
+			if totalDamage < 0 {
+				totalDamage = 0
+			}
+			// Update DamageRolls to reflect post-Parry damage.
+			adjustDamageRollsForReduction(resp.DamageRolls, parryResult.DamageReduction)
+			applyParryReaction(parryResult, ed)
+			resp.ReactionSummary = append(resp.ReactionSummary, buildParrySummary(parryResult))
+			mutated = true
+		}
+	}
+
 	resp.Summary = fmt.Sprintf("%s attacks %s with %s: %d to hit vs AC %d — HIT",
 		actorName, ts.Name, action.Name, attackTotal, ts.AC)
 	if isCrit {
@@ -157,7 +193,7 @@ func resolveNpcWeaponAttack(
 			actorName, ts.Name, action.Name, attackTotal, ts.AC)
 	}
 	if len(damageRolls) > 0 {
-		resp.Summary += ", " + npcDamageSummary(damageRolls)
+		resp.Summary += fmt.Sprintf(", %d damage", totalDamage)
 	}
 
 	// Apply damage to target

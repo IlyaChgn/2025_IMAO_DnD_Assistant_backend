@@ -61,6 +61,9 @@ func processStartOfTurn(npc *models.ParticipantFull, creature *models.Creature) 
 	// 5. Condition duration tick.
 	changed = tickConditions(npc) || changed
 
+	// 6. StatModifier duration tick (Shield, Dodge expire at start of turn).
+	changed = tickStatModifiers(npc) || changed
+
 	return changed
 }
 
@@ -156,6 +159,36 @@ func tickConditions(npc *models.ParticipantFull) bool {
 	}
 
 	npc.RuntimeState.Conditions = kept
+	return len(kept) != original
+}
+
+// tickStatModifiers removes expired StatModifiers at start of turn.
+// DurationUntilTurn modifiers (Shield, Dodge) expire when the NPC's turn starts.
+// DurationRounds modifiers decrement their counter and expire when it reaches 0.
+func tickStatModifiers(npc *models.ParticipantFull) bool {
+	if len(npc.RuntimeState.StatModifiers) == 0 {
+		return false
+	}
+
+	original := len(npc.RuntimeState.StatModifiers)
+	kept := npc.RuntimeState.StatModifiers[:0]
+
+	for _, sm := range npc.RuntimeState.StatModifiers {
+		if sm.Duration == models.DurationUntilTurn {
+			continue // expired at start of this NPC's turn
+		}
+
+		if sm.Duration == models.DurationRounds && sm.RoundsLeft > 0 {
+			sm.RoundsLeft--
+			if sm.RoundsLeft <= 0 {
+				continue
+			}
+		}
+
+		kept = append(kept, sm)
+	}
+
+	npc.RuntimeState.StatModifiers = kept
 	return len(kept) != original
 }
 

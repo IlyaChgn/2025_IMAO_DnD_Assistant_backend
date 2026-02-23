@@ -42,7 +42,7 @@ func loadTargetStats(ctx context.Context, uc *actionsUsecases, target *models.Pa
 
 		return &TargetStats{
 			Name:            charBase.Name,
-			AC:              derived.ArmorClass,
+			AC:              effectiveAC(target, derived.ArmorClass),
 			SaveBonuses:     saveBonuses,
 			Resistances:     derived.Resistances,
 			Immunities:      derived.Immunities,
@@ -75,12 +75,26 @@ func loadTargetStats(ctx context.Context, uc *actionsUsecases, target *models.Pa
 
 	return &TargetStats{
 		Name:            name,
-		AC:              creature.ArmorClass,
+		AC:              effectiveAC(target, creature.ArmorClass),
 		SaveBonuses:     saveBonuses,
 		Resistances:     creature.DamageResistances,
 		Immunities:      creature.DamageImmunities,
 		Vulnerabilities: creature.DamageVulnerabilities,
 	}, nil
+}
+
+// effectiveAC computes AC with StatModifier bonuses applied.
+// Scans RuntimeState.StatModifiers for ModTargetAC + ModOpAdd entries (e.g., Shield +5).
+func effectiveAC(p *models.ParticipantFull, baseAC int) int {
+	ac := baseAC
+	for _, sm := range p.RuntimeState.StatModifiers {
+		for _, eff := range sm.Modifiers {
+			if eff.Target == models.ModTargetAC && eff.Operation == models.ModOpAdd {
+				ac += eff.Value
+			}
+		}
+	}
+	return ac
 }
 
 // creatureSaveBonus extracts the integer save bonus from Creature.SavingThrows.

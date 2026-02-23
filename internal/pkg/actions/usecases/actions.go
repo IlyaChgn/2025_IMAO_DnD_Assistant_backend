@@ -23,6 +23,13 @@ type actionsUsecases struct {
 	spellsRepo    spellsinterfaces.SpellsRepository
 	bestiaryRepo  bestiaryinterfaces.BestiaryRepository
 	auditLogRepo  actionsinterfaces.AuditLogRepository
+	reactionEval  actionsinterfaces.ReactionEvaluator // nil until injected via setter
+}
+
+// SetReactionEvaluator injects the reaction evaluator after construction.
+// This breaks the circular DI dependency between actions and combatai packages.
+func (uc *actionsUsecases) SetReactionEvaluator(re actionsinterfaces.ReactionEvaluator) {
+	uc.reactionEval = re
 }
 
 func NewActionsUsecases(

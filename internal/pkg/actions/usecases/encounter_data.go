@@ -38,6 +38,11 @@ func ParseEncounterData(data json.RawMessage) (*EncounterData, error) {
 	return ed, nil
 }
 
+// GetParticipants returns all participants (satisfies actions.EncounterDataReader).
+func (ed *EncounterData) GetParticipants() []models.ParticipantFull {
+	return ed.Participants
+}
+
 // FindParticipant searches for a participant whose CharacterRuntime.CharacterID
 // matches the given characterID. Returns the participant and its index, or an
 // error if not found.
