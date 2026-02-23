@@ -688,7 +688,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 | PR-9 | Spell slot management / resource manager (round-based economy) | Done ✅ (PR #40, 2026-02-23) |
 | PR-10 | AoE target counting (geometry on grid, `AreaOfEffect`) | Done ✅ (PR #41, 2026-02-23) |
 | PR-11 | Bonus actions + legendary actions between turns | Done ✅ (PR #42, 2026-02-23) |
-| PR-12 | Opportunity attacks (reaction hook on movement) | Planned |
+| PR-12 | Opportunity attacks (reaction hook on movement) | Done ✅ (PR #43, 2026-02-23) |
 
 ## Phase 3 Tasks (after Phase 2)
 
