@@ -554,3 +554,194 @@ func TestSelectAction_SmartNPC_UsesStrongAbility(t *testing.T) {
 		t.Errorf("smart NPC: got %q, want %q (strong ability should be used)", decision.ActionID, "acid_spray")
 	}
 }
+
+// --- AoE integration tests ---
+
+// makeAoEBreathWeapon creates a recharge breath weapon with a 15ft cone AoE.
+func makeAoEBreathWeapon() models.StructuredAction {
+	return models.StructuredAction{
+		ID: "fire_breath", Name: "Fire Breath", Category: models.ActionCategoryAction,
+		Recharge: &models.RechargeData{MinRoll: 5},
+		SavingThrow: &models.SavingThrowData{
+			Ability: models.AbilityDEX, DC: 15, OnFail: "full damage", OnSuccess: "half damage",
+			Damage: []models.DamageRoll{{DiceCount: 8, DiceType: "d6", DamageType: "fire"}},
+			Area:   &models.AreaOfEffect{Shape: models.AreaShapeCone, Size: 15},
+		},
+	}
+}
+
+func TestSelectAction_AoE_BreathWeapon3Targets(t *testing.T) {
+	t.Parallel()
+
+	// Dragon at (0,0) with Fire Breath (15ft cone). 3 PCs in a line ahead.
+	// All 3 should be in the cone → EV tripled, all 3 in TargetIDs.
+	breath := makeAoEBreathWeapon()
+	claw := models.StructuredAction{
+		ID: "claw", Name: "Claw", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 6, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d8", Bonus: 4, DamageType: "slashing"}},
+		},
+	}
+
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.RuntimeState.Resources.RechargeReady = map[string]bool{"fire_breath": true}
+
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{breath, claw}},
+		Participants: []models.ParticipantFull{
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 2, 0),
+			makeParticipant("pc3", true, 50, 3, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc2": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc3": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+		},
+		Intelligence: 1.0,
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	if decision.ActionID != "fire_breath" {
+		t.Errorf("AoE 3 targets: got ActionID=%q, want fire_breath", decision.ActionID)
+	}
+	// Should have 3 targets (all PCs in the cone).
+	if len(decision.TargetIDs) != 3 {
+		t.Errorf("AoE 3 targets: got %d TargetIDs, want 3", len(decision.TargetIDs))
+	}
+	// EV should be ~3x single-target.
+	// Single-target EV for 8d6 DC15 vs DEX+2, half on success:
+	// fail = 0.60, avg = 28, EV = 0.60*28 + 0.40*14 = 16.8 + 5.6 = 22.4
+	// 3-target: 22.4 * 3 = 67.2
+	if decision.ExpectedDamage < 60.0 || decision.ExpectedDamage > 75.0 {
+		t.Errorf("AoE 3 targets: got EV=%.1f, want ~67.2 (22.4 * 3)", decision.ExpectedDamage)
+	}
+}
+
+func TestSelectAction_AoE_BreathWeapon1Target(t *testing.T) {
+	t.Parallel()
+
+	// Dragon at (0,0). Only 1 PC in cone direction, 1 behind NPC.
+	// AoE should not inflate EV (only 1 target in cone).
+	breath := makeAoEBreathWeapon()
+	claw := models.StructuredAction{
+		ID: "claw", Name: "Claw", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 6, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d8", Bonus: 4, DamageType: "slashing"}},
+		},
+	}
+
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.RuntimeState.Resources.RechargeReady = map[string]bool{"fire_breath": true}
+
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{breath, claw}},
+		Participants: []models.ParticipantFull{
+			makeParticipant("pc1", true, 50, 2, 0),   // in front
+			makeParticipant("pc2", true, 50, -10, 0), // far behind
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc2": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+		},
+		Intelligence: 1.0,
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	if decision.ActionID != "fire_breath" {
+		t.Errorf("AoE 1 target: got ActionID=%q, want fire_breath (recharge priority)", decision.ActionID)
+	}
+	// Only 1 target in cone → EV should be single-target (~22.4).
+	if decision.ExpectedDamage > 30.0 {
+		t.Errorf("AoE 1 target: got EV=%.1f, want ~22.4 (no AoE boost)", decision.ExpectedDamage)
+	}
+}
+
+func TestSelectAction_AoE_NilCoords_SingleTarget(t *testing.T) {
+	t.Parallel()
+
+	// NPC with nil coordinates → AoE fallback to single-target EV.
+	breath := makeAoEBreathWeapon()
+
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.CellsCoords = nil // no grid coordinates
+	npc.RuntimeState.Resources.RechargeReady = map[string]bool{"fire_breath": true}
+
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{breath}},
+		Participants: []models.ParticipantFull{
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 2, 0),
+			makeParticipant("pc3", true, 50, 3, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc2": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc3": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+		},
+		Intelligence: 1.0,
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// With nil NPC coords, FindAoETargets returns nil → no AoE boost.
+	// EV should be single-target (~22.4).
+	if decision.ExpectedDamage > 30.0 {
+		t.Errorf("nil coords AoE: got EV=%.1f, want ~22.4 (no boost)", decision.ExpectedDamage)
+	}
+}
+
+func TestSelectAction_AoE_BoostsRechargeEV(t *testing.T) {
+	t.Parallel()
+
+	// Verify that a recharge AoE breath weapon has its EV boosted
+	// in the returned ActionDecision when multiple targets are in the cone.
+	breath := makeAoEBreathWeapon()
+
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.RuntimeState.Resources.RechargeReady = map[string]bool{"fire_breath": true}
+
+	// 2 PCs in the cone.
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{breath}},
+		Participants: []models.ParticipantFull{
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 2, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc2": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+		},
+		Intelligence: 1.0,
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// EV should be ~2x single-target: 22.4 * 2 = 44.8
+	if decision.ExpectedDamage < 40.0 || decision.ExpectedDamage > 50.0 {
+		t.Errorf("AoE recharge boost: got EV=%.1f, want ~44.8 (22.4 * 2)", decision.ExpectedDamage)
+	}
+	if len(decision.TargetIDs) != 2 {
+		t.Errorf("AoE recharge boost: got %d TargetIDs, want 2", len(decision.TargetIDs))
+	}
+}

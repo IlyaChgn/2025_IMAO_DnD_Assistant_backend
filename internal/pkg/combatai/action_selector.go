@@ -52,6 +52,9 @@ func SelectAction(input *TurnInput, role CreatureRole, rng *rand.Rand) *ActionDe
 		targetStats := input.CombatantStats[targetIDs[0]]
 		ev := ComputeExpectedDamage(*a, targetStats)
 
+		// AoE multiplier: save-based actions with area effects.
+		ev, targetIDs = applyAoEMultiplier(input, a, ev, targetIDs)
+
 		// Limited-use ability economy: only spend if EV justifies it.
 		if a.Uses != nil && !ShouldUseAbility(ev, baseline, input.Intelligence) {
 			continue
@@ -101,6 +104,9 @@ func findRechargeReady(input *TurnInput, actions []models.StructuredAction, reso
 		}
 		targetStats := input.CombatantStats[targetIDs[0]]
 		ev := ComputeExpectedDamage(*a, targetStats)
+
+		// AoE multiplier: breath weapons are often cones/lines.
+		ev, targetIDs = applyAoEMultiplier(input, a, ev, targetIDs)
 
 		return &ActionDecision{
 			ActionType:     actionTypeFromAction(a),
@@ -188,6 +194,36 @@ func evaluateSingleSpell(input *TurnInput, spell models.SpellKnown, level int, s
 		ExpectedDamage: ev,
 		Reasoning:      fmt.Sprintf("spell %q (level %d): EV=%.1f", spell.Name, level, ev),
 	}
+}
+
+// applyAoEMultiplier adjusts EV and targetIDs for area-of-effect actions.
+// If the action has a SavingThrow with an AreaOfEffect, it finds all enemies
+// in the optimal placement and multiplies EV by the target count.
+// Returns the (possibly multiplied) EV and the (possibly expanded) target list.
+func applyAoEMultiplier(input *TurnInput, action *models.StructuredAction,
+	ev float64, targetIDs []string) (float64, []string) {
+	if action.SavingThrow == nil || action.SavingThrow.Area == nil {
+		return ev, targetIDs
+	}
+
+	enemies := aliveEnemies(input)
+	aoeTargets := FindAoETargets(input.ActiveNPC.CellsCoords, action.SavingThrow.Area, enemies)
+	if len(aoeTargets) <= 1 {
+		return ev, targetIDs
+	}
+
+	count := len(aoeTargets)
+
+	// Multiple area instances (e.g., Fire Storm: 10 cubes).
+	if action.SavingThrow.Area.Count > 1 {
+		total := count * action.SavingThrow.Area.Count
+		if total > len(enemies) {
+			total = len(enemies)
+		}
+		return ev * float64(total), aoeTargets
+	}
+
+	return ev * float64(count), aoeTargets
 }
 
 // bestByEV returns the candidate with the highest ExpectedDamage.
