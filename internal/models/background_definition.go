@@ -3,7 +3,7 @@ package models
 // LanguageChoice represents either fixed languages or a pick-N choice.
 type LanguageChoice struct {
 	Type      string   `json:"type" bson:"type"` // "fixed" or "pick"
-	Languages []string `json:"languages,omitempty" bson:"languages,omitempty"`
+	Languages []string `json:"languages" bson:"languages"`
 	Pick      int      `json:"pick,omitempty" bson:"pick,omitempty"`
 }
 
