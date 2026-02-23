@@ -98,6 +98,12 @@ func (ed *EncounterData) CurrentTurnIndex() int {
 	return turn
 }
 
+// RawField returns the raw JSON for a given top-level key in the encounter data.
+// Returns nil if the key doesn't exist.
+func (ed *EncounterData) RawField(key string) json.RawMessage {
+	return ed.raw[key]
+}
+
 // FindParticipantByInstanceID searches by the InstanceID (encounter slot ID),
 // used when targeting a specific creature/character in the encounter.
 func (ed *EncounterData) FindParticipantByInstanceID(instanceID string) (*models.ParticipantFull, int, error) {

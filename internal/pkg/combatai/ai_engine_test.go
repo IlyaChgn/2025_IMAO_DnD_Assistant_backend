@@ -527,7 +527,7 @@ func TestBuildReasoning_WithBonusAction(t *testing.T) {
 	action := &ActionDecision{ActionName: "Claw", ExpectedDamage: 5.0, TargetIDs: []string{"pc1"}}
 	bonus := &ActionDecision{ActionName: "Bonus Bite", ExpectedDamage: 3.0}
 
-	r := buildReasoning(RoleBrute, action, bonus)
+	r := buildReasoning(RoleBrute, nil, action, bonus)
 	if !strings.Contains(r, "Brute") {
 		t.Errorf("reasoning %q missing role", r)
 	}
@@ -544,7 +544,7 @@ func TestBuildReasoning_NilActionWithBonusOnly(t *testing.T) {
 
 	bonus := &ActionDecision{ActionName: "Healing Word", ExpectedDamage: 0}
 
-	r := buildReasoning(RoleCaster, nil, bonus)
+	r := buildReasoning(RoleCaster, nil, nil, bonus)
 	if !strings.Contains(r, "no action") {
 		t.Errorf("reasoning %q should say 'no action'", r)
 	}

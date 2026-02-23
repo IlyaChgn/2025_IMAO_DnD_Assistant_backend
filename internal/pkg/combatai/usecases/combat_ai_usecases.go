@@ -183,7 +183,7 @@ func (uc *combatAIUsecases) buildTurnInput(
 
 	intelligence := combatai.ComputeIntelligence(creature.Ability.Int, 0.0)
 
-	return &combatai.TurnInput{
+	input := &combatai.TurnInput{
 		ActiveNPC:        *npc,
 		CreatureTemplate: *creature,
 		Participants:     ed.Participants,
@@ -191,7 +191,29 @@ func (uc *combatAIUsecases) buildTurnInput(
 		CombatantStats:   stats,
 		Intelligence:     intelligence,
 		PreviousTargetID: "", // Phase 1: no sticky targeting persistence
-	}, nil
+	}
+
+	// Parse walkability grid from encounter data.
+	if walkRaw := ed.RawField("walkability"); walkRaw != nil {
+		var walkGrid [][]int
+		if err := json.Unmarshal(walkRaw, &walkGrid); err == nil && len(walkGrid) > 0 {
+			input.WalkabilityGrid = convertWalkGrid(walkGrid)
+			input.MapHeight = len(walkGrid)
+			if len(walkGrid[0]) > 0 {
+				input.MapWidth = len(walkGrid[0])
+			}
+		}
+	}
+
+	// Parse blocked edges from encounter data.
+	if edgesRaw := ed.RawField("edges"); edgesRaw != nil {
+		var edges []models.SerializedEdge
+		if err := json.Unmarshal(edgesRaw, &edges); err == nil {
+			input.BlockedEdges = parseBlockedEdges(edges)
+		}
+	}
+
+	return input, nil
 }
 
 // buildPCStats loads a PC's CharacterBase and computes CombatantStats.
@@ -277,14 +299,42 @@ func (uc *combatAIUsecases) executeTurn(
 	l := logger.FromContext(ctx)
 	var actionResults []*models.ActionResponse
 
+	// Movement (before action — D&D 5e turn order).
+	if decision.Movement != nil {
+		if err := uc.executeMovement(ctx, encounterID, decision, npc, ed, creature, userID); err != nil {
+			return nil, err
+		}
+		// Reload fresh data after position update.
+		encounter, err := uc.encounterRepo.GetEncounterByID(ctx, encounterID)
+		if err != nil {
+			return nil, fmt.Errorf("reload encounter after movement: %w", err)
+		}
+		ed, err = actionsuc.ParseEncounterData(encounter.Data)
+		if err != nil {
+			return nil, fmt.Errorf("parse encounter data after movement: %w", err)
+		}
+		npc, _, err = ed.FindParticipantByInstanceID(npc.InstanceID)
+		if err != nil {
+			return nil, fmt.Errorf("find NPC after movement: %w", err)
+		}
+	}
+
 	// Main action.
 	if decision.Action != nil {
-		// Dodge special path — no action pipeline.
-		if decision.Action.ActionID == "dodge" {
+		switch decision.Action.ActionID {
+		case "dodge":
 			if err := uc.executeDodge(ctx, encounterID, npc, ed, creature, decision, userID); err != nil {
 				return nil, err
 			}
-		} else {
+		case "dash":
+			if err := uc.executeDash(ctx, encounterID, npc, ed, creature, decision, userID); err != nil {
+				return nil, err
+			}
+		case "disengage":
+			if err := uc.executeDisengage(ctx, encounterID, npc, ed, creature, decision, userID); err != nil {
+				return nil, err
+			}
+		default:
 			results, err := uc.executeSingleOrMultiattack(ctx, encounterID, npc.InstanceID, decision.Action, userID)
 			if err != nil {
 				return nil, err
@@ -854,4 +904,158 @@ func (uc *combatAIUsecases) broadcastMoveResult(ctx context.Context, encounterID
 	}
 
 	uc.tableManager.BroadcastToEncounter(ctx, encounterID, 0, msg)
+}
+
+// executeMovement updates the NPC's grid position and persists.
+func (uc *combatAIUsecases) executeMovement(
+	ctx context.Context,
+	encounterID string,
+	decision *combatai.TurnDecision,
+	npc *models.ParticipantFull,
+	ed *actionsuc.EncounterData,
+	creature *models.Creature,
+	userID int,
+) error {
+	l := logger.FromContext(ctx)
+
+	npc.CellsCoords = &models.CellsCoordinates{
+		CellsX: decision.Movement.TargetX,
+		CellsY: decision.Movement.TargetY,
+	}
+
+	data, err := ed.Marshal()
+	if err != nil {
+		return fmt.Errorf("marshal encounter data: %w", err)
+	}
+	if err := uc.encounterRepo.UpdateEncounter(ctx, data, encounterID); err != nil {
+		return fmt.Errorf("update encounter: %w", err)
+	}
+
+	// Audit log for movement.
+	actorName := npcActorName(npc, creature)
+	entry := &models.AuditLogEntry{
+		EncounterID: encounterID,
+		Round:       ed.CurrentRound(),
+		Turn:        ed.CurrentTurnIndex(),
+		ActorID:     npc.InstanceID,
+		ActorName:   actorName,
+		ActionType:  "movement",
+		Summary:     fmt.Sprintf("%s moves to (%d,%d)", actorName, decision.Movement.TargetX, decision.Movement.TargetY),
+	}
+	if insertErr := uc.auditLogRepo.Insert(ctx, entry); insertErr != nil {
+		l.UsecasesWarn(insertErr, userID, map[string]any{
+			"encounterID": encounterID,
+			"action":      "audit_log_insert",
+		})
+	}
+
+	return nil
+}
+
+// executeDash handles the Dash action — audit log only (movement already applied).
+func (uc *combatAIUsecases) executeDash(
+	ctx context.Context,
+	encounterID string,
+	npc *models.ParticipantFull,
+	ed *actionsuc.EncounterData,
+	creature *models.Creature,
+	decision *combatai.TurnDecision,
+	userID int,
+) error {
+	l := logger.FromContext(ctx)
+
+	actorName := npcActorName(npc, creature)
+	entry := &models.AuditLogEntry{
+		EncounterID: encounterID,
+		Round:       ed.CurrentRound(),
+		Turn:        ed.CurrentTurnIndex(),
+		ActorID:     npc.InstanceID,
+		ActorName:   actorName,
+		ActionType:  "dash",
+		Summary:     fmt.Sprintf("%s takes the Dash action", actorName),
+	}
+	if insertErr := uc.auditLogRepo.Insert(ctx, entry); insertErr != nil {
+		l.UsecasesWarn(insertErr, userID, map[string]any{
+			"encounterID": encounterID,
+			"action":      "audit_log_insert",
+		})
+	}
+
+	return nil
+}
+
+// executeDisengage handles the Disengage action — audit log only (movement already applied).
+func (uc *combatAIUsecases) executeDisengage(
+	ctx context.Context,
+	encounterID string,
+	npc *models.ParticipantFull,
+	ed *actionsuc.EncounterData,
+	creature *models.Creature,
+	decision *combatai.TurnDecision,
+	userID int,
+) error {
+	l := logger.FromContext(ctx)
+
+	actorName := npcActorName(npc, creature)
+	entry := &models.AuditLogEntry{
+		EncounterID: encounterID,
+		Round:       ed.CurrentRound(),
+		Turn:        ed.CurrentTurnIndex(),
+		ActorID:     npc.InstanceID,
+		ActorName:   actorName,
+		ActionType:  "disengage",
+		Summary:     fmt.Sprintf("%s takes the Disengage action", actorName),
+	}
+	if insertErr := uc.auditLogRepo.Insert(ctx, entry); insertErr != nil {
+		l.UsecasesWarn(insertErr, userID, map[string]any{
+			"encounterID": encounterID,
+			"action":      "audit_log_insert",
+		})
+	}
+
+	return nil
+}
+
+// convertWalkGrid converts [][]int (1=passable, 0=blocked) to [][]bool.
+func convertWalkGrid(grid [][]int) [][]bool {
+	result := make([][]bool, len(grid))
+	for i, row := range grid {
+		result[i] = make([]bool, len(row))
+		for j, val := range row {
+			result[i][j] = val == 1
+		}
+	}
+	return result
+}
+
+// parseBlockedEdges converts SerializedEdges with MoveBlock=true into
+// the bidirectional map[[4]int]bool used by PathfindingParams.
+// Edge key format: "x1,y1-x2,y2" (both directions set).
+func parseBlockedEdges(edges []models.SerializedEdge) map[[4]int]bool {
+	result := make(map[[4]int]bool)
+	for _, e := range edges {
+		if !e.MoveBlock {
+			continue
+		}
+		parts := strings.SplitN(e.Key, "-", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		from := strings.Split(parts[0], ",")
+		to := strings.Split(parts[1], ",")
+		if len(from) != 2 || len(to) != 2 {
+			continue
+		}
+		x1, err1 := strconv.Atoi(strings.TrimSpace(from[0]))
+		y1, err2 := strconv.Atoi(strings.TrimSpace(from[1]))
+		x2, err3 := strconv.Atoi(strings.TrimSpace(to[0]))
+		y2, err4 := strconv.Atoi(strings.TrimSpace(to[1]))
+		if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
+			continue
+		}
+		// Bidirectional.
+		result[[4]int{x1, y1, x2, y2}] = true
+		result[[4]int{x2, y2, x1, y1}] = true
+	}
+	return result
 }
