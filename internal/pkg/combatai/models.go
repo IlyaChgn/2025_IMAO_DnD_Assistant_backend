@@ -66,6 +66,9 @@ type ActionDecision struct {
 	MultiattackGroupID string            // MultiattackGroup.ID (for logging)
 	MultiattackSteps   []MultiattackStep // nil = single action
 
+	// Legendary action cost (for resource deduction in usecases layer).
+	LegendaryCost int
+
 	// Metadata for logging.
 	ActionName     string
 	ExpectedDamage float64 // estimated damage (sum for multiattack)
@@ -118,6 +121,17 @@ type AIRoundTurn struct {
 	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
 	Skipped       bool                    `json:"skipped"`
 	SkipReason    string                  `json:"skipReason,omitempty"`
+
+	// Legendary actions taken by OTHER NPCs after this turn (D&D 5e between-turn).
+	LegendaryActionResults []*LegendaryActionResult `json:"legendaryActionResults,omitempty"`
+}
+
+// LegendaryActionResult describes a legendary action taken between turns.
+type LegendaryActionResult struct {
+	NpcID         string                  `json:"npcID"`
+	NpcName       string                  `json:"npcName"`
+	Decision      *ActionDecision         `json:"decision"`
+	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
 }
 
 // CreatureRole classifies a creature's combat behavior archetype.

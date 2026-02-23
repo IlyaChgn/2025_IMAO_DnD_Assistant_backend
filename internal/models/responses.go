@@ -35,14 +35,15 @@ const (
 	// Combat AI message types - relayed directly
 	YourTurn        WSMsgType = "your_turn"
 	CombatEnd       WSMsgType = "combat_end"
-	AITurnResultMsg WSMsgType = "ai_turn_result"
+	AITurnResultMsg      WSMsgType = "ai_turn_result"
+	AILegendaryResultMsg WSMsgType = "ai_legendary_result"
 )
 
 // IsPatchMessage returns true if the message type is a patch that should be relayed directly
 func IsPatchMessage(msgType WSMsgType) bool {
 	switch msgType {
 	case EncounterPatch, FogHistoryPatch, WalkabilityPatch, OcclusionPatch, EdgesPatch, InventoryPatch, VisionPatch,
-		AITurnResultMsg, YourTurn, CombatEnd:
+		AITurnResultMsg, AILegendaryResultMsg, YourTurn, CombatEnd:
 		return true
 	default:
 		return false

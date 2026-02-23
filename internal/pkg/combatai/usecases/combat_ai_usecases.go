@@ -274,29 +274,104 @@ func (uc *combatAIUsecases) executeTurn(
 	creature *models.Creature,
 	userID int,
 ) ([]*models.ActionResponse, error) {
-	// No action → skip turn.
-	if decision.Action == nil {
-		return nil, nil
+	l := logger.FromContext(ctx)
+	var actionResults []*models.ActionResponse
+
+	// Main action.
+	if decision.Action != nil {
+		// Dodge special path — no action pipeline.
+		if decision.Action.ActionID == "dodge" {
+			if err := uc.executeDodge(ctx, encounterID, npc, ed, creature, decision, userID); err != nil {
+				return nil, err
+			}
+		} else {
+			results, err := uc.executeSingleOrMultiattack(ctx, encounterID, npc.InstanceID, decision.Action, userID)
+			if err != nil {
+				return nil, err
+			}
+			actionResults = append(actionResults, results...)
+		}
 	}
 
-	// Dodge special path — no action pipeline.
-	if decision.Action.ActionID == "dodge" {
-		return nil, uc.executeDodge(ctx, encounterID, npc, ed, creature, decision, userID)
+	// Bonus action (independent of main action).
+	if decision.BonusAction != nil {
+		bonusResults, err := uc.executeSingleOrMultiattack(ctx, encounterID, npc.InstanceID, decision.BonusAction, userID)
+		if err != nil {
+			l.UsecasesWarn(err, userID, map[string]any{
+				"encounterID": encounterID,
+				"npcID":       npc.InstanceID,
+				"action":      "bonus_action",
+			})
+		} else {
+			actionResults = append(actionResults, bonusResults...)
+		}
+
+		// Mark bonus action as used (persist via encounter update).
+		uc.markBonusActionUsed(ctx, encounterID, npc.InstanceID, userID)
 	}
 
-	// Multiattack path.
-	if decision.Action.MultiattackSteps != nil {
-		return uc.executeMultiattack(ctx, encounterID, npc.InstanceID, decision.Action, userID)
+	return actionResults, nil
+}
+
+// executeSingleOrMultiattack dispatches a single ActionDecision through the action pipeline.
+func (uc *combatAIUsecases) executeSingleOrMultiattack(
+	ctx context.Context,
+	encounterID string,
+	npcInstanceID string,
+	action *combatai.ActionDecision,
+	userID int,
+) ([]*models.ActionResponse, error) {
+	if action.MultiattackSteps != nil {
+		return uc.executeMultiattack(ctx, encounterID, npcInstanceID, action, userID)
 	}
 
-	// Single action path.
-	req := toActionRequest(npc.InstanceID, decision.Action, nil)
+	req := toActionRequest(npcInstanceID, action, nil)
 	resp, err := uc.actionsUC.ExecuteAction(ctx, encounterID, req, userID)
 	if err != nil {
-		return nil, fmt.Errorf("execute action %s: %w", decision.Action.ActionID, err)
+		return nil, fmt.Errorf("execute action %s: %w", action.ActionID, err)
 	}
 
 	return []*models.ActionResponse{resp}, nil
+}
+
+// markBonusActionUsed persists BonusActionUsed=true for the NPC.
+func (uc *combatAIUsecases) markBonusActionUsed(
+	ctx context.Context,
+	encounterID string,
+	npcInstanceID string,
+	userID int,
+) {
+	l := logger.FromContext(ctx)
+
+	encounter, err := uc.encounterRepo.GetEncounterByID(ctx, encounterID)
+	if err != nil {
+		l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "action": "mark_bonus_used"})
+		return
+	}
+
+	ed, err := actionsuc.ParseEncounterData(encounter.Data)
+	if err != nil {
+		l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "action": "mark_bonus_used"})
+		return
+	}
+
+	npc, _, err := ed.FindParticipantByInstanceID(npcInstanceID)
+	if err != nil {
+		l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "npcID": npcInstanceID})
+		return
+	}
+
+	npc.RuntimeState.Resources.BonusActionUsed = true
+
+	data, err := ed.Marshal()
+	if err != nil {
+		l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "action": "mark_bonus_used"})
+		return
+	}
+
+	if err := uc.encounterRepo.UpdateEncounter(ctx, data, encounterID); err != nil {
+		l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "action": "mark_bonus_used"})
+	}
 }
 
 // executeDodge applies the Dodge universal action directly (no action pipeline).
