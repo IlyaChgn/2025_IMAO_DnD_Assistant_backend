@@ -686,7 +686,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 |------|-------------|--------|
 | PR-8 | Threat assessment (intelligence-gated, `ThreatScore` formula) | Done ✅ (PR #39, 2026-02-23) |
 | PR-9 | Spell slot management / resource manager (round-based economy) | Done ✅ (PR #40, 2026-02-23) |
-| PR-10 | AoE target counting (geometry on grid, `AreaOfEffect`) | Planned |
+| PR-10 | AoE target counting (geometry on grid, `AreaOfEffect`) | Done ✅ (PR #41, 2026-02-23) |
 | PR-11 | Bonus actions + legendary actions between turns | Planned |
 | PR-12 | Opportunity attacks (reaction hook on movement) | Planned |
 

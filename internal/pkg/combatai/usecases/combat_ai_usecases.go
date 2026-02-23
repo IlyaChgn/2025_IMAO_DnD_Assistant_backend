@@ -413,7 +413,9 @@ func buildActionCommand(actionType models.ActionType, actionID string, targetIDs
 		cmd.TargetIDs = targetIDs
 	case models.ActionUseFeature:
 		cmd.FeatureID = actionID
-		if len(targetIDs) > 0 {
+		if len(targetIDs) > 1 {
+			cmd.TargetIDs = targetIDs // AoE: pass all targets
+		} else if len(targetIDs) > 0 {
 			cmd.TargetID = targetIDs[0]
 		}
 	}
