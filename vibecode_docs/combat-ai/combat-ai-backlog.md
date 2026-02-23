@@ -694,7 +694,7 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 | Task | Description | Status |
 |------|-------------|--------|
-| PR-13 | A* pathfinding on walkability grid | Planned |
+| PR-13 | A* pathfinding on walkability grid | Done ✅ (PR #44, 2026-02-23) |
 | PR-14 | Movement planner + Dash / Disengage universal actions | Planned |
 | PR-15 | ReactionRule engine (Shield, Counterspell, Parry, etc.) | Planned |
 | PR-16 | Focus fire / team tactics (intelligence-gated) | Planned |
