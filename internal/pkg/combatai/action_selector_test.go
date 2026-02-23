@@ -313,3 +313,244 @@ func TestSelectAction_NoCandidates(t *testing.T) {
 		t.Errorf("no candidates: got %+v, want nil", decision)
 	}
 }
+
+// --- Resource Manager integration tests ---
+
+// makeCasterInput builds a TurnInput for a caster NPC with a staff, cantrip,
+// and a leveled spell. Used by resource economy integration tests.
+func makeCasterInput(hp int, round int, intelligence float64, slots map[int]int) *TurnInput {
+	staff := models.StructuredAction{
+		ID: "staff", Name: "Staff", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 2, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d6", Bonus: 0, DamageType: "bludgeoning"}},
+		},
+	}
+	qr := &models.SpellQuickRef{Range: "120 feet"}
+
+	npc := makeParticipant("npc1", false, hp, 0, 0)
+	npc.RuntimeState.Resources.SpellSlots = slots
+
+	return &TurnInput{
+		ActiveNPC: npc,
+		CreatureTemplate: models.Creature{
+			StructuredActions: []models.StructuredAction{staff},
+			Spellcasting: &models.Spellcasting{
+				SpellSaveDC: 15,
+				CasterLevel: 9,
+				SpellsByLevel: map[int][]models.SpellKnown{
+					0: {{Name: "Fire Bolt", Level: 0, QuickRef: qr}},
+					5: {{Name: "Cone of Cold", Level: 5, QuickRef: qr}},
+				},
+			},
+		},
+		Participants:   []models.ParticipantFull{makeParticipant("pc1", true, 50, 1, 0)},
+		CombatantStats: map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}}},
+		CurrentRound:   round,
+		Intelligence:   intelligence,
+	}
+}
+
+func TestSelectAction_SmartCaster_ConservesRound7(t *testing.T) {
+	t.Parallel()
+
+	// High INT caster in round 7 should conserve: use cantrip, not level 5.
+	input := makeCasterInput(100, 7, 0.80, map[int]int{5: 2})
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleCaster, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// Level 5 should be blocked in round 7 (conserve mode: only 1-2 allowed).
+	// Should pick cantrip or staff.
+	if decision.SlotLevel == 5 {
+		t.Errorf("smart caster round 7: should NOT use level 5 slot, got SlotLevel=%d ActionID=%q",
+			decision.SlotLevel, decision.ActionID)
+	}
+}
+
+func TestSelectAction_SmartCaster_SpendsAtLowHP(t *testing.T) {
+	t.Parallel()
+
+	// High INT caster at 20% HP in round 7: emergency override, use level 5.
+	// NPC MaxHP = 100 (from makeParticipant), HP = 20 → 20%.
+	// Use Intelligence=1.0 to guarantee optimal pick (removes randomness).
+	input := makeCasterInput(20, 7, 1.0, map[int]int{5: 2})
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleCaster, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// At 20% HP, emergency override should allow level 5.
+	// Cone of Cold (L5) has higher EV than cantrip → must be picked at Intelligence=1.0.
+	if decision.SlotLevel != 5 {
+		t.Errorf("smart caster low HP: got SlotLevel=%d ActionID=%q, want SlotLevel=5 (emergency override)",
+			decision.SlotLevel, decision.ActionID)
+	}
+}
+
+func TestSelectAction_MedCaster_BlocksTopRound1(t *testing.T) {
+	t.Parallel()
+
+	// Medium INT caster on round 1 should block top-level slot.
+	// Give both L2 and L5 slots so it has options.
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.RuntimeState.Resources.SpellSlots = map[int]int{2: 2, 5: 2}
+
+	qr := &models.SpellQuickRef{Range: "120 feet"}
+
+	input := &TurnInput{
+		ActiveNPC: npc,
+		CreatureTemplate: models.Creature{
+			StructuredActions: []models.StructuredAction{
+				{
+					ID: "staff", Name: "Staff", Category: models.ActionCategoryAction,
+					Attack: &models.AttackRollData{
+						Type: models.AttackRollMeleeWeapon, Bonus: 2, Reach: 5,
+						Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d6", Bonus: 0, DamageType: "bludgeoning"}},
+					},
+				},
+			},
+			Spellcasting: &models.Spellcasting{
+				SpellSaveDC: 15,
+				CasterLevel: 9,
+				SpellsByLevel: map[int][]models.SpellKnown{
+					2: {{Name: "Scorching Ray", Level: 2, QuickRef: qr}},
+					5: {{Name: "Cone of Cold", Level: 5, QuickRef: qr}},
+				},
+			},
+		},
+		Participants:   []models.ParticipantFull{makeParticipant("pc1", true, 50, 1, 0)},
+		CombatantStats: map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}}},
+		CurrentRound:   1,
+		Intelligence:   0.60, // medium — blocks top-level on round 1
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleCaster, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// Should NOT pick level 5 (top-level blocked on round 1 at medium INT).
+	if decision.SlotLevel == 5 {
+		t.Errorf("medium INT round 1: should NOT use top-level (5), got SlotLevel=%d", decision.SlotLevel)
+	}
+}
+
+func TestSelectAction_DumbCaster_UsesEverything(t *testing.T) {
+	t.Parallel()
+
+	// Low INT caster in round 7 should still use level 5 — no economy.
+	input := makeCasterInput(100, 7, 0.30, map[int]int{5: 2})
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleCaster, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// Low INT: no resource management → L5 should be available.
+	// With intelligence=0.30 and random selection, it may or may not pick L5,
+	// but we verify L5 is at least a candidate by running multiple seeds.
+	foundL5 := false
+	for seed := int64(0); seed < 50; seed++ {
+		r := rand.New(rand.NewSource(seed))
+		d := SelectAction(input, RoleCaster, r)
+		if d != nil && d.SlotLevel == 5 {
+			foundL5 = true
+			break
+		}
+	}
+	if !foundL5 {
+		t.Error("low INT round 7: level 5 should be available (no economy), but never selected in 50 tries")
+	}
+}
+
+func TestSelectAction_SmartNPC_SkipsWeakAbility(t *testing.T) {
+	t.Parallel()
+
+	// Strong baseline weapon + weak limited-use ability.
+	// Smart NPC should skip the ability (EV < 150% baseline).
+	claw := models.StructuredAction{
+		ID: "claw", Name: "Claw", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 7, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 2, DiceType: "d6", Bonus: 4, DamageType: "slashing"}},
+		},
+	}
+	// Weak limited-use ability: low damage save-based.
+	weakAbility := models.StructuredAction{
+		ID: "web", Name: "Web Spray", Category: models.ActionCategoryAction,
+		Uses: &models.UsesData{Max: 1},
+		SavingThrow: &models.SavingThrowData{
+			Ability: models.AbilityDEX, DC: 12, OnSuccess: "no effect",
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d4", DamageType: "bludgeoning"}},
+		},
+	}
+
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.RuntimeState.Resources.AbilityUses = map[string]int{"web": 1}
+
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{claw, weakAbility}},
+		Participants:     []models.ParticipantFull{makeParticipant("pc1", true, 50, 1, 0)},
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}}},
+		Intelligence:     1.0, // always optimal
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// Claw is baseline. Weak ability EV << 150% of claw EV → skipped.
+	if decision.ActionID != "claw" {
+		t.Errorf("smart NPC: got %q, want %q (weak ability should be skipped)", decision.ActionID, "claw")
+	}
+}
+
+func TestSelectAction_SmartNPC_UsesStrongAbility(t *testing.T) {
+	t.Parallel()
+
+	// Weak baseline weapon + strong limited-use ability.
+	// Smart NPC should use the ability (EV >= 150% baseline).
+	dagger := models.StructuredAction{
+		ID: "dagger", Name: "Dagger", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 2, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d4", Bonus: 0, DamageType: "piercing"}},
+		},
+	}
+	// Strong limited-use ability: high damage.
+	strongAbility := models.StructuredAction{
+		ID: "acid_spray", Name: "Acid Spray", Category: models.ActionCategoryAction,
+		Uses: &models.UsesData{Max: 1},
+		SavingThrow: &models.SavingThrowData{
+			Ability: models.AbilityDEX, DC: 15, OnSuccess: "half damage",
+			Damage: []models.DamageRoll{{DiceCount: 6, DiceType: "d8", DamageType: "acid"}},
+		},
+	}
+
+	npc := makeParticipant("npc1", false, 100, 0, 0)
+	npc.RuntimeState.Resources.AbilityUses = map[string]int{"acid_spray": 1}
+
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{dagger, strongAbility}},
+		Participants:     []models.ParticipantFull{makeParticipant("pc1", true, 50, 1, 0)},
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}}},
+		Intelligence:     1.0, // always optimal
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	// Acid Spray EV >> 150% of dagger EV → should be used.
+	if decision.ActionID != "acid_spray" {
+		t.Errorf("smart NPC: got %q, want %q (strong ability should be used)", decision.ActionID, "acid_spray")
+	}
+}
