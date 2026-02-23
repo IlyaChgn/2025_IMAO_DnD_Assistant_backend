@@ -375,7 +375,8 @@ func TestSelectAction_SmartCaster_SpendsAtLowHP(t *testing.T) {
 
 	// High INT caster at 20% HP in round 7: emergency override, use level 5.
 	// NPC MaxHP = 100 (from makeParticipant), HP = 20 → 20%.
-	input := makeCasterInput(20, 7, 0.80, map[int]int{5: 2})
+	// Use Intelligence=1.0 to guarantee optimal pick (removes randomness).
+	input := makeCasterInput(20, 7, 1.0, map[int]int{5: 2})
 
 	rng := rand.New(rand.NewSource(42))
 	decision := SelectAction(input, RoleCaster, rng)
@@ -383,15 +384,11 @@ func TestSelectAction_SmartCaster_SpendsAtLowHP(t *testing.T) {
 		t.Fatal("SelectAction returned nil")
 	}
 	// At 20% HP, emergency override should allow level 5.
-	// Cone of Cold (L5) should have higher EV than cantrip → picked.
-	if decision.ActionType == models.ActionSpellCast && decision.SlotLevel == 5 {
-		// Good — level 5 spell used under emergency.
-		return
+	// Cone of Cold (L5) has higher EV than cantrip → must be picked at Intelligence=1.0.
+	if decision.SlotLevel != 5 {
+		t.Errorf("smart caster low HP: got SlotLevel=%d ActionID=%q, want SlotLevel=5 (emergency override)",
+			decision.SlotLevel, decision.ActionID)
 	}
-	// If not spell, check that at least something was selected (cantrip/staff fallback is also OK).
-	// The main check: level 5 should NOT be blocked.
-	t.Logf("decision: ActionType=%q ActionID=%q SlotLevel=%d (low HP emergency should allow L5)",
-		decision.ActionType, decision.ActionID, decision.SlotLevel)
 }
 
 func TestSelectAction_MedCaster_BlocksTopRound1(t *testing.T) {
