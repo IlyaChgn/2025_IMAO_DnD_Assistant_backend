@@ -53,10 +53,14 @@ func (ai *RuleBasedAI) DecideTurn(input *TurnInput) (*TurnDecision, error) {
 		}
 	}
 
-	// 6. Build turn decision.
+	// 6. Select bonus action (independent of main action).
+	bonusAction := SelectBonusAction(input, role, ai.rng)
+
+	// 7. Build turn decision.
 	return &TurnDecision{
-		Action:    action,
-		Reasoning: buildReasoning(role, action),
+		Action:      action,
+		BonusAction: bonusAction,
+		Reasoning:   buildReasoning(role, action, bonusAction),
 	}, nil
 }
 
@@ -75,25 +79,36 @@ func IsIncapacitated(p *models.ParticipantFull) bool {
 }
 
 // buildReasoning creates a human-readable explanation for the DM log.
-func buildReasoning(role CreatureRole, action *ActionDecision) string {
-	if action == nil {
+func buildReasoning(role CreatureRole, action *ActionDecision, bonusAction *ActionDecision) string {
+	if action == nil && bonusAction == nil {
 		return fmt.Sprintf("%s role: no action available", capitalize(string(role)))
 	}
 
 	parts := []string{fmt.Sprintf("%s role:", capitalize(string(role)))}
 
-	if action.MultiattackSteps != nil {
-		parts = append(parts, fmt.Sprintf("multiattack %s", action.ActionName))
+	if action != nil {
+		if action.MultiattackSteps != nil {
+			parts = append(parts, fmt.Sprintf("multiattack %s", action.ActionName))
+		} else {
+			parts = append(parts, action.ActionName)
+		}
+
+		if len(action.TargetIDs) > 0 {
+			parts = append(parts, fmt.Sprintf("on %s", action.TargetIDs[0]))
+		}
+
+		if action.ExpectedDamage > 0 {
+			parts = append(parts, fmt.Sprintf("(EV=%.1f)", action.ExpectedDamage))
+		}
 	} else {
-		parts = append(parts, action.ActionName)
+		parts = append(parts, "no action")
 	}
 
-	if len(action.TargetIDs) > 0 {
-		parts = append(parts, fmt.Sprintf("on %s", action.TargetIDs[0]))
-	}
-
-	if action.ExpectedDamage > 0 {
-		parts = append(parts, fmt.Sprintf("(EV=%.1f)", action.ExpectedDamage))
+	if bonusAction != nil {
+		parts = append(parts, fmt.Sprintf("+ bonus %s", bonusAction.ActionName))
+		if bonusAction.ExpectedDamage > 0 {
+			parts = append(parts, fmt.Sprintf("(EV=%.1f)", bonusAction.ExpectedDamage))
+		}
 	}
 
 	return strings.Join(parts, " ")

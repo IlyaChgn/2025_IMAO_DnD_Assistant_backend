@@ -52,7 +52,13 @@ func processStartOfTurn(npc *models.ParticipantFull, creature *models.Creature) 
 	// 3. Legendary actions restore.
 	changed = restoreLegendaryActions(npc, creature) || changed
 
-	// 4. Condition duration tick.
+	// 4. Bonus action reset.
+	if npc.RuntimeState.Resources.BonusActionUsed {
+		npc.RuntimeState.Resources.BonusActionUsed = false
+		changed = true
+	}
+
+	// 5. Condition duration tick.
 	changed = tickConditions(npc) || changed
 
 	return changed
