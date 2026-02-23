@@ -53,14 +53,29 @@ func (ai *RuleBasedAI) DecideTurn(input *TurnInput) (*TurnDecision, error) {
 		}
 	}
 
-	// 6. Select bonus action (independent of main action).
+	// 6. Plan movement (uses A* pathfinding from PR-13).
+	var movementDecision *MovementDecision
+	if action != nil {
+		plan := PlanMovement(input, role, action, ai.rng)
+		if plan != nil {
+			movementDecision = plan.Movement
+			if plan.UseDash {
+				action = dashDecision(plan.Movement.Reasoning)
+			} else if plan.UseDisengage {
+				action = disengageDecision(plan.Movement.Reasoning)
+			}
+		}
+	}
+
+	// 7. Select bonus action (independent of main action).
 	bonusAction := SelectBonusAction(input, role, ai.rng)
 
-	// 7. Build turn decision.
+	// 8. Build turn decision.
 	return &TurnDecision{
+		Movement:    movementDecision,
 		Action:      action,
 		BonusAction: bonusAction,
-		Reasoning:   buildReasoning(role, action, bonusAction),
+		Reasoning:   buildReasoning(role, movementDecision, action, bonusAction),
 	}, nil
 }
 
@@ -79,12 +94,16 @@ func IsIncapacitated(p *models.ParticipantFull) bool {
 }
 
 // buildReasoning creates a human-readable explanation for the DM log.
-func buildReasoning(role CreatureRole, action *ActionDecision, bonusAction *ActionDecision) string {
-	if action == nil && bonusAction == nil {
+func buildReasoning(role CreatureRole, movement *MovementDecision, action *ActionDecision, bonusAction *ActionDecision) string {
+	if action == nil && bonusAction == nil && movement == nil {
 		return fmt.Sprintf("%s role: no action available", capitalize(string(role)))
 	}
 
 	parts := []string{fmt.Sprintf("%s role:", capitalize(string(role)))}
+
+	if movement != nil {
+		parts = append(parts, fmt.Sprintf("move to (%d,%d)", movement.TargetX, movement.TargetY))
+	}
 
 	if action != nil {
 		if action.MultiattackSteps != nil {

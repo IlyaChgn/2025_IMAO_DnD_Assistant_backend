@@ -29,6 +29,11 @@ type TurnInput struct {
 
 	// Walkability grid (nil = movement disabled in Phase 1).
 	WalkabilityGrid [][]bool
+
+	// BlockedEdges marks directed edges between adjacent cells that are
+	// impassable (walls). Key: [4]int{fromX, fromY, toX, toY}.
+	// Populated from encounter data edges with MoveBlock=true.
+	BlockedEdges map[[4]int]bool
 }
 
 // CombatantStats is a unified slice of combat characteristics for a participant.
