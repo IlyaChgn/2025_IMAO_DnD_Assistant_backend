@@ -78,6 +78,7 @@ func (uc *combatAIUsecases) ExecuteAIRound(
 		legendaryResults := uc.executeLegendaryActions(ctx, encounterID, npcID, npcOrder, userID)
 		if len(legendaryResults) > 0 {
 			result.Turns[len(result.Turns)-1].LegendaryActionResults = legendaryResults
+			uc.broadcastLegendaryResults(ctx, encounterID, legendaryResults)
 		}
 	}
 
@@ -271,6 +272,26 @@ func (uc *combatAIUsecases) executeLegendaryActions(
 			continue
 		}
 
+		// Reload encounter data — the action pipeline persisted its own changes
+		// (damage, conditions, etc.). We must not overwrite them with stale data.
+		encounter, err = uc.encounterRepo.GetEncounterByID(ctx, encounterID)
+		if err != nil {
+			l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "action": "legendary_reload_post"})
+			continue
+		}
+		ed, err = actionsuc.ParseEncounterData(encounter.Data)
+		if err != nil {
+			l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "action": "legendary_parse_post"})
+			continue
+		}
+
+		// Re-find NPC in fresh data to deduct legendary cost.
+		npc, _, err = ed.FindParticipantByInstanceID(npcID)
+		if err != nil {
+			l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "npcID": npcID})
+			continue
+		}
+
 		// Deduct legendary action cost and persist.
 		npc.RuntimeState.Resources.LegendaryActions -= decision.LegendaryCost
 		data, err := ed.Marshal()
@@ -292,6 +313,22 @@ func (uc *combatAIUsecases) executeLegendaryActions(
 	}
 
 	return results
+}
+
+// broadcastLegendaryResults sends legendary action results via WebSocket.
+func (uc *combatAIUsecases) broadcastLegendaryResults(ctx context.Context, encounterID string, results []*combatai.LegendaryActionResult) {
+	l := logger.FromContext(ctx)
+
+	msg, err := json.Marshal(models.WSResponse{
+		Type: models.AILegendaryResultMsg,
+		Data: results,
+	})
+	if err != nil {
+		l.UsecasesWarn(err, 0, map[string]any{"encounterID": encounterID, "action": "broadcast_legendary"})
+		return
+	}
+
+	uc.tableManager.BroadcastToEncounter(ctx, encounterID, 0, msg)
 }
 
 // broadcastAITurnResult sends a per-NPC turn result via WebSocket.

@@ -432,3 +432,123 @@ func TestDecideTurn_PureFunction(t *testing.T) {
 		t.Errorf("same seed different reasoning: %q vs %q", d1.Reasoning, d2.Reasoning)
 	}
 }
+
+func TestDecideTurn_BonusActionPopulated(t *testing.T) {
+	t.Parallel()
+
+	claw := models.StructuredAction{
+		ID: "claw", Name: "Claw", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 5, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d8", Bonus: 3, DamageType: "slashing"}},
+		},
+	}
+	bonusBite := models.StructuredAction{
+		ID: "bonus_bite", Name: "Bonus Bite", Category: models.ActionCategoryBonus,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 5, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d4", Bonus: 3, DamageType: "piercing"}},
+		},
+	}
+
+	ai := NewRuleBasedAIWithSeed(42)
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{Ability: models.Ability{Int: 10}, StructuredActions: []models.StructuredAction{claw, bonusBite}},
+		Participants:     []models.ParticipantFull{makeParticipant("pc1", true, 40, 1, 0)},
+		CombatantStats:   map[string]CombatantStats{"npc1": {MaxHP: 50, AC: 12}, "pc1": {MaxHP: 40, AC: 15}},
+		Intelligence:     1.0,
+	}
+
+	decision, err := ai.DecideTurn(input)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if decision == nil {
+		t.Fatal("got nil decision")
+	}
+	if decision.Action == nil || decision.Action.ActionID != "claw" {
+		t.Errorf("main action: got %v, want claw", decision.Action)
+	}
+	if decision.BonusAction == nil {
+		t.Fatal("BonusAction is nil, want bonus_bite")
+	}
+	if decision.BonusAction.ActionID != "bonus_bite" {
+		t.Errorf("bonus action: got ActionID=%q, want bonus_bite", decision.BonusAction.ActionID)
+	}
+	if !strings.Contains(decision.Reasoning, "bonus") {
+		t.Errorf("reasoning %q should mention bonus action", decision.Reasoning)
+	}
+}
+
+func TestDecideTurn_IncapacitatedNoBonusAction(t *testing.T) {
+	t.Parallel()
+
+	bonusBite := models.StructuredAction{
+		ID: "bonus_bite", Name: "Bonus Bite", Category: models.ActionCategoryBonus,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 5, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d4", Bonus: 3, DamageType: "piercing"}},
+		},
+	}
+
+	npc := makeParticipant("npc1", false, 50, 0, 0)
+	npc.RuntimeState.Conditions = []models.ActiveCondition{
+		{Condition: models.ConditionStunned},
+	}
+
+	ai := NewRuleBasedAIWithSeed(42)
+	input := &TurnInput{
+		ActiveNPC:        npc,
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{bonusBite}},
+		Participants:     []models.ParticipantFull{makeParticipant("pc1", true, 40, 1, 0)},
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 40, AC: 15}},
+		Intelligence:     1.0,
+	}
+
+	decision, err := ai.DecideTurn(input)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if decision == nil {
+		t.Fatal("got nil decision for incapacitated NPC")
+	}
+	if decision.Action != nil {
+		t.Errorf("incapacitated: Action should be nil, got %+v", decision.Action)
+	}
+	if decision.BonusAction != nil {
+		t.Errorf("incapacitated: BonusAction should be nil, got %+v", decision.BonusAction)
+	}
+}
+
+func TestBuildReasoning_WithBonusAction(t *testing.T) {
+	t.Parallel()
+
+	action := &ActionDecision{ActionName: "Claw", ExpectedDamage: 5.0, TargetIDs: []string{"pc1"}}
+	bonus := &ActionDecision{ActionName: "Bonus Bite", ExpectedDamage: 3.0}
+
+	r := buildReasoning(RoleBrute, action, bonus)
+	if !strings.Contains(r, "Brute") {
+		t.Errorf("reasoning %q missing role", r)
+	}
+	if !strings.Contains(r, "Claw") {
+		t.Errorf("reasoning %q missing main action", r)
+	}
+	if !strings.Contains(r, "bonus Bonus Bite") {
+		t.Errorf("reasoning %q missing bonus action", r)
+	}
+}
+
+func TestBuildReasoning_NilActionWithBonusOnly(t *testing.T) {
+	t.Parallel()
+
+	bonus := &ActionDecision{ActionName: "Healing Word", ExpectedDamage: 0}
+
+	r := buildReasoning(RoleCaster, nil, bonus)
+	if !strings.Contains(r, "no action") {
+		t.Errorf("reasoning %q should say 'no action'", r)
+	}
+	if !strings.Contains(r, "bonus Healing Word") {
+		t.Errorf("reasoning %q missing bonus action", r)
+	}
+}
