@@ -745,3 +745,110 @@ func TestSelectAction_AoE_BoostsRechargeEV(t *testing.T) {
 		t.Errorf("AoE recharge boost: got %d TargetIDs, want 2", len(decision.TargetIDs))
 	}
 }
+
+func TestSelectAction_AoE_SingleActionSaveBased(t *testing.T) {
+	t.Parallel()
+
+	// Non-recharge, non-limited save-based AoE action (e.g. Frightful Presence with damage).
+	// Goes through single actions loop, NOT findRechargeReady.
+	// 3 PCs in a 15ft cone → AoE multiplier should apply.
+	aoeAction := models.StructuredAction{
+		ID: "flame_wave", Name: "Flame Wave", Category: models.ActionCategoryAction,
+		SavingThrow: &models.SavingThrowData{
+			Ability: models.AbilityDEX, DC: 15, OnFail: "full damage", OnSuccess: "half damage",
+			Damage: []models.DamageRoll{{DiceCount: 4, DiceType: "d6", DamageType: "fire"}},
+			Area:   &models.AreaOfEffect{Shape: models.AreaShapeCone, Size: 15},
+		},
+	}
+	claw := models.StructuredAction{
+		ID: "claw", Name: "Claw", Category: models.ActionCategoryAction,
+		Attack: &models.AttackRollData{
+			Type: models.AttackRollMeleeWeapon, Bonus: 5, Reach: 5,
+			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d6", Bonus: 3, DamageType: "slashing"}},
+		},
+	}
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 100, 0, 0),
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{aoeAction, claw}},
+		Participants: []models.ParticipantFull{
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 2, 0),
+			makeParticipant("pc3", true, 50, 3, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc2": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc3": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+		},
+		Intelligence: 1.0,
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	if decision.ActionID != "flame_wave" {
+		t.Errorf("single action AoE: got ActionID=%q, want flame_wave", decision.ActionID)
+	}
+	if len(decision.TargetIDs) != 3 {
+		t.Errorf("single action AoE: got %d TargetIDs, want 3", len(decision.TargetIDs))
+	}
+	// 4d6 avg=14. DC15 vs DEX+2: fail=0.60.
+	// EV = 0.60*14 + 0.40*7 = 8.4+2.8 = 11.2 per target.
+	// 3 targets: 11.2 * 3 = 33.6
+	if decision.ExpectedDamage < 28.0 || decision.ExpectedDamage > 40.0 {
+		t.Errorf("single action AoE: got EV=%.1f, want ~33.6 (11.2 * 3)", decision.ExpectedDamage)
+	}
+}
+
+func TestSelectAction_AoE_CountMultiplier(t *testing.T) {
+	t.Parallel()
+
+	// Action with Count > 1 (like Fire Storm: multiple cubes).
+	// 4 PCs, 2 within a single cube. Count=3 → effective = min(2*3, 4) = 4.
+	multiCube := models.StructuredAction{
+		ID: "fire_storm", Name: "Fire Storm", Category: models.ActionCategoryAction,
+		SavingThrow: &models.SavingThrowData{
+			Ability: models.AbilityDEX, DC: 15, OnFail: "full damage", OnSuccess: "half damage",
+			Damage: []models.DamageRoll{{DiceCount: 7, DiceType: "d10", DamageType: "fire"}},
+			Area:   &models.AreaOfEffect{Shape: models.AreaShapeCube, Size: 20, Count: 3},
+		},
+	}
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 100, 0, 0),
+		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{multiCube}},
+		Participants: []models.ParticipantFull{
+			makeParticipant("pc1", true, 50, 5, 5), // cluster
+			makeParticipant("pc2", true, 50, 6, 5), // cluster
+			makeParticipant("pc3", true, 50, 30, 30), // far away
+			makeParticipant("pc4", true, 50, 31, 30), // far away
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc2": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc3": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+			"pc4": {MaxHP: 50, AC: 15, SaveBonuses: map[string]int{"DEX": 2}},
+		},
+		Intelligence: 1.0,
+	}
+
+	rng := rand.New(rand.NewSource(42))
+	decision := SelectAction(input, RoleBrute, rng)
+	if decision == nil {
+		t.Fatal("SelectAction returned nil")
+	}
+	if decision.ActionID != "fire_storm" {
+		t.Errorf("count multiplier: got ActionID=%q, want fire_storm", decision.ActionID)
+	}
+	// Best single cube: 2 targets (cluster at (5,5) and (6,5)).
+	// Count=3 → total = 2*3 = 6, capped at 4 enemies → effective = 4.
+	// 7d10 avg=38.5. DC15 vs DEX+2: fail=0.60.
+	// EV = 0.60*38.5 + 0.40*19.25 = 23.1+7.7 = 30.8 per target.
+	// 4 targets: 30.8 * 4 = 123.2
+	if decision.ExpectedDamage < 110.0 || decision.ExpectedDamage > 140.0 {
+		t.Errorf("count multiplier: got EV=%.1f, want ~123.2 (30.8 * 4)", decision.ExpectedDamage)
+	}
+}
