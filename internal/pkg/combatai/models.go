@@ -134,6 +134,40 @@ type LegendaryActionResult struct {
 	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
 }
 
+// MoveRequest is the input for ProcessMove.
+type MoveRequest struct {
+	ParticipantID string
+	NewPosition   models.CellsCoordinates
+}
+
+// MoveResult is the response from ProcessMove — position update plus any opportunity attacks.
+type MoveResult struct {
+	ParticipantID      string                    `json:"participantId"`
+	OldPosition        *models.CellsCoordinates  `json:"oldPosition"`
+	NewPosition        *models.CellsCoordinates  `json:"newPosition"`
+	MovementApplied    bool                      `json:"movementApplied"`
+	OpportunityAttacks []OpportunityAttackResult `json:"opportunityAttacks,omitempty"`
+}
+
+// OpportunityAttackResult describes one NPC's opportunity attack during movement.
+type OpportunityAttackResult struct {
+	NpcID         string                  `json:"npcID"`
+	NpcName       string                  `json:"npcName"`
+	ActionID      string                  `json:"actionID,omitempty"`
+	ActionName    string                  `json:"actionName,omitempty"`
+	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
+	Skipped       bool                    `json:"skipped"`
+	SkipReason    string                  `json:"skipReason,omitempty"`
+}
+
+// OpportunityAttackCandidate holds an NPC eligible for an opportunity attack.
+// Used by FindOpportunityAttackCandidates and consumed by usecases layer.
+type OpportunityAttackCandidate struct {
+	NPC      *models.ParticipantFull
+	Creature *models.Creature
+	Action   *models.StructuredAction // selected melee reaction action
+}
+
 // CreatureRole classifies a creature's combat behavior archetype.
 type CreatureRole string
 

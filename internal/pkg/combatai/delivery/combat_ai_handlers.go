@@ -111,6 +111,66 @@ func (h *CombatAIHandler) AIRound(w http.ResponseWriter, r *http.Request) {
 	responses.SendOkResponse(w, result)
 }
 
+// moveRequest is the JSON body for POST /encounter/{id}/move.
+type moveRequest struct {
+	ParticipantID string                  `json:"participantId"`
+	NewPosition   models.CellsCoordinates `json:"newPosition"`
+}
+
+// Move handles POST /encounter/{id}/move.
+// Validates movement and checks for opportunity attacks from nearby NPCs.
+func (h *CombatAIHandler) Move(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	// 1. Parse encounter ID from URL.
+	vars := mux.Vars(r)
+	encounterID, ok := vars["id"]
+	if !ok || encounterID == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	// 2. Decode request body.
+	var req moveRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, err, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+		return
+	}
+	if req.ParticipantID == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadRequest, nil,
+			map[string]any{"reason": "participantId is required"})
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadRequest)
+		return
+	}
+
+	// 3. Extract user from context.
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	// 4. Process move.
+	moveReq := &combatai.MoveRequest{
+		ParticipantID: req.ParticipantID,
+		NewPosition:   req.NewPosition,
+	}
+
+	result, err := h.usecases.ProcessMove(ctx, encounterID, moveReq, user.ID)
+	if err != nil {
+		code, status := mapAITurnError(err)
+		l.DeliveryError(ctx, code, status, err, map[string]any{
+			"encounterID":   encounterID,
+			"participantID": req.ParticipantID,
+			"userID":        user.ID,
+		})
+		responses.SendErrResponse(w, code, status)
+		return
+	}
+
+	// 5. Send success response.
+	responses.SendOkResponse(w, result)
+}
+
 // mapAITurnError maps usecase errors to HTTP status codes.
 func mapAITurnError(err error) (int, string) {
 	switch {

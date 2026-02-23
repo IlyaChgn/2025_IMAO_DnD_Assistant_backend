@@ -14,4 +14,5 @@ type CombatAI interface {
 type CombatAIUsecases interface {
 	ExecuteAITurn(ctx context.Context, encounterID string, npcInstanceID string, userID int) (*AITurnResult, error)
 	ExecuteAIRound(ctx context.Context, encounterID string, userID int) (*AIRoundResult, error)
+	ProcessMove(ctx context.Context, encounterID string, req *MoveRequest, userID int) (*MoveResult, error)
 }
