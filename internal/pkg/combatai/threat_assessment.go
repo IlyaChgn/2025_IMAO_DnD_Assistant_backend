@@ -14,6 +14,7 @@ type ThreatScore struct {
 	Distance        int // feet (Chebyshev)
 	IsConcentrating bool
 	HPPercent       float64
+	AllyCount       int // number of allies already targeting this enemy (focus fire)
 }
 
 // AssessThreats computes threat scores for all alive enemies.
@@ -71,12 +72,22 @@ func assessSingleThreat(input *TurnInput, enemy *models.ParticipantFull, stats C
 		}
 	}
 
+	// Focus-fire bonus: reward targeting the same enemy as allies this round.
+	// Each ally already targeting this enemy adds +15 to the score.
+	// Capped at 3 allies (max +45) to prevent extreme stacking.
+	allyCount := countAlliesTargeting(input.RecentNPCTargets, enemy.InstanceID, input.ActiveNPC.InstanceID)
+	if allyCount > 3 {
+		allyCount = 3
+	}
+	score += float64(allyCount) * 15.0
+
 	return ThreatScore{
 		TargetID:        enemy.InstanceID,
 		Score:           score,
 		Distance:        dist,
 		IsConcentrating: concentrating,
 		HPPercent:       hp,
+		AllyCount:       allyCount,
 	}
 }
 
@@ -136,6 +147,18 @@ func maxMeleeReach(creature models.Creature) int {
 		return 5
 	}
 	return best
+}
+
+// countAlliesTargeting returns how many NPCs in recentTargets are targeting
+// the given enemy. Excludes the active NPC itself.
+func countAlliesTargeting(recentTargets map[string]string, enemyID, selfID string) int {
+	count := 0
+	for npcID, targetID := range recentTargets {
+		if npcID != selfID && targetID == enemyID {
+			count++
+		}
+	}
+	return count
 }
 
 // containsDamageType checks if a string slice contains a damage type (case-insensitive).

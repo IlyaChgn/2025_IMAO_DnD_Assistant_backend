@@ -23,6 +23,11 @@ type TurnInput struct {
 	// Previous target for sticky targeting (empty string = first round or target dead).
 	PreviousTargetID string
 
+	// RecentNPCTargets maps NPC instanceID → target PC instanceID for NPCs
+	// that have already acted this round. Used for focus-fire coordination
+	// at intelligence >= 0.55. Nil or empty = no coordination data.
+	RecentNPCTargets map[string]string
+
 	// Grid dimensions (for movement, Phase 3).
 	MapWidth  int
 	MapHeight int

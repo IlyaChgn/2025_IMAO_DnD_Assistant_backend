@@ -106,7 +106,7 @@ func (uc *combatAIUsecases) ExecuteAITurn(
 	}
 
 	// 7. Build TurnInput.
-	input, err := uc.buildTurnInput(ctx, ed, npc, creature, userID)
+	input, err := uc.buildTurnInput(ctx, ed, npc, creature, userID, nil)
 	if err != nil {
 		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID, "npcID": npcInstanceID})
 		return nil, fmt.Errorf("build turn input: %w", err)
@@ -146,12 +146,14 @@ func (uc *combatAIUsecases) ExecuteAITurn(
 }
 
 // buildTurnInput assembles a TurnInput from encounter data and DB lookups.
+// recentTargets is nil for single-turn calls; non-nil during ExecuteAIRound for focus-fire.
 func (uc *combatAIUsecases) buildTurnInput(
 	ctx context.Context,
 	ed *actionsuc.EncounterData,
 	npc *models.ParticipantFull,
 	creature *models.Creature,
 	userID int,
+	recentTargets map[string]string,
 ) (*combatai.TurnInput, error) {
 	l := logger.FromContext(ctx)
 
@@ -191,6 +193,7 @@ func (uc *combatAIUsecases) buildTurnInput(
 		CombatantStats:   stats,
 		Intelligence:     intelligence,
 		PreviousTargetID: "", // Phase 1: no sticky targeting persistence
+		RecentNPCTargets: recentTargets,
 	}
 
 	// Parse walkability grid from encounter data.

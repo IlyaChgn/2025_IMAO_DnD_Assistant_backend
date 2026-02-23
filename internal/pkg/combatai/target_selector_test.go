@@ -361,3 +361,101 @@ func TestSelectTarget_SmartConcentrationOverridesDistance(t *testing.T) {
 		t.Errorf("smart concentration > distance: got %v, want [pc2] (concentrating)", targets)
 	}
 }
+
+func TestSelectTarget_SmartFocusFire(t *testing.T) {
+	t.Parallel()
+
+	// 3 PCs with identical stats — no concentration, same HP, same AC, same distance.
+	// Without focus fire, any target is equally valid.
+	// With 2 allies targeting pc1, focus-fire bonus (+30) should make pc1 the clear winner.
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+			StructuredActions: []models.StructuredAction{
+				*makeMeleeAction(),
+			},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 1, 0),
+			makeParticipant("pc3", true, 50, 1, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15},
+			"pc2": {MaxHP: 50, AC: 15},
+			"pc3": {MaxHP: 50, AC: 15},
+		},
+		Intelligence:     0.70,
+		RecentNPCTargets: map[string]string{"npc2": "pc1", "npc3": "pc1"},
+	}
+
+	targets := SelectTarget(input, makeMeleeAction())
+	if len(targets) != 1 || targets[0] != "pc1" {
+		t.Errorf("smart focus fire: got %v, want [pc1] (2 allies already targeting pc1)", targets)
+	}
+}
+
+func TestSelectTarget_SmartFocusFire_NilMap(t *testing.T) {
+	t.Parallel()
+
+	// With nil RecentNPCTargets, focus fire is disabled. All PCs are equally scored.
+	// We just verify no crash and a valid target is returned.
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+			StructuredActions: []models.StructuredAction{
+				*makeMeleeAction(),
+			},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 50, 1, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15},
+			"pc2": {MaxHP: 50, AC: 15},
+		},
+		Intelligence:     0.70,
+		RecentNPCTargets: nil,
+	}
+
+	targets := SelectTarget(input, makeMeleeAction())
+	if len(targets) != 1 {
+		t.Errorf("smart focus fire nil map: got %v, want exactly 1 target", targets)
+	}
+}
+
+func TestSelectTarget_GoblinIgnoresFocusFire(t *testing.T) {
+	t.Parallel()
+
+	// Goblin tier (intelligence 0.25) should NOT be affected by focus fire.
+	// Goblin logic: finish wounded (<25% HP) in reach, else nearest.
+	// pc2 is wounded (5 HP), pc1 is focused by allies but full HP.
+	// Goblin should pick pc2 (wounded), not pc1 (focus fire).
+	input := &TurnInput{
+		ActiveNPC: makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: models.Creature{
+			Movement: models.CreatureMovement{Walk: 30},
+		},
+		Participants: []models.ParticipantFull{
+			makeParticipant("npc1", false, 50, 0, 0),
+			makeParticipant("pc1", true, 50, 1, 0),
+			makeParticipant("pc2", true, 5, 1, 0),
+		},
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15},
+			"pc2": {MaxHP: 100, AC: 15},
+		},
+		Intelligence:     0.25,
+		RecentNPCTargets: map[string]string{"npc2": "pc1", "npc3": "pc1"},
+	}
+
+	targets := SelectTarget(input, makeMeleeAction())
+	if len(targets) != 1 || targets[0] != "pc2" {
+		t.Errorf("goblin ignores focus fire: got %v, want [pc2] (wounded, goblin tier)", targets)
+	}
+}

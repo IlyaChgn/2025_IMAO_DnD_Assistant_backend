@@ -47,8 +47,11 @@ func (uc *combatAIUsecases) ExecuteAIRound(
 	}
 
 	// 3. Execute each NPC turn.
+	// Track NPC target choices for focus-fire coordination.
+	recentTargets := make(map[string]string)
+
 	for _, npcID := range npcOrder {
-		turn, ended, combatResult, err := uc.executeOneNPCTurn(ctx, encounterID, npcID, userID)
+		turn, ended, combatResult, err := uc.executeOneNPCTurn(ctx, encounterID, npcID, userID, recentTargets)
 		if err != nil {
 			l.UsecasesWarn(err, userID, map[string]any{"encounterID": encounterID, "npcID": npcID})
 			// Non-fatal: skip this NPC and continue with the rest.
@@ -59,6 +62,11 @@ func (uc *combatAIUsecases) ExecuteAIRound(
 				SkipReason: "Internal error",
 			})
 			continue
+		}
+
+		// Record this NPC's primary target for subsequent NPCs' focus fire.
+		if target := extractPrimaryTarget(turn); target != "" {
+			recentTargets[npcID] = target
 		}
 
 		result.Turns = append(result.Turns, *turn)
@@ -75,7 +83,7 @@ func (uc *combatAIUsecases) ExecuteAIRound(
 
 		// Legendary action phase — after this NPC's turn, other NPCs
 		// with remaining legendary actions get to use one (D&D 5e).
-		legendaryResults := uc.executeLegendaryActions(ctx, encounterID, npcID, npcOrder, userID)
+		legendaryResults := uc.executeLegendaryActions(ctx, encounterID, npcID, npcOrder, userID, recentTargets)
 		if len(legendaryResults) > 0 {
 			result.Turns[len(result.Turns)-1].LegendaryActionResults = legendaryResults
 			uc.broadcastLegendaryResults(ctx, encounterID, legendaryResults)
@@ -95,6 +103,7 @@ func (uc *combatAIUsecases) executeOneNPCTurn(
 	encounterID string,
 	npcInstanceID string,
 	userID int,
+	recentTargets map[string]string,
 ) (*combatai.AIRoundTurn, bool, string, error) {
 	l := logger.FromContext(ctx)
 
@@ -156,7 +165,7 @@ func (uc *combatAIUsecases) executeOneNPCTurn(
 	}
 
 	// Build TurnInput and run AI decision.
-	input, err := uc.buildTurnInput(ctx, ed, npc, creature, userID)
+	input, err := uc.buildTurnInput(ctx, ed, npc, creature, userID, recentTargets)
 	if err != nil {
 		l.UsecasesError(err, userID, map[string]any{"encounterID": encounterID, "npcID": npcInstanceID})
 		return nil, false, "", fmt.Errorf("build turn input: %w", err)
@@ -216,6 +225,7 @@ func (uc *combatAIUsecases) executeLegendaryActions(
 	justActedNpcID string,
 	npcOrder []string,
 	userID int,
+	recentTargets map[string]string,
 ) []*combatai.LegendaryActionResult {
 	l := logger.FromContext(ctx)
 	var results []*combatai.LegendaryActionResult
@@ -251,7 +261,7 @@ func (uc *combatAIUsecases) executeLegendaryActions(
 			continue
 		}
 
-		input, err := uc.buildTurnInput(ctx, ed, npc, creature, userID)
+		input, err := uc.buildTurnInput(ctx, ed, npc, creature, userID, recentTargets)
 		if err != nil {
 			continue
 		}
@@ -310,6 +320,11 @@ func (uc *combatAIUsecases) executeLegendaryActions(
 			Decision:      decision,
 			ActionResults: actionResults,
 		})
+
+		// Record legendary action target for focus-fire coordination.
+		if target := extractActionTarget(decision); target != "" {
+			recentTargets[npcID] = target
+		}
 	}
 
 	return results
@@ -346,4 +361,35 @@ func (uc *combatAIUsecases) broadcastAITurnResult(ctx context.Context, encounter
 
 	// senderUserID = 0 ensures all connected clients receive the message.
 	uc.tableManager.BroadcastToEncounter(ctx, encounterID, 0, msg)
+}
+
+// extractPrimaryTarget returns the first target instanceID from a turn result.
+// Used for focus-fire coordination: tracks what each NPC targeted this round.
+// Falls back to bonus action target if the main action has no target (e.g. Dodge + bonus attack).
+// Returns "" for skip/dodge/dash/disengage turns (no offensive target).
+func extractPrimaryTarget(turn *combatai.AIRoundTurn) string {
+	if turn == nil || turn.Decision == nil {
+		return ""
+	}
+	if target := extractActionTarget(turn.Decision.Action); target != "" {
+		return target
+	}
+	return extractActionTarget(turn.Decision.BonusAction)
+}
+
+// extractActionTarget returns the first target instanceID from an ActionDecision.
+// Handles both single actions (TargetIDs) and multiattack steps.
+func extractActionTarget(action *combatai.ActionDecision) string {
+	if action == nil {
+		return ""
+	}
+	if len(action.TargetIDs) > 0 {
+		return action.TargetIDs[0]
+	}
+	for _, step := range action.MultiattackSteps {
+		if len(step.TargetIDs) > 0 {
+			return step.TargetIDs[0]
+		}
+	}
+	return ""
 }

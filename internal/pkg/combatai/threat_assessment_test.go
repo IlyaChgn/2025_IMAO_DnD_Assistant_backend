@@ -372,3 +372,140 @@ func TestAssessSingleThreat_NilCoords(t *testing.T) {
 	// Base 10 - 15 (distance) = -5
 	assert.InDelta(t, -5.0, score.Score, 0.01)
 }
+
+// --- Focus-fire tests ---
+
+func TestAssessSingleThreat_FocusFire_OneAlly(t *testing.T) {
+	t.Parallel()
+
+	enemy := makeParticipant("pc1", true, 50, 1, 0)
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: makeSlashingCreature(),
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15}},
+		RecentNPCTargets: map[string]string{"npc2": "pc1"},
+	}
+
+	score := assessSingleThreat(input, &enemy, input.CombatantStats["pc1"])
+
+	// Base 10 + 15 (1 ally) = 25
+	assert.InDelta(t, 25.0, score.Score, 0.01)
+	assert.Equal(t, 1, score.AllyCount)
+}
+
+func TestAssessSingleThreat_FocusFire_TwoAllies(t *testing.T) {
+	t.Parallel()
+
+	enemy := makeParticipant("pc1", true, 50, 1, 0)
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: makeSlashingCreature(),
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15}},
+		RecentNPCTargets: map[string]string{"npc2": "pc1", "npc3": "pc1"},
+	}
+
+	score := assessSingleThreat(input, &enemy, input.CombatantStats["pc1"])
+
+	// Base 10 + 30 (2 allies) = 40
+	assert.InDelta(t, 40.0, score.Score, 0.01)
+	assert.Equal(t, 2, score.AllyCount)
+}
+
+func TestAssessSingleThreat_FocusFire_CappedAtThree(t *testing.T) {
+	t.Parallel()
+
+	enemy := makeParticipant("pc1", true, 50, 1, 0)
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: makeSlashingCreature(),
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15}},
+		RecentNPCTargets: map[string]string{
+			"npc2": "pc1", "npc3": "pc1", "npc4": "pc1", "npc5": "pc1", "npc6": "pc1",
+		},
+	}
+
+	score := assessSingleThreat(input, &enemy, input.CombatantStats["pc1"])
+
+	// Base 10 + 45 (capped at 3 allies × 15) = 55
+	assert.InDelta(t, 55.0, score.Score, 0.01)
+	assert.Equal(t, 3, score.AllyCount) // capped
+}
+
+func TestAssessSingleThreat_FocusFire_NilMap(t *testing.T) {
+	t.Parallel()
+
+	enemy := makeParticipant("pc1", true, 50, 1, 0)
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: makeSlashingCreature(),
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15}},
+		RecentNPCTargets: nil,
+	}
+
+	score := assessSingleThreat(input, &enemy, input.CombatantStats["pc1"])
+
+	// Base 10, no focus-fire bonus
+	assert.InDelta(t, 10.0, score.Score, 0.01)
+	assert.Equal(t, 0, score.AllyCount)
+}
+
+func TestAssessSingleThreat_FocusFire_SelfExcluded(t *testing.T) {
+	t.Parallel()
+
+	enemy := makeParticipant("pc1", true, 50, 1, 0)
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: makeSlashingCreature(),
+		CombatantStats:   map[string]CombatantStats{"pc1": {MaxHP: 50, AC: 15}},
+		RecentNPCTargets: map[string]string{"npc1": "pc1"}, // self targeting pc1
+	}
+
+	score := assessSingleThreat(input, &enemy, input.CombatantStats["pc1"])
+
+	// Base 10, self excluded from ally count
+	assert.InDelta(t, 10.0, score.Score, 0.01)
+	assert.Equal(t, 0, score.AllyCount)
+}
+
+func TestAssessSingleThreat_FocusFire_OverriddenByImmunity(t *testing.T) {
+	t.Parallel()
+
+	enemy := makeParticipant("pc1", true, 50, 1, 0)
+
+	input := &TurnInput{
+		ActiveNPC:        makeParticipant("npc1", false, 50, 0, 0),
+		CreatureTemplate: makeFireBreathCreature(),
+		CombatantStats: map[string]CombatantStats{
+			"pc1": {MaxHP: 50, AC: 15, Immunities: []string{"fire"}},
+		},
+		RecentNPCTargets: map[string]string{"npc2": "pc1", "npc3": "pc1"},
+	}
+
+	score := assessSingleThreat(input, &enemy, input.CombatantStats["pc1"])
+
+	// Base 10 - 50 (fire immune) + 30 (2 allies) = -10
+	assert.InDelta(t, -10.0, score.Score, 0.01)
+	assert.Equal(t, 2, score.AllyCount)
+}
+
+func TestCountAlliesTargeting(t *testing.T) {
+	t.Parallel()
+
+	targets := map[string]string{
+		"npc1": "pc1",
+		"npc2": "pc1",
+		"npc3": "pc2",
+		"npc4": "pc1",
+	}
+
+	assert.Equal(t, 3, countAlliesTargeting(targets, "pc1", "npc99"))
+	assert.Equal(t, 2, countAlliesTargeting(targets, "pc1", "npc1")) // self excluded
+	assert.Equal(t, 1, countAlliesTargeting(targets, "pc2", "npc99"))
+	assert.Equal(t, 0, countAlliesTargeting(targets, "pc3", "npc99"))
+	assert.Equal(t, 0, countAlliesTargeting(nil, "pc1", "npc1"))
+}
