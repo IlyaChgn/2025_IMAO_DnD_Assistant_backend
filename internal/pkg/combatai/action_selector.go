@@ -34,6 +34,9 @@ func SelectAction(input *TurnInput, role CreatureRole, rng *rand.Rand) *ActionDe
 	}
 
 	// 3. Single actions.
+	// Compute baseline EV for limited-use ability cost-benefit check.
+	baseline := bestBaselineEV(input)
+
 	for i := range actions {
 		a := &actions[i]
 		if !isActionAvailable(a, resources) {
@@ -48,6 +51,11 @@ func SelectAction(input *TurnInput, role CreatureRole, rng *rand.Rand) *ActionDe
 		}
 		targetStats := input.CombatantStats[targetIDs[0]]
 		ev := ComputeExpectedDamage(*a, targetStats)
+
+		// Limited-use ability economy: only spend if EV justifies it.
+		if a.Uses != nil && !ShouldUseAbility(ev, baseline, input.Intelligence) {
+			continue
+		}
 
 		candidates = append(candidates, &ActionDecision{
 			ActionType:     actionTypeFromAction(a),
@@ -147,6 +155,16 @@ func evaluateSingleSpell(input *TurnInput, spell models.SpellKnown, level int, s
 	// Cantrips are always available; leveled spells need slots.
 	if level > 0 && resources.SpellSlots[level] <= 0 {
 		return nil
+	}
+
+	// Spell slot economy: intelligence-gated round-based spending.
+	if level > 0 {
+		hpPct := npcHPPercent(input)
+		maxLevel := maxAvailableSlotLevel(resources.SpellSlots)
+		if !ShouldSpendSpellSlot(level, input.CurrentRound, hpPct,
+			input.Intelligence, maxLevel) {
+			return nil
+		}
 	}
 
 	// Need a target to evaluate against.
