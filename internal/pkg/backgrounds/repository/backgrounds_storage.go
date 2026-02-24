@@ -136,7 +136,7 @@ func (s *backgroundsStorage) GetBackgroundByEngName(ctx context.Context, engName
 	return &bg, nil
 }
 
-func (s *backgroundsStorage) UpsertBackground(ctx context.Context, bg *models.BackgroundDefinition) error {
+func (s *backgroundsStorage) UpsertBackground(ctx context.Context, bg *models.BackgroundDefinition) (bool, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -146,13 +146,13 @@ func (s *backgroundsStorage) UpsertBackground(ctx context.Context, bg *models.Ba
 	update := bson.D{{Key: "$set", Value: bg}}
 	opts := options.Update().SetUpsert(true)
 
-	_, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+	res, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update, opts)
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"engName": bg.EngName})
-		return err
+		return false, err
 	}
 
-	return nil
+	return res.UpsertedCount > 0 || res.ModifiedCount > 0, nil
 }

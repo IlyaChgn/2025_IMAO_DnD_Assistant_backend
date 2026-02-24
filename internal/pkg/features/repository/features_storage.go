@@ -195,7 +195,7 @@ func (s *featuresStorage) GetFeaturesByClass(ctx context.Context, className stri
 	return features, nil
 }
 
-func (s *featuresStorage) UpsertFeature(ctx context.Context, feature *models.FeatureDefinition) error {
+func (s *featuresStorage) UpsertFeature(ctx context.Context, feature *models.FeatureDefinition) (bool, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -205,13 +205,13 @@ func (s *featuresStorage) UpsertFeature(ctx context.Context, feature *models.Fea
 	update := bson.D{{Key: "$set", Value: feature}}
 	opts := options.Update().SetUpsert(true)
 
-	_, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+	res, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update, opts)
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"engName": feature.EngName})
-		return err
+		return false, err
 	}
 
-	return nil
+	return res.UpsertedCount > 0 || res.ModifiedCount > 0, nil
 }

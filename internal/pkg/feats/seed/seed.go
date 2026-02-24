@@ -20,16 +20,19 @@ func SeedFeatDefinitions(ctx context.Context, repo featsinterfaces.FeatsReposito
 		return 0, err
 	}
 
-	upserted := 0
+	changed := 0
 
 	for i := range feats {
 		feats[i].SchemaVersion = 1
 
-		if err := repo.UpsertFeat(ctx, &feats[i]); err != nil {
-			return upserted, err
+		modified, err := repo.UpsertFeat(ctx, &feats[i])
+		if err != nil {
+			return changed, err
 		}
-		upserted++
+		if modified {
+			changed++
+		}
 	}
 
-	return upserted, nil
+	return changed, nil
 }

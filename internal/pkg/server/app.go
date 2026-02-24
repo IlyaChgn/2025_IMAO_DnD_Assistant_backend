@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
@@ -429,5 +431,38 @@ func (srv *Server) Run() error {
 
 	logger.ServerInfo(cfg.Server.Host, cfg.Server.Port, isProduction)
 
-	return srv.server.ListenAndServe()
+	// Graceful shutdown: listen for SIGINT/SIGTERM.
+	sigCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	errCh := make(chan error, 1)
+	go func() { errCh <- srv.server.ListenAndServe() }()
+
+	select {
+	case <-sigCtx.Done():
+		log.Println("Shutting down server...")
+
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+
+		if err := srv.server.Shutdown(shutdownCtx); err != nil {
+			log.Printf("HTTP server shutdown error: %v", err)
+		}
+	case err := <-errCh:
+		if err != nil && err != http.ErrServerClosed {
+			return err
+		}
+	}
+
+	// Close database connections.
+	postgresPool.Close()
+	if err := redisClient.Close(); err != nil {
+		log.Printf("Redis close error: %v", err)
+	}
+	if err := mongoDatabase.Client().Disconnect(context.Background()); err != nil {
+		log.Printf("MongoDB disconnect error: %v", err)
+	}
+
+	log.Println("Server stopped gracefully")
+	return nil
 }

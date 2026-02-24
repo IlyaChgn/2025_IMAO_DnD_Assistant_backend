@@ -45,7 +45,10 @@ func (uc *LLMUsecase) SubmitText(ctx context.Context, desc string) (string, erro
 		return "", err
 	}
 
-	uc.runner.Go(func() { uc.process(ctx, id) })
+	// Use background context so the job survives after the HTTP request ends.
+	// Carry the logger over so errors are still logged.
+	bgCtx := logger.FromContext(ctx).WithContext(context.Background())
+	uc.runner.Go(func() { uc.process(bgCtx, id) })
 
 	return id, nil
 }
@@ -64,7 +67,10 @@ func (uc *LLMUsecase) SubmitImage(ctx context.Context, img []byte) (string, erro
 		return "", err
 	}
 
-	uc.runner.Go(func() { uc.process(ctx, id) })
+	// Use background context so the job survives after the HTTP request ends.
+	// Carry the logger over so errors are still logged.
+	bgCtx := logger.FromContext(ctx).WithContext(context.Background())
+	uc.runner.Go(func() { uc.process(bgCtx, id) })
 
 	return id, nil
 }

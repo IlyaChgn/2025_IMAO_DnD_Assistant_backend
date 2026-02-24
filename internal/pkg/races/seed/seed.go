@@ -20,16 +20,19 @@ func SeedRaceDefinitions(ctx context.Context, repo racesinterfaces.RacesReposito
 		return 0, err
 	}
 
-	upserted := 0
+	changed := 0
 
 	for i := range races {
 		races[i].SchemaVersion = 1
 
-		if err := repo.UpsertRace(ctx, &races[i]); err != nil {
-			return upserted, err
+		modified, err := repo.UpsertRace(ctx, &races[i])
+		if err != nil {
+			return changed, err
 		}
-		upserted++
+		if modified {
+			changed++
+		}
 	}
 
-	return upserted, nil
+	return changed, nil
 }

@@ -26,16 +26,19 @@ func SeedSpellDefinitions(ctx context.Context, repo spellsinterfaces.SpellsRepos
 		return 0, err
 	}
 
-	upserted := 0
+	changed := 0
 
 	for i := range spells {
 		spells[i].SchemaVersion = 1
 
-		if err := repo.UpsertSpell(ctx, &spells[i]); err != nil {
-			return upserted, err
+		modified, err := repo.UpsertSpell(ctx, &spells[i])
+		if err != nil {
+			return changed, err
 		}
-		upserted++
+		if modified {
+			changed++
+		}
 	}
 
-	return upserted, nil
+	return changed, nil
 }

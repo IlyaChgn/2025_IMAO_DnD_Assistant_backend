@@ -20,16 +20,19 @@ func SeedClassDefinitions(ctx context.Context, repo classesinterfaces.ClassesRep
 		return 0, err
 	}
 
-	upserted := 0
+	changed := 0
 
 	for i := range classes {
 		classes[i].SchemaVersion = 1
 
-		if err := repo.UpsertClass(ctx, &classes[i]); err != nil {
-			return upserted, err
+		modified, err := repo.UpsertClass(ctx, &classes[i])
+		if err != nil {
+			return changed, err
 		}
-		upserted++
+		if modified {
+			changed++
+		}
 	}
 
-	return upserted, nil
+	return changed, nil
 }

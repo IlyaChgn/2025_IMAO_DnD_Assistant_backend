@@ -11,7 +11,7 @@ type FeaturesRepository interface {
 	GetFeatureByID(ctx context.Context, id string) (*models.FeatureDefinition, error)
 	GetFeaturesByClass(ctx context.Context, className string, level *int) ([]*models.FeatureDefinition, error)
 	EnsureIndexes(ctx context.Context) error
-	UpsertFeature(ctx context.Context, feature *models.FeatureDefinition) error
+	UpsertFeature(ctx context.Context, feature *models.FeatureDefinition) (bool, error)
 }
 
 type FeaturesUsecases interface {

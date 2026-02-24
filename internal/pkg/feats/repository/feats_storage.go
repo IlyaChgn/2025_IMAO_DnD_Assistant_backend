@@ -136,7 +136,7 @@ func (s *featsStorage) GetFeatByEngName(ctx context.Context, engName string) (*m
 	return &feat, nil
 }
 
-func (s *featsStorage) UpsertFeat(ctx context.Context, feat *models.FeatDefinition) error {
+func (s *featsStorage) UpsertFeat(ctx context.Context, feat *models.FeatDefinition) (bool, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -146,13 +146,13 @@ func (s *featsStorage) UpsertFeat(ctx context.Context, feat *models.FeatDefiniti
 	update := bson.D{{Key: "$set", Value: feat}}
 	opts := options.Update().SetUpsert(true)
 
-	_, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+	res, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update, opts)
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"engName": feat.EngName})
-		return err
+		return false, err
 	}
 
-	return nil
+	return res.UpsertedCount > 0 || res.ModifiedCount > 0, nil
 }

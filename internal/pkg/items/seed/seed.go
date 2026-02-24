@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "embed"
 	"encoding/json"
-	"log"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	itemsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items"
@@ -33,9 +32,7 @@ func SeedItemDefinitions(ctx context.Context, repo itemsinterfaces.ItemDefinitio
 
 		_, err := repo.CreateItem(ctx, &items[i])
 		if err != nil {
-			// Skip duplicates (engName unique index)
-			log.Printf("Seed: skipping %s: %v", items[i].EngName, err)
-			continue
+			continue // skip duplicates (engName unique index)
 		}
 		inserted++
 	}

@@ -10,7 +10,7 @@ type RacesRepository interface {
 	GetRaces(ctx context.Context, filter models.RaceFilterParams) ([]*models.RaceDefinition, int64, error)
 	GetRaceByEngName(ctx context.Context, engName string) (*models.RaceDefinition, error)
 	EnsureIndexes(ctx context.Context) error
-	UpsertRace(ctx context.Context, race *models.RaceDefinition) error
+	UpsertRace(ctx context.Context, race *models.RaceDefinition) (bool, error)
 }
 
 type RacesUsecases interface {

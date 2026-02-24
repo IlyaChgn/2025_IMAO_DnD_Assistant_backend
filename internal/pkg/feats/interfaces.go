@@ -10,7 +10,7 @@ type FeatsRepository interface {
 	GetFeats(ctx context.Context, filter models.FeatFilterParams) ([]*models.FeatDefinition, int64, error)
 	GetFeatByEngName(ctx context.Context, engName string) (*models.FeatDefinition, error)
 	EnsureIndexes(ctx context.Context) error
-	UpsertFeat(ctx context.Context, feat *models.FeatDefinition) error
+	UpsertFeat(ctx context.Context, feat *models.FeatDefinition) (bool, error)
 }
 
 type FeatsUsecases interface {

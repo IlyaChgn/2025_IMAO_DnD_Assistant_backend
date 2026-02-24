@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (s *spellsStorage) UpsertSpell(ctx context.Context, spell *models.SpellDefinition) error {
+func (s *spellsStorage) UpsertSpell(ctx context.Context, spell *models.SpellDefinition) (bool, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -23,13 +23,13 @@ func (s *spellsStorage) UpsertSpell(ctx context.Context, spell *models.SpellDefi
 	update := bson.D{{Key: "$set", Value: spell}}
 	opts := options.Update().SetUpsert(true)
 
-	_, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+	res, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update, opts)
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"engName": spell.EngName})
-		return err
+		return false, err
 	}
 
-	return nil
+	return res.UpsertedCount > 0 || res.ModifiedCount > 0, nil
 }

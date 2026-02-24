@@ -20,16 +20,19 @@ func SeedBackgroundDefinitions(ctx context.Context, repo backgroundsinterfaces.B
 		return 0, err
 	}
 
-	upserted := 0
+	changed := 0
 
 	for i := range backgrounds {
 		backgrounds[i].SchemaVersion = 1
 
-		if err := repo.UpsertBackground(ctx, &backgrounds[i]); err != nil {
-			return upserted, err
+		modified, err := repo.UpsertBackground(ctx, &backgrounds[i])
+		if err != nil {
+			return changed, err
 		}
-		upserted++
+		if modified {
+			changed++
+		}
 	}
 
-	return upserted, nil
+	return changed, nil
 }

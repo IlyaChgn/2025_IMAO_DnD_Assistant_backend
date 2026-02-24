@@ -3,15 +3,18 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
-	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
-	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
-	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
+	"errors"
 	"time"
 
 	"github.com/redis/go-redis/v9"
+
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
+	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
+	mymetrics "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/metrics"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 )
 
 type sessionManager struct {
@@ -48,14 +51,14 @@ func (manager *sessionManager) CreateSession(ctx context.Context, sessionID stri
 func (manager *sessionManager) RemoveSession(ctx context.Context, sessionID string) error {
 	fnName := utils.GetFunctionName()
 
-	if _, exists := manager.GetSession(ctx, sessionID); !exists {
-		return apperrors.SessionNotExistsError
-	}
-
 	return dbcall.ErrOnlyDBCall(fnName, manager.metrics, func() error {
-		_, err := manager.client.Del(context.Background(), sessionID).Result()
+		deleted, err := manager.client.Del(ctx, sessionID).Result()
 		if err != nil {
 			return apperrors.DeleteFromRedisError
+		}
+
+		if deleted == 0 {
+			return apperrors.SessionNotExistsError
 		}
 
 		return nil
@@ -65,9 +68,16 @@ func (manager *sessionManager) RemoveSession(ctx context.Context, sessionID stri
 func (manager *sessionManager) GetSession(ctx context.Context, sessionID string) (*models.FullSessionData, bool) {
 	fnName := utils.GetFunctionName()
 
-	rawSession, _ := dbcall.DBCall[string](fnName, manager.metrics, func() (string, error) {
+	rawSession, err := dbcall.DBCall[string](fnName, manager.metrics, func() (string, error) {
 		return manager.client.Get(ctx, sessionID).Result()
 	})
+
+	if err != nil {
+		if !errors.Is(err, redis.Nil) {
+			logger.FromContext(ctx).RepoError(err, map[string]any{"session_id": sessionID})
+		}
+		return nil, false
+	}
 
 	var session *models.FullSessionData
 	if err := json.Unmarshal([]byte(rawSession), &session); err != nil {

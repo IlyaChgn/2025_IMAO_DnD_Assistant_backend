@@ -136,7 +136,7 @@ func (s *racesStorage) GetRaceByEngName(ctx context.Context, engName string) (*m
 	return &race, nil
 }
 
-func (s *racesStorage) UpsertRace(ctx context.Context, race *models.RaceDefinition) error {
+func (s *racesStorage) UpsertRace(ctx context.Context, race *models.RaceDefinition) (bool, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -146,13 +146,13 @@ func (s *racesStorage) UpsertRace(ctx context.Context, race *models.RaceDefiniti
 	update := bson.D{{Key: "$set", Value: race}}
 	opts := options.Update().SetUpsert(true)
 
-	_, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+	res, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update, opts)
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"engName": race.EngName})
-		return err
+		return false, err
 	}
 
-	return nil
+	return res.UpsertedCount > 0 || res.ModifiedCount > 0, nil
 }

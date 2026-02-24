@@ -4,7 +4,7 @@
 > **Status:** Draft
 > **Feature Plan:** [combat-ai-design-plan.md](combat-ai-design-plan.md)
 > **Branch:** `feature/combat-ai-mvp`
-> **Last updated:** 2026-02-21
+> **Last updated:** 2026-02-23
 
 ---
 
@@ -696,8 +696,8 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 |------|-------------|--------|
 | PR-13 | A* pathfinding on walkability grid | Done ✅ (PR #44, 2026-02-23) |
 | PR-14 | Movement planner + Dash / Disengage universal actions | Done ✅ (PR #45, 2026-02-23) |
-| PR-15 | ReactionRule engine (Shield, Counterspell, Parry, etc.) | Planned |
-| PR-16 | Focus fire / team tactics (intelligence-gated) | Planned |
+| PR-15 | ReactionRule engine (Shield, Counterspell, Parry, etc.) | Done ✅ (PR #46, 2026-02-23) |
+| PR-16 | Focus fire / team tactics (intelligence-gated) | Done ✅ (PR #47, 2026-02-23) |
 
 ---
 

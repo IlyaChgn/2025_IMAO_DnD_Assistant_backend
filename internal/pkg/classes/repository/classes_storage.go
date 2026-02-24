@@ -136,7 +136,7 @@ func (s *classesStorage) GetClassByEngName(ctx context.Context, engName string) 
 	return &class, nil
 }
 
-func (s *classesStorage) UpsertClass(ctx context.Context, class *models.ClassDefinition) error {
+func (s *classesStorage) UpsertClass(ctx context.Context, class *models.ClassDefinition) (bool, error) {
 	l := logger.FromContext(ctx)
 	fnName := utils.GetFunctionName()
 
@@ -146,13 +146,13 @@ func (s *classesStorage) UpsertClass(ctx context.Context, class *models.ClassDef
 	update := bson.D{{Key: "$set", Value: class}}
 	opts := options.Update().SetUpsert(true)
 
-	_, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+	res, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
 		return collection.UpdateOne(ctx, filter, update, opts)
 	})
 	if err != nil {
 		l.RepoError(err, map[string]any{"engName": class.EngName})
-		return err
+		return false, err
 	}
 
-	return nil
+	return res.UpsertedCount > 0 || res.ModifiedCount > 0, nil
 }
