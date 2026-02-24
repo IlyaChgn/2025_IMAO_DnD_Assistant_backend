@@ -1,7 +1,10 @@
 [
   {
     "engName": "second_wind",
-    "name": { "eng": "Second Wind", "rus": "Второе дыхание" },
+    "name": {
+      "eng": "Second Wind",
+      "rus": "Второе дыхание"
+    },
     "description": {
       "eng": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
       "rus": "У вас есть ограниченный запас выносливости, который вы можете использовать для защиты. В свой ход вы можете бонусным действием восстановить хиты в количестве 1к10 + ваш уровень воина. Использовав эту способность, вы должны завершить короткий или продолжительный отдых, прежде чем сможете использовать её снова."
@@ -9,12 +12,21 @@
     "source": "class",
     "sourceDetail": "fighter",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["healing", "bonus_action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "healing",
+      "bonus_action"
+    ]
   },
   {
     "engName": "action_surge",
-    "name": { "eng": "Action Surge", "rus": "Всплеск действий" },
+    "name": {
+      "eng": "Action Surge",
+      "rus": "Всплеск действий"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
       "rus": "Начиная со 2-го уровня, вы можете на мгновение превзойти свои обычные возможности. В свой ход вы можете совершить одно дополнительное действие. Использовав эту способность, вы должны завершить короткий или продолжительный отдых, прежде чем сможете использовать её снова. Начиная с 17-го уровня, вы можете использовать её дважды до отдыха, но только один раз в тот же ход."
@@ -22,12 +34,20 @@
     "source": "class",
     "sourceDetail": "fighter",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["action_economy"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "action_economy"
+    ]
   },
   {
     "engName": "extra_attack_fighter",
-    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "name": {
+      "eng": "Extra Attack",
+      "rus": "Дополнительная атака"
+    },
     "description": {
       "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn. The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
       "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход. Количество атак увеличивается до трёх на 11-м уровне и до четырёх на 20-м уровне этого класса."
@@ -35,11 +55,17 @@
     "source": "class",
     "sourceDetail": "fighter",
     "level": 5,
-    "tags": ["combat", "attack"]
+    "tags": [
+      "combat",
+      "attack"
+    ]
   },
   {
     "engName": "indomitable",
-    "name": { "eng": "Indomitable", "rus": "Несгибаемый" },
+    "name": {
+      "eng": "Indomitable",
+      "rus": "Несгибаемый"
+    },
     "description": {
       "eng": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest. You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.",
       "rus": "Начиная с 9-го уровня, вы можете перебросить проваленный спасбросок. Если вы это делаете, вы должны использовать новый результат. Вы не можете использовать эту способность снова, пока не завершите продолжительный отдых. Вы можете использовать эту способность дважды между продолжительными отдыхами начиная с 13-го уровня и трижды начиная с 17-го уровня."
@@ -47,12 +73,21 @@
     "source": "class",
     "sourceDetail": "fighter",
     "level": 9,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["defensive", "saving_throw"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "defensive",
+      "saving_throw"
+    ]
   },
   {
     "engName": "fighting_style_fighter",
-    "name": { "eng": "Fighting Style", "rus": "Боевой стиль" },
+    "name": {
+      "eng": "Fighting Style",
+      "rus": "Боевой стиль"
+    },
     "description": {
       "eng": "You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
       "rus": "Вы выбираете определённый стиль боя в качестве своей специализации. Выберите один из следующих вариантов. Вы не можете выбрать один и тот же вариант боевого стиля дважды, даже если позднее у вас будет возможность выбрать снова."
@@ -60,11 +95,17 @@
     "source": "class",
     "sourceDetail": "fighter",
     "level": 1,
-    "tags": ["combat", "choice"]
+    "tags": [
+      "combat",
+      "choice"
+    ]
   },
   {
     "engName": "divine_sense",
-    "name": { "eng": "Divine Sense", "rus": "Божественное чувство" },
+    "name": {
+      "eng": "Divine Sense",
+      "rus": "Божественное чувство"
+    },
     "description": {
       "eng": "The presence of strong evil registers on your senses like a noxious odor, and powerful good rings like heavenly music in your ears. As an action, you can open your awareness to detect such forces. Until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover.",
       "rus": "Присутствие сильного зла воспринимается вашими чувствами как неприятный запах, а могущественное добро звучит как небесная музыка. Вы можете действием открыть своё сознание для обнаружения таких сил. До конца вашего следующего хода вы знаете расположение любого небожителя, исчадия или нежити в пределах 60 футов от вас, не находящегося за полным укрытием."
@@ -72,12 +113,21 @@
     "source": "class",
     "sourceDetail": "paladin",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["detection", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "detection",
+      "action"
+    ]
   },
   {
     "engName": "lay_on_hands",
-    "name": { "eng": "Lay on Hands", "rus": "Наложение рук" },
+    "name": {
+      "eng": "Lay on Hands",
+      "rus": "Наложение рук"
+    },
     "description": {
       "eng": "Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you take a long rest. With that pool, you can restore a total number of hit points equal to your paladin level x 5. As an action, you can touch a creature and draw power from the pool to restore a number of hit points to that creature, up to the maximum amount remaining in your pool.",
       "rus": "Ваше благословенное касание может исцелять раны. У вас есть запас целительной силы, восстанавливающийся после продолжительного отдыха. Этим запасом вы можете восстановить суммарное количество хитов, равное уровню паладина x 5. Вы можете действием коснуться существа и восстановить ему хиты, потратив любое количество из вашего запаса."
@@ -85,11 +135,17 @@
     "source": "class",
     "sourceDetail": "paladin",
     "level": 1,
-    "tags": ["healing", "action"]
+    "tags": [
+      "healing",
+      "action"
+    ]
   },
   {
     "engName": "divine_smite",
-    "name": { "eng": "Divine Smite", "rus": "Божественная кара" },
+    "name": {
+      "eng": "Divine Smite",
+      "rus": "Божественная кара"
+    },
     "description": {
       "eng": "Starting at 2nd level, when you hit a creature with a melee weapon attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon's damage. The extra damage is 2d8 for a 1st-level spell slot, plus 1d8 for each spell level higher than 1st, to a maximum of 5d8. The damage increases by 1d8 if the target is an undead or a fiend, to a maximum of 6d8.",
       "rus": "Начиная со 2-го уровня, когда вы попадаете по существу атакой рукопашным оружием, вы можете потратить одну ячейку заклинаний, чтобы нанести цели урон излучением в дополнение к урону оружия. Дополнительный урон составляет 2к8 для ячейки 1-го уровня, плюс 1к8 за каждый уровень ячейки выше 1-го, максимум 5к8. Урон увеличивается на 1к8, если цель — нежить или исчадие, максимум 6к8."
@@ -97,11 +153,18 @@
     "source": "class",
     "sourceDetail": "paladin",
     "level": 2,
-    "tags": ["combat", "damage", "radiant"]
+    "tags": [
+      "combat",
+      "damage",
+      "radiant"
+    ]
   },
   {
     "engName": "aura_of_protection",
-    "name": { "eng": "Aura of Protection", "rus": "Аура защиты" },
+    "name": {
+      "eng": "Aura of Protection",
+      "rus": "Аура защиты"
+    },
     "description": {
       "eng": "Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus. At 18th level, the range of this aura increases to 30 feet.",
       "rus": "Начиная с 6-го уровня, каждый раз, когда вы или дружественное существо в пределах 10 футов от вас должны совершить спасбросок, существо получает бонус к спасброску, равный вашему модификатору Харизмы (минимум +1). Вы должны быть в сознании, чтобы предоставлять этот бонус. На 18-м уровне радиус ауры увеличивается до 30 футов."
@@ -109,11 +172,18 @@
     "source": "class",
     "sourceDetail": "paladin",
     "level": 6,
-    "tags": ["defensive", "aura", "saving_throw"]
+    "tags": [
+      "defensive",
+      "aura",
+      "saving_throw"
+    ]
   },
   {
     "engName": "extra_attack_paladin",
-    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "name": {
+      "eng": "Extra Attack",
+      "rus": "Дополнительная атака"
+    },
     "description": {
       "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
       "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход."
@@ -121,11 +191,17 @@
     "source": "class",
     "sourceDetail": "paladin",
     "level": 5,
-    "tags": ["combat", "attack"]
+    "tags": [
+      "combat",
+      "attack"
+    ]
   },
   {
     "engName": "fighting_style_paladin",
-    "name": { "eng": "Fighting Style", "rus": "Боевой стиль" },
+    "name": {
+      "eng": "Fighting Style",
+      "rus": "Боевой стиль"
+    },
     "description": {
       "eng": "At 2nd level, you adopt a style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
       "rus": "На 2-м уровне вы выбираете стиль боя в качестве своей специализации. Выберите один из следующих вариантов. Вы не можете выбрать один и тот же вариант боевого стиля дважды, даже если позднее у вас будет возможность выбрать снова."
@@ -133,11 +209,17 @@
     "source": "class",
     "sourceDetail": "paladin",
     "level": 2,
-    "tags": ["combat", "choice"]
+    "tags": [
+      "combat",
+      "choice"
+    ]
   },
   {
     "engName": "arcane_recovery",
-    "name": { "eng": "Arcane Recovery", "rus": "Магическое восстановление" },
+    "name": {
+      "eng": "Arcane Recovery",
+      "rus": "Магическое восстановление"
+    },
     "description": {
       "eng": "You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher.",
       "rus": "Вы научились восстанавливать часть своей магической энергии, изучая книгу заклинаний. Один раз в день, завершив короткий отдых, вы можете восстановить потраченные ячейки заклинаний. Суммарный уровень ячеек не может превышать половину вашего уровня волшебника (с округлением вверх), и ни одна из ячеек не может быть 6-го уровня или выше."
@@ -145,12 +227,21 @@
     "source": "class",
     "sourceDetail": "wizard",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["spell_slots", "recovery"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "spell_slots",
+      "recovery"
+    ]
   },
   {
     "engName": "spell_mastery",
-    "name": { "eng": "Spell Mastery", "rus": "Мастерство заклинаний" },
+    "name": {
+      "eng": "Spell Mastery",
+      "rus": "Мастерство заклинаний"
+    },
     "description": {
       "eng": "At 18th level, you have achieved such mastery over certain spells that you can cast them at will. Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook. You can cast those spells at their lowest level without expending a spell slot when you have them prepared.",
       "rus": "На 18-м уровне вы достигли такого мастерства в определённых заклинаниях, что можете использовать их по желанию. Выберите заклинание волшебника 1-го уровня и заклинание волшебника 2-го уровня из вашей книги заклинаний. Вы можете использовать эти заклинания на их минимальном уровне без траты ячейки заклинаний, если они подготовлены."
@@ -158,11 +249,16 @@
     "source": "class",
     "sourceDetail": "wizard",
     "level": 18,
-    "tags": ["spellcasting"]
+    "tags": [
+      "spellcasting"
+    ]
   },
   {
     "engName": "signature_spells",
-    "name": { "eng": "Signature Spells", "rus": "Коронные заклинания" },
+    "name": {
+      "eng": "Signature Spells",
+      "rus": "Коронные заклинания"
+    },
     "description": {
       "eng": "When you reach 20th level, you gain mastery over two powerful spells and can cast them with little effort. Choose two 3rd-level wizard spells in your spellbook as your signature spells. You always have these spells prepared, they don't count against the number of spells you have prepared, and you can cast each of them once at 3rd level without expending a spell slot.",
       "rus": "Достигнув 20-го уровня, вы обретаете мастерство над двумя мощными заклинаниями и можете использовать их без особых усилий. Выберите два заклинания волшебника 3-го уровня из вашей книги заклинаний в качестве коронных. Эти заклинания всегда считаются подготовленными и не учитываются в числе подготовленных заклинаний. Вы можете использовать каждое из них один раз на 3-м уровне без траты ячейки заклинаний."
@@ -170,12 +266,20 @@
     "source": "class",
     "sourceDetail": "wizard",
     "level": 20,
-    "resource": { "maxUses": 2, "resetOn": "short_rest" },
-    "tags": ["spellcasting"]
+    "resource": {
+      "maxUses": 2,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "spellcasting"
+    ]
   },
   {
     "engName": "arcane_tradition",
-    "name": { "eng": "Arcane Tradition", "rus": "Магическая традиция" },
+    "name": {
+      "eng": "Arcane Tradition",
+      "rus": "Магическая традиция"
+    },
     "description": {
       "eng": "When you reach 2nd level, you choose an arcane tradition, shaping your practice of magic through one of the following schools. Your choice grants you features at 2nd level and again at 6th, 10th, and 14th level.",
       "rus": "Достигнув 2-го уровня, вы выбираете магическую традицию, определяющую вашу практику магии через одну из школ. Ваш выбор даёт вам умения на 2-м уровне, а также на 6-м, 10-м и 14-м уровнях."
@@ -183,11 +287,17 @@
     "source": "class",
     "sourceDetail": "wizard",
     "level": 2,
-    "tags": ["subclass", "choice"]
+    "tags": [
+      "subclass",
+      "choice"
+    ]
   },
   {
     "engName": "sneak_attack",
-    "name": { "eng": "Sneak Attack", "rus": "Скрытая атака" },
+    "name": {
+      "eng": "Sneak Attack",
+      "rus": "Скрытая атака"
+    },
     "description": {
       "eng": "Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra 1d6 damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon. You don't need advantage if another enemy of the target is within 5 feet of it. The extra damage increases as you gain levels in this class.",
       "rus": "Начиная с 1-го уровня, вы знаете, как наносить точные удары, используя отвлечённость противника. Один раз в ход вы можете нанести дополнительные 1к6 урона одному существу, по которому вы попали атакой, если у вас есть преимущество на бросок атаки. Атака должна использовать фехтовальное или дальнобойное оружие. Преимущество не требуется, если другой враг цели находится в пределах 5 футов от неё. Дополнительный урон увеличивается с ростом уровня в этом классе."
@@ -195,11 +305,17 @@
     "source": "class",
     "sourceDetail": "rogue",
     "level": 1,
-    "tags": ["combat", "damage"]
+    "tags": [
+      "combat",
+      "damage"
+    ]
   },
   {
     "engName": "cunning_action",
-    "name": { "eng": "Cunning Action", "rus": "Хитрое действие" },
+    "name": {
+      "eng": "Cunning Action",
+      "rus": "Хитрое действие"
+    },
     "description": {
       "eng": "Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action.",
       "rus": "Начиная со 2-го уровня, ваше быстрое мышление и ловкость позволяют вам быстро двигаться и действовать. Вы можете совершить бонусное действие в каждый свой ход в бою. Это действие может быть использовано только для совершения действий Рывок, Отход или Засада."
@@ -207,11 +323,17 @@
     "source": "class",
     "sourceDetail": "rogue",
     "level": 2,
-    "tags": ["action_economy", "bonus_action"]
+    "tags": [
+      "action_economy",
+      "bonus_action"
+    ]
   },
   {
     "engName": "uncanny_dodge",
-    "name": { "eng": "Uncanny Dodge", "rus": "Уклонение" },
+    "name": {
+      "eng": "Uncanny Dodge",
+      "rus": "Уклонение"
+    },
     "description": {
       "eng": "Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.",
       "rus": "Начиная с 5-го уровня, когда видимый вами атакующий попадает по вам атакой, вы можете реакцией уменьшить урон от этой атаки вдвое."
@@ -219,11 +341,17 @@
     "source": "class",
     "sourceDetail": "rogue",
     "level": 5,
-    "tags": ["defensive", "reaction"]
+    "tags": [
+      "defensive",
+      "reaction"
+    ]
   },
   {
     "engName": "evasion_rogue",
-    "name": { "eng": "Evasion", "rus": "Увёртливость" },
+    "name": {
+      "eng": "Evasion",
+      "rus": "Увёртливость"
+    },
     "description": {
       "eng": "Beginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or an ice storm spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
       "rus": "Начиная с 7-го уровня, вы можете ловко уклоняться от определённых эффектов по площади, таких как огненное дыхание красного дракона или заклинание ледяная буря. Когда вы подвергаетесь эффекту, позволяющему совершить спасбросок Ловкости для получения только половины урона, вы вместо этого не получаете урон при успехе и получаете только половину урона при провале."
@@ -231,11 +359,17 @@
     "source": "class",
     "sourceDetail": "rogue",
     "level": 7,
-    "tags": ["defensive", "saving_throw"]
+    "tags": [
+      "defensive",
+      "saving_throw"
+    ]
   },
   {
     "engName": "reliable_talent",
-    "name": { "eng": "Reliable Talent", "rus": "Надёжный талант" },
+    "name": {
+      "eng": "Reliable Talent",
+      "rus": "Надёжный талант"
+    },
     "description": {
       "eng": "By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10.",
       "rus": "К 11-му уровню вы отточили свои навыки до совершенства. Каждый раз, когда вы совершаете проверку характеристики, позволяющую добавить бонус мастерства, вы можете считать результат броска к20, равный 9 или ниже, как 10."
@@ -243,11 +377,16 @@
     "source": "class",
     "sourceDetail": "rogue",
     "level": 11,
-    "tags": ["skill"]
+    "tags": [
+      "skill"
+    ]
   },
   {
     "engName": "thieves_cant",
-    "name": { "eng": "Thieves' Cant", "rus": "Воровской жаргон" },
+    "name": {
+      "eng": "Thieves' Cant",
+      "rus": "Воровской жаргон"
+    },
     "description": {
       "eng": "During your rogue training you learned thieves' cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves' cant understands such messages.",
       "rus": "Во время обучения плутовскому ремеслу вы выучили воровской жаргон — тайную смесь диалекта, жаргона и кода, позволяющую скрывать сообщения в обычном разговоре. Только другое существо, знающее воровской жаргон, понимает такие сообщения."
@@ -255,11 +394,17 @@
     "source": "class",
     "sourceDetail": "rogue",
     "level": 1,
-    "tags": ["language", "utility"]
+    "tags": [
+      "language",
+      "utility"
+    ]
   },
   {
     "engName": "rage",
-    "name": { "eng": "Rage", "rus": "Ярость" },
+    "name": {
+      "eng": "Rage",
+      "rus": "Ярость"
+    },
     "description": {
       "eng": "In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain resistance to bludgeoning, piercing, and slashing damage, advantage on Strength checks and Strength saving throws, and a bonus to melee weapon damage rolls. You can rage a number of times equal to your rage uses, and you regain all expended uses when you finish a long rest.",
       "rus": "В бою вы сражаетесь с первобытной свирепостью. В свой ход вы можете бонусным действием впасть в ярость. Пока вы в ярости, вы получаете сопротивление дробящему, колющему и рубящему урону, преимущество на проверки Силы и спасброски Силы, а также бонус к броскам урона рукопашным оружием. Вы можете впадать в ярость количество раз, равное вашим зарядам ярости, и восстанавливаете все использования после продолжительного отдыха."
@@ -267,12 +412,22 @@
     "source": "class",
     "sourceDetail": "barbarian",
     "level": 1,
-    "resource": { "maxUses": 2, "resetOn": "long_rest" },
-    "tags": ["combat", "bonus_action", "resistance"]
+    "resource": {
+      "maxUses": 2,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "combat",
+      "bonus_action",
+      "resistance"
+    ]
   },
   {
     "engName": "unarmored_defense_barbarian",
-    "name": { "eng": "Unarmored Defense", "rus": "Защита без доспехов" },
+    "name": {
+      "eng": "Unarmored Defense",
+      "rus": "Защита без доспехов"
+    },
     "description": {
       "eng": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
       "rus": "Пока вы не носите доспехов, ваш Класс Доспеха равен 10 + модификатор Ловкости + модификатор Телосложения. Вы можете использовать щит и всё равно получать это преимущество."
@@ -280,11 +435,17 @@
     "source": "class",
     "sourceDetail": "barbarian",
     "level": 1,
-    "tags": ["defensive", "armor_class"]
+    "tags": [
+      "defensive",
+      "armor_class"
+    ]
   },
   {
     "engName": "reckless_attack",
-    "name": { "eng": "Reckless Attack", "rus": "Безрассудная атака" },
+    "name": {
+      "eng": "Reckless Attack",
+      "rus": "Безрассудная атака"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
       "rus": "Начиная со 2-го уровня, вы можете отбросить всю заботу о защите ради яростной атаки. Совершая первую атаку в свой ход, вы можете решить атаковать безрассудно. Это даёт вам преимущество на броски атаки рукопашным оружием с использованием Силы в течение этого хода, но броски атаки против вас получают преимущество до начала вашего следующего хода."
@@ -292,11 +453,18 @@
     "source": "class",
     "sourceDetail": "barbarian",
     "level": 2,
-    "tags": ["combat", "attack", "advantage"]
+    "tags": [
+      "combat",
+      "attack",
+      "advantage"
+    ]
   },
   {
     "engName": "danger_sense",
-    "name": { "eng": "Danger Sense", "rus": "Чувство опасности" },
+    "name": {
+      "eng": "Danger Sense",
+      "rus": "Чувство опасности"
+    },
     "description": {
       "eng": "At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
       "rus": "На 2-м уровне вы обретаете сверхъестественное чувство, когда что-то рядом с вами не так, как должно быть, что даёт вам преимущество при уклонении от опасности. Вы получаете преимущество на спасброски Ловкости от эффектов, которые вы видите, таких как ловушки и заклинания. Чтобы получить это преимущество, вы не должны быть ослеплены, оглушены или недееспособны."
@@ -304,11 +472,18 @@
     "source": "class",
     "sourceDetail": "barbarian",
     "level": 2,
-    "tags": ["defensive", "saving_throw", "advantage"]
+    "tags": [
+      "defensive",
+      "saving_throw",
+      "advantage"
+    ]
   },
   {
     "engName": "extra_attack_barbarian",
-    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "name": {
+      "eng": "Extra Attack",
+      "rus": "Дополнительная атака"
+    },
     "description": {
       "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
       "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход."
@@ -316,11 +491,17 @@
     "source": "class",
     "sourceDetail": "barbarian",
     "level": 5,
-    "tags": ["combat", "attack"]
+    "tags": [
+      "combat",
+      "attack"
+    ]
   },
   {
     "engName": "channel_divinity",
-    "name": { "eng": "Channel Divinity", "rus": "Божественный канал" },
+    "name": {
+      "eng": "Channel Divinity",
+      "rus": "Божественный канал"
+    },
     "description": {
       "eng": "At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws.",
       "rus": "На 2-м уровне вы получаете способность направлять божественную энергию непосредственно от своего божества, используя эту энергию для создания магических эффектов. Используя Божественный канал, вы выбираете, какой эффект создать. Затем вы должны завершить короткий или продолжительный отдых, чтобы снова использовать Божественный канал. Некоторые эффекты Божественного канала требуют спасбросков."
@@ -328,12 +509,21 @@
     "source": "class",
     "sourceDetail": "cleric",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "resource"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "resource"
+    ]
   },
   {
     "engName": "turn_undead",
-    "name": { "eng": "Turn Undead", "rus": "Изгнание нежити" },
+    "name": {
+      "eng": "Turn Undead",
+      "rus": "Изгнание нежити"
+    },
     "description": {
       "eng": "As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.",
       "rus": "Вы действием демонстрируете свой священный символ и произносите молитву, осуждающую нежить. Каждая нежить, которая может видеть или слышать вас в пределах 30 футов, должна совершить спасбросок Мудрости. При провале существо считается изгнанным на 1 минуту или пока не получит какой-либо урон."
@@ -341,11 +531,18 @@
     "source": "class",
     "sourceDetail": "cleric",
     "level": 2,
-    "tags": ["divine", "action", "undead"]
+    "tags": [
+      "divine",
+      "action",
+      "undead"
+    ]
   },
   {
     "engName": "favored_enemy",
-    "name": { "eng": "Favored Enemy", "rus": "Избранный враг" },
+    "name": {
+      "eng": "Favored Enemy",
+      "rus": "Избранный враг"
+    },
     "description": {
       "eng": "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy. Choose a type of favored enemy: aberrations, beasts, celestials, constructs, dragons, elementals, fey, fiends, giants, monstrosities, oozes, plants, or undead.",
       "rus": "Начиная с 1-го уровня, у вас есть значительный опыт изучения, выслеживания, охоты и даже общения с определённым типом врагов. Выберите тип избранного врага: аберрации, звери, небожители, конструкты, драконы, элементали, феи, исчадия, великаны, чудовища, слизи, растения или нежить."
@@ -353,11 +550,17 @@
     "source": "class",
     "sourceDetail": "ranger",
     "level": 1,
-    "tags": ["exploration", "choice"]
+    "tags": [
+      "exploration",
+      "choice"
+    ]
   },
   {
     "engName": "natural_explorer",
-    "name": { "eng": "Natural Explorer", "rus": "Исследователь природы" },
+    "name": {
+      "eng": "Natural Explorer",
+      "rus": "Исследователь природы"
+    },
     "description": {
       "eng": "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, swamp, or the Underdark.",
       "rus": "Вы особенно хорошо знакомы с одним типом природной среды и умеете путешествовать и выживать в таких регионах. Выберите один тип избранной местности: арктика, побережье, пустыня, лес, луга, горы, болото или Подземье."
@@ -365,11 +568,17 @@
     "source": "class",
     "sourceDetail": "ranger",
     "level": 1,
-    "tags": ["exploration", "choice"]
+    "tags": [
+      "exploration",
+      "choice"
+    ]
   },
   {
     "engName": "fighting_style_ranger",
-    "name": { "eng": "Fighting Style", "rus": "Боевой стиль" },
+    "name": {
+      "eng": "Fighting Style",
+      "rus": "Боевой стиль"
+    },
     "description": {
       "eng": "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
       "rus": "На 2-м уровне вы выбираете определённый стиль боя в качестве своей специализации. Выберите один из следующих вариантов. Вы не можете выбрать один и тот же вариант боевого стиля дважды, даже если позднее у вас будет возможность выбрать снова."
@@ -377,11 +586,17 @@
     "source": "class",
     "sourceDetail": "ranger",
     "level": 2,
-    "tags": ["combat", "choice"]
+    "tags": [
+      "combat",
+      "choice"
+    ]
   },
   {
     "engName": "extra_attack_ranger",
-    "name": { "eng": "Extra Attack", "rus": "Дополнительная атака" },
+    "name": {
+      "eng": "Extra Attack",
+      "rus": "Дополнительная атака"
+    },
     "description": {
       "eng": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
       "rus": "Начиная с 5-го уровня, вы можете атаковать дважды вместо одного раза, когда совершаете действие Атака в свой ход."
@@ -389,12 +604,17 @@
     "source": "class",
     "sourceDetail": "ranger",
     "level": 5,
-    "tags": ["combat", "attack"]
+    "tags": [
+      "combat",
+      "attack"
+    ]
   },
-
   {
     "engName": "bonus_proficiency_life",
-    "name": { "eng": "Bonus Proficiency", "rus": "Дополнительное владение" },
+    "name": {
+      "eng": "Bonus Proficiency",
+      "rus": "Дополнительное владение"
+    },
     "description": {
       "eng": "When you choose this domain at 1st level, you gain proficiency with heavy armor.",
       "rus": "Выбирая этот домен на 1-м уровне, вы получаете владение тяжёлыми доспехами."
@@ -402,11 +622,17 @@
     "source": "subclass",
     "sourceDetail": "life",
     "level": 1,
-    "tags": ["proficiency", "armor"]
+    "tags": [
+      "proficiency",
+      "armor"
+    ]
   },
   {
     "engName": "disciple_of_life",
-    "name": { "eng": "Disciple of Life", "rus": "Ученик Жизни" },
+    "name": {
+      "eng": "Disciple of Life",
+      "rus": "Ученик Жизни"
+    },
     "description": {
       "eng": "Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level.",
       "rus": "Начиная с 1-го уровня ваши заклинания исцеления более эффективны. Когда вы используете заклинание 1-го уровня или выше для восстановления хитов существа, оно восстанавливает дополнительные хиты, равные 2 + уровень заклинания."
@@ -414,11 +640,17 @@
     "source": "subclass",
     "sourceDetail": "life",
     "level": 1,
-    "tags": ["healing", "passive"]
+    "tags": [
+      "healing",
+      "passive"
+    ]
   },
   {
     "engName": "channel_divinity_preserve_life",
-    "name": { "eng": "Channel Divinity: Preserve Life", "rus": "Божественный канал: Сохранение жизни" },
+    "name": {
+      "eng": "Channel Divinity: Preserve Life",
+      "rus": "Божественный канал: Сохранение жизни"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to heal the badly injured. As an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum.",
       "rus": "Начиная со 2-го уровня вы можете использовать Божественный канал для исцеления тяжелораненых. Вы действием демонстрируете святой символ и призываете целительную энергию, которая может восстановить хиты, равные пятикратному вашему уровню жреца. Выберите любых существ в пределах 30 футов и распределите хиты между ними. Эта способность не может восстановить существу более половины его максимума хитов."
@@ -426,12 +658,22 @@
     "source": "subclass",
     "sourceDetail": "life",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["healing", "action", "divine"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "healing",
+      "action",
+      "divine"
+    ]
   },
   {
     "engName": "blessed_healer",
-    "name": { "eng": "Blessed Healer", "rus": "Благословенный целитель" },
+    "name": {
+      "eng": "Blessed Healer",
+      "rus": "Благословенный целитель"
+    },
     "description": {
       "eng": "Beginning at 6th level, the healing spells you cast on others heal you as well. When you cast a healing spell of 1st level or higher that restores hit points to a creature other than you, you regain hit points equal to 2 + the spell's level.",
       "rus": "Начиная с 6-го уровня заклинания исцеления, которые вы накладываете на других, также исцеляют вас. Когда вы накладываете заклинание исцеления 1-го уровня или выше, восстанавливающее хиты существу, отличному от вас, вы восстанавливаете хиты, равные 2 + уровень заклинания."
@@ -439,11 +681,17 @@
     "source": "subclass",
     "sourceDetail": "life",
     "level": 6,
-    "tags": ["healing", "passive"]
+    "tags": [
+      "healing",
+      "passive"
+    ]
   },
   {
     "engName": "divine_strike_life",
-    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "name": {
+      "eng": "Divine Strike",
+      "rus": "Божественный удар"
+    },
     "description": {
       "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 radiant damage to the target. When you reach 14th level, the extra damage increases to 2d8.",
       "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона излучением. На 14-м уровне дополнительный урон увеличивается до 2к8."
@@ -451,11 +699,18 @@
     "source": "subclass",
     "sourceDetail": "life",
     "level": 8,
-    "tags": ["combat", "weapon", "radiant"]
+    "tags": [
+      "combat",
+      "weapon",
+      "radiant"
+    ]
   },
   {
     "engName": "supreme_healing",
-    "name": { "eng": "Supreme Healing", "rus": "Высшее исцеление" },
+    "name": {
+      "eng": "Supreme Healing",
+      "rus": "Высшее исцеление"
+    },
     "description": {
       "eng": "Starting at 17th level, when you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die. For example, instead of restoring 2d6 hit points to a creature, you restore 12.",
       "rus": "Начиная с 17-го уровня, когда вы бросаете кости для восстановления хитов заклинанием, вы используете максимальное значение каждой кости. Например, вместо восстановления 2к6 хитов вы восстанавливаете 12."
@@ -463,12 +718,17 @@
     "source": "subclass",
     "sourceDetail": "life",
     "level": 17,
-    "tags": ["healing", "passive"]
+    "tags": [
+      "healing",
+      "passive"
+    ]
   },
-
   {
     "engName": "warding_flare",
-    "name": { "eng": "Warding Flare", "rus": "Защитная вспышка" },
+    "name": {
+      "eng": "Warding Flare",
+      "rus": "Защитная вспышка"
+    },
     "description": {
       "eng": "Also at 1st level, you can interpose divine light between yourself and an attacking enemy. When you are attacked by a creature within 30 feet of you that you can see, you can use your reaction to impose disadvantage on the attack roll, causing light to flare before the attacker before it hits or misses. An attacker that can't be blinded is immune to this feature. You can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
       "rus": "На 1-м уровне вы можете расположить божественный свет между собой и атакующим противником. Когда существо в пределах 30 футов от вас, которое вы видите, атакует вас, вы можете реакцией наложить помеху на бросок атаки, вызвав вспышку перед атакующим. Атакующий, которого нельзя ослепить, имеет иммунитет к этой способности. Вы можете использовать её количество раз, равное модификатору Мудрости (минимум один раз). Все использования восстанавливаются после продолжительного отдыха."
@@ -476,12 +736,22 @@
     "source": "subclass",
     "sourceDetail": "light",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["defensive", "reaction", "radiant"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "defensive",
+      "reaction",
+      "radiant"
+    ]
   },
   {
     "engName": "channel_divinity_radiance_of_the_dawn",
-    "name": { "eng": "Channel Divinity: Radiance of the Dawn", "rus": "Божественный канал: Сияние рассвета" },
+    "name": {
+      "eng": "Channel Divinity: Radiance of the Dawn",
+      "rus": "Божественный канал: Сияние рассвета"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to harness sunlight, banishing darkness and dealing radiant damage to your foes. As an action, you present your holy symbol, and any magical darkness within 30 feet of you is dispelled. Additionally, each hostile creature within 30 feet of you must make a Constitution saving throw. A creature takes radiant damage equal to 2d10 + your cleric level on a failed save, or half as much damage on a successful one. A creature that has total cover from you is not affected.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для управления солнечным светом, разгоняя тьму и нанося урон излучением врагам. Вы действием демонстрируете святой символ, и любая магическая тьма в пределах 30 футов рассеивается. Каждый враждебный противник в пределах 30 футов должен совершить спасбросок Телосложения, получая 2к10 + ваш уровень жреца урона излучением при провале или половину при успехе."
@@ -489,12 +759,22 @@
     "source": "subclass",
     "sourceDetail": "light",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "radiant", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "radiant",
+      "action"
+    ]
   },
   {
     "engName": "improved_flare",
-    "name": { "eng": "Improved Flare", "rus": "Улучшенная вспышка" },
+    "name": {
+      "eng": "Improved Flare",
+      "rus": "Улучшенная вспышка"
+    },
     "description": {
       "eng": "Starting at 6th level, you can also use your Warding Flare feature when a creature that you can see within 30 feet of you attacks a creature other than you.",
       "rus": "Начиная с 6-го уровня вы также можете использовать Защитную вспышку, когда видимое вами существо в пределах 30 футов атакует кого-либо другого, а не вас."
@@ -502,11 +782,17 @@
     "source": "subclass",
     "sourceDetail": "light",
     "level": 6,
-    "tags": ["defensive", "passive"]
+    "tags": [
+      "defensive",
+      "passive"
+    ]
   },
   {
     "engName": "potent_spellcasting_light",
-    "name": { "eng": "Potent Spellcasting", "rus": "Мощное колдовство" },
+    "name": {
+      "eng": "Potent Spellcasting",
+      "rus": "Мощное колдовство"
+    },
     "description": {
       "eng": "Starting at 8th level, you add your Wisdom modifier to the damage you deal with any cleric cantrip.",
       "rus": "Начиная с 8-го уровня вы добавляете модификатор Мудрости к урону, наносимому заговорами жреца."
@@ -514,11 +800,17 @@
     "source": "subclass",
     "sourceDetail": "light",
     "level": 8,
-    "tags": ["spellcasting", "passive"]
+    "tags": [
+      "spellcasting",
+      "passive"
+    ]
   },
   {
     "engName": "corona_of_light",
-    "name": { "eng": "Corona of Light", "rus": "Корона света" },
+    "name": {
+      "eng": "Corona of Light",
+      "rus": "Корона света"
+    },
     "description": {
       "eng": "Starting at 17th level, you can use your action to activate an aura of sunlight that lasts for 1 minute or until you dismiss it using another action. You emit bright light in a 60-foot radius and dim light 30 feet beyond that. Your enemies in the bright light have disadvantage on saving throws against any spell that deals fire or radiant damage.",
       "rus": "Начиная с 17-го уровня вы можете действием активировать ауру солнечного света на 1 минуту или пока не отпустите её другим действием. Вы испускаете яркий свет в радиусе 60 футов и тусклый в дополнительных 30 футах. Враги в ярком свете имеют помеху на спасброски против заклинаний огня или излучения."
@@ -526,12 +818,18 @@
     "source": "subclass",
     "sourceDetail": "light",
     "level": 17,
-    "tags": ["radiant", "aura", "action"]
+    "tags": [
+      "radiant",
+      "aura",
+      "action"
+    ]
   },
-
   {
     "engName": "acolyte_of_nature",
-    "name": { "eng": "Acolyte of Nature", "rus": "Послушник природы" },
+    "name": {
+      "eng": "Acolyte of Nature",
+      "rus": "Послушник природы"
+    },
     "description": {
       "eng": "At 1st level, you learn one cantrip of your choice from the druid spell list. You also gain proficiency in one of the following skills of your choice: Animal Handling, Nature, or Survival.",
       "rus": "На 1-м уровне вы изучаете один заговор на свой выбор из списка заклинаний друида. Вы также получаете владение одним из следующих навыков на ваш выбор: Обращение с животными, Природа или Выживание."
@@ -539,11 +837,18 @@
     "source": "subclass",
     "sourceDetail": "nature",
     "level": 1,
-    "tags": ["cantrip", "skill", "choice"]
+    "tags": [
+      "cantrip",
+      "skill",
+      "choice"
+    ]
   },
   {
     "engName": "channel_divinity_charm_animals_and_plants",
-    "name": { "eng": "Channel Divinity: Charm Animals and Plants", "rus": "Божественный канал: Очарование животных и растений" },
+    "name": {
+      "eng": "Channel Divinity: Charm Animals and Plants",
+      "rus": "Божественный канал: Очарование животных и растений"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to charm animals and plants. As an action, you present your holy symbol and invoke the name of your deity. Each beast or plant creature that can see you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is charmed by you for 1 minute or until it takes damage. While it is charmed by you, it is friendly to you and other creatures you designate.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для очарования животных и растений. Вы действием демонстрируете святой символ и призываете имя своего божества. Каждый зверь или растение в пределах 30 футов, способное вас видеть, должно совершить спасбросок Мудрости или стать очарованным вами на 1 минуту или до получения урона."
@@ -551,12 +856,22 @@
     "source": "subclass",
     "sourceDetail": "nature",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "charm", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "charm",
+      "action"
+    ]
   },
   {
     "engName": "dampen_elements",
-    "name": { "eng": "Dampen Elements", "rus": "Гашение стихий" },
+    "name": {
+      "eng": "Dampen Elements",
+      "rus": "Гашение стихий"
+    },
     "description": {
       "eng": "Starting at 6th level, when you or a creature within 30 feet of you takes acid, cold, fire, lightning, or thunder damage, you can use your reaction to grant resistance to the creature against that instance of the damage.",
       "rus": "Начиная с 6-го уровня, когда вы или существо в пределах 30 футов от вас получает урон кислотой, холодом, огнём, молнией или громом, вы можете реакцией предоставить ему сопротивление этому типу урона."
@@ -564,11 +879,18 @@
     "source": "subclass",
     "sourceDetail": "nature",
     "level": 6,
-    "tags": ["defensive", "reaction", "elemental"]
+    "tags": [
+      "defensive",
+      "reaction",
+      "elemental"
+    ]
   },
   {
     "engName": "divine_strike_nature",
-    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "name": {
+      "eng": "Divine Strike",
+      "rus": "Божественный удар"
+    },
     "description": {
       "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 cold, fire, or lightning damage (your choice) to the target. When you reach 14th level, the extra damage increases to 2d8.",
       "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона холодом, огнём или молнией (на ваш выбор). На 14-м уровне дополнительный урон увеличивается до 2к8."
@@ -576,11 +898,18 @@
     "source": "subclass",
     "sourceDetail": "nature",
     "level": 8,
-    "tags": ["combat", "weapon", "elemental"]
+    "tags": [
+      "combat",
+      "weapon",
+      "elemental"
+    ]
   },
   {
     "engName": "master_of_nature",
-    "name": { "eng": "Master of Nature", "rus": "Владыка природы" },
+    "name": {
+      "eng": "Master of Nature",
+      "rus": "Владыка природы"
+    },
     "description": {
       "eng": "At 17th level, you gain the ability to command animals and plant creatures. While creatures are charmed by your Charm Animals and Plants feature, you can take a bonus action on your turn to verbally command what each of those creatures will do on its next turn.",
       "rus": "На 17-м уровне вы получаете способность командовать животными и растениями. Пока существа очарованы вашей способностью Очарование животных и растений, вы можете бонусным действием в свой ход устно командовать ими, указывая, что каждое из них будет делать в следующий ход."
@@ -588,12 +917,17 @@
     "source": "subclass",
     "sourceDetail": "nature",
     "level": 17,
-    "tags": ["control", "bonus_action"]
+    "tags": [
+      "control",
+      "bonus_action"
+    ]
   },
-
   {
     "engName": "bonus_proficiency_tempest",
-    "name": { "eng": "Bonus Proficiency", "rus": "Дополнительное владение" },
+    "name": {
+      "eng": "Bonus Proficiency",
+      "rus": "Дополнительное владение"
+    },
     "description": {
       "eng": "When you choose this domain at 1st level, you gain proficiency with martial weapons and heavy armor.",
       "rus": "Выбирая этот домен на 1-м уровне, вы получаете владение воинским оружием и тяжёлыми доспехами."
@@ -601,11 +935,18 @@
     "source": "subclass",
     "sourceDetail": "tempest",
     "level": 1,
-    "tags": ["proficiency", "armor", "weapon"]
+    "tags": [
+      "proficiency",
+      "armor",
+      "weapon"
+    ]
   },
   {
     "engName": "wrath_of_the_storm",
-    "name": { "eng": "Wrath of the Storm", "rus": "Гнев бури" },
+    "name": {
+      "eng": "Wrath of the Storm",
+      "rus": "Гнев бури"
+    },
     "description": {
       "eng": "Also at 1st level, you can thunderously rebuke attackers. When a creature within 5 feet of you that you can see hits you with an attack, you can use your reaction to cause the creature to make a Dexterity saving throw. The creature takes 2d8 lightning or thunder damage (your choice) on a failed save, or half as much on a successful one. You can use this feature a number of times equal to your Wisdom modifier (minimum of once). You regain all expended uses when you finish a long rest.",
       "rus": "На 1-м уровне вы можете оглушительно отбрасывать атакующих. Когда существо в пределах 5 футов, которое вы видите, попадает по вам атакой, вы можете реакцией заставить его совершить спасбросок Ловкости. При провале оно получает 2к8 урона молнией или громом (на ваш выбор), при успехе — половину."
@@ -613,12 +954,22 @@
     "source": "subclass",
     "sourceDetail": "tempest",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["lightning", "thunder", "reaction"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "lightning",
+      "thunder",
+      "reaction"
+    ]
   },
   {
     "engName": "channel_divinity_destructive_wrath",
-    "name": { "eng": "Channel Divinity: Destructive Wrath", "rus": "Божественный канал: Разрушительный гнев" },
+    "name": {
+      "eng": "Channel Divinity: Destructive Wrath",
+      "rus": "Божественный канал: Разрушительный гнев"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to wield the power of the storm with unchecked ferocity. When you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для необузданного гнева бури. Когда вы наносите урон молнией или громом, вы можете использовать Божественный канал для нанесения максимального урона вместо броска."
@@ -626,12 +977,22 @@
     "source": "subclass",
     "sourceDetail": "tempest",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "lightning", "thunder"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "lightning",
+      "thunder"
+    ]
   },
   {
     "engName": "thunderbolt_strike",
-    "name": { "eng": "Thunderbolt Strike", "rus": "Удар молнии" },
+    "name": {
+      "eng": "Thunderbolt Strike",
+      "rus": "Удар молнии"
+    },
     "description": {
       "eng": "At 6th level, when you deal lightning damage to a Large or smaller creature, you can also push it up to 10 feet away from you.",
       "rus": "На 6-м уровне, когда вы наносите урон молнией существу с размером не больше Большого, вы также можете оттолкнуть его на расстояние до 10 футов от себя."
@@ -639,11 +1000,18 @@
     "source": "subclass",
     "sourceDetail": "tempest",
     "level": 6,
-    "tags": ["lightning", "push", "passive"]
+    "tags": [
+      "lightning",
+      "push",
+      "passive"
+    ]
   },
   {
     "engName": "divine_strike_tempest",
-    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "name": {
+      "eng": "Divine Strike",
+      "rus": "Божественный удар"
+    },
     "description": {
       "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 thunder damage to the target. When you reach 14th level, the extra damage increases to 2d8.",
       "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона громом. На 14-м уровне дополнительный урон увеличивается до 2к8."
@@ -651,11 +1019,18 @@
     "source": "subclass",
     "sourceDetail": "tempest",
     "level": 8,
-    "tags": ["combat", "weapon", "thunder"]
+    "tags": [
+      "combat",
+      "weapon",
+      "thunder"
+    ]
   },
   {
     "engName": "stormborn",
-    "name": { "eng": "Stormborn", "rus": "Дитя бури" },
+    "name": {
+      "eng": "Stormborn",
+      "rus": "Дитя бури"
+    },
     "description": {
       "eng": "At 17th level, you have a flying speed equal to your current walking speed whenever you are not underground or indoors.",
       "rus": "На 17-м уровне скорость полёта равна вашей скорости ходьбы, когда вы находитесь не под землёй и не в помещении."
@@ -663,12 +1038,18 @@
     "source": "subclass",
     "sourceDetail": "tempest",
     "level": 17,
-    "tags": ["movement", "flight", "passive"]
+    "tags": [
+      "movement",
+      "flight",
+      "passive"
+    ]
   },
-
   {
     "engName": "blessing_of_the_trickster",
-    "name": { "eng": "Blessing of the Trickster", "rus": "Благословение обманщика" },
+    "name": {
+      "eng": "Blessing of the Trickster",
+      "rus": "Благословение обманщика"
+    },
     "description": {
       "eng": "Starting when you choose this domain at 1st level, you can use your action to touch a willing creature other than yourself to give it advantage on Dexterity (Stealth) checks. This blessing lasts for 1 hour or until you use this feature again.",
       "rus": "Начиная с 1-го уровня вы можете действием прикоснуться к согласному существу (не к себе) и дать ему преимущество на проверки Ловкости (Скрытность). Это благословение длится 1 час или пока вы снова не используете эту способность."
@@ -676,11 +1057,18 @@
     "source": "subclass",
     "sourceDetail": "trickery",
     "level": 1,
-    "tags": ["stealth", "buff", "action"]
+    "tags": [
+      "stealth",
+      "buff",
+      "action"
+    ]
   },
   {
     "engName": "channel_divinity_invoke_duplicity",
-    "name": { "eng": "Channel Divinity: Invoke Duplicity", "rus": "Божественный канал: Призыв двойника" },
+    "name": {
+      "eng": "Channel Divinity: Invoke Duplicity",
+      "rus": "Божественный канал: Призыв двойника"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to create a perfect illusion of yourself. As an action, you create a perfect illusion of yourself that lasts for 1 minute, or until you lose your concentration. The illusion appears in an unoccupied space that you can see within 30 feet of you. As a bonus action on your turn, you can move the illusion up to 30 feet to a space you can see, but it must remain within 120 feet of you.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для создания иллюзии себя. Вы действием создаёте точную иллюзию себя на 1 минуту или пока не потеряете концентрацию. Иллюзия появляется в незанятом пространстве в пределах 30 футов, которое вы видите. Бонусным действием вы можете перемещать иллюзию на 30 футов."
@@ -688,12 +1076,23 @@
     "source": "subclass",
     "sourceDetail": "trickery",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "illusion", "concentration", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "illusion",
+      "concentration",
+      "action"
+    ]
   },
   {
     "engName": "channel_divinity_cloak_of_shadows",
-    "name": { "eng": "Channel Divinity: Cloak of Shadows", "rus": "Божественный канал: Плащ теней" },
+    "name": {
+      "eng": "Channel Divinity: Cloak of Shadows",
+      "rus": "Божественный канал: Плащ теней"
+    },
     "description": {
       "eng": "Starting at 6th level, you can use your Channel Divinity to vanish. As an action, you become invisible until the end of your next turn. You become visible if you attack or cast a spell.",
       "rus": "На 6-м уровне вы можете использовать Божественный канал для исчезновения. Вы действием становитесь невидимым до конца вашего следующего хода. Невидимость заканчивается, если вы атакуете или накладываете заклинание."
@@ -701,12 +1100,22 @@
     "source": "subclass",
     "sourceDetail": "trickery",
     "level": 6,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "invisibility", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "invisibility",
+      "action"
+    ]
   },
   {
     "engName": "divine_strike_trickery",
-    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "name": {
+      "eng": "Divine Strike",
+      "rus": "Божественный удар"
+    },
     "description": {
       "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 poison damage to the target. When you reach 14th level, the extra damage increases to 2d8.",
       "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона ядом. На 14-м уровне дополнительный урон увеличивается до 2к8."
@@ -714,11 +1123,18 @@
     "source": "subclass",
     "sourceDetail": "trickery",
     "level": 8,
-    "tags": ["combat", "weapon", "poison"]
+    "tags": [
+      "combat",
+      "weapon",
+      "poison"
+    ]
   },
   {
     "engName": "improved_duplicity",
-    "name": { "eng": "Improved Duplicity", "rus": "Улучшенный двойник" },
+    "name": {
+      "eng": "Improved Duplicity",
+      "rus": "Улучшенный двойник"
+    },
     "description": {
       "eng": "At 17th level, you can create up to four duplicates of yourself, rather than one, when you use Invoke Duplicity. As a bonus action on your turn, you can move any number of them up to 30 feet, to a maximum range of 120 feet.",
       "rus": "На 17-м уровне при использовании Призыва двойника вы можете создать до четырёх копий вместо одной. Бонусным действием в свой ход вы можете перемещать любое количество из них на 30 футов."
@@ -726,12 +1142,17 @@
     "source": "subclass",
     "sourceDetail": "trickery",
     "level": 17,
-    "tags": ["illusion", "passive"]
+    "tags": [
+      "illusion",
+      "passive"
+    ]
   },
-
   {
     "engName": "bonus_proficiency_war",
-    "name": { "eng": "Bonus Proficiency", "rus": "Дополнительное владение" },
+    "name": {
+      "eng": "Bonus Proficiency",
+      "rus": "Дополнительное владение"
+    },
     "description": {
       "eng": "When you choose this domain at 1st level, you gain proficiency with martial weapons and heavy armor.",
       "rus": "Выбирая этот домен на 1-м уровне, вы получаете владение воинским оружием и тяжёлыми доспехами."
@@ -739,11 +1160,18 @@
     "source": "subclass",
     "sourceDetail": "war",
     "level": 1,
-    "tags": ["proficiency", "armor", "weapon"]
+    "tags": [
+      "proficiency",
+      "armor",
+      "weapon"
+    ]
   },
   {
     "engName": "war_priest",
-    "name": { "eng": "War Priest", "rus": "Военный жрец" },
+    "name": {
+      "eng": "War Priest",
+      "rus": "Военный жрец"
+    },
     "description": {
       "eng": "From 1st level, your god delivers bolts of inspiration to you while you are engaged in battle. When you use the Attack action, you can make one weapon attack as a bonus action. You can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
       "rus": "С 1-го уровня ваш бог вдохновляет вас в бою. Когда вы совершаете действие Атака, вы можете совершить одну атаку оружием бонусным действием. Вы можете использовать эту способность количество раз, равное модификатору Мудрости (минимум один раз). Все использования восстанавливаются после продолжительного отдыха."
@@ -751,12 +1179,22 @@
     "source": "subclass",
     "sourceDetail": "war",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["combat", "bonus_action", "attack"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "combat",
+      "bonus_action",
+      "attack"
+    ]
   },
   {
     "engName": "channel_divinity_guided_strike",
-    "name": { "eng": "Channel Divinity: Guided Strike", "rus": "Божественный канал: Направленный удар" },
+    "name": {
+      "eng": "Channel Divinity: Guided Strike",
+      "rus": "Божественный канал: Направленный удар"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to strike with supernatural accuracy. When you make an attack roll, you can use your Channel Divinity to gain a +10 bonus to the roll. You make this choice after you see the roll, but before the DM says whether the attack hits or misses.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для удара со сверхъестественной точностью. Когда вы совершаете бросок атаки, вы можете использовать Божественный канал, чтобы получить +10 к броску. Вы делаете этот выбор после броска, но до того, как Мастер объявит результат."
@@ -764,12 +1202,22 @@
     "source": "subclass",
     "sourceDetail": "war",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "attack", "bonus"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "attack",
+      "bonus"
+    ]
   },
   {
     "engName": "channel_divinity_war_gods_blessing",
-    "name": { "eng": "Channel Divinity: War God's Blessing", "rus": "Божественный канал: Благословение бога войны" },
+    "name": {
+      "eng": "Channel Divinity: War God's Blessing",
+      "rus": "Божественный канал: Благословение бога войны"
+    },
     "description": {
       "eng": "At 6th level, when a creature within 30 feet of you makes an attack roll, you can use your reaction to grant that creature a +10 bonus to the roll, using your Channel Divinity. You make this choice after you see the roll, but before the DM says whether the attack hits or misses.",
       "rus": "На 6-м уровне, когда существо в пределах 30 футов совершает бросок атаки, вы можете реакцией использовать Божественный канал, чтобы дать ему +10 к броску. Вы делаете этот выбор после броска, но до объявления результата Мастером."
@@ -777,12 +1225,23 @@
     "source": "subclass",
     "sourceDetail": "war",
     "level": 6,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "reaction", "attack", "bonus"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "reaction",
+      "attack",
+      "bonus"
+    ]
   },
   {
     "engName": "divine_strike_war",
-    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "name": {
+      "eng": "Divine Strike",
+      "rus": "Божественный удар"
+    },
     "description": {
       "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 damage of the same type dealt by the weapon to the target. When you reach 14th level, the extra damage increases to 2d8.",
       "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона того же типа, что и оружие. На 14-м уровне дополнительный урон увеличивается до 2к8."
@@ -790,11 +1249,17 @@
     "source": "subclass",
     "sourceDetail": "war",
     "level": 8,
-    "tags": ["combat", "weapon"]
+    "tags": [
+      "combat",
+      "weapon"
+    ]
   },
   {
     "engName": "avatar_of_battle",
-    "name": { "eng": "Avatar of Battle", "rus": "Аватар войны" },
+    "name": {
+      "eng": "Avatar of Battle",
+      "rus": "Аватар войны"
+    },
     "description": {
       "eng": "At 17th level, you gain resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons.",
       "rus": "На 17-м уровне вы получаете сопротивление дроблящему, колющему и рубящему урону от немагического оружия."
@@ -802,12 +1267,18 @@
     "source": "subclass",
     "sourceDetail": "war",
     "level": 17,
-    "tags": ["defensive", "resistance", "passive"]
+    "tags": [
+      "defensive",
+      "resistance",
+      "passive"
+    ]
   },
-
   {
     "engName": "blessings_of_knowledge",
-    "name": { "eng": "Blessings of Knowledge", "rus": "Дары знаний" },
+    "name": {
+      "eng": "Blessings of Knowledge",
+      "rus": "Дары знаний"
+    },
     "description": {
       "eng": "At 1st level, you learn two languages of your choice. You also become proficient in your choice of two of the following skills: Arcana, History, Nature, or Religion. Your proficiency bonus is doubled for any ability check you make that uses either of those skills.",
       "rus": "На 1-м уровне вы изучаете два языка на ваш выбор. Вы также получаете владение двумя навыками на выбор из следующих: Магия, История, Природа или Религия. Ваш бонус мастерства удваивается для любых проверок этих навыков."
@@ -815,11 +1286,19 @@
     "source": "subclass",
     "sourceDetail": "knowledge",
     "level": 1,
-    "tags": ["skill", "language", "choice", "expertise"]
+    "tags": [
+      "skill",
+      "language",
+      "choice",
+      "expertise"
+    ]
   },
   {
     "engName": "channel_divinity_knowledge_of_the_ages",
-    "name": { "eng": "Channel Divinity: Knowledge of the Ages", "rus": "Божественный канал: Знание эпох" },
+    "name": {
+      "eng": "Channel Divinity: Knowledge of the Ages",
+      "rus": "Божественный канал: Знание эпох"
+    },
     "description": {
       "eng": "Starting at 2nd level, you can use your Channel Divinity to tap into a divine well of knowledge. As an action, you choose one skill or tool. For 10 minutes, you have proficiency with the chosen skill or tool.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для прикосновения к источнику божественных знаний. Вы действием выбираете один навык или инструмент. В течение 10 минут вы получаете владение выбранным навыком или инструментом."
@@ -827,12 +1306,22 @@
     "source": "subclass",
     "sourceDetail": "knowledge",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "skill", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "skill",
+      "action"
+    ]
   },
   {
     "engName": "channel_divinity_read_thoughts",
-    "name": { "eng": "Channel Divinity: Read Thoughts", "rus": "Божественный канал: Чтение мыслей" },
+    "name": {
+      "eng": "Channel Divinity: Read Thoughts",
+      "rus": "Божественный канал: Чтение мыслей"
+    },
     "description": {
       "eng": "At 2nd level, you can use your Channel Divinity to read a creature's thoughts. You can then use your access to the creature's mind to command it. As an action, choose one creature that you can see within 60 feet of you. That creature must make a Wisdom saving throw. If the creature succeeds on its saving throw, you can't use this feature on it again until you finish a long rest. If the creature fails its save, you can read its surface thoughts (those foremost in its mind, reflecting its current emotions and what it is actively thinking about) when it is within 60 feet of you.",
       "rus": "На 2-м уровне вы можете использовать Божественный канал для чтения мыслей существа. Вы действием выбираете одно видимое вами существо в пределах 60 футов. Оно совершает спасбросок Мудрости. При провале вы можете читать его поверхностные мысли, когда оно находится в пределах 60 футов от вас."
@@ -840,12 +1329,22 @@
     "source": "subclass",
     "sourceDetail": "knowledge",
     "level": 2,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["divine", "mind", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "divine",
+      "mind",
+      "action"
+    ]
   },
   {
     "engName": "potent_spellcasting_knowledge",
-    "name": { "eng": "Potent Spellcasting", "rus": "Мощное колдовство" },
+    "name": {
+      "eng": "Potent Spellcasting",
+      "rus": "Мощное колдовство"
+    },
     "description": {
       "eng": "Starting at 8th level, you add your Wisdom modifier to the damage you deal with any cleric cantrip.",
       "rus": "Начиная с 8-го уровня вы добавляете модификатор Мудрости к урону, наносимому заговорами жреца."
@@ -853,11 +1352,17 @@
     "source": "subclass",
     "sourceDetail": "knowledge",
     "level": 8,
-    "tags": ["spellcasting", "passive"]
+    "tags": [
+      "spellcasting",
+      "passive"
+    ]
   },
   {
     "engName": "dragon_ancestor",
-    "name": { "eng": "Dragon Ancestor", "rus": "Драконий предок" },
+    "name": {
+      "eng": "Dragon Ancestor",
+      "rus": "Драконий предок"
+    },
     "description": {
       "eng": "At 1st level, you choose one type of dragon as your ancestor. The damage type associated with each dragon is used by features you gain later. You can speak, read, and write Draconic. Additionally, whenever you make a Charisma check when interacting with dragons, your proficiency bonus is doubled if it applies to the check.",
       "rus": "На 1-м уровне вы выбираете тип дракона в качестве своего предка. Тип урона этого дракона используется в последующих способностях. Вы можете говорить, читать и писать на Драконьем. Кроме того, когда вы делаете проверку Харизмы при взаимодействии с драконами, ваш бонус мастерства удваивается, если он применим."
@@ -865,11 +1370,18 @@
     "source": "subclass",
     "sourceDetail": "draconic",
     "level": 1,
-    "tags": ["language", "choice", "charisma"]
+    "tags": [
+      "language",
+      "choice",
+      "charisma"
+    ]
   },
   {
     "engName": "draconic_resilience",
-    "name": { "eng": "Draconic Resilience", "rus": "Драконья живучесть" },
+    "name": {
+      "eng": "Draconic Resilience",
+      "rus": "Драконья живучесть"
+    },
     "description": {
       "eng": "As magic flows through your body, it causes physical traits of your dragon ancestors to emerge. At 1st level, your hit point maximum increases by 1 and increases by 1 again whenever you gain a level in this class. Additionally, parts of your skin are covered by a thin sheen of dragon-like scales. When you aren't wearing armor, your AC equals 13 + your Dexterity modifier.",
       "rus": "Магия, текущая через ваше тело, проявляет физические черты ваших драконьих предков. На 1-м уровне максимум хитов увеличивается на 1 и ещё на 1 с каждым уровнем жреца. Кроме того, части вашей кожи покрыты тонким слоем чешуи. Когда вы не носите доспех, ваш КД равен 13 + ваш модификатор Ловкости."
@@ -877,11 +1389,18 @@
     "source": "subclass",
     "sourceDetail": "draconic",
     "level": 1,
-    "tags": ["hp", "armor", "passive"]
+    "tags": [
+      "hp",
+      "armor",
+      "passive"
+    ]
   },
   {
     "engName": "elemental_affinity",
-    "name": { "eng": "Elemental Affinity", "rus": "Стихийное родство" },
+    "name": {
+      "eng": "Elemental Affinity",
+      "rus": "Стихийное родство"
+    },
     "description": {
       "eng": "Starting at 6th level, when you cast a spell that deals damage of the type associated with your draconic ancestry, you can add your Charisma modifier to one damage roll of that spell. At the same time, you can spend 1 sorcery point to gain resistance to that damage type for 1 hour.",
       "rus": "Начиная с 6-го уровня, когда вы накладываете заклинание, наносящее урон типа вашего драконьего предка, вы можете добавить модификатор Харизмы к одному броску урона. Кроме того, вы можете потратить 1 очко волшебства, чтобы получить сопротивление этому типу урона на 1 час."
@@ -889,11 +1408,18 @@
     "source": "subclass",
     "sourceDetail": "draconic",
     "level": 6,
-    "tags": ["elemental", "sorcery_point", "passive"]
+    "tags": [
+      "elemental",
+      "sorcery_point",
+      "passive"
+    ]
   },
   {
     "engName": "dragon_wings",
-    "name": { "eng": "Dragon Wings", "rus": "Драконьи крылья" },
+    "name": {
+      "eng": "Dragon Wings",
+      "rus": "Драконьи крылья"
+    },
     "description": {
       "eng": "At 14th level, you gain the ability to sprout a pair of dragon wings from your back, gaining a flying speed equal to your current speed. You can create these wings as a bonus action on your turn. They last until you dismiss them as a bonus action on your turn. You can't manifest your wings while wearing armor unless the armor is made to accommodate them, and clothing not made to accommodate your wings might be destroyed when you manifest them.",
       "rus": "На 14-м уровне вы получаете способность выпускать пару драконьих крыльев за спиной, получая скорость полёта, равную вашей текущей скорости. Вы можете создать эти крылья бонусным действием в свой ход. Они сохраняются до тех пор, пока вы не уберёте их другим бонусным действием. Вы не можете проявить крылья в доспехе, если он не приспособлен для этого."
@@ -901,11 +1427,18 @@
     "source": "subclass",
     "sourceDetail": "draconic",
     "level": 14,
-    "tags": ["movement", "flight", "bonus_action"]
+    "tags": [
+      "movement",
+      "flight",
+      "bonus_action"
+    ]
   },
   {
     "engName": "draconic_presence",
-    "name": { "eng": "Draconic Presence", "rus": "Драконье присутствие" },
+    "name": {
+      "eng": "Draconic Presence",
+      "rus": "Драконье присутствие"
+    },
     "description": {
       "eng": "Beginning at 18th level, you can channel the dread presence of your dragon ancestor, causing those around you to become awestruck or frightened. As an action, you can spend 5 sorcery points to draw on this power and exude an aura of awe or fear (your choice) to a distance of 60 feet. For 1 minute or until you lose your concentration, each hostile creature that starts its turn in this aura must succeed on a Wisdom saving throw or be charmed (if you chose awe) or frightened (if you chose fear) until the aura ends.",
       "rus": "Начиная с 18-го уровня вы можете направить грозное присутствие своего драконьего предка, повергая окружающих в трепет или ужас. Вы действием тратите 5 очков волшебства, чтобы излучать ауру восхищения или страха (на ваш выбор) в радиусе 60 футов. В течение 1 минуты или до потери концентрации каждый враждебный противник, начинающий ход в ауре, должен пройти спасбросок Мудрости или оказаться очарованным (восхищение) или испуганным (страх) до конца ауры."
@@ -913,12 +1446,23 @@
     "source": "subclass",
     "sourceDetail": "draconic",
     "level": 18,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["aura", "sorcery_point", "concentration", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "aura",
+      "sorcery_point",
+      "concentration",
+      "action"
+    ]
   },
   {
     "engName": "wild_magic_surge",
-    "name": { "eng": "Wild Magic Surge", "rus": "Всплеск дикой магии" },
+    "name": {
+      "eng": "Wild Magic Surge",
+      "rus": "Всплеск дикой магии"
+    },
     "description": {
       "eng": "Starting when you choose this origin at 1st level, your spellcasting can unleash surges of untamed magic. Immediately after you cast a sorcerer spell of 1st level or higher, the DM can have you roll a d20. If you roll a 1, roll on the Wild Magic Surge table to create a random magical effect. A Wild Magic Surge can happen once per turn.",
       "rus": "Начиная с 1-го уровня ваше колдовство может вызывать всплески необузданной магии. Сразу после того, как вы накладываете заклинание чародея 1-го уровня или выше, Мастер может попросить вас бросить к20. Если выпадает 1, бросок по таблице Всплеска дикой магии создаёт случайный магический эффект."
@@ -926,11 +1470,18 @@
     "source": "subclass",
     "sourceDetail": "wild_magic",
     "level": 1,
-    "tags": ["chaos", "passive", "random"]
+    "tags": [
+      "chaos",
+      "passive",
+      "random"
+    ]
   },
   {
     "engName": "tides_of_chaos",
-    "name": { "eng": "Tides of Chaos", "rus": "Приливы хаоса" },
+    "name": {
+      "eng": "Tides of Chaos",
+      "rus": "Приливы хаоса"
+    },
     "description": {
       "eng": "Starting at 1st level, you can manipulate the forces of chance and chaos to gain advantage on one attack roll, ability check, or saving throw. Once you do so, you must finish a long rest before you can use this feature again. Any time before you regain the use of this feature, the DM can have you roll on the Wild Magic Surge table immediately after you cast a sorcerer spell of 1st level or higher. You then regain the use of this feature.",
       "rus": "Начиная с 1-го уровня вы можете манипулировать силами случая и хаоса, получая преимущество на один бросок атаки, проверку характеристики или спасбросок. После этого вы должны завершить продолжительный отдых, чтобы снова использовать эту способность. В любое время до её восстановления Мастер может попросить вас совершить бросок по таблице Всплеска дикой магии после накладывания заклинания 1-го уровня или выше, после чего способность восстанавливается."
@@ -938,12 +1489,22 @@
     "source": "subclass",
     "sourceDetail": "wild_magic",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["advantage", "chaos", "action"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "advantage",
+      "chaos",
+      "action"
+    ]
   },
   {
     "engName": "bend_luck",
-    "name": { "eng": "Bend Luck", "rus": "Искажение удачи" },
+    "name": {
+      "eng": "Bend Luck",
+      "rus": "Искажение удачи"
+    },
     "description": {
       "eng": "Starting at 6th level, you have the ability to twist fate using your wild magic. When another creature you can see makes an attack roll, an ability check, or a saving throw, you can use your reaction and spend 2 sorcery points to roll 1d4 and apply the number rolled as a bonus or penalty (your choice) to the creature's roll. You can do so after the creature rolls but before any effects of the roll occur.",
       "rus": "Начиная с 6-го уровня вы можете искажать судьбу с помощью дикой магии. Когда другое видимое вами существо совершает бросок атаки, проверку или спасбросок, вы можете реакцией потратить 2 очка волшебства и бросить 1к4, прибавив или вычтя результат из броска существа. Вы делаете это после броска, но до применения результата."
@@ -951,12 +1512,22 @@
     "source": "subclass",
     "sourceDetail": "wild_magic",
     "level": 6,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["chaos", "reaction", "sorcery_point"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "chaos",
+      "reaction",
+      "sorcery_point"
+    ]
   },
   {
     "engName": "controlled_chaos",
-    "name": { "eng": "Controlled Chaos", "rus": "Управляемый хаос" },
+    "name": {
+      "eng": "Controlled Chaos",
+      "rus": "Управляемый хаос"
+    },
     "description": {
       "eng": "At 14th level, you gain a modicum of control over the surges of your wild magic. Whenever you roll on the Wild Magic Surge table, you can roll twice and use either number.",
       "rus": "На 14-м уровне вы получаете некоторый контроль над всплесками дикой магии. Каждый раз, когда вы совершаете бросок по таблице Всплеска дикой магии, вы можете бросить дважды и выбрать любой из результатов."
@@ -964,11 +1535,17 @@
     "source": "subclass",
     "sourceDetail": "wild_magic",
     "level": 14,
-    "tags": ["chaos", "passive"]
+    "tags": [
+      "chaos",
+      "passive"
+    ]
   },
   {
     "engName": "spell_bombardment",
-    "name": { "eng": "Spell Bombardment", "rus": "Магическая бомбардировка" },
+    "name": {
+      "eng": "Spell Bombardment",
+      "rus": "Магическая бомбардировка"
+    },
     "description": {
       "eng": "Beginning at 18th level, the harmful energy of your spells intensifies. When you roll damage for a spell and roll the highest number possible on any of the dice, choose one of those dice, roll it again and add that roll to the damage. You can use the feature only once per turn.",
       "rus": "Начиная с 18-го уровня разрушительная энергия ваших заклинаний усиливается. Когда вы бросаете кости урона заклинания и выпадает максимальное значение на любой кости, выберите одну такую кость, бросьте её снова и добавьте результат к урону. Вы можете использовать эту способность только один раз в ход."
@@ -976,11 +1553,18 @@
     "source": "subclass",
     "sourceDetail": "wild_magic",
     "level": 18,
-    "tags": ["damage", "passive", "spellcasting"]
+    "tags": [
+      "damage",
+      "passive",
+      "spellcasting"
+    ]
   },
   {
     "engName": "dark_ones_blessing",
-    "name": { "eng": "Dark One's Blessing", "rus": "Благословение тёмного владыки" },
+    "name": {
+      "eng": "Dark One's Blessing",
+      "rus": "Благословение тёмного владыки"
+    },
     "description": {
       "eng": "Starting at 1st level, when you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1).",
       "rus": "Начиная с 1-го уровня, когда вы снижаете хиты враждебного существа до 0, вы получаете временные хиты, равные вашему модификатору Харизмы + уровень варлока (минимум 1)."
@@ -988,11 +1572,18 @@
     "source": "subclass",
     "sourceDetail": "fiend",
     "level": 1,
-    "tags": ["healing", "passive", "temp_hp"]
+    "tags": [
+      "healing",
+      "passive",
+      "temp_hp"
+    ]
   },
   {
     "engName": "dark_ones_own_luck",
-    "name": { "eng": "Dark One's Own Luck", "rus": "Удача тёмного владыки" },
+    "name": {
+      "eng": "Dark One's Own Luck",
+      "rus": "Удача тёмного владыки"
+    },
     "description": {
       "eng": "Starting at 6th level, you can call on your patron to alter fate in your favor. When you make an ability check or a saving throw, you can use this feature to add a d10 to your roll. You can do so after seeing the initial roll but before any of the roll's effects occur. Once you use this feature, you can't use it again until you finish a short or long rest.",
       "rus": "Начиная с 6-го уровня вы можете призвать покровителя изменить судьбу в вашу пользу. Когда вы совершаете проверку характеристики или спасбросок, вы можете добавить к10 к броску. Вы делаете это после броска, но до применения результата. После использования требуется короткий или продолжительный отдых."
@@ -1000,12 +1591,21 @@
     "source": "subclass",
     "sourceDetail": "fiend",
     "level": 6,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["luck", "saving_throw"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "luck",
+      "saving_throw"
+    ]
   },
   {
     "engName": "fiendish_resilience",
-    "name": { "eng": "Fiendish Resilience", "rus": "Стойкость исчадия" },
+    "name": {
+      "eng": "Fiendish Resilience",
+      "rus": "Стойкость исчадия"
+    },
     "description": {
       "eng": "Starting at 10th level, you can choose one damage type when you finish a short or long rest. You gain resistance to that damage type until you choose a different one with this feature. Damage from magical weapons or silver weapons ignores this resistance.",
       "rus": "Начиная с 10-го уровня после короткого или продолжительного отдыха вы можете выбрать один тип урона. Вы получаете сопротивление этому типу урона до следующего выбора. Урон от магического или серебряного оружия игнорирует это сопротивление."
@@ -1013,11 +1613,18 @@
     "source": "subclass",
     "sourceDetail": "fiend",
     "level": 10,
-    "tags": ["resistance", "passive", "choice"]
+    "tags": [
+      "resistance",
+      "passive",
+      "choice"
+    ]
   },
   {
     "engName": "hurl_through_hell",
-    "name": { "eng": "Hurl Through Hell", "rus": "Низвержение в Ад" },
+    "name": {
+      "eng": "Hurl Through Hell",
+      "rus": "Низвержение в Ад"
+    },
     "description": {
       "eng": "Starting at 14th level, when you hit a creature with an attack, you can use this feature to instantly transport the target through the lower planes. The creature disappears and hurtles through a nightmare landscape. At the end of your next turn, the target returns. If the target is not a fiend, it takes 10d10 psychic damage. Once you use this feature, you can't use it again until you finish a long rest.",
       "rus": "Начиная с 14-го уровня, когда вы попадаете по существу атакой, вы можете мгновенно перенести цель через нижние планы. Существо исчезает и несётся через кошмарный пейзаж. В конце вашего следующего хода оно возвращается. Если цель не является исчадием, она получает 10к10 урона психической энергией. Требуется продолжительный отдых."
@@ -1025,12 +1632,22 @@
     "source": "subclass",
     "sourceDetail": "fiend",
     "level": 14,
-    "resource": { "maxUses": 1, "resetOn": "long_rest" },
-    "tags": ["combat", "teleport", "psychic"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "long_rest"
+    },
+    "tags": [
+      "combat",
+      "teleport",
+      "psychic"
+    ]
   },
   {
     "engName": "fey_presence",
-    "name": { "eng": "Fey Presence", "rus": "Фейское присутствие" },
+    "name": {
+      "eng": "Fey Presence",
+      "rus": "Фейское присутствие"
+    },
     "description": {
       "eng": "Starting at 1st level, your patron bestows upon you the ability to project the beguiling and fearsome might of the fey. As an action, you can cause each creature in a 10-foot cube originating from you to make a Wisdom saving throw against your warlock spell save DC. The creatures that fail their saving throws are all charmed or frightened by you (your choice) until the end of your next turn. Once you use this feature, you can't use it again until you finish a short or long rest.",
       "rus": "Начиная с 1-го уровня ваш покровитель наделяет вас способностью излучать завораживающую и пугающую силу фей. Вы действием заставляете каждое существо в кубе 10 футов совершить спасбросок Мудрости. Провалившие очарованы или испуганы вами (на ваш выбор) до конца вашего следующего хода. Требуется короткий или продолжительный отдых."
@@ -1038,12 +1655,23 @@
     "source": "subclass",
     "sourceDetail": "archfey",
     "level": 1,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["charm", "fear", "action", "fey"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "charm",
+      "fear",
+      "action",
+      "fey"
+    ]
   },
   {
     "engName": "misty_escape",
-    "name": { "eng": "Misty Escape", "rus": "Туманный побег" },
+    "name": {
+      "eng": "Misty Escape",
+      "rus": "Туманный побег"
+    },
     "description": {
       "eng": "Starting at 6th level, when you take damage, you can use your reaction to turn invisible and teleport up to 60 feet to an unoccupied space you can see. You remain invisible until the start of your next turn or until you attack or cast a spell. Once you use this feature, you can't use it again until you finish a short or long rest.",
       "rus": "Начиная с 6-го уровня, когда вы получаете урон, вы можете реакцией стать невидимым и телепортироваться на расстояние до 60 футов в видимое незанятое пространство. Вы остаётесь невидимым до начала вашего следующего хода или пока не атакуете/заклинаете. Требуется короткий или продолжительный отдых."
@@ -1051,12 +1679,23 @@
     "source": "subclass",
     "sourceDetail": "archfey",
     "level": 6,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["teleport", "invisibility", "reaction", "defensive"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "teleport",
+      "invisibility",
+      "reaction",
+      "defensive"
+    ]
   },
   {
     "engName": "beguiling_defenses",
-    "name": { "eng": "Beguiling Defenses", "rus": "Завораживающая защита" },
+    "name": {
+      "eng": "Beguiling Defenses",
+      "rus": "Завораживающая защита"
+    },
     "description": {
       "eng": "Beginning at 10th level, you are immune to being charmed, and when another creature attempts to charm you, you can use your reaction to attempt to turn the charm back on that creature. The creature must succeed on a Wisdom saving throw against your warlock spell save DC or be charmed by you for 1 minute or until it takes any damage.",
       "rus": "Начиная с 10-го уровня вы получаете иммунитет к очарованию. Когда существо пытается вас очаровать, вы можете реакцией переадресовать чары ему. Существо совершает спасбросок Мудрости или оказывается очарованным вами на 1 минуту или до получения урона."
@@ -1064,11 +1703,19 @@
     "source": "subclass",
     "sourceDetail": "archfey",
     "level": 10,
-    "tags": ["charm", "immunity", "reaction", "defensive"]
+    "tags": [
+      "charm",
+      "immunity",
+      "reaction",
+      "defensive"
+    ]
   },
   {
     "engName": "dark_delirium",
-    "name": { "eng": "Dark Delirium", "rus": "Тёмный морок" },
+    "name": {
+      "eng": "Dark Delirium",
+      "rus": "Тёмный морок"
+    },
     "description": {
       "eng": "Starting at 14th level, as an action, choose a creature that you can see within 60 feet of you. It must make a Wisdom saving throw against your warlock spell save DC. On a failed save, it is charmed or frightened by you (your choice) for 1 minute or until your concentration is broken. This feature has no effect on undead or constructs. Once you use this feature, you can't use it again until you finish a short or long rest.",
       "rus": "Начиная с 14-го уровня вы действием выбираете видимое существо в пределах 60 футов. Оно совершает спасбросок Мудрости. При провале очаровано или испугано вами (на ваш выбор) на 1 минуту или до потери концентрации. Не действует на нежить и конструкты. Требуется короткий или продолжительный отдых."
@@ -1076,12 +1723,24 @@
     "source": "subclass",
     "sourceDetail": "archfey",
     "level": 14,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["charm", "fear", "concentration", "action", "illusion"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "charm",
+      "fear",
+      "concentration",
+      "action",
+      "illusion"
+    ]
   },
   {
     "engName": "awakened_mind",
-    "name": { "eng": "Awakened Mind", "rus": "Пробуждённый разум" },
+    "name": {
+      "eng": "Awakened Mind",
+      "rus": "Пробуждённый разум"
+    },
     "description": {
       "eng": "Starting at 1st level, your alien knowledge gives you the ability to touch the minds of other creatures. You can communicate telepathically with any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand your telepathic utterances, but the creature must be able to understand at least one language.",
       "rus": "Начиная с 1-го уровня ваши чуждые знания позволяют вам касаться разумов других существ. Вы можете телепатически общаться с любым видимым существом в пределах 30 футов. Вам не нужно знать общий язык, но существо должно понимать хотя бы один язык."
@@ -1089,11 +1748,18 @@
     "source": "subclass",
     "sourceDetail": "great_old_one",
     "level": 1,
-    "tags": ["telepathy", "passive", "communication"]
+    "tags": [
+      "telepathy",
+      "passive",
+      "communication"
+    ]
   },
   {
     "engName": "entropic_ward",
-    "name": { "eng": "Entropic Ward", "rus": "Энтропийная защита" },
+    "name": {
+      "eng": "Entropic Ward",
+      "rus": "Энтропийная защита"
+    },
     "description": {
       "eng": "At 6th level, when a creature makes an attack roll against you, you can use your reaction to impose disadvantage on that roll. If the attack misses you, your next attack roll against the creature has advantage if you make it before the end of your next turn. Once you use this feature, you can't use it again until you finish a short or long rest.",
       "rus": "На 6-м уровне, когда существо атакует вас, вы можете реакцией наложить на него помеху. Если атака промахивается, ваш следующий бросок атаки против этого существа до конца следующего хода имеет преимущество. Требуется короткий или продолжительный отдых."
@@ -1101,12 +1767,22 @@
     "source": "subclass",
     "sourceDetail": "great_old_one",
     "level": 6,
-    "resource": { "maxUses": 1, "resetOn": "short_rest" },
-    "tags": ["defensive", "reaction", "attack"]
+    "resource": {
+      "maxUses": 1,
+      "resetOn": "short_rest"
+    },
+    "tags": [
+      "defensive",
+      "reaction",
+      "attack"
+    ]
   },
   {
     "engName": "thought_shield",
-    "name": { "eng": "Thought Shield", "rus": "Щит мысли" },
+    "name": {
+      "eng": "Thought Shield",
+      "rus": "Щит мысли"
+    },
     "description": {
       "eng": "Starting at 10th level, your thoughts can't be read by telepathy or other means unless you allow it. Also, whenever a creature deals psychic damage to you, that creature takes the same amount of damage that you do.",
       "rus": "Начиная с 10-го уровня ваши мысли нельзя прочитать телепатически без вашего ведома. Кроме того, когда существо наносит вам урон психической энергией, оно получает такое же количество урона."
@@ -1114,11 +1790,19 @@
     "source": "subclass",
     "sourceDetail": "great_old_one",
     "level": 10,
-    "tags": ["mind", "psychic", "passive", "resistance"]
+    "tags": [
+      "mind",
+      "psychic",
+      "passive",
+      "resistance"
+    ]
   },
   {
     "engName": "create_thrall",
-    "name": { "eng": "Create Thrall", "rus": "Создание приспешника" },
+    "name": {
+      "eng": "Create Thrall",
+      "rus": "Создание приспешника"
+    },
     "description": {
       "eng": "At 14th level, you gain the ability to infect a humanoid's mind with the alien magic of your patron. You can use your action to touch an incapacitated humanoid. That creature is then charmed by you until a Remove Curse spell is cast on it, the charmed condition is removed from it, or you use this feature again. You can communicate telepathically with the charmed creature as long as you are on the same plane of existence.",
       "rus": "На 14-м уровне вы действием прикасаетесь к обездвиженному гуманоиду. Существо очаровывается вами до снятия заклинанием Снятие проклятия или до следующего использования этой способности. Вы можете телепатически общаться с ним на одном плане существования."
@@ -1126,11 +1810,19 @@
     "source": "subclass",
     "sourceDetail": "great_old_one",
     "level": 14,
-    "tags": ["charm", "telepathy", "action", "mind"]
+    "tags": [
+      "charm",
+      "telepathy",
+      "action",
+      "mind"
+    ]
   },
   {
     "engName": "visions_of_the_past",
-    "name": { "eng": "Visions of the Past", "rus": "Видения прошлого" },
+    "name": {
+      "eng": "Visions of the Past",
+      "rus": "Видения прошлого"
+    },
     "description": {
       "eng": "Starting at 17th level, you can call up visions of the past that relate to an object you hold or your immediate surroundings. You spend at least 1 minute in meditation and prayer, then receive dreamlike, shadowy glimpses of recent events. You can meditate this way for a number of minutes equal to your Wisdom score and must maintain concentration during that time.",
       "rus": "Начиная с 17-го уровня вы можете вызывать видения прошлого, связанные с предметом в вашей руке или вашим непосредственным окружением. Вы проводите не менее 1 минуты в медитации и молитве, после чего получаете смутные видения недавних событий. Вы можете медитировать столько минут, сколько составляет ваше значение Мудрости, сохраняя при этом концентрацию."
@@ -1138,6 +1830,176 @@
     "source": "subclass",
     "sourceDetail": "knowledge",
     "level": 17,
-    "tags": ["divination", "concentration"]
+    "tags": [
+      "divination",
+      "concentration"
+    ]
+  },
+  {
+    "engName": "frenzy",
+    "name": {
+      "eng": "Frenzy",
+      "rus": "Исступление"
+    },
+    "description": {
+      "eng": "You can go into a frenzy when you rage. While frenzied, you can make a single melee weapon attack as a bonus action each turn. When your rage ends, you suffer one level of exhaustion.",
+      "rus": "Когда вы входите в ярость, вы можете впасть в исступление. Пока вы в исступлении, каждый ход вы можете совершить одну рукопашную атаку оружием бонусным действием. Когда ярость заканчивается, вы получаете один уровень истощения."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Berserker",
+    "level": 3,
+    "tags": [
+      "combat",
+      "rage"
+    ]
+  },
+  {
+    "engName": "mindless_rage",
+    "name": {
+      "eng": "Mindless Rage",
+      "rus": "Безумная ярость"
+    },
+    "description": {
+      "eng": "You cannot be charmed or frightened while raging. If you are charmed or frightened when you enter your rage, the effect is suspended for the duration of the rage.",
+      "rus": "Пока вы в ярости, вас нельзя очаровать или напугать. Если вы очарованы или напуганы в момент входа в ярость, эффект приостанавливается на время ярости."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Berserker",
+    "level": 6,
+    "tags": [
+      "defense",
+      "rage"
+    ]
+  },
+  {
+    "engName": "intimidating_presence",
+    "name": {
+      "eng": "Intimidating Presence",
+      "rus": "Устрашающее присутствие"
+    },
+    "description": {
+      "eng": "You can use your action to frighten someone with your menacing presence. Choose one creature you can see within 30 feet. It must succeed on a Wisdom saving throw (DC 8 + proficiency bonus + Charisma modifier) or be frightened of you until the end of your next turn.",
+      "rus": "Вы можете использовать действие, чтобы запугать существо. Выберите одно видимое существо в пределах 30 футов. Оно должно пройти испытание Мудрости (Сл = 8 + бонус мастерства + модификатор Харизмы) или стать напуганным до конца вашего следующего хода."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Berserker",
+    "level": 10,
+    "tags": [
+      "social",
+      "fear"
+    ]
+  },
+  {
+    "engName": "retaliation",
+    "name": {
+      "eng": "Retaliation",
+      "rus": "Возмездие"
+    },
+    "description": {
+      "eng": "When you take damage from a creature within 5 feet of you, you can use your reaction to make a melee weapon attack against that creature.",
+      "rus": "Когда существо в пределах 5 футов наносит вам урон, вы можете реакцией совершить рукопашную атаку оружием против этого существа."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Berserker",
+    "level": 14,
+    "tags": [
+      "combat",
+      "reaction"
+    ]
+  },
+  {
+    "engName": "spirit_seeker",
+    "name": {
+      "eng": "Spirit Seeker",
+      "rus": "Искатель духов"
+    },
+    "description": {
+      "eng": "You gain the ability to cast the Beast Sense and Speak with Animals spells as rituals.",
+      "rus": "Вы можете ритуально накладывать заклинания «Звериное чувство» и «Разговор с животными»."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Totem Warrior",
+    "level": 3,
+    "tags": [
+      "spellcasting",
+      "nature",
+      "ritual"
+    ]
+  },
+  {
+    "engName": "totem_spirit",
+    "name": {
+      "eng": "Totem Spirit",
+      "rus": "Дух тотема"
+    },
+    "description": {
+      "eng": "Choose a totem spirit: Bear (resistance to all damage except psychic while raging), Eagle (Dash as bonus action and ignore difficult terrain while raging), or Wolf (allies have advantage on melee attacks against creatures within 5 ft of you while raging).",
+      "rus": "Выберите духа тотема: Медведь (сопротивление всему урону кроме психического в ярости), Орёл (Рывок бонусным действием и игнорирование труднопроходимой местности в ярости), Волк (союзники с преимуществом атакуют врагов рядом с вами в ярости)."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Totem Warrior",
+    "level": 3,
+    "tags": [
+      "rage",
+      "nature",
+      "choice"
+    ]
+  },
+  {
+    "engName": "aspect_of_the_beast",
+    "name": {
+      "eng": "Aspect of the Beast",
+      "rus": "Аспект зверя"
+    },
+    "description": {
+      "eng": "You gain a magical benefit: Bear (carrying capacity doubles, advantage on Strength checks to push/pull/lift/break), Eagle (see 1 mile clearly, no disadvantage in dim light on Perception), or Wolf (track at fast pace, move stealthily at normal pace).",
+      "rus": "Вы получаете магическое преимущество: Медведь (грузоподъёмность удваивается, преимущество на проверки Силы), Орёл (видите на милю чётко, тусклый свет не мешает Восприятию), Волк (отслеживаете при быстром движении, скрытно перемещаетесь при нормальном)."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Totem Warrior",
+    "level": 6,
+    "tags": [
+      "nature",
+      "passive",
+      "choice"
+    ]
+  },
+  {
+    "engName": "spirit_walker",
+    "name": {
+      "eng": "Spirit Walker",
+      "rus": "Странник духов"
+    },
+    "description": {
+      "eng": "You can cast the Commune with Nature spell as a ritual. A spiritual version of one of your totem animals appears to convey the information you seek.",
+      "rus": "Вы можете ритуально накладывать заклинание «Единение с природой». Духовная версия одного из ваших тотемных животных является, чтобы донести нужные сведения."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Totem Warrior",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "nature",
+      "ritual"
+    ]
+  },
+  {
+    "engName": "totemic_attunement",
+    "name": {
+      "eng": "Totemic Attunement",
+      "rus": "Настройка тотема"
+    },
+    "description": {
+      "eng": "You gain a magical benefit: Bear (hostile creatures within 5 ft have disadvantage on attacks against targets other than you while raging), Eagle (flying speed equals walking speed while raging), or Wolf (bonus action to knock a Large or smaller creature prone after hitting it while raging).",
+      "rus": "Вы получаете магическое преимущество: Медведь (враждебные существа рядом с помехой на атаки против других в ярости), Орёл (скорость полёта равна скорости ходьбы в ярости), Волк (бонусным действием сбиваете с ног существо после попадания в ярости)."
+    },
+    "source": "srd",
+    "sourceDetail": "Barbarian: Path of the Totem Warrior",
+    "level": 14,
+    "tags": [
+      "rage",
+      "nature",
+      "choice"
+    ]
   }
 ]
