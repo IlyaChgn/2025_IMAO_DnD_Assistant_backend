@@ -1179,39 +1179,460 @@
           "type": "custom",
           "effect": "choose_dragon_type_for_breath_and_resistance"
         }
-      },
-      {
-        "engName": "breath-weapon",
-        "name": {
-          "eng": "Breath Weapon",
-          "rus": "Оружие дыхания"
-        },
-        "description": {
-          "eng": "You can use your action to exhale destructive energy. The damage type and area are determined by your draconic ancestry. Each creature in the area must make a saving throw (DC = 8 + CON mod + proficiency). Damage is 2d6, increasing at levels 6, 11, and 16. Usable once per short or long rest.",
-          "rus": "Вы можете действием выдохнуть разрушительную энергию. Тип урона и область определяются вашим драконьим наследием. Каждое существо в области должно совершить спасбросок (Сл = 8 + модификатор ТЕЛ + бонус мастерства). Урон — 2к6, возрастающий на 6, 11 и 16 уровнях. Используется один раз за короткий или длинный отдых."
-        },
-        "mechanics": {
-          "type": "custom",
-          "effect": "breath_weapon_2d6_scaling_con_dc_once_per_short_rest"
-        }
-      },
-      {
-        "engName": "damage-resistance",
-        "name": {
-          "eng": "Damage Resistance",
-          "rus": "Сопротивление урону"
-        },
-        "description": {
-          "eng": "You have resistance to the damage type associated with your draconic ancestry.",
-          "rus": "Вы обладаете сопротивлением к типу урона, связанному с вашим драконьим наследием."
-        },
-        "mechanics": {
-          "type": "custom",
-          "effect": "resistance_matching_draconic_ancestry"
-        }
       }
     ],
-    "subraces": [],
+    "subraces": [
+      {
+        "engName": "draconic-black",
+        "name": {
+          "eng": "Draconic Ancestry: Black Dragon",
+          "rus": "Драконье наследие: Чёрный дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the black dragon. Your breath weapon deals acid damage (line 5×30 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to acid damage.",
+          "rus": "Ваше драконье наследие происходит от чёрный дракона. Ваше оружие дыхания наносит урон кислоты (линия 1,5×9 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону кислоты."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-black",
+            "name": {
+              "eng": "Breath Weapon (Acid)",
+              "rus": "Оружие дыхания (Кислота)"
+            },
+            "description": {
+              "eng": "You exhale acid in a line 5×30 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 acid damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете кислоты в виде линия 1,5×9 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона кислоты, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_acid_line_5x30_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-black",
+            "name": {
+              "eng": "Damage Resistance (Acid)",
+              "rus": "Сопротивление урону (Кислота)"
+            },
+            "description": {
+              "eng": "You have resistance to acid damage.",
+              "rus": "Вы получаете сопротивление к урону кислоты."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_acid"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-blue",
+        "name": {
+          "eng": "Draconic Ancestry: Blue Dragon",
+          "rus": "Драконье наследие: Синий дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the blue dragon. Your breath weapon deals lightning damage (line 5×30 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to lightning damage.",
+          "rus": "Ваше драконье наследие происходит от синий дракона. Ваше оружие дыхания наносит урон молнии (линия 1,5×9 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону молнии."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-blue",
+            "name": {
+              "eng": "Breath Weapon (Lightning)",
+              "rus": "Оружие дыхания (Молния)"
+            },
+            "description": {
+              "eng": "You exhale lightning in a line 5×30 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 lightning damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете молнии в виде линия 1,5×9 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона молнии, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_lightning_line_5x30_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-blue",
+            "name": {
+              "eng": "Damage Resistance (Lightning)",
+              "rus": "Сопротивление урону (Молния)"
+            },
+            "description": {
+              "eng": "You have resistance to lightning damage.",
+              "rus": "Вы получаете сопротивление к урону молнии."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_lightning"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-brass",
+        "name": {
+          "eng": "Draconic Ancestry: Brass Dragon",
+          "rus": "Драконье наследие: Латунный дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the brass dragon. Your breath weapon deals fire damage (line 5×30 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to fire damage.",
+          "rus": "Ваше драконье наследие происходит от латунный дракона. Ваше оружие дыхания наносит урон огня (линия 1,5×9 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону огня."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-brass",
+            "name": {
+              "eng": "Breath Weapon (Fire)",
+              "rus": "Оружие дыхания (Огонь)"
+            },
+            "description": {
+              "eng": "You exhale fire in a line 5×30 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 fire damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете огня в виде линия 1,5×9 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона огня, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_fire_line_5x30_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-brass",
+            "name": {
+              "eng": "Damage Resistance (Fire)",
+              "rus": "Сопротивление урону (Огонь)"
+            },
+            "description": {
+              "eng": "You have resistance to fire damage.",
+              "rus": "Вы получаете сопротивление к урону огня."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_fire"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-bronze",
+        "name": {
+          "eng": "Draconic Ancestry: Bronze Dragon",
+          "rus": "Драконье наследие: Бронзовый дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the bronze dragon. Your breath weapon deals lightning damage (line 5×30 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to lightning damage.",
+          "rus": "Ваше драконье наследие происходит от бронзовый дракона. Ваше оружие дыхания наносит урон молнии (линия 1,5×9 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону молнии."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-bronze",
+            "name": {
+              "eng": "Breath Weapon (Lightning)",
+              "rus": "Оружие дыхания (Молния)"
+            },
+            "description": {
+              "eng": "You exhale lightning in a line 5×30 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 lightning damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете молнии в виде линия 1,5×9 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона молнии, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_lightning_line_5x30_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-bronze",
+            "name": {
+              "eng": "Damage Resistance (Lightning)",
+              "rus": "Сопротивление урону (Молния)"
+            },
+            "description": {
+              "eng": "You have resistance to lightning damage.",
+              "rus": "Вы получаете сопротивление к урону молнии."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_lightning"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-copper",
+        "name": {
+          "eng": "Draconic Ancestry: Copper Dragon",
+          "rus": "Драконье наследие: Медный дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the copper dragon. Your breath weapon deals acid damage (line 5×30 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to acid damage.",
+          "rus": "Ваше драконье наследие происходит от медный дракона. Ваше оружие дыхания наносит урон кислоты (линия 1,5×9 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону кислоты."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-copper",
+            "name": {
+              "eng": "Breath Weapon (Acid)",
+              "rus": "Оружие дыхания (Кислота)"
+            },
+            "description": {
+              "eng": "You exhale acid in a line 5×30 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 acid damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете кислоты в виде линия 1,5×9 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона кислоты, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_acid_line_5x30_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-copper",
+            "name": {
+              "eng": "Damage Resistance (Acid)",
+              "rus": "Сопротивление урону (Кислота)"
+            },
+            "description": {
+              "eng": "You have resistance to acid damage.",
+              "rus": "Вы получаете сопротивление к урону кислоты."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_acid"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-gold",
+        "name": {
+          "eng": "Draconic Ancestry: Gold Dragon",
+          "rus": "Драконье наследие: Золотой дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the gold dragon. Your breath weapon deals fire damage (cone 15 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to fire damage.",
+          "rus": "Ваше драконье наследие происходит от золотой дракона. Ваше оружие дыхания наносит урон огня (конус 4,5 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону огня."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-gold",
+            "name": {
+              "eng": "Breath Weapon (Fire)",
+              "rus": "Оружие дыхания (Огонь)"
+            },
+            "description": {
+              "eng": "You exhale fire in a cone 15 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 fire damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете огня в виде конус 4,5 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона огня, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_fire_cone_15_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-gold",
+            "name": {
+              "eng": "Damage Resistance (Fire)",
+              "rus": "Сопротивление урону (Огонь)"
+            },
+            "description": {
+              "eng": "You have resistance to fire damage.",
+              "rus": "Вы получаете сопротивление к урону огня."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_fire"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-green",
+        "name": {
+          "eng": "Draconic Ancestry: Green Dragon",
+          "rus": "Драконье наследие: Зелёный дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the green dragon. Your breath weapon deals poison damage (cone 15 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to poison damage.",
+          "rus": "Ваше драконье наследие происходит от зелёный дракона. Ваше оружие дыхания наносит урон яда (конус 4,5 м, Сл = 8 + ТЛ + мастерство, испытание Телосложения на половину). Вы получаете сопротивление к урону яда."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-green",
+            "name": {
+              "eng": "Breath Weapon (Poison)",
+              "rus": "Оружие дыхания (Яд)"
+            },
+            "description": {
+              "eng": "You exhale poison in a cone 15 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) CON saving throw, taking 2d6 poison damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете яда в виде конус 4,5 м. Каждое существо в зоне проходит испытание Телосложения (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона яда, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_poison_cone_15_ft_con_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-green",
+            "name": {
+              "eng": "Damage Resistance (Poison)",
+              "rus": "Сопротивление урону (Яд)"
+            },
+            "description": {
+              "eng": "You have resistance to poison damage.",
+              "rus": "Вы получаете сопротивление к урону яда."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_poison"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-red",
+        "name": {
+          "eng": "Draconic Ancestry: Red Dragon",
+          "rus": "Драконье наследие: Красный дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the red dragon. Your breath weapon deals fire damage (cone 15 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to fire damage.",
+          "rus": "Ваше драконье наследие происходит от красный дракона. Ваше оружие дыхания наносит урон огня (конус 4,5 м, Сл = 8 + ТЛ + мастерство, испытание Ловкости на половину). Вы получаете сопротивление к урону огня."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-red",
+            "name": {
+              "eng": "Breath Weapon (Fire)",
+              "rus": "Оружие дыхания (Огонь)"
+            },
+            "description": {
+              "eng": "You exhale fire in a cone 15 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) DEX saving throw, taking 2d6 fire damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете огня в виде конус 4,5 м. Каждое существо в зоне проходит испытание Ловкости (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона огня, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_fire_cone_15_ft_dex_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-red",
+            "name": {
+              "eng": "Damage Resistance (Fire)",
+              "rus": "Сопротивление урону (Огонь)"
+            },
+            "description": {
+              "eng": "You have resistance to fire damage.",
+              "rus": "Вы получаете сопротивление к урону огня."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_fire"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-silver",
+        "name": {
+          "eng": "Draconic Ancestry: Silver Dragon",
+          "rus": "Драконье наследие: Серебряный дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the silver dragon. Your breath weapon deals cold damage (cone 15 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to cold damage.",
+          "rus": "Ваше драконье наследие происходит от серебряный дракона. Ваше оружие дыхания наносит урон холода (конус 4,5 м, Сл = 8 + ТЛ + мастерство, испытание Телосложения на половину). Вы получаете сопротивление к урону холода."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-silver",
+            "name": {
+              "eng": "Breath Weapon (Cold)",
+              "rus": "Оружие дыхания (Холод)"
+            },
+            "description": {
+              "eng": "You exhale cold in a cone 15 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) CON saving throw, taking 2d6 cold damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете холода в виде конус 4,5 м. Каждое существо в зоне проходит испытание Телосложения (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона холода, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_cold_cone_15_ft_con_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-silver",
+            "name": {
+              "eng": "Damage Resistance (Cold)",
+              "rus": "Сопротивление урону (Холод)"
+            },
+            "description": {
+              "eng": "You have resistance to cold damage.",
+              "rus": "Вы получаете сопротивление к урону холода."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_cold"
+            }
+          }
+        ],
+        "source": "srd"
+      },
+      {
+        "engName": "draconic-white",
+        "name": {
+          "eng": "Draconic Ancestry: White Dragon",
+          "rus": "Драконье наследие: Белый дракон"
+        },
+        "description": {
+          "eng": "Your draconic ancestry is that of the white dragon. Your breath weapon deals cold damage (cone 15 ft, DC 8 + CON + proficiency, DEX save for half). You have resistance to cold damage.",
+          "rus": "Ваше драконье наследие происходит от белый дракона. Ваше оружие дыхания наносит урон холода (конус 4,5 м, Сл = 8 + ТЛ + мастерство, испытание Телосложения на половину). Вы получаете сопротивление к урону холода."
+        },
+        "abilityBonuses": {},
+        "features": [
+          {
+            "engName": "breath-weapon-white",
+            "name": {
+              "eng": "Breath Weapon (Cold)",
+              "rus": "Оружие дыхания (Холод)"
+            },
+            "description": {
+              "eng": "You exhale cold in a cone 15 ft. Each creature in the area makes a DC (8 + CON modifier + proficiency bonus) CON saving throw, taking 2d6 cold damage on a failure, or half as much on a success. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. Usable once per short or long rest.",
+              "rus": "Вы выдыхаете холода в виде конус 4,5 м. Каждое существо в зоне проходит испытание Телосложения (Сл = 8 + модификатор ТЛ + бонус мастерства). Провал — 2к6 урона холода, успех — половина. Урон возрастает до 3к6 на 6-м, 4к6 на 11-м и 5к6 на 16-м уровне. Раз за короткий или длинный отдых."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "breath_weapon_cold_cone_15_ft_con_save"
+            }
+          },
+          {
+            "engName": "damage-resistance-white",
+            "name": {
+              "eng": "Damage Resistance (Cold)",
+              "rus": "Сопротивление урону (Холод)"
+            },
+            "description": {
+              "eng": "You have resistance to cold damage.",
+              "rus": "Вы получаете сопротивление к урону холода."
+            },
+            "mechanics": {
+              "type": "custom",
+              "effect": "resistance_cold"
+            }
+          }
+        ],
+        "source": "srd"
+      }
+    ],
     "source": "srd",
     "tags": [
       "draconic",
