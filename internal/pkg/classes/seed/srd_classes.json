@@ -3514,6 +3514,84 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "assassin",
+        "name": {
+          "eng": "Assassin",
+          "rus": "Убийца"
+        },
+        "description": {
+          "eng": "You focus your training on the grim art of death. Those who adhere to this archetype are diverse — hired killers, spies, bounty hunters, and even specially anointed priests trained to exterminate the enemies of their deity.",
+          "rus": "Вы сосредотачиваете обучение на мрачном искусстве смерти. Последователи этого архетипа разнообразны — наёмные убийцы, шпионы, охотники за головами и даже специально обученные жрецы, уничтожающие врагов своего божества."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "bonus_proficiencies_assassin",
+              "assassinate"
+            ]
+          },
+          {
+            "level": 9,
+            "features": [
+              "infiltration_expertise"
+            ]
+          },
+          {
+            "level": 13,
+            "features": [
+              "impostor"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "death_strike"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "arcane_trickster",
+        "name": {
+          "eng": "Arcane Trickster",
+          "rus": "Магический трикстер"
+        },
+        "description": {
+          "eng": "Some rogues enhance their fine-honed skills of stealth and agility with magic, learning tricks of enchantment and illusion. These rogues include pickpockets and burglars, but also pranksters, mischief-makers, and a significant number of adventurers.",
+          "rus": "Некоторые разбойники дополняют отточенные навыки скрытности и ловкости магией, изучая трюки очарования и иллюзий. Среди них есть карманники и взломщики, но также и шутники, проказники и немало авантюристов."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "spellcasting_arcane_trickster",
+              "mage_hand_legerdemain"
+            ]
+          },
+          {
+            "level": 9,
+            "features": [
+              "magical_ambush"
+            ]
+          },
+          {
+            "level": 13,
+            "features": [
+              "versatile_trickster"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "spell_thief"
+            ]
+          }
+        ]
       }
     ],
     "features": [
