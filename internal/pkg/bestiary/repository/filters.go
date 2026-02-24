@@ -85,6 +85,11 @@ func buildTypesFilters(filter models.FilterParams) bson.D {
 	// Фильтр по окружению (environment)
 	mongoFilter = append(mongoFilter, filterIn("environment", filter.Environment)...)
 
+	// Фильтр по SRD
+	if filter.IsSrd != nil && *filter.IsSrd {
+		mongoFilter = append(mongoFilter, bson.E{Key: "isSrd", Value: true})
+	}
+
 	return mongoFilter
 }
 

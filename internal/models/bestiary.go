@@ -20,6 +20,7 @@ type BestiaryCreature struct {
 	URL             string             `bson:"url" json:"url"`
 	Source          Source             `bson:"source" json:"source"`
 	Images          []string           `bson:"images" json:"images"`
+	IsSrd           bool               `bson:"isSrd" json:"isSrd"`
 }
 
 type TypeName struct {

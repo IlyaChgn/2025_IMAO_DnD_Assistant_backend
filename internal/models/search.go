@@ -25,4 +25,5 @@ type FilterParams struct {
 	ImmunityCondition   []string `json:"immunityCondition"`
 	Features            []string `json:"features"`
 	Environment         []string `json:"environment"`
+	IsSrd               *bool    `json:"isSrd,omitempty"`
 }
