@@ -2001,5 +2001,336 @@
       "nature",
       "choice"
     ]
+  },
+  {
+    "engName": "oath_spells_devotion",
+    "name": {
+      "eng": "Oath Spells (Devotion)",
+      "rus": "Заклинания клятвы (Благочестие)"
+    },
+    "description": {
+      "eng": "You gain oath spells at the paladin levels listed: 3rd — Protection from Evil and Good, Sanctuary; 5th — Lesser Restoration, Zone of Truth; 9th — Beacon of Hope, Dispel Magic; 13th — Freedom of Movement, Guardian of Faith; 17th — Commune, Flame Strike.",
+      "rus": "Вы получаете заклинания клятвы: 3 — «Защита от добра и зла», «Убежище»; 5 — «Малое восстановление», «Зона истины»; 9 — «Маяк надежды», «Рассеивание магии»; 13 — «Свобода передвижения», «Хранитель веры»; 17 — «Общение», «Огненный удар»."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Devotion",
+    "level": 3,
+    "tags": [
+      "spellcasting"
+    ]
+  },
+  {
+    "engName": "channel_divinity_sacred_weapon",
+    "name": {
+      "eng": "Channel Divinity: Sacred Weapon",
+      "rus": "Проводник божественной силы: Священное оружие"
+    },
+    "description": {
+      "eng": "As an action, you can imbue one weapon you are holding with positive energy. For 1 minute, you add your Charisma modifier to attack rolls made with that weapon (min +1). The weapon also emits bright light in a 20-foot radius and dim light 20 feet beyond that. If the weapon is not already magical, it becomes magical for the duration.",
+      "rus": "Действием вы наполняете оружие в руках положительной энергией. В течение 1 минуты вы добавляете модификатор Харизмы к броскам атаки этим оружием (минимум +1). Оружие испускает яркий свет в радиусе 6 метров и тусклый ещё 6 метров. Немагическое оружие становится магическим на это время."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Devotion",
+    "level": 3,
+    "tags": [
+      "channel_divinity",
+      "combat"
+    ]
+  },
+  {
+    "engName": "channel_divinity_turn_the_unholy",
+    "name": {
+      "eng": "Channel Divinity: Turn the Unholy",
+      "rus": "Проводник божественной силы: Обращение нечестивых"
+    },
+    "description": {
+      "eng": "As an action, you present your holy symbol and speak a prayer censuring fiends and undead. Each fiend or undead that can see or hear you within 30 feet must make a Wisdom saving throw. On a failed save, the creature is turned for 1 minute or until it takes damage.",
+      "rus": "Действием вы предъявляете святой символ и произносите молитву, осуждающую исчадий и нежить. Каждое исчадие или нежить в пределах 9 метров, видящие или слышащие вас, должны пройти испытание Мудрости или обратиться в бегство на 1 минуту (или до получения урона)."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Devotion",
+    "level": 3,
+    "tags": [
+      "channel_divinity",
+      "undead",
+      "fiend"
+    ]
+  },
+  {
+    "engName": "aura_of_devotion",
+    "name": {
+      "eng": "Aura of Devotion",
+      "rus": "Аура благочестия"
+    },
+    "description": {
+      "eng": "You and friendly creatures within 10 feet of you cannot be charmed while you are conscious. At 18th level, the range increases to 30 feet.",
+      "rus": "Вы и дружественные существа в пределах 3 метров не могут быть очарованы, пока вы в сознании. На 18-м уровне радиус возрастает до 9 метров."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Devotion",
+    "level": 7,
+    "tags": [
+      "aura",
+      "defense"
+    ]
+  },
+  {
+    "engName": "purity_of_spirit",
+    "name": {
+      "eng": "Purity of Spirit",
+      "rus": "Чистота духа"
+    },
+    "description": {
+      "eng": "You are always under the effects of a Protection from Evil and Good spell.",
+      "rus": "На вас постоянно действует заклинание «Защита от добра и зла»."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Devotion",
+    "level": 15,
+    "tags": [
+      "defense",
+      "passive"
+    ]
+  },
+  {
+    "engName": "holy_nimbus",
+    "name": {
+      "eng": "Holy Nimbus",
+      "rus": "Священный нимб"
+    },
+    "description": {
+      "eng": "As an action, you can emanate an aura of sunlight. For 1 minute, bright light shines from you in a 30-foot radius, and dim light shines 30 feet beyond that. Whenever an enemy creature starts its turn in the bright light, it takes 10 radiant damage. Additionally, for the duration, you have advantage on saving throws against spells cast by fiends or undead.",
+      "rus": "Действием вы испускаете ауру солнечного света. В течение 1 минуты яркий свет освещает 9 метров вокруг, тусклый — ещё 9 метров. Враждебные существа, начинающие ход в ярком свете, получают 10 урона излучением. Кроме того, вы имеете преимущество на испытания против заклинаний исчадий и нежити."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Devotion",
+    "level": 20,
+    "tags": [
+      "ultimate",
+      "radiant",
+      "aura"
+    ]
+  },
+  {
+    "engName": "oath_spells_ancients",
+    "name": {
+      "eng": "Oath Spells (Ancients)",
+      "rus": "Заклинания клятвы (Древние)"
+    },
+    "description": {
+      "eng": "You gain oath spells: 3rd — Ensnaring Strike, Speak with Animals; 5th — Moonbeam, Misty Step; 9th — Plant Growth, Protection from Energy; 13th — Ice Storm, Stoneskin; 17th — Commune with Nature, Tree Stride.",
+      "rus": "Вы получаете заклинания клятвы: 3 — «Опутывающий удар», «Разговор с животными»; 5 — «Лунный луч», «Туманный шаг»; 9 — «Рост растений», «Защита от энергии»; 13 — «Ледяной шторм», «Каменная кожа»; 17 — «Единение с природой», «Шаг дерева»."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of the Ancients",
+    "level": 3,
+    "tags": [
+      "spellcasting"
+    ]
+  },
+  {
+    "engName": "channel_divinity_natures_wrath",
+    "name": {
+      "eng": "Channel Divinity: Nature's Wrath",
+      "rus": "Проводник: Гнев природы"
+    },
+    "description": {
+      "eng": "You can use your Channel Divinity to invoke primeval forces to ensnare a foe. As an action, you can cause spectral vines to spring up and reach for a creature within 10 feet. The creature must succeed on a Strength or Dexterity saving throw (its choice) or be restrained. While restrained, the creature repeats the saving throw at the end of each of its turns. On a success, it frees itself.",
+      "rus": "Действием вы вызываете призрачные лозы, которые тянутся к существу в пределах 3 метров. Оно должно пройти испытание Силы или Ловкости (на выбор) или оказаться обездвиженным. В конце каждого хода существо повторяет испытание, на успехе освобождаясь."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of the Ancients",
+    "level": 3,
+    "tags": [
+      "channel_divinity",
+      "control"
+    ]
+  },
+  {
+    "engName": "channel_divinity_turn_the_faithless",
+    "name": {
+      "eng": "Channel Divinity: Turn the Faithless",
+      "rus": "Проводник: Обращение безбожных"
+    },
+    "description": {
+      "eng": "You can use your Channel Divinity to utter ancient words that are painful for fey and fiends to hear. As an action, each fey or fiend within 30 feet that can see or hear you must make a Wisdom saving throw. On a failed save, the creature is turned for 1 minute or until it takes damage.",
+      "rus": "Действием вы произносите древние слова, причиняющие боль фейри и исчадиям. Каждое фейри или исчадие в пределах 9 метров, видящие или слышащие вас, должны пройти испытание Мудрости или обратиться в бегство на 1 минуту (или до получения урона)."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of the Ancients",
+    "level": 3,
+    "tags": [
+      "channel_divinity",
+      "fey",
+      "fiend"
+    ]
+  },
+  {
+    "engName": "aura_of_warding",
+    "name": {
+      "eng": "Aura of Warding",
+      "rus": "Аура защиты"
+    },
+    "description": {
+      "eng": "Ancient magic lies so heavily upon you that it forms an eldritch ward. You and friendly creatures within 10 feet of you have resistance to damage from spells. At 18th level, the range increases to 30 feet.",
+      "rus": "Древняя магия столь сильно давит на вас, что образует мистическую защиту. Вы и дружественные существа в пределах 3 метров получаете сопротивление урону от заклинаний. На 18-м уровне радиус возрастает до 9 метров."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of the Ancients",
+    "level": 7,
+    "tags": [
+      "aura",
+      "defense",
+      "resistance"
+    ]
+  },
+  {
+    "engName": "undying_sentinel",
+    "name": {
+      "eng": "Undying Sentinel",
+      "rus": "Бессмертный страж"
+    },
+    "description": {
+      "eng": "When you are reduced to 0 hit points and are not killed outright, you can choose to drop to 1 hit point instead. Once you use this feature, you cannot use it again until you finish a long rest. Additionally, you suffer none of the drawbacks of old age, and you cannot be aged magically.",
+      "rus": "Когда вас опускают до 0 хитов без немедленной смерти, вы можете вместо этого остаться с 1 хитом. После использования — длинный отдых. Кроме того, вы не страдаете от недостатков старости и не можете быть состарены магически."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of the Ancients",
+    "level": 15,
+    "tags": [
+      "defense",
+      "survival"
+    ]
+  },
+  {
+    "engName": "elder_champion",
+    "name": {
+      "eng": "Elder Champion",
+      "rus": "Древний чемпион"
+    },
+    "description": {
+      "eng": "You can assume the form of an ancient force of nature, taking on an appearance you choose. For 1 minute, you gain: at the start of each turn you regain 10 hit points, you can cast paladin spells with a casting time of 1 action as a bonus action, and hostile creatures within 10 feet have disadvantage on saves against your paladin spells and Channel Divinity options.",
+      "rus": "Вы принимаете облик древней природной силы на 1 минуту: в начале каждого хода восстанавливаете 10 хитов, заклинания паладина с временем накладывания 1 действие накладываете бонусным действием, враждебные существа в пределах 3 метров с помехой на испытания от ваших заклинаний и Проводника."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of the Ancients",
+    "level": 20,
+    "tags": [
+      "ultimate",
+      "nature",
+      "transformation"
+    ]
+  },
+  {
+    "engName": "oath_spells_vengeance",
+    "name": {
+      "eng": "Oath Spells (Vengeance)",
+      "rus": "Заклинания клятвы (Месть)"
+    },
+    "description": {
+      "eng": "You gain oath spells: 3rd — Bane, Hunter's Mark; 5th — Hold Person, Misty Step; 9th — Haste, Protection from Energy; 13th — Banishment, Dimension Door; 17th — Hold Monster, Scrying.",
+      "rus": "Вы получаете заклинания клятвы: 3 — «Порча», «Метка охотника»; 5 — «Удержание личности», «Туманный шаг»; 9 — «Ускорение», «Защита от энергии»; 13 — «Изгнание», «Межпространственная дверь»; 17 — «Удержание чудовища», «Ясновидение»."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Vengeance",
+    "level": 3,
+    "tags": [
+      "spellcasting"
+    ]
+  },
+  {
+    "engName": "channel_divinity_abjure_enemy",
+    "name": {
+      "eng": "Channel Divinity: Abjure Enemy",
+      "rus": "Проводник: Запрет врагу"
+    },
+    "description": {
+      "eng": "As an action, you present your holy symbol and speak a prayer of denunciation. Choose one creature you can see within 60 feet. That creature must make a Wisdom saving throw, unless it is immune to the frightened condition. Fiends and undead have disadvantage on this saving throw. On a failed save, the creature is frightened for 1 minute or until it takes any damage. While frightened, its speed is 0.",
+      "rus": "Действием вы предъявляете святой символ и произносите молитву. Выберите одно существо в пределах 18 метров. Оно должно пройти испытание Мудрости (исчадия и нежить с помехой) или оказаться напуганным на 1 минуту (или до получения урона). Напуганное существо не может двигаться."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Vengeance",
+    "level": 3,
+    "tags": [
+      "channel_divinity",
+      "control",
+      "fear"
+    ]
+  },
+  {
+    "engName": "channel_divinity_vow_of_enmity",
+    "name": {
+      "eng": "Channel Divinity: Vow of Enmity",
+      "rus": "Проводник: Клятва вражды"
+    },
+    "description": {
+      "eng": "As a bonus action, you can utter a vow of enmity against a creature you can see within 10 feet. You gain advantage on attack rolls against the creature for 1 minute or until it drops to 0 hit points or falls unconscious.",
+      "rus": "Бонусным действием вы произносите клятву вражды против видимого существа в пределах 3 метров. Вы получаете преимущество на броски атаки против него в течение 1 минуты или пока оно не потеряет сознание."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Vengeance",
+    "level": 3,
+    "tags": [
+      "channel_divinity",
+      "combat",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "relentless_avenger",
+    "name": {
+      "eng": "Relentless Avenger",
+      "rus": "Неустанный мститель"
+    },
+    "description": {
+      "eng": "Your supernatural focus helps you close off a foe's retreat. When you hit a creature with an opportunity attack, you can move up to half your speed immediately after the attack as part of the same reaction. This movement doesn't provoke opportunity attacks.",
+      "rus": "Когда вы попадаете атакой по возможности, вы можете немедленно переместиться на расстояние до половины скорости как часть той же реакции. Это перемещение не провоцирует атаки по возможности."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Vengeance",
+    "level": 7,
+    "tags": [
+      "combat",
+      "movement",
+      "reaction"
+    ]
+  },
+  {
+    "engName": "soul_of_vengeance",
+    "name": {
+      "eng": "Soul of Vengeance",
+      "rus": "Душа мести"
+    },
+    "description": {
+      "eng": "The authority with which you speak your Vow of Enmity gives you greater power over your foe. When a creature under your Vow of Enmity makes an attack, you can use your reaction to make a melee weapon attack against that creature if it is within range.",
+      "rus": "Когда существо, против которого действует ваша Клятва вражды, совершает атаку, вы можете реакцией совершить рукопашную атаку оружием против этого существа, если оно в досягаемости."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Vengeance",
+    "level": 15,
+    "tags": [
+      "combat",
+      "reaction"
+    ]
+  },
+  {
+    "engName": "avenging_angel",
+    "name": {
+      "eng": "Avenging Angel",
+      "rus": "Ангел-мститель"
+    },
+    "description": {
+      "eng": "You can assume the form of an angelic avenger. For 1 minute you sprout wings with a flying speed of 60 feet. Additionally, whenever an enemy creature starts its turn within 30 feet of you, it must succeed on a Wisdom saving throw or be frightened of you until the end of its turn.",
+      "rus": "Вы принимаете облик ангела-мстителя на 1 минуту: вырастают крылья со скоростью полёта 18 метров. Кроме того, враждебные существа, начинающие ход в пределах 9 метров, должны пройти испытание Мудрости или оказаться напуганными вами до конца своего хода."
+    },
+    "source": "srd",
+    "sourceDetail": "Paladin: Oath of Vengeance",
+    "level": 20,
+    "tags": [
+      "ultimate",
+      "flight",
+      "fear",
+      "transformation"
+    ]
   }
 ]

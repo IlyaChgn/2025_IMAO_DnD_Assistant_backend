@@ -2529,6 +2529,86 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "ancients",
+        "name": {
+          "eng": "Oath of the Ancients",
+          "rus": "Клятва древних"
+        },
+        "description": {
+          "eng": "The Oath of the Ancients is as old as the race of elves and the rituals of the druids. Paladins who swear this oath love the light for the beauty it brings to the world, not because it reveals the wicked.",
+          "rus": "Клятва древних столь же стара, как эльфийская раса и друидические ритуалы. Паладины, давшие эту клятву, любят свет за красоту, которую он дарит миру, а не за то, что он разоблачает злодеев."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "oath_spells_ancients",
+              "channel_divinity_natures_wrath",
+              "channel_divinity_turn_the_faithless"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "aura_of_warding"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "undying_sentinel"
+            ]
+          },
+          {
+            "level": 20,
+            "features": [
+              "elder_champion"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "vengeance",
+        "name": {
+          "eng": "Oath of Vengeance",
+          "rus": "Клятва мести"
+        },
+        "description": {
+          "eng": "The Oath of Vengeance is a solemn commitment to punish those who have committed a grievous sin. Paladins who adhere to this oath are willing to sacrifice even their own righteousness to mete out justice.",
+          "rus": "Клятва мести — торжественное обязательство покарать тех, кто совершил тяжкий грех. Паладины этой клятвы готовы пожертвовать собственной праведностью ради свершения правосудия."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "oath_spells_vengeance",
+              "channel_divinity_abjure_enemy",
+              "channel_divinity_vow_of_enmity"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "relentless_avenger"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "soul_of_vengeance"
+            ]
+          },
+          {
+            "level": 20,
+            "features": [
+              "avenging_angel"
+            ]
+          }
+        ]
       }
     ],
     "features": [
