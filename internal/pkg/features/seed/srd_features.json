@@ -2777,5 +2777,152 @@
       "ki",
       "elemental"
     ]
+  },
+  {
+    "engName": "hunters_prey",
+    "name": {
+      "eng": "Hunter's Prey",
+      "rus": "Добыча охотника"
+    },
+    "description": {
+      "eng": "At 3rd level, you gain one of the following features of your choice: Colossus Slayer (once per turn, deal 1d8 extra damage to a creature below its hit point maximum), Giant Killer (when a Large or larger creature within 5 ft attacks you, you can use your reaction to attack it), or Horde Breaker (once per turn, attack a second creature within 5 ft of the first with the same weapon).",
+      "rus": "На 3-м уровне выберите одну из особенностей: Убийца колоссов (раз в ход, 1к8 доп. урона по существу с неполными хитами), Истребитель великанов (реакцией атакуете Большое или крупнее существо, когда оно атакует вас), или Сеятель хаоса (раз в ход атакуете второе существо в пределах 1,5 м от первого тем же оружием)."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Hunter",
+    "level": 3,
+    "tags": [
+      "combat",
+      "choice"
+    ]
+  },
+  {
+    "engName": "defensive_tactics",
+    "name": {
+      "eng": "Defensive Tactics",
+      "rus": "Оборонительная тактика"
+    },
+    "description": {
+      "eng": "At 7th level, you gain one of the following features of your choice: Escape the Horde (opportunity attacks against you are made with disadvantage), Multiattack Defense (when a creature hits you with an attack, you gain +4 AC against all subsequent attacks from that creature for the rest of the turn), or Steel Will (advantage on saving throws against being frightened).",
+      "rus": "На 7-м уровне выберите одну из особенностей: Уход от толпы (атаки по возможности против вас с помехой), Многоатакующая защита (+4 к КД против последующих атак существа, уже попавшего по вам в этом ходу), или Железная воля (преимущество на испытания против испуга)."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Hunter",
+    "level": 7,
+    "tags": [
+      "defense",
+      "choice"
+    ]
+  },
+  {
+    "engName": "multiattack_hunter",
+    "name": {
+      "eng": "Multiattack (Hunter)",
+      "rus": "Многократная атака (Охотник)"
+    },
+    "description": {
+      "eng": "At 11th level, you gain one of the following features of your choice: Volley (use your action to make a ranged attack against any number of creatures within 10 feet of a point you can see within your range, expending one piece of ammunition per target) or Whirlwind Attack (use your action to make a melee attack against any number of creatures within 5 feet of you, with a separate attack roll for each target).",
+      "rus": "На 11-м уровне выберите одну из особенностей: Залп (действием атакуете всех существ в пределах 3 м от выбранной точки дальнобойной атакой, тратя боеприпас на каждую цель) или Вихревая атака (действием атакуете всех существ в пределах 1,5 м рукопашной атакой с отдельным броском на каждую цель)."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Hunter",
+    "level": 11,
+    "tags": [
+      "combat",
+      "multiattack",
+      "choice"
+    ]
+  },
+  {
+    "engName": "superior_hunters_defense",
+    "name": {
+      "eng": "Superior Hunter's Defense",
+      "rus": "Превосходная защита охотника"
+    },
+    "description": {
+      "eng": "At 15th level, you gain one of the following features of your choice: Evasion (when you are subjected to an effect that allows a Dexterity saving throw for half damage, you take no damage on a success and half damage on a failure) or Stand Against the Tide (when a hostile creature misses you with a melee attack, you can use your reaction to force that creature to repeat the same attack against another creature of your choice).",
+      "rus": "На 15-м уровне выберите одну из особенностей: Уклонение (при успешном испытании Ловкости на половину урона получаете 0 урона, при провале — половину) или Стойте против прилива (когда враг промахивается рукопашной атакой, вы реакцией можете заставить его повторить атаку против другого существа на ваш выбор)."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Hunter",
+    "level": 15,
+    "tags": [
+      "defense",
+      "choice"
+    ]
+  },
+  {
+    "engName": "ranger_companion",
+    "name": {
+      "eng": "Ranger's Companion",
+      "rus": "Компаньон рейнджера"
+    },
+    "description": {
+      "eng": "At 3rd level, you gain a beast companion that accompanies you on your adventures and is trained to fight alongside you. Choose a beast that is no larger than Medium and that has a challenge rating of 1/4 or lower. Add your proficiency bonus to the beast's AC, attack rolls, and damage rolls, as well as to any saving throws and skills it is proficient in. Its hit point maximum equals its normal maximum or four times your ranger level, whichever is higher. The beast obeys your commands. On your turn you can verbally command it to take the Attack, Dash, Disengage, Dodge, or Help action.",
+      "rus": "На 3-м уровне вы получаете компаньона-зверя, который сопровождает вас и обучен сражаться рядом. Выберите зверя не крупнее Среднего с рейтингом опасности не выше 1/4. Добавьте бонус мастерства к его КД, броскам атаки и урона, испытаниям и навыкам. Максимум его хитов равен обычному максимуму или учетверённому уровню рейнджера (что выше). Зверь выполняет ваши команды: Атака, Рывок, Отход, Уклонение или Помощь."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Beast Master",
+    "level": 3,
+    "tags": [
+      "companion",
+      "beast"
+    ]
+  },
+  {
+    "engName": "exceptional_training",
+    "name": {
+      "eng": "Exceptional Training",
+      "rus": "Исключительная подготовка"
+    },
+    "description": {
+      "eng": "Beginning at 7th level, on any of your turns when your beast companion does not attack, you can use a bonus action to command it to take the Dash, Disengage, Dodge, or Help action. In addition, the beast's attacks now count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.",
+      "rus": "Начиная с 7-го уровня, в ходы, когда ваш компаньон не атакует, вы можете бонусным действием скомандовать ему совершить Рывок, Отход, Уклонение или Помощь. Кроме того, атаки зверя теперь считаются магическими для преодоления сопротивления и иммунитета."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Beast Master",
+    "level": 7,
+    "tags": [
+      "companion",
+      "beast",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "bestial_fury",
+    "name": {
+      "eng": "Bestial Fury",
+      "rus": "Звериная ярость"
+    },
+    "description": {
+      "eng": "Starting at 11th level, when you command your beast companion to take the Attack action, the beast can make two attacks, or it can take the Multiattack action if it has that action.",
+      "rus": "Начиная с 11-го уровня, когда вы командуете компаньону совершить Атаку, он может атаковать дважды или использовать Многократную атаку, если она у него есть."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Beast Master",
+    "level": 11,
+    "tags": [
+      "companion",
+      "beast",
+      "combat"
+    ]
+  },
+  {
+    "engName": "share_spells",
+    "name": {
+      "eng": "Share Spells",
+      "rus": "Общие заклинания"
+    },
+    "description": {
+      "eng": "Beginning at 15th level, when you cast a spell targeting yourself, you can also affect your beast companion with the spell if the beast is within 30 feet of you.",
+      "rus": "Начиная с 15-го уровня, когда вы накладываете заклинание на себя, вы можете также распространить его на вашего компаньона, если тот находится в пределах 9 метров от вас."
+    },
+    "source": "srd",
+    "sourceDetail": "Ranger: Beast Master",
+    "level": 15,
+    "tags": [
+      "companion",
+      "spellcasting"
+    ]
   }
 ]

@@ -3058,6 +3058,44 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "beast_master",
+        "name": {
+          "eng": "Beast Master",
+          "rus": "Повелитель зверей"
+        },
+        "description": {
+          "eng": "The Beast Master archetype embodies a friendship between the civilized races and the beasts of the world. United with its animal companion, a Beast Master ranger forms a powerful bond that allows the pair to fight together as one.",
+          "rus": "Архетип Повелителя зверей воплощает дружбу между цивилизованными расами и животными мира. Объединившись с животным компаньоном, рейнджер-Повелитель зверей образует мощную связь, позволяющую им сражаться как единое целое."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "ranger_companion"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "exceptional_training"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "bestial_fury"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "share_spells"
+            ]
+          }
+        ]
       }
     ],
     "features": [
