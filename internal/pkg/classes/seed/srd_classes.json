@@ -1676,6 +1676,45 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "moon",
+        "name": {
+          "eng": "Circle of the Moon",
+          "rus": "Круг луны"
+        },
+        "description": {
+          "eng": "Druids of the Circle of the Moon are fierce guardians of the wilds. They can transform into more powerful animal forms and are masters of wild shape.",
+          "rus": "Друиды Круга луны — суровые стражи дикой природы, способные принимать облик более мощных животных и превосходно владеющие диким обликом."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "combat_wild_shape",
+              "circle_forms"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "primal_strike"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "elemental_wild_shape"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "thousand_forms"
+            ]
+          }
+        ]
       }
     ],
     "features": [

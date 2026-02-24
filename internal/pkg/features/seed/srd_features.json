@@ -2332,5 +2332,207 @@
       "fear",
       "transformation"
     ]
+  },
+  {
+    "engName": "bonus_cantrip_land",
+    "name": {
+      "eng": "Bonus Cantrip (Land)",
+      "rus": "Дополнительный заговор (Земля)"
+    },
+    "description": {
+      "eng": "When you choose this circle at 2nd level, you learn one additional druid cantrip of your choice.",
+      "rus": "Когда вы выбираете этот круг на 2-м уровне, вы изучаете один дополнительный заговор друида на ваш выбор."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Land",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "cantrip"
+    ]
+  },
+  {
+    "engName": "natural_recovery",
+    "name": {
+      "eng": "Natural Recovery",
+      "rus": "Природное восстановление"
+    },
+    "description": {
+      "eng": "Starting at 2nd level, you can regain some of your magical energy by sitting in meditation and communing with nature. During a short rest, you choose expended spell slots to recover. The spell slots can have a combined level equal to or less than half your druid level (rounded up), and none of the slots can be 6th level or higher. You can use this feature once per long rest.",
+      "rus": "Начиная со 2-го уровня, во время короткого отдыха вы можете восстановить часть потраченных ячеек заклинаний. Суммарный уровень восстанавливаемых ячеек не может превышать половину вашего уровня друида (округлённую вверх), а сами ячейки — 6-го уровня и выше. Использование — 1 раз за длинный отдых."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Land",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "recovery"
+    ]
+  },
+  {
+    "engName": "circle_spells",
+    "name": {
+      "eng": "Circle Spells",
+      "rus": "Заклинания круга"
+    },
+    "description": {
+      "eng": "Your mystical connection to the land infuses you with the ability to cast certain spells. At 3rd, 5th, 7th, and 9th level you gain access to circle spells connected to the land where you became a druid. Choose that land — Arctic, Coast, Desert, Forest, Grassland, Mountain, Swamp, or Underdark — and consult the associated list of spells. Once you gain access to a circle spell, you always have it prepared.",
+      "rus": "Ваша мистическая связь с землёй наполняет вас способностью накладывать определённые заклинания. На 3, 5, 7 и 9-м уровнях вы получаете доступ к заклинаниям круга, связанным с местностью, где вы стали друидом. Выберите местность (Арктика, Побережье, Пустыня, Лес, Луга, Горы, Болото или Подземье) — эти заклинания всегда считаются подготовленными."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Land",
+    "level": 3,
+    "tags": [
+      "spellcasting",
+      "choice"
+    ]
+  },
+  {
+    "engName": "lands_stride",
+    "name": {
+      "eng": "Land's Stride",
+      "rus": "Шаг земли"
+    },
+    "description": {
+      "eng": "Starting at 6th level, moving through nonmagical difficult terrain costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard. In addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement.",
+      "rus": "Начиная с 6-го уровня, перемещение по немагической труднопроходимой местности не стоит дополнительного движения. Вы также проходите сквозь немагические растения без замедления и без урона от шипов. Кроме того, вы имеете преимущество на испытания против магически созданных растений, препятствующих движению."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Land",
+    "level": 6,
+    "tags": [
+      "movement",
+      "nature",
+      "passive"
+    ]
+  },
+  {
+    "engName": "natures_ward",
+    "name": {
+      "eng": "Nature's Ward",
+      "rus": "Защита природы"
+    },
+    "description": {
+      "eng": "When you reach 10th level, you cannot be charmed or frightened by elementals or fey, and you are immune to poison and disease.",
+      "rus": "Достигнув 10-го уровня, вы не можете быть очарованы или напуганы элементалями или фейри, а также иммунны к яду и болезням."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Land",
+    "level": 10,
+    "tags": [
+      "defense",
+      "immunity",
+      "passive"
+    ]
+  },
+  {
+    "engName": "natures_sanctuary",
+    "name": {
+      "eng": "Nature's Sanctuary",
+      "rus": "Святилище природы"
+    },
+    "description": {
+      "eng": "When you reach 14th level, creatures of the natural world sense your connection to nature and become hesitant to attack you. When a beast or plant creature attacks you, that creature must make a Wisdom saving throw against your druid spell save DC. On a failed save, the creature must choose a different target, or the attack automatically misses.",
+      "rus": "Достигнув 14-го уровня, существа природного мира ощущают вашу связь с природой. Когда зверь или растение атакует вас, оно должно пройти испытание Мудрости против Сл ваших заклинаний. При провале оно должно выбрать другую цель, иначе атака автоматически промахивается."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Land",
+    "level": 14,
+    "tags": [
+      "defense",
+      "nature"
+    ]
+  },
+  {
+    "engName": "combat_wild_shape",
+    "name": {
+      "eng": "Combat Wild Shape",
+      "rus": "Боевой дикий облик"
+    },
+    "description": {
+      "eng": "When you choose this circle at 2nd level, you gain the ability to use Wild Shape as a bonus action, rather than as an action. Additionally, while you are transformed by Wild Shape, you can use a bonus action to expend one spell slot to regain 1d8 hit points per level of the spell slot expended.",
+      "rus": "Вы можете использовать Дикий облик бонусным действием вместо действия. Кроме того, находясь в диком облике, вы можете бонусным действием потратить ячейку заклинания, восстанавливая 1к8 хитов за каждый уровень ячейки."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Moon",
+    "level": 2,
+    "tags": [
+      "wild_shape",
+      "combat",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "circle_forms",
+    "name": {
+      "eng": "Circle Forms",
+      "rus": "Облики круга"
+    },
+    "description": {
+      "eng": "The rites of your circle grant you the ability to transform into more dangerous animal forms. Starting at 2nd level, you can use your Wild Shape to transform into a beast with a challenge rating as high as 1 (you ignore the Max. CR column of the Beast Shapes table, but must abide by the other limitations there). Starting at 6th level, you can transform into a beast with a challenge rating as high as your druid level divided by 3, rounded down.",
+      "rus": "Ритуалы вашего круга позволяют принимать облик более опасных животных. Начиная со 2-го уровня, вы можете трансформироваться в зверя с рейтингом опасности до 1. С 6-го уровня — до значения вашего уровня друида, делённого на 3 (округлённого вниз)."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Moon",
+    "level": 2,
+    "tags": [
+      "wild_shape",
+      "passive"
+    ]
+  },
+  {
+    "engName": "primal_strike",
+    "name": {
+      "eng": "Primal Strike",
+      "rus": "Первобытный удар"
+    },
+    "description": {
+      "eng": "Starting at 6th level, your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.",
+      "rus": "Начиная с 6-го уровня, ваши атаки в облике зверя считаются магическими для преодоления сопротивления и иммунитета к немагическим атакам и урону."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Moon",
+    "level": 6,
+    "tags": [
+      "wild_shape",
+      "combat",
+      "passive"
+    ]
+  },
+  {
+    "engName": "elemental_wild_shape",
+    "name": {
+      "eng": "Elemental Wild Shape",
+      "rus": "Стихийный дикий облик"
+    },
+    "description": {
+      "eng": "At 10th level, you can expend two uses of Wild Shape at the same time to transform into an air elemental, an earth elemental, a fire elemental, or a water elemental.",
+      "rus": "На 10-м уровне вы можете потратить два использования Дикого облика одновременно, чтобы превратиться в воздушного, земляного, огненного или водного элементаля."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Moon",
+    "level": 10,
+    "tags": [
+      "wild_shape",
+      "elemental"
+    ]
+  },
+  {
+    "engName": "thousand_forms",
+    "name": {
+      "eng": "Thousand Forms",
+      "rus": "Тысяча обликов"
+    },
+    "description": {
+      "eng": "By 14th level, you have learned to use magic to alter your physical form in more subtle ways. You can cast the Alter Self spell at will.",
+      "rus": "К 14-му уровню вы научились с помощью магии изменять физический облик тоньше. Вы можете накладывать заклинание «Изменить облик» по желанию."
+    },
+    "source": "srd",
+    "sourceDetail": "Druid: Circle of the Moon",
+    "level": 14,
+    "tags": [
+      "spellcasting",
+      "transformation"
+    ]
   }
 ]
