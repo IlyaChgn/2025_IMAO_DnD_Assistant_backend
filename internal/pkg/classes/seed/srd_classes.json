@@ -3096,6 +3096,21 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "wild_magic",
+        "name": { "eng": "Wild Magic", "rus": "Дикая магия" },
+        "description": {
+          "eng": "Your innate magic comes from the wild forces of chaos that underlie the order of creation. You might have endured exposure to some form of raw magic, or perhaps a fairy's blessing, or an encounter with a deity of magic.",
+          "rus": "Ваша врождённая магия исходит из диких сил хаоса, лежащих в основе порядка мироздания. Возможно, вы подверглись воздействию грубой магии, получили благословение феи или встретились с божеством магии."
+        },
+        "source": "srd",
+        "features": [
+          { "level": 1, "features": ["wild_magic_surge", "tides_of_chaos"] },
+          { "level": 6, "features": ["bend_luck"] },
+          { "level": 14, "features": ["controlled_chaos"] },
+          { "level": 18, "features": ["spell_bombardment"] }
+        ]
       }
     ],
     "features": [

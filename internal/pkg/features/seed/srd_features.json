@@ -856,6 +856,129 @@
     "tags": ["spellcasting", "passive"]
   },
   {
+    "engName": "dragon_ancestor",
+    "name": { "eng": "Dragon Ancestor", "rus": "Драконий предок" },
+    "description": {
+      "eng": "At 1st level, you choose one type of dragon as your ancestor. The damage type associated with each dragon is used by features you gain later. You can speak, read, and write Draconic. Additionally, whenever you make a Charisma check when interacting with dragons, your proficiency bonus is doubled if it applies to the check.",
+      "rus": "На 1-м уровне вы выбираете тип дракона в качестве своего предка. Тип урона этого дракона используется в последующих способностях. Вы можете говорить, читать и писать на Драконьем. Кроме того, когда вы делаете проверку Харизмы при взаимодействии с драконами, ваш бонус мастерства удваивается, если он применим."
+    },
+    "source": "subclass",
+    "sourceDetail": "draconic",
+    "level": 1,
+    "tags": ["language", "choice", "charisma"]
+  },
+  {
+    "engName": "draconic_resilience",
+    "name": { "eng": "Draconic Resilience", "rus": "Драконья живучесть" },
+    "description": {
+      "eng": "As magic flows through your body, it causes physical traits of your dragon ancestors to emerge. At 1st level, your hit point maximum increases by 1 and increases by 1 again whenever you gain a level in this class. Additionally, parts of your skin are covered by a thin sheen of dragon-like scales. When you aren't wearing armor, your AC equals 13 + your Dexterity modifier.",
+      "rus": "Магия, текущая через ваше тело, проявляет физические черты ваших драконьих предков. На 1-м уровне максимум хитов увеличивается на 1 и ещё на 1 с каждым уровнем жреца. Кроме того, части вашей кожи покрыты тонким слоем чешуи. Когда вы не носите доспех, ваш КД равен 13 + ваш модификатор Ловкости."
+    },
+    "source": "subclass",
+    "sourceDetail": "draconic",
+    "level": 1,
+    "tags": ["hp", "armor", "passive"]
+  },
+  {
+    "engName": "elemental_affinity",
+    "name": { "eng": "Elemental Affinity", "rus": "Стихийное родство" },
+    "description": {
+      "eng": "Starting at 6th level, when you cast a spell that deals damage of the type associated with your draconic ancestry, you can add your Charisma modifier to one damage roll of that spell. At the same time, you can spend 1 sorcery point to gain resistance to that damage type for 1 hour.",
+      "rus": "Начиная с 6-го уровня, когда вы накладываете заклинание, наносящее урон типа вашего драконьего предка, вы можете добавить модификатор Харизмы к одному броску урона. Кроме того, вы можете потратить 1 очко волшебства, чтобы получить сопротивление этому типу урона на 1 час."
+    },
+    "source": "subclass",
+    "sourceDetail": "draconic",
+    "level": 6,
+    "tags": ["elemental", "sorcery_point", "passive"]
+  },
+  {
+    "engName": "dragon_wings",
+    "name": { "eng": "Dragon Wings", "rus": "Драконьи крылья" },
+    "description": {
+      "eng": "At 14th level, you gain the ability to sprout a pair of dragon wings from your back, gaining a flying speed equal to your current speed. You can create these wings as a bonus action on your turn. They last until you dismiss them as a bonus action on your turn. You can't manifest your wings while wearing armor unless the armor is made to accommodate them, and clothing not made to accommodate your wings might be destroyed when you manifest them.",
+      "rus": "На 14-м уровне вы получаете способность выпускать пару драконьих крыльев за спиной, получая скорость полёта, равную вашей текущей скорости. Вы можете создать эти крылья бонусным действием в свой ход. Они сохраняются до тех пор, пока вы не уберёте их другим бонусным действием. Вы не можете проявить крылья в доспехе, если он не приспособлен для этого."
+    },
+    "source": "subclass",
+    "sourceDetail": "draconic",
+    "level": 14,
+    "tags": ["movement", "flight", "bonus_action"]
+  },
+  {
+    "engName": "draconic_presence",
+    "name": { "eng": "Draconic Presence", "rus": "Драконье присутствие" },
+    "description": {
+      "eng": "Beginning at 18th level, you can channel the dread presence of your dragon ancestor, causing those around you to become awestruck or frightened. As an action, you can spend 5 sorcery points to draw on this power and exude an aura of awe or fear (your choice) to a distance of 60 feet. For 1 minute or until you lose your concentration, each hostile creature that starts its turn in this aura must succeed on a Wisdom saving throw or be charmed (if you chose awe) or frightened (if you chose fear) until the aura ends.",
+      "rus": "Начиная с 18-го уровня вы можете направить грозное присутствие своего драконьего предка, повергая окружающих в трепет или ужас. Вы действием тратите 5 очков волшебства, чтобы излучать ауру восхищения или страха (на ваш выбор) в радиусе 60 футов. В течение 1 минуты или до потери концентрации каждый враждебный противник, начинающий ход в ауре, должен пройти спасбросок Мудрости или оказаться очарованным (восхищение) или испуганным (страх) до конца ауры."
+    },
+    "source": "subclass",
+    "sourceDetail": "draconic",
+    "level": 18,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["aura", "sorcery_point", "concentration", "action"]
+  },
+  {
+    "engName": "wild_magic_surge",
+    "name": { "eng": "Wild Magic Surge", "rus": "Всплеск дикой магии" },
+    "description": {
+      "eng": "Starting when you choose this origin at 1st level, your spellcasting can unleash surges of untamed magic. Immediately after you cast a sorcerer spell of 1st level or higher, the DM can have you roll a d20. If you roll a 1, roll on the Wild Magic Surge table to create a random magical effect. A Wild Magic Surge can happen once per turn.",
+      "rus": "Начиная с 1-го уровня ваше колдовство может вызывать всплески необузданной магии. Сразу после того, как вы накладываете заклинание чародея 1-го уровня или выше, Мастер может попросить вас бросить к20. Если выпадает 1, бросок по таблице Всплеска дикой магии создаёт случайный магический эффект."
+    },
+    "source": "subclass",
+    "sourceDetail": "wild_magic",
+    "level": 1,
+    "tags": ["chaos", "passive", "random"]
+  },
+  {
+    "engName": "tides_of_chaos",
+    "name": { "eng": "Tides of Chaos", "rus": "Приливы хаоса" },
+    "description": {
+      "eng": "Starting at 1st level, you can manipulate the forces of chance and chaos to gain advantage on one attack roll, ability check, or saving throw. Once you do so, you must finish a long rest before you can use this feature again. Any time before you regain the use of this feature, the DM can have you roll on the Wild Magic Surge table immediately after you cast a sorcerer spell of 1st level or higher. You then regain the use of this feature.",
+      "rus": "Начиная с 1-го уровня вы можете манипулировать силами случая и хаоса, получая преимущество на один бросок атаки, проверку характеристики или спасбросок. После этого вы должны завершить продолжительный отдых, чтобы снова использовать эту способность. В любое время до её восстановления Мастер может попросить вас совершить бросок по таблице Всплеска дикой магии после накладывания заклинания 1-го уровня или выше, после чего способность восстанавливается."
+    },
+    "source": "subclass",
+    "sourceDetail": "wild_magic",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["advantage", "chaos", "action"]
+  },
+  {
+    "engName": "bend_luck",
+    "name": { "eng": "Bend Luck", "rus": "Искажение удачи" },
+    "description": {
+      "eng": "Starting at 6th level, you have the ability to twist fate using your wild magic. When another creature you can see makes an attack roll, an ability check, or a saving throw, you can use your reaction and spend 2 sorcery points to roll 1d4 and apply the number rolled as a bonus or penalty (your choice) to the creature's roll. You can do so after the creature rolls but before any effects of the roll occur.",
+      "rus": "Начиная с 6-го уровня вы можете искажать судьбу с помощью дикой магии. Когда другое видимое вами существо совершает бросок атаки, проверку или спасбросок, вы можете реакцией потратить 2 очка волшебства и бросить 1к4, прибавив или вычтя результат из броска существа. Вы делаете это после броска, но до применения результата."
+    },
+    "source": "subclass",
+    "sourceDetail": "wild_magic",
+    "level": 6,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["chaos", "reaction", "sorcery_point"]
+  },
+  {
+    "engName": "controlled_chaos",
+    "name": { "eng": "Controlled Chaos", "rus": "Управляемый хаос" },
+    "description": {
+      "eng": "At 14th level, you gain a modicum of control over the surges of your wild magic. Whenever you roll on the Wild Magic Surge table, you can roll twice and use either number.",
+      "rus": "На 14-м уровне вы получаете некоторый контроль над всплесками дикой магии. Каждый раз, когда вы совершаете бросок по таблице Всплеска дикой магии, вы можете бросить дважды и выбрать любой из результатов."
+    },
+    "source": "subclass",
+    "sourceDetail": "wild_magic",
+    "level": 14,
+    "tags": ["chaos", "passive"]
+  },
+  {
+    "engName": "spell_bombardment",
+    "name": { "eng": "Spell Bombardment", "rus": "Магическая бомбардировка" },
+    "description": {
+      "eng": "Beginning at 18th level, the harmful energy of your spells intensifies. When you roll damage for a spell and roll the highest number possible on any of the dice, choose one of those dice, roll it again and add that roll to the damage. You can use the feature only once per turn.",
+      "rus": "Начиная с 18-го уровня разрушительная энергия ваших заклинаний усиливается. Когда вы бросаете кости урона заклинания и выпадает максимальное значение на любой кости, выберите одну такую кость, бросьте её снова и добавьте результат к урону. Вы можете использовать эту способность только один раз в ход."
+    },
+    "source": "subclass",
+    "sourceDetail": "wild_magic",
+    "level": 18,
+    "tags": ["damage", "passive", "spellcasting"]
+  },
+  {
     "engName": "visions_of_the_past",
     "name": { "eng": "Visions of the Past", "rus": "Видения прошлого" },
     "description": {
