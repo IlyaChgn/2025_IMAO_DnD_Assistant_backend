@@ -3239,5 +3239,152 @@
       "combat",
       "bonus_action"
     ]
+  },
+  {
+    "engName": "bonus_proficiencies_lore",
+    "name": {
+      "eng": "Bonus Proficiencies (Lore)",
+      "rus": "Дополнительные владения (Знания)"
+    },
+    "description": {
+      "eng": "When you join the College of Lore at 3rd level, you gain proficiency with three skills of your choice.",
+      "rus": "Вступая в Коллегию знаний на 3-м уровне, вы получаете владение тремя навыками на ваш выбор."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Lore",
+    "level": 3,
+    "tags": [
+      "proficiency",
+      "skills"
+    ]
+  },
+  {
+    "engName": "cutting_words",
+    "name": {
+      "eng": "Cutting Words",
+      "rus": "Хлёсткие слова"
+    },
+    "description": {
+      "eng": "Also at 3rd level, you learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet makes an attack roll, ability check, or damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll.",
+      "rus": "На 3-м уровне вы учитесь использовать острословие, чтобы сбивать с толку и подрывать уверенность противников. Реакцией вы тратите одно использование Бардовского вдохновения: бросаете кубик вдохновения и вычитаете результат из броска атаки, проверки характеристики или урона видимого существа в пределах 18 метров."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Lore",
+    "level": 3,
+    "tags": [
+      "reaction",
+      "debuff",
+      "bardic_inspiration"
+    ]
+  },
+  {
+    "engName": "additional_magical_secrets",
+    "name": {
+      "eng": "Additional Magical Secrets",
+      "rus": "Дополнительные магические тайны"
+    },
+    "description": {
+      "eng": "At 6th level, you learn two spells of your choice from any class. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip. The chosen spells count as bard spells for you but do not count against the number of bard spells you know.",
+      "rus": "На 6-м уровне вы изучаете два заклинания на ваш выбор из любого класса. Выбранные заклинания должны быть уровня, который вы можете накладывать, или быть заговорами. Они считаются заклинаниями барда, но не учитываются в лимите известных заклинаний."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Lore",
+    "level": 6,
+    "tags": [
+      "spellcasting",
+      "versatility"
+    ]
+  },
+  {
+    "engName": "peerless_skill",
+    "name": {
+      "eng": "Peerless Skill",
+      "rus": "Непревзойдённое мастерство"
+    },
+    "description": {
+      "eng": "Starting at 14th level, when you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the DM tells you whether you succeed or fail.",
+      "rus": "Начиная с 14-го уровня, совершая проверку характеристики, вы можете потратить одно использование Бардовского вдохновения: бросаете кубик вдохновения и добавляете результат к проверке. Это можно сделать после броска, но до того как Мастер объявит результат."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Lore",
+    "level": 14,
+    "tags": [
+      "bardic_inspiration",
+      "utility"
+    ]
+  },
+  {
+    "engName": "bonus_proficiencies_valor",
+    "name": {
+      "eng": "Bonus Proficiencies (Valor)",
+      "rus": "Дополнительные владения (Доблесть)"
+    },
+    "description": {
+      "eng": "When you join the College of Valor at 3rd level, you gain proficiency with medium armor, shields, and martial weapons.",
+      "rus": "Вступая в Коллегию доблести на 3-м уровне, вы получаете владение средними доспехами, щитами и воинским оружием."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Valor",
+    "level": 3,
+    "tags": [
+      "proficiency",
+      "armor",
+      "weapons"
+    ]
+  },
+  {
+    "engName": "combat_inspiration",
+    "name": {
+      "eng": "Combat Inspiration",
+      "rus": "Боевое вдохновение"
+    },
+    "description": {
+      "eng": "Also at 3rd level, you learn to inspire others in battle. A creature that has a Bardic Inspiration die from you can roll that die and add the number rolled to a weapon damage roll it just made. Alternatively, when an attack roll is made against the creature, it can use its reaction to roll the Bardic Inspiration die and add the number rolled to its AC against that attack.",
+      "rus": "На 3-м уровне вы учитесь вдохновлять других в бою. Существо с вашим кубиком Бардовского вдохновения может добавить его к броску урона оружием. Альтернативно, реакцией при атаке против него — добавить к своему КД против этой атаки."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Valor",
+    "level": 3,
+    "tags": [
+      "bardic_inspiration",
+      "combat"
+    ]
+  },
+  {
+    "engName": "extra_attack_bard",
+    "name": {
+      "eng": "Extra Attack (Bard)",
+      "rus": "Дополнительная атака (Бард)"
+    },
+    "description": {
+      "eng": "Starting at 6th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
+      "rus": "Начиная с 6-го уровня, при совершении действия Атака вы можете атаковать дважды, а не один раз."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Valor",
+    "level": 6,
+    "tags": [
+      "combat",
+      "multiattack"
+    ]
+  },
+  {
+    "engName": "battle_magic",
+    "name": {
+      "eng": "Battle Magic",
+      "rus": "Боевая магия"
+    },
+    "description": {
+      "eng": "At 14th level, you have mastered the art of weaving spellcasting and weapon use into a single harmonious act. When you use your action to cast a bard spell, you can make one weapon attack as a bonus action.",
+      "rus": "На 14-м уровне вы освоили искусство сочетания заклинаний и оружия в единое гармоничное действие. Когда вы тратите действие на наложение заклинания барда, вы можете бонусным действием совершить одну атаку оружием."
+    },
+    "source": "srd",
+    "sourceDetail": "Bard: College of Valor",
+    "level": 14,
+    "tags": [
+      "spellcasting",
+      "combat",
+      "bonus_action"
+    ]
   }
 ]

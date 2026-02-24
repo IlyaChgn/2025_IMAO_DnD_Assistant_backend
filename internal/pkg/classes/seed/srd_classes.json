@@ -533,6 +533,39 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "valor",
+        "name": {
+          "eng": "College of Valor",
+          "rus": "Коллегия доблести"
+        },
+        "description": {
+          "eng": "Bards of the College of Valor are daring skalds whose tales keep alive the memory of the great heroes of the past. These bards gather in mead halls or around great bonfires to sing of the exploits of the mighty.",
+          "rus": "Барды Коллегии доблести — отважные скальды, чьи предания хранят память о великих героях прошлого. Они собираются в пиршественных залах или у больших костров, чтобы воспеть подвиги могучих воинов."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "bonus_proficiencies_valor",
+              "combat_inspiration"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "extra_attack_bard"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "battle_magic"
+            ]
+          }
+        ]
       }
     ],
     "features": [
