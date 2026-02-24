@@ -4619,6 +4619,279 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "abjuration",
+        "name": {
+          "eng": "School of Abjuration",
+          "rus": "Школа ограждения"
+        },
+        "description": {
+          "eng": "The School of Abjuration emphasizes magic that blocks, banishes, or protects. Detractors of this school say that its tradition is about denial, negation, rather than positive assertion.",
+          "rus": "Школа ограждения делает упор на магию защиты, изгнания и блокировки. Критики говорят, что эта традиция строится на отрицании, а не на созидании."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "abjuration_savant",
+              "arcane_ward"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "projected_ward"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "improved_abjuration"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "spell_resistance"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "conjuration",
+        "name": {
+          "eng": "School of Conjuration",
+          "rus": "Школа призыва"
+        },
+        "description": {
+          "eng": "As a conjurer, you favor spells that produce objects and creatures out of thin air. You can conjure billowing clouds of killing fog or summon creatures from elsewhere to fight on your behalf.",
+          "rus": "Как заклинатель призыва, вы предпочитаете заклинания, создающие предметы и существ из воздуха. Вы можете призывать смертоносные туманы или вызывать существ из других мест, чтобы они сражались на вашей стороне."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "conjuration_savant",
+              "minor_conjuration"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "benign_transposition"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "focused_conjuration"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "durable_summons"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "divination",
+        "name": {
+          "eng": "School of Divination",
+          "rus": "Школа прорицания"
+        },
+        "description": {
+          "eng": "The counsel of a diviner is sought by royalty and commoners alike, for all seek a clearer understanding of the past, present, and future.",
+          "rus": "Советами прорицателей дорожат и короли, и простолюдины — ведь все стремятся к более ясному пониманию прошлого, настоящего и будущего."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "divination_savant",
+              "portent"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "expert_divination"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "the_third_eye"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "greater_portent"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "enchantment",
+        "name": {
+          "eng": "School of Enchantment",
+          "rus": "Школа очарования"
+        },
+        "description": {
+          "eng": "As a member of the School of Enchantment, you have honed your ability to magically entrance and beguile other people and monsters.",
+          "rus": "Как член Школы очарования, вы отточили умение магически завораживать и обманывать других людей и чудовищ."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "enchantment_savant",
+              "hypnotic_gaze"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "instinctive_charm"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "split_enchantment"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "alter_memories"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "illusion",
+        "name": {
+          "eng": "School of Illusion",
+          "rus": "Школа иллюзий"
+        },
+        "description": {
+          "eng": "You focus your studies on magic that dazzles the senses, befuddles the mind, and tricks even the wisest folk. Your magic is subtle, but the illusions crafted by your keen mind make the impossible seem real.",
+          "rus": "Вы сосредотачиваетесь на магии, ослепляющей чувства и запутывающей разум. Ваша магия тонка, но иллюзии, созданные вашим острым умом, делают невозможное реальным."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "illusion_savant",
+              "improved_minor_illusion"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "malleable_illusions"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "illusory_self"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "illusory_reality"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "necromancy",
+        "name": {
+          "eng": "School of Necromancy",
+          "rus": "Школа некромантии"
+        },
+        "description": {
+          "eng": "The School of Necromancy explores the cosmic forces of life, death, and undeath. As you focus your studies in this tradition, you learn to manipulate the energy that animates all living things.",
+          "rus": "Школа некромантии исследует космические силы жизни, смерти и нежити. Сосредоточившись на этой традиции, вы учитесь управлять энергией, оживляющей всё живое."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "necromancy_savant",
+              "grim_harvest"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "undead_thralls"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "inured_to_undeath"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "command_undead"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "transmutation",
+        "name": {
+          "eng": "School of Transmutation",
+          "rus": "Школа преобразования"
+        },
+        "description": {
+          "eng": "You are a student of spells that modify energy and matter. To you, the world is not a fixed thing, but eminently mutable, and you delight in being an agent of change.",
+          "rus": "Вы изучаете заклинания, изменяющие энергию и материю. Для вас мир — не нечто фиксированное, а нечто легко изменяемое, и вы наслаждаетесь ролью агента перемен."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 2,
+            "features": [
+              "transmutation_savant",
+              "minor_alchemy"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "transmuters_stone"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "shapechanger_wizard"
+            ]
+          },
+          {
+            "level": 14,
+            "features": [
+              "master_transmuter"
+            ]
+          }
+        ]
       }
     ],
     "features": [

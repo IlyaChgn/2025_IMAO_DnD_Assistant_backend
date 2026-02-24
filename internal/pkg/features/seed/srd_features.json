@@ -3386,5 +3386,763 @@
       "combat",
       "bonus_action"
     ]
+  },
+  {
+    "engName": "evocation_savant",
+    "name": {
+      "eng": "Evocation Savant",
+      "rus": "Знаток воплощения"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy an evocation spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время, необходимые для копирования заклинания школы воплощения в книгу заклинаний, уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Evocation",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "sculpt_spells",
+    "name": {
+      "eng": "Sculpt Spells",
+      "rus": "Формирование заклинаний"
+    },
+    "description": {
+      "eng": "Beginning at 2nd level, you can create pockets of relative safety within the effects of your evocation spells. When you cast an evocation spell that affects other creatures that you can see, you can choose a number of them equal to 1 + the spell's level. The chosen creatures automatically succeed on their saving throws against the spell, and they take no damage if they would normally take half damage on a successful save.",
+      "rus": "Начиная со 2-го уровня, при накладывании заклинания воплощения, затрагивающего видимых существ, вы можете выбрать количество существ, равное 1 + уровень заклинания. Они автоматически проходят испытания против заклинания и не получают урона при успешном испытании на половину урона."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Evocation",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "control"
+    ]
+  },
+  {
+    "engName": "potent_cantrip",
+    "name": {
+      "eng": "Potent Cantrip",
+      "rus": "Мощный заговор"
+    },
+    "description": {
+      "eng": "Starting at 6th level, your damaging cantrips affect even creatures that avoid the brunt of the effect. When a creature succeeds on a saving throw against your cantrip, the creature takes half the cantrip's damage (if any) but suffers no additional effect from the cantrip.",
+      "rus": "Начиная с 6-го уровня, ваши наносящие урон заговоры действуют даже на существ, избежавших основного эффекта. При успешном испытании против вашего заговора существо получает половину урона от заговора (если есть), но не страдает от дополнительных эффектов."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Evocation",
+    "level": 6,
+    "tags": [
+      "spellcasting",
+      "damage",
+      "cantrip"
+    ]
+  },
+  {
+    "engName": "empowered_evocation",
+    "name": {
+      "eng": "Empowered Evocation",
+      "rus": "Усиленное воплощение"
+    },
+    "description": {
+      "eng": "Beginning at 10th level, you can add your Intelligence modifier to one damage roll of any wizard evocation spell you cast.",
+      "rus": "Начиная с 10-го уровня, вы можете добавить модификатор Интеллекта к одному броску урона любого заклинания воплощения волшебника."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Evocation",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "damage",
+      "passive"
+    ]
+  },
+  {
+    "engName": "overchannel",
+    "name": {
+      "eng": "Overchannel",
+      "rus": "Перегрузка"
+    },
+    "description": {
+      "eng": "Starting at 14th level, you can increase the power of your simpler spells. When you cast a wizard spell of 1st through 5th level that deals damage, you can deal maximum damage with that spell. The first time you do so, you suffer no adverse effect. If you use this feature again before you finish a long rest, you take 2d12 necrotic damage per level of the spell, immediately after you cast it.",
+      "rus": "Начиная с 14-го уровня, при накладывании заклинания волшебника 1–5-го уровня, наносящего урон, вы можете нанести максимальный урон. Первый раз без последствий. При повторном использовании до длинного отдыха вы получаете 2к12 урона некрозом за каждый уровень заклинания сразу после его наложения."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Evocation",
+    "level": 14,
+    "tags": [
+      "spellcasting",
+      "damage",
+      "risk"
+    ]
+  },
+  {
+    "engName": "abjuration_savant",
+    "name": {
+      "eng": "Abjuration Savant",
+      "rus": "Знаток ограждения"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy an abjuration spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы ограждения уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Abjuration",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "arcane_ward",
+    "name": {
+      "eng": "Arcane Ward",
+      "rus": "Магическая защита"
+    },
+    "description": {
+      "eng": "Starting at 2nd level, you can weave magic around yourself for protection. When you cast an abjuration spell of 1st level or higher, you can simultaneously use a strand of the spell's magic to create a magical ward on yourself that lasts until you finish a long rest. The ward has hit points equal to twice your wizard level + your Intelligence modifier. Whenever you take damage, the ward takes the damage instead. If this damage reduces the ward to 0 hit points, you take any remaining damage.",
+      "rus": "Начиная со 2-го уровня, при накладывании заклинания ограждения 1-го уровня и выше вы одновременно создаёте магический щит, существующий до длинного отдыха. Щит имеет хиты, равные удвоенному уровню волшебника + модификатор Интеллекта. Получаемый вами урон сначала поглощается щитом."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Abjuration",
+    "level": 2,
+    "tags": [
+      "defense",
+      "passive",
+      "shield"
+    ]
+  },
+  {
+    "engName": "projected_ward",
+    "name": {
+      "eng": "Projected Ward",
+      "rus": "Проецируемая защита"
+    },
+    "description": {
+      "eng": "Starting at 6th level, when a creature that you can see within 30 feet of you takes damage, you can use your reaction to cause your Arcane Ward to absorb that damage. If this damage reduces the ward to 0 hit points, the warded creature takes any remaining damage.",
+      "rus": "Начиная с 6-го уровня, реакцией при получении урона видимым существом в пределах 9 метров вы можете перенаправить этот урон на Магическую защиту. Если щит опустошается, оставшийся урон получает защищённое существо."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Abjuration",
+    "level": 6,
+    "tags": [
+      "defense",
+      "reaction",
+      "shield"
+    ]
+  },
+  {
+    "engName": "improved_abjuration",
+    "name": {
+      "eng": "Improved Abjuration",
+      "rus": "Улучшенное ограждение"
+    },
+    "description": {
+      "eng": "Beginning at 10th level, when you cast an abjuration spell that requires you to make an ability check as a part of casting that spell (as in counterspell and dispel magic), you add your proficiency bonus to that ability check.",
+      "rus": "Начиная с 10-го уровня, при накладывании заклинания ограждения, требующего проверки характеристики как части наложения (как «Рассеивание магии» или «Контрзаклинание»), вы добавляете бонус мастерства к этой проверке."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Abjuration",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "passive"
+    ]
+  },
+  {
+    "engName": "spell_resistance",
+    "name": {
+      "eng": "Spell Resistance",
+      "rus": "Сопротивление заклинаниям"
+    },
+    "description": {
+      "eng": "Starting at 14th level, you have advantage on saving throws against spells. Furthermore, you have resistance to the damage of spells.",
+      "rus": "Начиная с 14-го уровня, вы имеете преимущество на испытания против заклинаний, а также сопротивление к урону от заклинаний."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Abjuration",
+    "level": 14,
+    "tags": [
+      "defense",
+      "resistance",
+      "passive"
+    ]
+  },
+  {
+    "engName": "conjuration_savant",
+    "name": {
+      "eng": "Conjuration Savant",
+      "rus": "Знаток призыва"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy a conjuration spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы призыва уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Conjuration",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "minor_conjuration",
+    "name": {
+      "eng": "Minor Conjuration",
+      "rus": "Малый призыв"
+    },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your action to conjure up an inanimate object in your hand or on the ground in an unoccupied space within 10 feet of you. This object can be no larger than 3 feet on a side and weigh no more than 10 pounds, and its form must be that of a nonmagical object. The object is visibly magical. It disappears after 1 hour, when you use this feature again, or if it takes or deals any damage.",
+      "rus": "Начиная со 2-го уровня, действием вы призываете неодушевлённый предмет в руку или в незанятое место в пределах 3 метров. Предмет не больше 1 метра с каждой стороны и не тяжелее 5 кг, должен быть немагическим по форме, но выглядит явно магическим. Исчезает через 1 час, при повторном использовании или при получении/нанесении урона."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Conjuration",
+    "level": 2,
+    "tags": [
+      "utility",
+      "conjuration"
+    ]
+  },
+  {
+    "engName": "benign_transposition",
+    "name": {
+      "eng": "Benign Transposition",
+      "rus": "Благосклонная замена"
+    },
+    "description": {
+      "eng": "Starting at 6th level, you can use your action to teleport up to 30 feet to an unoccupied space that you can see. Alternatively, you can choose a space within range that is occupied by a Small or Medium creature. If that creature is willing, you both teleport, swapping places. Once you use this feature, you cannot use it again until you finish a long rest or you cast a conjuration spell of 1st level or higher.",
+      "rus": "Начиная с 6-го уровня, действием вы телепортируетесь на расстояние до 9 метров в видимое незанятое место. Альтернативно, вы можете поменяться местами с согласным Маленьким или Средним существом в радиусе. После использования — до длинного отдыха или наложения заклинания призыва 1+ уровня."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Conjuration",
+    "level": 6,
+    "tags": [
+      "movement",
+      "teleport",
+      "utility"
+    ]
+  },
+  {
+    "engName": "focused_conjuration",
+    "name": {
+      "eng": "Focused Conjuration",
+      "rus": "Сосредоточенный призыв"
+    },
+    "description": {
+      "eng": "Beginning at 10th level, while you are concentrating on a conjuration spell, your concentration cannot be broken as a result of taking damage.",
+      "rus": "Начиная с 10-го уровня, пока вы концентрируетесь на заклинании призыва, получаемый урон не прерывает концентрацию."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Conjuration",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "concentration",
+      "passive"
+    ]
+  },
+  {
+    "engName": "durable_summons",
+    "name": {
+      "eng": "Durable Summons",
+      "rus": "Стойкий призыв"
+    },
+    "description": {
+      "eng": "Starting at 14th level, any creature that you summon or create with a conjuration spell has 30 temporary hit points.",
+      "rus": "Начиная с 14-го уровня, любое призванное или созданное вами заклинанием призыва существо получает 30 временных хитов."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Conjuration",
+    "level": 14,
+    "tags": [
+      "summons",
+      "conjuration",
+      "passive"
+    ]
+  },
+  {
+    "engName": "divination_savant",
+    "name": {
+      "eng": "Divination Savant",
+      "rus": "Знаток прорицания"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy a divination spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы прорицания уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Divination",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "portent",
+    "name": {
+      "eng": "Portent",
+      "rus": "Предзнаменование"
+    },
+    "description": {
+      "eng": "Starting at 2nd level, glimpses of the future begin to press in on your awareness. When you finish a long rest, roll two d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.",
+      "rus": "Начиная со 2-го уровня, после длинного отдыха бросьте два к20 и запишите результаты. Вы можете заменить любой бросок атаки, испытание или проверку характеристики — свой или видимого существа — одним из этих результатов. Замену нужно объявить до броска, и за ход — только один раз."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Divination",
+    "level": 2,
+    "tags": [
+      "utility",
+      "divination",
+      "fate"
+    ]
+  },
+  {
+    "engName": "expert_divination",
+    "name": {
+      "eng": "Expert Divination",
+      "rus": "Мастер прорицания"
+    },
+    "description": {
+      "eng": "Beginning at 6th level, casting divination spells comes so easily to you that it expends only a fraction of your spellcasting efforts. When you cast a divination spell of 2nd level or higher using a spell slot, you regain one expended spell slot. The slot you regain must be of a level lower than the spell you cast and cannot be higher than 5th level.",
+      "rus": "Начиная с 6-го уровня, при наложении заклинания прорицания 2-го уровня и выше с использованием ячейки вы восстанавливаете одну потраченную ячейку. Восстанавливаемая ячейка должна быть ниже уровнем, чем использованная, и не выше 5-го уровня."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Divination",
+    "level": 6,
+    "tags": [
+      "spellcasting",
+      "recovery"
+    ]
+  },
+  {
+    "engName": "the_third_eye",
+    "name": {
+      "eng": "The Third Eye",
+      "rus": "Третий глаз"
+    },
+    "description": {
+      "eng": "Starting at 10th level, you can use your action to increase your powers of perception. When you do so, choose one of the following benefits, which lasts until you are incapacitated or you take a short or long rest: Darkvision (60 ft.), Ethereal Sight, Greater Comprehension (read any language), or See Invisibility.",
+      "rus": "Начиная с 10-го уровня, действием вы усиливаете восприятие. Выберите одно из преимуществ до следующего отдыха или потери дееспособности: Тёмное зрение (18 м), Взгляд в Эфир, Высшее понимание (читать любой язык) или Видение невидимого."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Divination",
+    "level": 10,
+    "tags": [
+      "utility",
+      "perception",
+      "choice"
+    ]
+  },
+  {
+    "engName": "greater_portent",
+    "name": {
+      "eng": "Greater Portent",
+      "rus": "Великое предзнаменование"
+    },
+    "description": {
+      "eng": "Starting at 14th level, the visions in your dreams intensify and paint a more accurate picture in your mind of what is to come. You roll three d20s for your Portent feature, rather than two.",
+      "rus": "Начиная с 14-го уровня, видения становятся более отчётливыми. Для особенности Предзнаменование вы бросаете три к20 вместо двух."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Divination",
+    "level": 14,
+    "tags": [
+      "utility",
+      "divination",
+      "fate"
+    ]
+  },
+  {
+    "engName": "enchantment_savant",
+    "name": {
+      "eng": "Enchantment Savant",
+      "rus": "Знаток очарования"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy an enchantment spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы очарования уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Enchantment",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "hypnotic_gaze",
+    "name": {
+      "eng": "Hypnotic Gaze",
+      "rus": "Гипнотический взгляд"
+    },
+    "description": {
+      "eng": "Starting at 2nd level, your soft words and enchanting gaze can magically enthrall another creature. As an action, choose one creature that you can see within 5 feet of you. If the target can see or hear you, it must succeed on a Wisdom saving throw against your wizard spell save DC or be charmed by you until the end of your next turn. The charmed creature's speed drops to 0, and the creature is incapacitated and visibly dazed. On subsequent turns, you can use your action to maintain this effect, extending its duration until the end of your next turn.",
+      "rus": "Начиная со 2-го уровня, действием вы магически завораживаете видимое существо в пределах 1,5 метра. При провале испытания Мудрости оно очаровано вами до конца вашего следующего хода: скорость 0, недееспособно, выглядит ошеломлённым. Последующими действиями вы можете поддерживать эффект."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Enchantment",
+    "level": 2,
+    "tags": [
+      "control",
+      "charm"
+    ]
+  },
+  {
+    "engName": "instinctive_charm",
+    "name": {
+      "eng": "Instinctive Charm",
+      "rus": "Инстинктивное очарование"
+    },
+    "description": {
+      "eng": "Beginning at 6th level, when a creature you can see within 30 feet makes an attack roll against you, you can use your reaction to divert the attack, provided that another creature is within the attack's range. The attacker must make a Wisdom saving throw. On a failed save, the attacker must target the creature that is closest to it, not counting you or itself.",
+      "rus": "Начиная с 6-го уровня, реакцией при атаке против вас видимым существом в пределах 9 метров вы перенаправляете атаку. Атакующий проходит испытание Мудрости; при провале — обязан атаковать ближайшее к нему существо (не вас и не себя)."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Enchantment",
+    "level": 6,
+    "tags": [
+      "defense",
+      "reaction",
+      "charm"
+    ]
+  },
+  {
+    "engName": "split_enchantment",
+    "name": {
+      "eng": "Split Enchantment",
+      "rus": "Раздельное очарование"
+    },
+    "description": {
+      "eng": "Starting at 10th level, when you cast an enchantment spell of 1st level or higher that targets only one creature, you can have it target a second creature.",
+      "rus": "Начиная с 10-го уровня, при накладывании заклинания очарования 1-го уровня и выше, нацеленного только на одно существо, вы можете выбрать вторую цель."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Enchantment",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "enchantment",
+      "passive"
+    ]
+  },
+  {
+    "engName": "alter_memories",
+    "name": {
+      "eng": "Alter Memories",
+      "rus": "Изменение воспоминаний"
+    },
+    "description": {
+      "eng": "At 14th level, you gain the ability to make a creature unaware of your magical influence on it. When you cast an enchantment spell to charm one or more creatures, you can alter one creature's understanding so that it remains unaware of being charmed. Additionally, once before the spell expires, you can use your action to try to make the chosen creature forget some of the time it spent charmed by you.",
+      "rus": "На 14-м уровне при накладывании заклинания очарования вы можете сделать так, что одно существо не будет знать о своём очаровании. Кроме того, один раз до истечения заклинания вы можете действием попытаться заставить существо забыть часть времени, проведённого под вашим очарованием."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Enchantment",
+    "level": 14,
+    "tags": [
+      "enchantment",
+      "utility",
+      "memory"
+    ]
+  },
+  {
+    "engName": "illusion_savant",
+    "name": {
+      "eng": "Illusion Savant",
+      "rus": "Знаток иллюзий"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy an illusion spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы иллюзий уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Illusion",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "improved_minor_illusion",
+    "name": {
+      "eng": "Improved Minor Illusion",
+      "rus": "Улучшенная малая иллюзия"
+    },
+    "description": {
+      "eng": "When you choose this school at 2nd level, you learn the Minor Illusion cantrip. If you already know this cantrip, you learn a different wizard cantrip of your choice. The cantrip does not count against your number of cantrips known. When you cast Minor Illusion, you can create both a sound and an image with a single casting of the spell.",
+      "rus": "На 2-м уровне вы изучаете заговор «Малая иллюзия» (не в счёт лимита заговоров). При его наложении вы можете создавать одновременно звук и изображение одним накладыванием."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Illusion",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "cantrip",
+      "illusion"
+    ]
+  },
+  {
+    "engName": "malleable_illusions",
+    "name": {
+      "eng": "Malleable Illusions",
+      "rus": "Гибкие иллюзии"
+    },
+    "description": {
+      "eng": "Starting at 6th level, when you cast an illusion spell that has a duration of 1 minute or longer, you can use your action to change the nature of that illusion (using the spell's normal parameters for the illusion), provided that you can see the illusion.",
+      "rus": "Начиная с 6-го уровня, при активном заклинании иллюзии с длительностью 1 минута и более вы можете действием изменить характер иллюзии (в рамках нормальных параметров заклинания), если видите иллюзию."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Illusion",
+    "level": 6,
+    "tags": [
+      "spellcasting",
+      "illusion",
+      "utility"
+    ]
+  },
+  {
+    "engName": "illusory_self",
+    "name": {
+      "eng": "Illusory Self",
+      "rus": "Иллюзорное «я»"
+    },
+    "description": {
+      "eng": "Beginning at 10th level, you can create an illusory duplicate of yourself as an instant, almost instinctual reaction to danger. When a creature makes an attack roll against you, you can use your reaction to interpose the illusory duplicate between the attacker and yourself. The attack automatically misses you, then the illusion dissipates. Once you use this feature, you cannot use it again until you finish a short or long rest.",
+      "rus": "Начиная с 10-го уровня, реакцией при атаке против вас вы создаёте иллюзорный дубликат себя, который перехватывает атаку — она автоматически промахивается, после чего иллюзия исчезает. Использование — 1 раз до короткого или длинного отдыха."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Illusion",
+    "level": 10,
+    "tags": [
+      "defense",
+      "reaction",
+      "illusion"
+    ]
+  },
+  {
+    "engName": "illusory_reality",
+    "name": {
+      "eng": "Illusory Reality",
+      "rus": "Иллюзорная реальность"
+    },
+    "description": {
+      "eng": "By 14th level, you have learned the secret of weaving shadow magic into your illusions to give them a semi-reality. When you cast an illusion spell of 1st level or higher, you can choose one inanimate, nonmagical object that is part of the illusion and make that object real. You can do this on your turn as a bonus action while the spell is ongoing. The object remains real for 1 minute.",
+      "rus": "К 14-му уровню вы научились вплетать теневую магию в иллюзии, придавая им полуреальность. При накладывании заклинания иллюзии 1-го уровня и выше вы можете бонусным действием сделать один неодушевлённый немагический объект в иллюзии реальным на 1 минуту."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Illusion",
+    "level": 14,
+    "tags": [
+      "illusion",
+      "utility",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "necromancy_savant",
+    "name": {
+      "eng": "Necromancy Savant",
+      "rus": "Знаток некромантии"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy a necromancy spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы некромантии уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Necromancy",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "grim_harvest",
+    "name": {
+      "eng": "Grim Harvest",
+      "rus": "Мрачная жатва"
+    },
+    "description": {
+      "eng": "At 2nd level, you gain the ability to reap life energy from creatures you kill with your spells. Once per turn when you kill one or more creatures with a spell of 1st level or higher, you regain hit points equal to twice the spell's level, or three times its level if the spell belongs to the School of Necromancy.",
+      "rus": "На 2-м уровне раз в ход при убийстве одного или более существ заклинанием 1-го уровня и выше вы восстанавливаете хиты в количестве, равном удвоенному уровню заклинания (или утроенному, если заклинание относится к школе некромантии)."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Necromancy",
+    "level": 2,
+    "tags": [
+      "healing",
+      "necromancy",
+      "passive"
+    ]
+  },
+  {
+    "engName": "undead_thralls",
+    "name": {
+      "eng": "Undead Thralls",
+      "rus": "Рабы-нежить"
+    },
+    "description": {
+      "eng": "At 6th level, you add the Animate Dead spell to your spellbook if it is not there already. When you cast Animate Dead, you can target one additional corpse or pile of bones, creating another zombie or skeleton, as appropriate. Whenever you create an undead using a necromancy spell, it has additional benefits: its hit point maximum is increased by an amount equal to your wizard level, and it adds your proficiency bonus to its weapon damage rolls.",
+      "rus": "На 6-м уровне добавляете «Оживление мертвецов» в книгу заклинаний. При его наложении вы можете выбрать одну дополнительную цель. Вся нежить, созданная вашими заклинаниями некромантии, получает бонус: максимум хитов увеличен на ваш уровень волшебника, а броски урона оружием включают бонус мастерства."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Necromancy",
+    "level": 6,
+    "tags": [
+      "necromancy",
+      "undead",
+      "summons"
+    ]
+  },
+  {
+    "engName": "inured_to_undeath",
+    "name": {
+      "eng": "Inured to Undeath",
+      "rus": "Невосприимчивость к нежити"
+    },
+    "description": {
+      "eng": "Beginning at 10th level, you have resistance to necrotic damage, and your hit point maximum cannot be reduced. You have spent so much time dealing with undead and the forces that animate them that you have become desensitized to some of their worst effects.",
+      "rus": "Начиная с 10-го уровня, вы получаете сопротивление к урону некрозом, и ваш максимум хитов не может быть снижен. Долгое общение с нежитью приучило вас к некоторым её худшим эффектам."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Necromancy",
+    "level": 10,
+    "tags": [
+      "defense",
+      "resistance",
+      "passive",
+      "necromancy"
+    ]
+  },
+  {
+    "engName": "command_undead",
+    "name": {
+      "eng": "Command Undead",
+      "rus": "Командование нежитью"
+    },
+    "description": {
+      "eng": "Starting at 14th level, you can use magic to bring undead under your control, even those created by other wizards. As an action, you can choose one undead that you can see within 60 feet of you. That creature must make a Charisma saving throw against your wizard spell save DC. If it succeeds, you cannot use this feature on it again. If it fails, it becomes friendly to you and obeys your commands until you use this feature again.",
+      "rus": "Начиная с 14-го уровня, действием вы подчиняете видимую нежить в пределах 18 метров. Она проходит испытание Харизмы; при провале становится дружественной и выполняет ваши команды до следующего использования этой способности."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Necromancy",
+    "level": 14,
+    "tags": [
+      "necromancy",
+      "undead",
+      "control"
+    ]
+  },
+  {
+    "engName": "transmutation_savant",
+    "name": {
+      "eng": "Transmutation Savant",
+      "rus": "Знаток преобразования"
+    },
+    "description": {
+      "eng": "Beginning when you select this school at 2nd level, the gold and time you must spend to copy a transmutation spell into your spellbook is halved.",
+      "rus": "Начиная со 2-го уровня, золото и время для копирования заклинания школы преобразования уменьшаются вдвое."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Transmutation",
+    "level": 2,
+    "tags": [
+      "spellcasting",
+      "utility",
+      "passive"
+    ]
+  },
+  {
+    "engName": "minor_alchemy",
+    "name": {
+      "eng": "Minor Alchemy",
+      "rus": "Малая алхимия"
+    },
+    "description": {
+      "eng": "Starting at 2nd level, you can temporarily alter the physical properties of one nonmagical object, changing it from one substance into another. You perform a special alchemical procedure on one object composed entirely of wood, stone (but not a gemstone), iron, copper, or silver, transforming it into a different one of those materials. For each 10 minutes you spend performing the procedure, you can transform up to 1 cubic foot of material. The transformation lasts for up to 1 hour or until you use this feature again.",
+      "rus": "Начиная со 2-го уровня, вы можете временно изменить физические свойства одного немагического предмета из дерева, камня (не драгоценного), железа, меди или серебра, превратив его в другой из этих материалов. За каждые 10 минут процедуры — до 0,03 куб. м материала. Трансформация длится до 1 часа или до следующего использования."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Transmutation",
+    "level": 2,
+    "tags": [
+      "utility",
+      "alchemy",
+      "transmutation"
+    ]
+  },
+  {
+    "engName": "transmuters_stone",
+    "name": {
+      "eng": "Transmuter's Stone",
+      "rus": "Камень преобразователя"
+    },
+    "description": {
+      "eng": "Starting at 6th level, you can spend 8 hours creating a transmuter's stone that stores transmutation magic. You can benefit from the stone yourself or give it to another creature. A creature gains a benefit of your choice as long as the stone is in the creature's possession: Darkvision (60 ft.), an increase to speed of 10 ft., proficiency in Constitution saving throws, or resistance to acid, cold, fire, lightning, or thunder damage. Each time you cast a transmutation spell of 1st level or higher, you can change the effect of your stone if the stone is on your person.",
+      "rus": "Начиная с 6-го уровня, за 8 часов вы создаёте камень преобразователя. Существо, владеющее камнем, получает одно выбранное преимущество: Тёмное зрение (18 м), +3 м к скорости, владение испытаниями Телосложения или сопротивление к кислоте/холоду/огню/молнии/грому. При наложении заклинания преобразования 1+ уровня с камнем при себе вы можете изменить эффект."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Transmutation",
+    "level": 6,
+    "tags": [
+      "utility",
+      "transmutation",
+      "passive",
+      "choice"
+    ]
+  },
+  {
+    "engName": "shapechanger_wizard",
+    "name": {
+      "eng": "Shapechanger (Wizard)",
+      "rus": "Оборотень (Волшебник)"
+    },
+    "description": {
+      "eng": "At 10th level, you add the Polymorph spell to your spellbook, if it is not there already. You can cast Polymorph without expending a spell slot. When you do so, you can target only yourself and transform into a beast whose challenge rating is 1 or lower. Once you cast Polymorph in this way, you cannot do so again until you finish a short or long rest, though you can still cast it normally using an available spell slot.",
+      "rus": "На 10-м уровне добавляете «Превращение» в книгу заклинаний. Вы можете наложить «Превращение» без траты ячейки, но только на себя, принимая облик зверя с РО не выше 1. После использования — короткий или длинный отдых (обычное наложение с ячейкой по-прежнему доступно)."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Transmutation",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "transformation",
+      "transmutation"
+    ]
+  },
+  {
+    "engName": "master_transmuter",
+    "name": {
+      "eng": "Master Transmuter",
+      "rus": "Мастер преобразования"
+    },
+    "description": {
+      "eng": "Starting at 14th level, you can use your action to consume the reserve of transmutation magic stored within your transmuter's stone in a single burst. When you do so, choose one of the following effects: Major Transformation, Panacea (remove all curses/diseases/poisons and restore all hit points), Restore Life (cast Raise Dead without expending a spell slot), or Restore Youth (reduce the apparent age of a willing creature by 3d10 years).",
+      "rus": "На 14-м уровне действием вы расходуете запас магии преобразования в камне. Выберите эффект: Великое превращение (один немагический предмет в другой), Панацея (снять проклятья/болезни/яды и восстановить все хиты), Воскрешение (наложить «Воскрешение мёртвых» без ячейки) или Восстановление молодости (уменьшить видимый возраст на 3к10 лет)."
+    },
+    "source": "srd",
+    "sourceDetail": "Wizard: School of Transmutation",
+    "level": 14,
+    "tags": [
+      "transmutation",
+      "ultimate",
+      "utility",
+      "choice"
+    ]
   }
 ]
