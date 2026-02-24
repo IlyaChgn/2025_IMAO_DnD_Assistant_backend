@@ -1982,6 +1982,96 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "battle_master",
+        "name": {
+          "eng": "Battle Master",
+          "rus": "Мастер боя"
+        },
+        "description": {
+          "eng": "Those who emulate the archetypal Battle Master employ martial techniques passed down through generations. A Battle Master might be a veteran who uses tactical combinations and maneuvers to gain advantage over foes.",
+          "rus": "Те, кто следует архетипу Мастера боя, используют боевые техники, передаваемые из поколения в поколение. Мастер боя — это ветеран, применяющий тактические комбинации и манёвры для получения преимущества над противниками."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "combat_superiority",
+              "student_of_war"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "know_your_enemy"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "combat_superiority_improvement"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "relentless"
+            ]
+          },
+          {
+            "level": 18,
+            "features": [
+              "combat_superiority_improvement_18"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "eldritch_knight",
+        "name": {
+          "eng": "Eldritch Knight",
+          "rus": "Тайный рыцарь"
+        },
+        "description": {
+          "eng": "The archetypal Eldritch Knight combines the martial mastery common to all fighters with a careful study of magic. Eldritch Knights use magical techniques similar to those practiced by wizards.",
+          "rus": "Архетип Тайного рыцаря сочетает боевое мастерство, общее для всех воинов, с тщательным изучением магии. Тайные рыцари используют магические техники, схожие с теми, что практикуют волшебники."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "spellcasting_eldritch_knight",
+              "weapon_bond"
+            ]
+          },
+          {
+            "level": 7,
+            "features": [
+              "war_magic"
+            ]
+          },
+          {
+            "level": 10,
+            "features": [
+              "eldritch_strike"
+            ]
+          },
+          {
+            "level": 15,
+            "features": [
+              "arcane_charge"
+            ]
+          },
+          {
+            "level": 18,
+            "features": [
+              "improved_war_magic"
+            ]
+          }
+        ]
       }
     ],
     "features": [

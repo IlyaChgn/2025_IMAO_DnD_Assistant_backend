@@ -2924,5 +2924,320 @@
       "companion",
       "spellcasting"
     ]
+  },
+  {
+    "engName": "improved_critical",
+    "name": {
+      "eng": "Improved Critical",
+      "rus": "Улучшенный критический удар"
+    },
+    "description": {
+      "eng": "Beginning when you choose this archetype at 3rd level, your weapon attacks score a critical hit on a roll of 19 or 20.",
+      "rus": "Начиная с выбора этого архетипа на 3-м уровне, ваши атаки оружием наносят критический удар при выпадении 19 или 20."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Champion",
+    "level": 3,
+    "tags": [
+      "combat",
+      "passive"
+    ]
+  },
+  {
+    "engName": "remarkable_athlete",
+    "name": {
+      "eng": "Remarkable Athlete",
+      "rus": "Выдающийся атлет"
+    },
+    "description": {
+      "eng": "Starting at 7th level, you can add half your proficiency bonus (rounded up) to any Strength, Dexterity, or Constitution check you make that does not already use your proficiency bonus. In addition, when you make a running long jump, the distance you can cover increases by a number of feet equal to your Strength modifier.",
+      "rus": "Начиная с 7-го уровня, вы добавляете половину бонуса мастерства (округлённую вверх) к проверкам Силы, Ловкости или Телосложения, к которым не применяется ваш бонус мастерства. Кроме того, при прыжке с разбега дальность увеличивается на количество футов, равное модификатору Силы."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Champion",
+    "level": 7,
+    "tags": [
+      "athletics",
+      "passive"
+    ]
+  },
+  {
+    "engName": "additional_fighting_style",
+    "name": {
+      "eng": "Additional Fighting Style",
+      "rus": "Дополнительный боевой стиль"
+    },
+    "description": {
+      "eng": "At 10th level, you can choose a second option from the Fighting Style class feature.",
+      "rus": "На 10-м уровне вы можете выбрать второй вариант из особенности класса «Боевой стиль»."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Champion",
+    "level": 10,
+    "tags": [
+      "combat",
+      "passive"
+    ]
+  },
+  {
+    "engName": "superior_critical",
+    "name": {
+      "eng": "Superior Critical",
+      "rus": "Превосходный критический удар"
+    },
+    "description": {
+      "eng": "Starting at 15th level, your weapon attacks score a critical hit on a roll of 18-20.",
+      "rus": "Начиная с 15-го уровня, ваши атаки оружием наносят критический удар при выпадении 18, 19 или 20."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Champion",
+    "level": 15,
+    "tags": [
+      "combat",
+      "passive"
+    ]
+  },
+  {
+    "engName": "survivor",
+    "name": {
+      "eng": "Survivor",
+      "rus": "Выживший"
+    },
+    "description": {
+      "eng": "At 18th level, you attain the pinnacle of resilience in battle. At the start of each of your turns, you regain hit points equal to 5 + your Constitution modifier if you have no more than half of your hit points left. You do not gain this benefit if you have 0 hit points.",
+      "rus": "На 18-м уровне вы достигаете вершины боевой стойкости. В начале каждого своего хода вы восстанавливаете хиты в количестве 5 + модификатор Телосложения, если у вас не более половины максимума хитов. Это не работает при 0 хитах."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Champion",
+    "level": 18,
+    "tags": [
+      "defense",
+      "healing",
+      "passive"
+    ]
+  },
+  {
+    "engName": "combat_superiority",
+    "name": {
+      "eng": "Combat Superiority",
+      "rus": "Боевое превосходство"
+    },
+    "description": {
+      "eng": "When you choose this archetype at 3rd level, you learn maneuvers that are fueled by special dice called superiority dice (d8). You have four superiority dice, regained on a short or long rest. You learn three maneuvers of your choice from the Battle Master list. You save the DC for maneuvers equals 8 + your proficiency bonus + your Strength or Dexterity modifier (your choice).",
+      "rus": "На 3-м уровне вы изучаете манёвры, питаемые кубиками превосходства (к8). У вас 4 таких кубика, восстанавливаемых при коротком или длинном отдыхе. Вы изучаете 3 манёвра на выбор из списка Мастера боя. Сл испытаний от манёвров = 8 + бонус мастерства + модификатор Силы или Ловкости (на ваш выбор)."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Battle Master",
+    "level": 3,
+    "tags": [
+      "combat",
+      "maneuver",
+      "superiority_dice"
+    ]
+  },
+  {
+    "engName": "student_of_war",
+    "name": {
+      "eng": "Student of War",
+      "rus": "Студент войны"
+    },
+    "description": {
+      "eng": "At 3rd level, you gain proficiency with one type of artisan's tools of your choice.",
+      "rus": "На 3-м уровне вы получаете владение одним типом инструментов ремесленника на ваш выбор."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Battle Master",
+    "level": 3,
+    "tags": [
+      "proficiency",
+      "tools"
+    ]
+  },
+  {
+    "engName": "know_your_enemy",
+    "name": {
+      "eng": "Know Your Enemy",
+      "rus": "Знай своего врага"
+    },
+    "description": {
+      "eng": "Starting at 7th level, if you spend at least 1 minute observing or interacting with another creature outside combat, you can learn certain information about its capabilities compared to your own. The DM tells you if the creature is equal, superior, or inferior to you in regard to Strength, Dexterity, Constitution, AC, current HP, total class levels, and fighter class levels.",
+      "rus": "Начиная с 7-го уровня, если вы потратите не менее 1 минуты, наблюдая или взаимодействуя с существом вне боя, вы можете узнать определённую информацию о нём. Мастер сообщает, превосходит ли существо вас, уступает или равно вам по Силе, Ловкости, Телосложению, КД, текущим хитам, общему уровню класса и уровням воина."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Battle Master",
+    "level": 7,
+    "tags": [
+      "utility",
+      "investigation"
+    ]
+  },
+  {
+    "engName": "combat_superiority_improvement",
+    "name": {
+      "eng": "Combat Superiority Improvement (10th)",
+      "rus": "Улучшение боевого превосходства (10-й ур.)"
+    },
+    "description": {
+      "eng": "At 10th level, you learn two additional maneuvers of your choice, and your superiority dice turn into d10s.",
+      "rus": "На 10-м уровне вы изучаете ещё 2 манёвра на ваш выбор, а ваши кубики превосходства становятся к10."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Battle Master",
+    "level": 10,
+    "tags": [
+      "combat",
+      "maneuver",
+      "superiority_dice"
+    ]
+  },
+  {
+    "engName": "relentless",
+    "name": {
+      "eng": "Relentless",
+      "rus": "Неудержимость"
+    },
+    "description": {
+      "eng": "Starting at 15th level, when you roll initiative and have no superiority dice remaining, you regain 1 superiority die.",
+      "rus": "Начиная с 15-го уровня, когда вы бросаете инициативу и у вас не осталось кубиков превосходства, вы восстанавливаете 1 кубик превосходства."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Battle Master",
+    "level": 15,
+    "tags": [
+      "combat",
+      "superiority_dice"
+    ]
+  },
+  {
+    "engName": "combat_superiority_improvement_18",
+    "name": {
+      "eng": "Combat Superiority Improvement (18th)",
+      "rus": "Улучшение боевого превосходства (18-й ур.)"
+    },
+    "description": {
+      "eng": "At 18th level, you learn two additional maneuvers of your choice, and your superiority dice turn into d12s.",
+      "rus": "На 18-м уровне вы изучаете ещё 2 манёвра на ваш выбор, а ваши кубики превосходства становятся к12."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Battle Master",
+    "level": 18,
+    "tags": [
+      "combat",
+      "maneuver",
+      "superiority_dice"
+    ]
+  },
+  {
+    "engName": "spellcasting_eldritch_knight",
+    "name": {
+      "eng": "Spellcasting (Eldritch Knight)",
+      "rus": "Использование заклинаний (Тайный рыцарь)"
+    },
+    "description": {
+      "eng": "When you reach 3rd level, you augment your martial prowess with the ability to cast spells. You learn two cantrips of your choice from the wizard spell list, and you know three 1st-level wizard spells, two of which must be from the abjuration and evocation schools. Intelligence is your spellcasting ability.",
+      "rus": "На 3-м уровне вы дополняете боевое мастерство способностью накладывать заклинания. Вы изучаете 2 заговора волшебника и 3 заклинания 1-го уровня (из которых 2 должны быть из школ ограждения или воплощения). Интеллект — ваша характеристика заклинаний."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Eldritch Knight",
+    "level": 3,
+    "tags": [
+      "spellcasting",
+      "wizard"
+    ]
+  },
+  {
+    "engName": "weapon_bond",
+    "name": {
+      "eng": "Weapon Bond",
+      "rus": "Связь с оружием"
+    },
+    "description": {
+      "eng": "At 3rd level, you learn a ritual that creates a magical bond between yourself and one weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. The weapon must be within your reach throughout the ritual. Once you have bonded with a weapon, you cannot be disarmed of that weapon unless you are incapacitated. If it is on the same plane of existence, you can summon that weapon as a bonus action, causing it to teleport instantly to your hand.",
+      "rus": "На 3-м уровне вы изучаете ритуал, создающий магическую связь между вами и одним оружием (1 час, можно во время короткого отдыха). Связанное оружие нельзя выбить у вас, пока вы дееспособны. Если оно на том же плане существования, вы можете бонусным действием призвать его в руку."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Eldritch Knight",
+    "level": 3,
+    "tags": [
+      "weapon",
+      "ritual",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "war_magic",
+    "name": {
+      "eng": "War Magic",
+      "rus": "Боевая магия"
+    },
+    "description": {
+      "eng": "Beginning at 7th level, when you use your action to cast a cantrip, you can make one weapon attack as a bonus action.",
+      "rus": "Начиная с 7-го уровня, когда вы тратите действие на наложение заговора, вы можете бонусным действием совершить одну атаку оружием."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Eldritch Knight",
+    "level": 7,
+    "tags": [
+      "spellcasting",
+      "combat",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "eldritch_strike",
+    "name": {
+      "eng": "Eldritch Strike",
+      "rus": "Тайный удар"
+    },
+    "description": {
+      "eng": "At 10th level, you learn how to make your weapon strikes undercut a creature's resistance to your spells. When you hit a creature with a weapon attack, that creature has disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn.",
+      "rus": "На 10-м уровне ваши удары оружием подрывают сопротивление существа вашим заклинаниям. Попав атакой оружием, существо получает помеху на следующее испытание против вашего заклинания, наложенного до конца вашего следующего хода."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Eldritch Knight",
+    "level": 10,
+    "tags": [
+      "spellcasting",
+      "combat",
+      "debuff"
+    ]
+  },
+  {
+    "engName": "arcane_charge",
+    "name": {
+      "eng": "Arcane Charge",
+      "rus": "Магический бросок"
+    },
+    "description": {
+      "eng": "At 15th level, you gain the ability to teleport up to 30 feet to an unoccupied space you can see when you use your Action Surge. You can teleport before or after the additional action.",
+      "rus": "На 15-м уровне при использовании Всплеска действий вы можете телепортироваться на расстояние до 9 метров в видимое незанятое место — до или после дополнительного действия."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Eldritch Knight",
+    "level": 15,
+    "tags": [
+      "movement",
+      "teleport",
+      "action_surge"
+    ]
+  },
+  {
+    "engName": "improved_war_magic",
+    "name": {
+      "eng": "Improved War Magic",
+      "rus": "Улучшенная боевая магия"
+    },
+    "description": {
+      "eng": "Starting at 18th level, when you use your action to cast a spell, you can make one weapon attack as a bonus action.",
+      "rus": "Начиная с 18-го уровня, когда вы тратите действие на наложение заклинания (любого, не только заговора), вы можете бонусным действием совершить одну атаку оружием."
+    },
+    "source": "srd",
+    "sourceDetail": "Fighter: Eldritch Knight",
+    "level": 18,
+    "tags": [
+      "spellcasting",
+      "combat",
+      "bonus_action"
+    ]
   }
 ]
