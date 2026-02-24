@@ -390,5 +390,481 @@
     "sourceDetail": "ranger",
     "level": 5,
     "tags": ["combat", "attack"]
+  },
+
+  {
+    "engName": "bonus_proficiency_life",
+    "name": { "eng": "Bonus Proficiency", "rus": "Дополнительное владение" },
+    "description": {
+      "eng": "When you choose this domain at 1st level, you gain proficiency with heavy armor.",
+      "rus": "Выбирая этот домен на 1-м уровне, вы получаете владение тяжёлыми доспехами."
+    },
+    "source": "subclass",
+    "sourceDetail": "life",
+    "level": 1,
+    "tags": ["proficiency", "armor"]
+  },
+  {
+    "engName": "disciple_of_life",
+    "name": { "eng": "Disciple of Life", "rus": "Ученик Жизни" },
+    "description": {
+      "eng": "Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level.",
+      "rus": "Начиная с 1-го уровня ваши заклинания исцеления более эффективны. Когда вы используете заклинание 1-го уровня или выше для восстановления хитов существа, оно восстанавливает дополнительные хиты, равные 2 + уровень заклинания."
+    },
+    "source": "subclass",
+    "sourceDetail": "life",
+    "level": 1,
+    "tags": ["healing", "passive"]
+  },
+  {
+    "engName": "channel_divinity_preserve_life",
+    "name": { "eng": "Channel Divinity: Preserve Life", "rus": "Божественный канал: Сохранение жизни" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to heal the badly injured. As an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum.",
+      "rus": "Начиная со 2-го уровня вы можете использовать Божественный канал для исцеления тяжелораненых. Вы действием демонстрируете святой символ и призываете целительную энергию, которая может восстановить хиты, равные пятикратному вашему уровню жреца. Выберите любых существ в пределах 30 футов и распределите хиты между ними. Эта способность не может восстановить существу более половины его максимума хитов."
+    },
+    "source": "subclass",
+    "sourceDetail": "life",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["healing", "action", "divine"]
+  },
+  {
+    "engName": "blessed_healer",
+    "name": { "eng": "Blessed Healer", "rus": "Благословенный целитель" },
+    "description": {
+      "eng": "Beginning at 6th level, the healing spells you cast on others heal you as well. When you cast a healing spell of 1st level or higher that restores hit points to a creature other than you, you regain hit points equal to 2 + the spell's level.",
+      "rus": "Начиная с 6-го уровня заклинания исцеления, которые вы накладываете на других, также исцеляют вас. Когда вы накладываете заклинание исцеления 1-го уровня или выше, восстанавливающее хиты существу, отличному от вас, вы восстанавливаете хиты, равные 2 + уровень заклинания."
+    },
+    "source": "subclass",
+    "sourceDetail": "life",
+    "level": 6,
+    "tags": ["healing", "passive"]
+  },
+  {
+    "engName": "divine_strike_life",
+    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "description": {
+      "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 radiant damage to the target. When you reach 14th level, the extra damage increases to 2d8.",
+      "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона излучением. На 14-м уровне дополнительный урон увеличивается до 2к8."
+    },
+    "source": "subclass",
+    "sourceDetail": "life",
+    "level": 8,
+    "tags": ["combat", "weapon", "radiant"]
+  },
+  {
+    "engName": "supreme_healing",
+    "name": { "eng": "Supreme Healing", "rus": "Высшее исцеление" },
+    "description": {
+      "eng": "Starting at 17th level, when you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die. For example, instead of restoring 2d6 hit points to a creature, you restore 12.",
+      "rus": "Начиная с 17-го уровня, когда вы бросаете кости для восстановления хитов заклинанием, вы используете максимальное значение каждой кости. Например, вместо восстановления 2к6 хитов вы восстанавливаете 12."
+    },
+    "source": "subclass",
+    "sourceDetail": "life",
+    "level": 17,
+    "tags": ["healing", "passive"]
+  },
+
+  {
+    "engName": "warding_flare",
+    "name": { "eng": "Warding Flare", "rus": "Защитная вспышка" },
+    "description": {
+      "eng": "Also at 1st level, you can interpose divine light between yourself and an attacking enemy. When you are attacked by a creature within 30 feet of you that you can see, you can use your reaction to impose disadvantage on the attack roll, causing light to flare before the attacker before it hits or misses. An attacker that can't be blinded is immune to this feature. You can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
+      "rus": "На 1-м уровне вы можете расположить божественный свет между собой и атакующим противником. Когда существо в пределах 30 футов от вас, которое вы видите, атакует вас, вы можете реакцией наложить помеху на бросок атаки, вызвав вспышку перед атакующим. Атакующий, которого нельзя ослепить, имеет иммунитет к этой способности. Вы можете использовать её количество раз, равное модификатору Мудрости (минимум один раз). Все использования восстанавливаются после продолжительного отдыха."
+    },
+    "source": "subclass",
+    "sourceDetail": "light",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["defensive", "reaction", "radiant"]
+  },
+  {
+    "engName": "channel_divinity_radiance_of_the_dawn",
+    "name": { "eng": "Channel Divinity: Radiance of the Dawn", "rus": "Божественный канал: Сияние рассвета" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to harness sunlight, banishing darkness and dealing radiant damage to your foes. As an action, you present your holy symbol, and any magical darkness within 30 feet of you is dispelled. Additionally, each hostile creature within 30 feet of you must make a Constitution saving throw. A creature takes radiant damage equal to 2d10 + your cleric level on a failed save, or half as much damage on a successful one. A creature that has total cover from you is not affected.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для управления солнечным светом, разгоняя тьму и нанося урон излучением врагам. Вы действием демонстрируете святой символ, и любая магическая тьма в пределах 30 футов рассеивается. Каждый враждебный противник в пределах 30 футов должен совершить спасбросок Телосложения, получая 2к10 + ваш уровень жреца урона излучением при провале или половину при успехе."
+    },
+    "source": "subclass",
+    "sourceDetail": "light",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "radiant", "action"]
+  },
+  {
+    "engName": "improved_flare",
+    "name": { "eng": "Improved Flare", "rus": "Улучшенная вспышка" },
+    "description": {
+      "eng": "Starting at 6th level, you can also use your Warding Flare feature when a creature that you can see within 30 feet of you attacks a creature other than you.",
+      "rus": "Начиная с 6-го уровня вы также можете использовать Защитную вспышку, когда видимое вами существо в пределах 30 футов атакует кого-либо другого, а не вас."
+    },
+    "source": "subclass",
+    "sourceDetail": "light",
+    "level": 6,
+    "tags": ["defensive", "passive"]
+  },
+  {
+    "engName": "potent_spellcasting_light",
+    "name": { "eng": "Potent Spellcasting", "rus": "Мощное колдовство" },
+    "description": {
+      "eng": "Starting at 8th level, you add your Wisdom modifier to the damage you deal with any cleric cantrip.",
+      "rus": "Начиная с 8-го уровня вы добавляете модификатор Мудрости к урону, наносимому заговорами жреца."
+    },
+    "source": "subclass",
+    "sourceDetail": "light",
+    "level": 8,
+    "tags": ["spellcasting", "passive"]
+  },
+  {
+    "engName": "corona_of_light",
+    "name": { "eng": "Corona of Light", "rus": "Корона света" },
+    "description": {
+      "eng": "Starting at 17th level, you can use your action to activate an aura of sunlight that lasts for 1 minute or until you dismiss it using another action. You emit bright light in a 60-foot radius and dim light 30 feet beyond that. Your enemies in the bright light have disadvantage on saving throws against any spell that deals fire or radiant damage.",
+      "rus": "Начиная с 17-го уровня вы можете действием активировать ауру солнечного света на 1 минуту или пока не отпустите её другим действием. Вы испускаете яркий свет в радиусе 60 футов и тусклый в дополнительных 30 футах. Враги в ярком свете имеют помеху на спасброски против заклинаний огня или излучения."
+    },
+    "source": "subclass",
+    "sourceDetail": "light",
+    "level": 17,
+    "tags": ["radiant", "aura", "action"]
+  },
+
+  {
+    "engName": "acolyte_of_nature",
+    "name": { "eng": "Acolyte of Nature", "rus": "Послушник природы" },
+    "description": {
+      "eng": "At 1st level, you learn one cantrip of your choice from the druid spell list. You also gain proficiency in one of the following skills of your choice: Animal Handling, Nature, or Survival.",
+      "rus": "На 1-м уровне вы изучаете один заговор на свой выбор из списка заклинаний друида. Вы также получаете владение одним из следующих навыков на ваш выбор: Обращение с животными, Природа или Выживание."
+    },
+    "source": "subclass",
+    "sourceDetail": "nature",
+    "level": 1,
+    "tags": ["cantrip", "skill", "choice"]
+  },
+  {
+    "engName": "channel_divinity_charm_animals_and_plants",
+    "name": { "eng": "Channel Divinity: Charm Animals and Plants", "rus": "Божественный канал: Очарование животных и растений" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to charm animals and plants. As an action, you present your holy symbol and invoke the name of your deity. Each beast or plant creature that can see you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is charmed by you for 1 minute or until it takes damage. While it is charmed by you, it is friendly to you and other creatures you designate.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для очарования животных и растений. Вы действием демонстрируете святой символ и призываете имя своего божества. Каждый зверь или растение в пределах 30 футов, способное вас видеть, должно совершить спасбросок Мудрости или стать очарованным вами на 1 минуту или до получения урона."
+    },
+    "source": "subclass",
+    "sourceDetail": "nature",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "charm", "action"]
+  },
+  {
+    "engName": "dampen_elements",
+    "name": { "eng": "Dampen Elements", "rus": "Гашение стихий" },
+    "description": {
+      "eng": "Starting at 6th level, when you or a creature within 30 feet of you takes acid, cold, fire, lightning, or thunder damage, you can use your reaction to grant resistance to the creature against that instance of the damage.",
+      "rus": "Начиная с 6-го уровня, когда вы или существо в пределах 30 футов от вас получает урон кислотой, холодом, огнём, молнией или громом, вы можете реакцией предоставить ему сопротивление этому типу урона."
+    },
+    "source": "subclass",
+    "sourceDetail": "nature",
+    "level": 6,
+    "tags": ["defensive", "reaction", "elemental"]
+  },
+  {
+    "engName": "divine_strike_nature",
+    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "description": {
+      "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 cold, fire, or lightning damage (your choice) to the target. When you reach 14th level, the extra damage increases to 2d8.",
+      "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона холодом, огнём или молнией (на ваш выбор). На 14-м уровне дополнительный урон увеличивается до 2к8."
+    },
+    "source": "subclass",
+    "sourceDetail": "nature",
+    "level": 8,
+    "tags": ["combat", "weapon", "elemental"]
+  },
+  {
+    "engName": "master_of_nature",
+    "name": { "eng": "Master of Nature", "rus": "Владыка природы" },
+    "description": {
+      "eng": "At 17th level, you gain the ability to command animals and plant creatures. While creatures are charmed by your Charm Animals and Plants feature, you can take a bonus action on your turn to verbally command what each of those creatures will do on its next turn.",
+      "rus": "На 17-м уровне вы получаете способность командовать животными и растениями. Пока существа очарованы вашей способностью Очарование животных и растений, вы можете бонусным действием в свой ход устно командовать ими, указывая, что каждое из них будет делать в следующий ход."
+    },
+    "source": "subclass",
+    "sourceDetail": "nature",
+    "level": 17,
+    "tags": ["control", "bonus_action"]
+  },
+
+  {
+    "engName": "bonus_proficiency_tempest",
+    "name": { "eng": "Bonus Proficiency", "rus": "Дополнительное владение" },
+    "description": {
+      "eng": "When you choose this domain at 1st level, you gain proficiency with martial weapons and heavy armor.",
+      "rus": "Выбирая этот домен на 1-м уровне, вы получаете владение воинским оружием и тяжёлыми доспехами."
+    },
+    "source": "subclass",
+    "sourceDetail": "tempest",
+    "level": 1,
+    "tags": ["proficiency", "armor", "weapon"]
+  },
+  {
+    "engName": "wrath_of_the_storm",
+    "name": { "eng": "Wrath of the Storm", "rus": "Гнев бури" },
+    "description": {
+      "eng": "Also at 1st level, you can thunderously rebuke attackers. When a creature within 5 feet of you that you can see hits you with an attack, you can use your reaction to cause the creature to make a Dexterity saving throw. The creature takes 2d8 lightning or thunder damage (your choice) on a failed save, or half as much on a successful one. You can use this feature a number of times equal to your Wisdom modifier (minimum of once). You regain all expended uses when you finish a long rest.",
+      "rus": "На 1-м уровне вы можете оглушительно отбрасывать атакующих. Когда существо в пределах 5 футов, которое вы видите, попадает по вам атакой, вы можете реакцией заставить его совершить спасбросок Ловкости. При провале оно получает 2к8 урона молнией или громом (на ваш выбор), при успехе — половину."
+    },
+    "source": "subclass",
+    "sourceDetail": "tempest",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["lightning", "thunder", "reaction"]
+  },
+  {
+    "engName": "channel_divinity_destructive_wrath",
+    "name": { "eng": "Channel Divinity: Destructive Wrath", "rus": "Божественный канал: Разрушительный гнев" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to wield the power of the storm with unchecked ferocity. When you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для необузданного гнева бури. Когда вы наносите урон молнией или громом, вы можете использовать Божественный канал для нанесения максимального урона вместо броска."
+    },
+    "source": "subclass",
+    "sourceDetail": "tempest",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "lightning", "thunder"]
+  },
+  {
+    "engName": "thunderbolt_strike",
+    "name": { "eng": "Thunderbolt Strike", "rus": "Удар молнии" },
+    "description": {
+      "eng": "At 6th level, when you deal lightning damage to a Large or smaller creature, you can also push it up to 10 feet away from you.",
+      "rus": "На 6-м уровне, когда вы наносите урон молнией существу с размером не больше Большого, вы также можете оттолкнуть его на расстояние до 10 футов от себя."
+    },
+    "source": "subclass",
+    "sourceDetail": "tempest",
+    "level": 6,
+    "tags": ["lightning", "push", "passive"]
+  },
+  {
+    "engName": "divine_strike_tempest",
+    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "description": {
+      "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 thunder damage to the target. When you reach 14th level, the extra damage increases to 2d8.",
+      "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона громом. На 14-м уровне дополнительный урон увеличивается до 2к8."
+    },
+    "source": "subclass",
+    "sourceDetail": "tempest",
+    "level": 8,
+    "tags": ["combat", "weapon", "thunder"]
+  },
+  {
+    "engName": "stormborn",
+    "name": { "eng": "Stormborn", "rus": "Дитя бури" },
+    "description": {
+      "eng": "At 17th level, you have a flying speed equal to your current walking speed whenever you are not underground or indoors.",
+      "rus": "На 17-м уровне скорость полёта равна вашей скорости ходьбы, когда вы находитесь не под землёй и не в помещении."
+    },
+    "source": "subclass",
+    "sourceDetail": "tempest",
+    "level": 17,
+    "tags": ["movement", "flight", "passive"]
+  },
+
+  {
+    "engName": "blessing_of_the_trickster",
+    "name": { "eng": "Blessing of the Trickster", "rus": "Благословение обманщика" },
+    "description": {
+      "eng": "Starting when you choose this domain at 1st level, you can use your action to touch a willing creature other than yourself to give it advantage on Dexterity (Stealth) checks. This blessing lasts for 1 hour or until you use this feature again.",
+      "rus": "Начиная с 1-го уровня вы можете действием прикоснуться к согласному существу (не к себе) и дать ему преимущество на проверки Ловкости (Скрытность). Это благословение длится 1 час или пока вы снова не используете эту способность."
+    },
+    "source": "subclass",
+    "sourceDetail": "trickery",
+    "level": 1,
+    "tags": ["stealth", "buff", "action"]
+  },
+  {
+    "engName": "channel_divinity_invoke_duplicity",
+    "name": { "eng": "Channel Divinity: Invoke Duplicity", "rus": "Божественный канал: Призыв двойника" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to create a perfect illusion of yourself. As an action, you create a perfect illusion of yourself that lasts for 1 minute, or until you lose your concentration. The illusion appears in an unoccupied space that you can see within 30 feet of you. As a bonus action on your turn, you can move the illusion up to 30 feet to a space you can see, but it must remain within 120 feet of you.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для создания иллюзии себя. Вы действием создаёте точную иллюзию себя на 1 минуту или пока не потеряете концентрацию. Иллюзия появляется в незанятом пространстве в пределах 30 футов, которое вы видите. Бонусным действием вы можете перемещать иллюзию на 30 футов."
+    },
+    "source": "subclass",
+    "sourceDetail": "trickery",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "illusion", "concentration", "action"]
+  },
+  {
+    "engName": "channel_divinity_cloak_of_shadows",
+    "name": { "eng": "Channel Divinity: Cloak of Shadows", "rus": "Божественный канал: Плащ теней" },
+    "description": {
+      "eng": "Starting at 6th level, you can use your Channel Divinity to vanish. As an action, you become invisible until the end of your next turn. You become visible if you attack or cast a spell.",
+      "rus": "На 6-м уровне вы можете использовать Божественный канал для исчезновения. Вы действием становитесь невидимым до конца вашего следующего хода. Невидимость заканчивается, если вы атакуете или накладываете заклинание."
+    },
+    "source": "subclass",
+    "sourceDetail": "trickery",
+    "level": 6,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "invisibility", "action"]
+  },
+  {
+    "engName": "divine_strike_trickery",
+    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "description": {
+      "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 poison damage to the target. When you reach 14th level, the extra damage increases to 2d8.",
+      "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона ядом. На 14-м уровне дополнительный урон увеличивается до 2к8."
+    },
+    "source": "subclass",
+    "sourceDetail": "trickery",
+    "level": 8,
+    "tags": ["combat", "weapon", "poison"]
+  },
+  {
+    "engName": "improved_duplicity",
+    "name": { "eng": "Improved Duplicity", "rus": "Улучшенный двойник" },
+    "description": {
+      "eng": "At 17th level, you can create up to four duplicates of yourself, rather than one, when you use Invoke Duplicity. As a bonus action on your turn, you can move any number of them up to 30 feet, to a maximum range of 120 feet.",
+      "rus": "На 17-м уровне при использовании Призыва двойника вы можете создать до четырёх копий вместо одной. Бонусным действием в свой ход вы можете перемещать любое количество из них на 30 футов."
+    },
+    "source": "subclass",
+    "sourceDetail": "trickery",
+    "level": 17,
+    "tags": ["illusion", "passive"]
+  },
+
+  {
+    "engName": "bonus_proficiency_war",
+    "name": { "eng": "Bonus Proficiency", "rus": "Дополнительное владение" },
+    "description": {
+      "eng": "When you choose this domain at 1st level, you gain proficiency with martial weapons and heavy armor.",
+      "rus": "Выбирая этот домен на 1-м уровне, вы получаете владение воинским оружием и тяжёлыми доспехами."
+    },
+    "source": "subclass",
+    "sourceDetail": "war",
+    "level": 1,
+    "tags": ["proficiency", "armor", "weapon"]
+  },
+  {
+    "engName": "war_priest",
+    "name": { "eng": "War Priest", "rus": "Военный жрец" },
+    "description": {
+      "eng": "From 1st level, your god delivers bolts of inspiration to you while you are engaged in battle. When you use the Attack action, you can make one weapon attack as a bonus action. You can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
+      "rus": "С 1-го уровня ваш бог вдохновляет вас в бою. Когда вы совершаете действие Атака, вы можете совершить одну атаку оружием бонусным действием. Вы можете использовать эту способность количество раз, равное модификатору Мудрости (минимум один раз). Все использования восстанавливаются после продолжительного отдыха."
+    },
+    "source": "subclass",
+    "sourceDetail": "war",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["combat", "bonus_action", "attack"]
+  },
+  {
+    "engName": "channel_divinity_guided_strike",
+    "name": { "eng": "Channel Divinity: Guided Strike", "rus": "Божественный канал: Направленный удар" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to strike with supernatural accuracy. When you make an attack roll, you can use your Channel Divinity to gain a +10 bonus to the roll. You make this choice after you see the roll, but before the DM says whether the attack hits or misses.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для удара со сверхъестественной точностью. Когда вы совершаете бросок атаки, вы можете использовать Божественный канал, чтобы получить +10 к броску. Вы делаете этот выбор после броска, но до того, как Мастер объявит результат."
+    },
+    "source": "subclass",
+    "sourceDetail": "war",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "attack", "bonus"]
+  },
+  {
+    "engName": "channel_divinity_war_gods_blessing",
+    "name": { "eng": "Channel Divinity: War God's Blessing", "rus": "Божественный канал: Благословение бога войны" },
+    "description": {
+      "eng": "At 6th level, when a creature within 30 feet of you makes an attack roll, you can use your reaction to grant that creature a +10 bonus to the roll, using your Channel Divinity. You make this choice after you see the roll, but before the DM says whether the attack hits or misses.",
+      "rus": "На 6-м уровне, когда существо в пределах 30 футов совершает бросок атаки, вы можете реакцией использовать Божественный канал, чтобы дать ему +10 к броску. Вы делаете этот выбор после броска, но до объявления результата Мастером."
+    },
+    "source": "subclass",
+    "sourceDetail": "war",
+    "level": 6,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "reaction", "attack", "bonus"]
+  },
+  {
+    "engName": "divine_strike_war",
+    "name": { "eng": "Divine Strike", "rus": "Божественный удар" },
+    "description": {
+      "eng": "At 8th level, you gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 damage of the same type dealt by the weapon to the target. When you reach 14th level, the extra damage increases to 2d8.",
+      "rus": "На 8-м уровне вы получаете способность наполнять удары оружия божественной энергией. Один раз в ход, когда вы попадаете по существу атакой оружием, вы можете нанести ему дополнительно 1к8 урона того же типа, что и оружие. На 14-м уровне дополнительный урон увеличивается до 2к8."
+    },
+    "source": "subclass",
+    "sourceDetail": "war",
+    "level": 8,
+    "tags": ["combat", "weapon"]
+  },
+  {
+    "engName": "avatar_of_battle",
+    "name": { "eng": "Avatar of Battle", "rus": "Аватар войны" },
+    "description": {
+      "eng": "At 17th level, you gain resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons.",
+      "rus": "На 17-м уровне вы получаете сопротивление дроблящему, колющему и рубящему урону от немагического оружия."
+    },
+    "source": "subclass",
+    "sourceDetail": "war",
+    "level": 17,
+    "tags": ["defensive", "resistance", "passive"]
+  },
+
+  {
+    "engName": "blessings_of_knowledge",
+    "name": { "eng": "Blessings of Knowledge", "rus": "Дары знаний" },
+    "description": {
+      "eng": "At 1st level, you learn two languages of your choice. You also become proficient in your choice of two of the following skills: Arcana, History, Nature, or Religion. Your proficiency bonus is doubled for any ability check you make that uses either of those skills.",
+      "rus": "На 1-м уровне вы изучаете два языка на ваш выбор. Вы также получаете владение двумя навыками на выбор из следующих: Магия, История, Природа или Религия. Ваш бонус мастерства удваивается для любых проверок этих навыков."
+    },
+    "source": "subclass",
+    "sourceDetail": "knowledge",
+    "level": 1,
+    "tags": ["skill", "language", "choice", "expertise"]
+  },
+  {
+    "engName": "channel_divinity_knowledge_of_the_ages",
+    "name": { "eng": "Channel Divinity: Knowledge of the Ages", "rus": "Божественный канал: Знание эпох" },
+    "description": {
+      "eng": "Starting at 2nd level, you can use your Channel Divinity to tap into a divine well of knowledge. As an action, you choose one skill or tool. For 10 minutes, you have proficiency with the chosen skill or tool.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для прикосновения к источнику божественных знаний. Вы действием выбираете один навык или инструмент. В течение 10 минут вы получаете владение выбранным навыком или инструментом."
+    },
+    "source": "subclass",
+    "sourceDetail": "knowledge",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "skill", "action"]
+  },
+  {
+    "engName": "channel_divinity_read_thoughts",
+    "name": { "eng": "Channel Divinity: Read Thoughts", "rus": "Божественный канал: Чтение мыслей" },
+    "description": {
+      "eng": "At 2nd level, you can use your Channel Divinity to read a creature's thoughts. You can then use your access to the creature's mind to command it. As an action, choose one creature that you can see within 60 feet of you. That creature must make a Wisdom saving throw. If the creature succeeds on its saving throw, you can't use this feature on it again until you finish a long rest. If the creature fails its save, you can read its surface thoughts (those foremost in its mind, reflecting its current emotions and what it is actively thinking about) when it is within 60 feet of you.",
+      "rus": "На 2-м уровне вы можете использовать Божественный канал для чтения мыслей существа. Вы действием выбираете одно видимое вами существо в пределах 60 футов. Оно совершает спасбросок Мудрости. При провале вы можете читать его поверхностные мысли, когда оно находится в пределах 60 футов от вас."
+    },
+    "source": "subclass",
+    "sourceDetail": "knowledge",
+    "level": 2,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["divine", "mind", "action"]
+  },
+  {
+    "engName": "potent_spellcasting_knowledge",
+    "name": { "eng": "Potent Spellcasting", "rus": "Мощное колдовство" },
+    "description": {
+      "eng": "Starting at 8th level, you add your Wisdom modifier to the damage you deal with any cleric cantrip.",
+      "rus": "Начиная с 8-го уровня вы добавляете модификатор Мудрости к урону, наносимому заговорами жреца."
+    },
+    "source": "subclass",
+    "sourceDetail": "knowledge",
+    "level": 8,
+    "tags": ["spellcasting", "passive"]
+  },
+  {
+    "engName": "visions_of_the_past",
+    "name": { "eng": "Visions of the Past", "rus": "Видения прошлого" },
+    "description": {
+      "eng": "Starting at 17th level, you can call up visions of the past that relate to an object you hold or your immediate surroundings. You spend at least 1 minute in meditation and prayer, then receive dreamlike, shadowy glimpses of recent events. You can meditate this way for a number of minutes equal to your Wisdom score and must maintain concentration during that time.",
+      "rus": "Начиная с 17-го уровня вы можете вызывать видения прошлого, связанные с предметом в вашей руке или вашим непосредственным окружением. Вы проводите не менее 1 минуты в медитации и молитве, после чего получаете смутные видения недавних событий. Вы можете медитировать столько минут, сколько составляет ваше значение Мудрости, сохраняя при этом концентрацию."
+    },
+    "source": "subclass",
+    "sourceDetail": "knowledge",
+    "level": 17,
+    "tags": ["divination", "concentration"]
   }
 ]

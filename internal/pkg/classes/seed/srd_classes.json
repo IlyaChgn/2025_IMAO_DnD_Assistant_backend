@@ -842,6 +842,144 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "light",
+        "name": { "eng": "Light Domain", "rus": "Домен Света" },
+        "description": {
+          "eng": "Gods of light promote the ideals of rebirth and truth, and their clerics are a mote of these ideals, using divine light to scorch undead and illuminate the darkness.",
+          "rus": "Боги света продвигают идеалы возрождения и истины, а их жрецы несут эти идеалы, используя божественный свет, чтобы сжигать нежить и освещать тьму."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["burning_hands", "faerie_fire"] },
+          { "classLevel": 3, "spells": ["flaming_sphere", "scorching_ray"] },
+          { "classLevel": 5, "spells": ["daylight", "fireball"] },
+          { "classLevel": 7, "spells": ["guardian_of_faith", "wall_of_fire"] },
+          { "classLevel": 9, "spells": ["flame_strike", "scrying"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["warding_flare"] },
+          { "level": 2, "features": ["channel_divinity_radiance_of_the_dawn"] },
+          { "level": 6, "features": ["improved_flare"] },
+          { "level": 8, "features": ["potent_spellcasting_light"] },
+          { "level": 17, "features": ["corona_of_light"] }
+        ]
+      },
+      {
+        "engName": "nature",
+        "name": { "eng": "Nature Domain", "rus": "Домен Природы" },
+        "description": {
+          "eng": "Gods of nature are as varied as the natural world itself. Druids revere nature as a whole. Clerics of a nature deity command the forces of nature.",
+          "rus": "Боги природы столь же разнообразны, как и сам мир природы. Жрецы божества природы управляют её силами."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["animal_friendship", "speak_with_animals"] },
+          { "classLevel": 3, "spells": ["barkskin", "spike_growth"] },
+          { "classLevel": 5, "spells": ["plant_growth", "wind_wall"] },
+          { "classLevel": 7, "spells": ["dominate_beast", "grasping_vine"] },
+          { "classLevel": 9, "spells": ["insect_plague", "wall_of_stone"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["acolyte_of_nature"] },
+          { "level": 2, "features": ["channel_divinity_charm_animals_and_plants"] },
+          { "level": 6, "features": ["dampen_elements"] },
+          { "level": 8, "features": ["divine_strike_nature"] },
+          { "level": 17, "features": ["master_of_nature"] }
+        ]
+      },
+      {
+        "engName": "tempest",
+        "name": { "eng": "Tempest Domain", "rus": "Домен Бури" },
+        "description": {
+          "eng": "Gods whose portfolios include the Tempest domain govern storms, seas and wind. Tempest clerics can be fierce warriors, using the power of the storm to smite their foes.",
+          "rus": "Боги, чья сфера влияния включает Домен Бури, управляют штормами, морями и ветром. Жрецы бури могут быть свирепыми воинами, используя силу шторма, чтобы разить врагов."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["fog_cloud", "thunderwave"] },
+          { "classLevel": 3, "spells": ["gust_of_wind", "shatter"] },
+          { "classLevel": 5, "spells": ["call_lightning", "sleet_storm"] },
+          { "classLevel": 7, "spells": ["control_water", "ice_storm"] },
+          { "classLevel": 9, "spells": ["destructive_wave", "insect_plague"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["bonus_proficiency_tempest", "wrath_of_the_storm"] },
+          { "level": 2, "features": ["channel_divinity_destructive_wrath"] },
+          { "level": 6, "features": ["thunderbolt_strike"] },
+          { "level": 8, "features": ["divine_strike_tempest"] },
+          { "level": 17, "features": ["stormborn"] }
+        ]
+      },
+      {
+        "engName": "trickery",
+        "name": { "eng": "Trickery Domain", "rus": "Домен Обмана" },
+        "description": {
+          "eng": "Gods of trickery are mischief-makers who stand in opposition to the rigid order of deities of law. Trickery clerics are a disruptive force, challenging the assumptions of those in power.",
+          "rus": "Боги обмана — проказники, противостоящие жёсткому порядку богов закона. Жрецы обмана — разрушительная сила, бросающая вызов устоям власти."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["charm_person", "disguise_self"] },
+          { "classLevel": 3, "spells": ["mirror_image", "pass_without_trace"] },
+          { "classLevel": 5, "spells": ["blink", "dispel_magic"] },
+          { "classLevel": 7, "spells": ["dimension_door", "polymorph"] },
+          { "classLevel": 9, "spells": ["dominate_person", "modify_memory"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["blessing_of_the_trickster"] },
+          { "level": 2, "features": ["channel_divinity_invoke_duplicity"] },
+          { "level": 6, "features": ["channel_divinity_cloak_of_shadows"] },
+          { "level": 8, "features": ["divine_strike_trickery"] },
+          { "level": 17, "features": ["improved_duplicity"] }
+        ]
+      },
+      {
+        "engName": "war",
+        "name": { "eng": "War Domain", "rus": "Домен Войны" },
+        "description": {
+          "eng": "War has many manifestations. Gods of war watch over warriors and reward them for their great deeds. War clerics excel in battle, inspiring others to fight the good fight.",
+          "rus": "Война имеет множество проявлений. Боги войны наблюдают за воинами и вознаграждают их за великие дела. Жрецы войны превосходят в бою, вдохновляя других сражаться за правое дело."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["divine_favor", "shield_of_faith"] },
+          { "classLevel": 3, "spells": ["magic_weapon", "spiritual_weapon"] },
+          { "classLevel": 5, "spells": ["crusaders_mantle", "spirit_guardians"] },
+          { "classLevel": 7, "spells": ["freedom_of_movement", "stoneskin"] },
+          { "classLevel": 9, "spells": ["flame_strike", "hold_monster"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["bonus_proficiency_war", "war_priest"] },
+          { "level": 2, "features": ["channel_divinity_guided_strike"] },
+          { "level": 6, "features": ["channel_divinity_war_gods_blessing"] },
+          { "level": 8, "features": ["divine_strike_war"] },
+          { "level": 17, "features": ["avatar_of_battle"] }
+        ]
+      },
+      {
+        "engName": "knowledge",
+        "name": { "eng": "Knowledge Domain", "rus": "Домен Знаний" },
+        "description": {
+          "eng": "The gods of knowledge value learning and understanding above all. Some teach that knowledge is to be gathered and shared while others hoard it jealously.",
+          "rus": "Боги знаний ценят обучение и понимание превыше всего. Одни учат, что знание нужно собирать и делиться им, другие ревностно его хранят."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["command", "identify"] },
+          { "classLevel": 3, "spells": ["augury", "suggestion"] },
+          { "classLevel": 5, "spells": ["nondetection", "speak_with_dead"] },
+          { "classLevel": 7, "spells": ["arcane_eye", "confusion"] },
+          { "classLevel": 9, "spells": ["legend_lore", "scrying"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["blessings_of_knowledge"] },
+          { "level": 2, "features": ["channel_divinity_knowledge_of_the_ages", "channel_divinity_read_thoughts"] },
+          { "level": 6, "features": ["channel_divinity_read_thoughts"] },
+          { "level": 8, "features": ["potent_spellcasting_knowledge"] },
+          { "level": 17, "features": ["visions_of_the_past"] }
+        ]
       }
     ],
     "features": [
