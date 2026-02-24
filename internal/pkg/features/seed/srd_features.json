@@ -2534,5 +2534,248 @@
       "spellcasting",
       "transformation"
     ]
+  },
+  {
+    "engName": "open_hand_technique",
+    "name": {
+      "eng": "Open Hand Technique",
+      "rus": "Техника открытой ладони"
+    },
+    "description": {
+      "eng": "Starting when you choose this tradition at 3rd level, you can manipulate your enemy's ki when you harness your own. Whenever you hit a creature with one of the attacks granted by your Flurry of Blows, you can impose one of the following effects: the target must succeed on a Dexterity saving throw or be knocked prone; the target must make a Strength saving throw or be pushed up to 15 feet away; the target cannot take reactions until the end of your next turn.",
+      "rus": "Когда вы попадаете атакой из Шквала ударов, вы можете применить один из эффектов: цель должна пройти испытание Ловкости или упасть ничком; цель должна пройти испытание Силы или быть отброшена на 4,5 метра; цель не может использовать реакции до конца вашего следующего хода."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Open Hand",
+    "level": 3,
+    "tags": [
+      "combat",
+      "ki",
+      "control"
+    ]
+  },
+  {
+    "engName": "wholeness_of_body",
+    "name": {
+      "eng": "Wholeness of Body",
+      "rus": "Целостность тела"
+    },
+    "description": {
+      "eng": "At 6th level, you gain the ability to heal yourself. As an action, you can regain hit points equal to three times your monk level. You must finish a long rest before you can use this feature again.",
+      "rus": "На 6-м уровне вы получаете способность исцелять себя. Действием вы восстанавливаете хиты в количестве, равном утроенному уровню монаха. Использование — 1 раз за длинный отдых."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Open Hand",
+    "level": 6,
+    "tags": [
+      "healing",
+      "self"
+    ]
+  },
+  {
+    "engName": "tranquility",
+    "name": {
+      "eng": "Tranquility",
+      "rus": "Спокойствие"
+    },
+    "description": {
+      "eng": "Beginning at 11th level, you can enter a special meditation that surrounds you with an aura of peace. At the end of a long rest, you gain the effect of a Sanctuary spell that lasts until the start of your next long rest (the spell can end early as normal). The saving throw DC for the spell equals 8 + your Wisdom modifier + your proficiency bonus.",
+      "rus": "Начиная с 11-го уровня, после длинного отдыха вы получаете эффект заклинания «Убежище», действующий до начала следующего длинного отдыха. Сл испытания = 8 + модификатор Мудрости + бонус мастерства."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Open Hand",
+    "level": 11,
+    "tags": [
+      "defense",
+      "aura",
+      "passive"
+    ]
+  },
+  {
+    "engName": "quivering_palm",
+    "name": {
+      "eng": "Quivering Palm",
+      "rus": "Дрожащая ладонь"
+    },
+    "description": {
+      "eng": "At 17th level, you gain the ability to set up lethal vibrations in someone's body. When you hit a creature with an unarmed strike, you can spend 3 ki points to start these imperceptible vibrations, which last for a number of days equal to your monk level. The vibrations are harmless unless you use your action to end them. When you do so, the creature must make a Constitution saving throw. If it fails, it is reduced to 0 hit points. If it succeeds, it takes 10d10 necrotic damage.",
+      "rus": "На 17-м уровне, попав безоружным ударом, вы можете потратить 3 очка ци, чтобы запустить незаметные вибрации в теле существа на количество дней, равное уровню монаха. Действием вы можете активировать их: цель проходит испытание Телосложения — провал опускает её до 0 хитов, успех наносит 10к10 урона некрозом."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Open Hand",
+    "level": 17,
+    "tags": [
+      "combat",
+      "ki",
+      "necrotic",
+      "ultimate"
+    ]
+  },
+  {
+    "engName": "shadow_arts",
+    "name": {
+      "eng": "Shadow Arts",
+      "rus": "Искусство тени"
+    },
+    "description": {
+      "eng": "Starting when you choose this tradition at 3rd level, you can use your ki to duplicate the effects of certain spells. As an action, you can spend 2 ki points to cast Darkness, Darkvision, Pass without Trace, or Silence, without providing material components. Additionally, you gain the Minor Illusion cantrip if you do not already know it.",
+      "rus": "Действием вы можете потратить 2 очка ци, чтобы наложить «Тьму», «Тёмное зрение», «Бесследное движение» или «Тишину» без материальных компонентов. Кроме того, вы получаете заговор «Малая иллюзия»."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of Shadow",
+    "level": 3,
+    "tags": [
+      "spellcasting",
+      "ki",
+      "stealth"
+    ]
+  },
+  {
+    "engName": "shadow_step",
+    "name": {
+      "eng": "Shadow Step",
+      "rus": "Шаг в тени"
+    },
+    "description": {
+      "eng": "At 6th level, you gain the ability to step from one shadow into another. When you are in dim light or darkness, as a bonus action you can teleport up to 60 feet to an unoccupied space you can see that is also in dim light or darkness. You then have advantage on the first melee attack you make before the end of the turn.",
+      "rus": "На 6-м уровне, находясь в тусклом свете или тьме, вы можете бонусным действием телепортироваться на расстояние до 18 метров в незанятое место, также находящееся в тусклом свете или тьме. После этого вы имеете преимущество на первую рукопашную атаку до конца хода."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of Shadow",
+    "level": 6,
+    "tags": [
+      "movement",
+      "teleport",
+      "stealth",
+      "bonus_action"
+    ]
+  },
+  {
+    "engName": "cloak_of_shadows",
+    "name": {
+      "eng": "Cloak of Shadows",
+      "rus": "Плащ теней"
+    },
+    "description": {
+      "eng": "By 11th level, you have learned to become one with the shadows. When you are in an area of dim light or darkness, you can use your action to become invisible. You remain invisible until you make an attack, cast a spell, or are in an area of bright light.",
+      "rus": "К 11-му уровню вы научились сливаться с тенями. Находясь в тусклом свете или тьме, вы можете действием стать невидимым. Вы остаётесь невидимым до тех пор, пока не атакуете, не наложите заклинание или не окажетесь в ярком свете."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of Shadow",
+    "level": 11,
+    "tags": [
+      "stealth",
+      "invisibility"
+    ]
+  },
+  {
+    "engName": "opportunist",
+    "name": {
+      "eng": "Opportunist",
+      "rus": "Оппортунист"
+    },
+    "description": {
+      "eng": "At 17th level, you can exploit a creature's momentary distraction when it is hit by an attack. Whenever a creature within 5 feet of you is hit by an attack made by a creature other than you, you can use your reaction to make a melee attack against that creature.",
+      "rus": "На 17-м уровне, когда существо в пределах 1,5 метра от вас получает попадание от атаки другого существа, вы можете реакцией совершить рукопашную атаку против него."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of Shadow",
+    "level": 17,
+    "tags": [
+      "combat",
+      "reaction"
+    ]
+  },
+  {
+    "engName": "disciple_of_the_elements",
+    "name": {
+      "eng": "Disciple of the Elements",
+      "rus": "Ученик стихий"
+    },
+    "description": {
+      "eng": "When you choose this tradition at 3rd level, you learn magical disciplines that harness the power of the four elements. A discipline requires you to spend ki points each time you use it. You know the Elemental Attunement discipline and one other elemental discipline of your choice. You learn one additional elemental discipline of your choice at 6th, 11th, and 17th level.",
+      "rus": "Выбирая эту традицию на 3-м уровне, вы изучаете магические дисциплины, использующие силу четырёх стихий. Вы знаете дисциплину «Стихийная настройка» и ещё одну на ваш выбор. На 6, 11 и 17-м уровнях вы изучаете по одной дополнительной дисциплине."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Four Elements",
+    "level": 3,
+    "tags": [
+      "ki",
+      "elemental",
+      "spellcasting"
+    ]
+  },
+  {
+    "engName": "elemental_attunement",
+    "name": {
+      "eng": "Elemental Attunement",
+      "rus": "Стихийная настройка"
+    },
+    "description": {
+      "eng": "You can use your action to briefly control elemental forces nearby: create a harmless instantaneous sensory effect related to air, earth, fire, or water; instantly light or snuff out a candle, torch, or small campfire; chill or warm up to 1 pound of nonliving material for up to 1 hour; cause earth, fire, water, or mist to shape itself into a crude form you designate for 1 minute.",
+      "rus": "Действием вы управляете стихийными силами рядом: создаёте безвредный сенсорный эффект стихии; мгновенно зажигаете или гасите свечу/факел/костёр; охлаждаете или нагреваете до 0,5 кг неживого материала на 1 час; заставляете землю, огонь, воду или туман принять грубую форму по вашему выбору на 1 минуту."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Four Elements",
+    "level": 3,
+    "tags": [
+      "ki",
+      "elemental",
+      "utility"
+    ]
+  },
+  {
+    "engName": "elemental_discipline_extra",
+    "name": {
+      "eng": "Additional Elemental Discipline (6th)",
+      "rus": "Дополнительная стихийная дисциплина (6-й ур.)"
+    },
+    "description": {
+      "eng": "At 6th level, you learn one additional elemental discipline of your choice. You can now use elemental disciplines that require spending up to 3 ki points.",
+      "rus": "На 6-м уровне вы изучаете ещё одну стихийную дисциплину на ваш выбор. Теперь вы можете использовать дисциплины, требующие до 3 очков ци."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Four Elements",
+    "level": 6,
+    "tags": [
+      "ki",
+      "elemental"
+    ]
+  },
+  {
+    "engName": "elemental_discipline_extra_11",
+    "name": {
+      "eng": "Additional Elemental Discipline (11th)",
+      "rus": "Дополнительная стихийная дисциплина (11-й ур.)"
+    },
+    "description": {
+      "eng": "At 11th level, you learn one additional elemental discipline of your choice. You can now use elemental disciplines that require spending up to 4 ki points.",
+      "rus": "На 11-м уровне вы изучаете ещё одну стихийную дисциплину на ваш выбор. Теперь вы можете использовать дисциплины, требующие до 4 очков ци."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Four Elements",
+    "level": 11,
+    "tags": [
+      "ki",
+      "elemental"
+    ]
+  },
+  {
+    "engName": "elemental_discipline_extra_17",
+    "name": {
+      "eng": "Additional Elemental Discipline (17th)",
+      "rus": "Дополнительная стихийная дисциплина (17-й ур.)"
+    },
+    "description": {
+      "eng": "At 17th level, you learn one additional elemental discipline of your choice. You can now use elemental disciplines that require spending up to 5 ki points.",
+      "rus": "На 17-м уровне вы изучаете ещё одну стихийную дисциплину на ваш выбор. Теперь вы можете использовать дисциплины, требующие до 5 очков ци."
+    },
+    "source": "srd",
+    "sourceDetail": "Monk: Way of the Four Elements",
+    "level": 17,
+    "tags": [
+      "ki",
+      "elemental"
+    ]
   }
 ]

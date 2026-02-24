@@ -2238,6 +2238,83 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "shadow",
+        "name": {
+          "eng": "Way of Shadow",
+          "rus": "Путь тени"
+        },
+        "description": {
+          "eng": "Monks of the Way of Shadow follow a tradition that values stealth and subterfuge. These monks might be called ninjas or shadowdancers, and they serve as spies and assassins.",
+          "rus": "Монахи Пути тени следуют традиции, ценящей скрытность и хитрость. Их называют ниндзя или танцорами теней — они служат шпионами и убийцами."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "shadow_arts"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "shadow_step"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "cloak_of_shadows"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "opportunist"
+            ]
+          }
+        ]
+      },
+      {
+        "engName": "four_elements",
+        "name": {
+          "eng": "Way of the Four Elements",
+          "rus": "Путь четырёх стихий"
+        },
+        "description": {
+          "eng": "You follow a monastic tradition that teaches you to harness the elements. When you focus your ki, you can align yourself with the forces of creation and bend the four elements to your will.",
+          "rus": "Вы следуете монашеской традиции, обучающей управлению стихиями. Концентрируя ци, вы можете согласоваться с силами творения и подчинять себе четыре элемента."
+        },
+        "source": "srd",
+        "features": [
+          {
+            "level": 3,
+            "features": [
+              "disciple_of_the_elements",
+              "elemental_attunement"
+            ]
+          },
+          {
+            "level": 6,
+            "features": [
+              "elemental_discipline_extra"
+            ]
+          },
+          {
+            "level": 11,
+            "features": [
+              "elemental_discipline_extra_11"
+            ]
+          },
+          {
+            "level": 17,
+            "features": [
+              "elemental_discipline_extra_17"
+            ]
+          }
+        ]
       }
     ],
     "features": [
