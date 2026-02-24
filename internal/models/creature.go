@@ -181,6 +181,7 @@ type Creature struct {
 	Spellcasting          *Spellcasting       `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`             // regular spellcasting (spell slots)
 	InnateSpellcasting    *InnateSpellcasting `json:"innateSpellcasting,omitempty" bson:"innateSpellcasting,omitempty"` // at-will and X/day spells
 	UserID                string              `bson:"userID,omitempty" json:"userID,omitempty"`
+	IsSrd                 bool                `bson:"isSrd" json:"isSrd"`
 }
 
 type CreatureInput struct {
