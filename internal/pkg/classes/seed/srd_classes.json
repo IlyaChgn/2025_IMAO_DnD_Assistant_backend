@@ -3404,6 +3404,50 @@
             ]
           }
         ]
+      },
+      {
+        "engName": "archfey",
+        "name": { "eng": "The Archfey", "rus": "Архифея" },
+        "description": {
+          "eng": "Your patron is a lord or lady of the fey, a creature of legend who holds secrets that were forgotten before the mortal races were born. This being's motivations are often inscrutable, and sometimes whimsical, and might involve a striving for greater magical power or the settling of ancient grudges.",
+          "rus": "Ваш покровитель — владыка фейского мира, легендарное существо, хранящее тайны, забытые прежде, чем появились смертные расы. Его мотивы часто загадочны и непостоянны — он может стремиться к большей магической силе или сводить древние счёты."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["faerie_fire", "sleep"] },
+          { "classLevel": 3, "spells": ["calm_emotions", "phantasmal_force"] },
+          { "classLevel": 5, "spells": ["blink", "plant_growth"] },
+          { "classLevel": 7, "spells": ["dominate_beast", "greater_invisibility"] },
+          { "classLevel": 9, "spells": ["dominate_person", "seeming"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["fey_presence"] },
+          { "level": 6, "features": ["misty_escape"] },
+          { "level": 10, "features": ["beguiling_defenses"] },
+          { "level": 14, "features": ["dark_delirium"] }
+        ]
+      },
+      {
+        "engName": "great_old_one",
+        "name": { "eng": "The Great Old One", "rus": "Великий Древний" },
+        "description": {
+          "eng": "Your patron is a mysterious entity whose nature is utterly foreign to the fabric of reality. It might come from the Far Realm, the space beyond reality, or it could be one of the elder gods known only in legends. Its motives are incomprehensible to mortals, and its knowledge so immense and ancient that even the greatest libraries pale in comparison.",
+          "rus": "Ваш покровитель — таинственная сущность, чья природа совершенно чужда ткани реальности. Возможно, она явилась из Дальних пределов или является одним из древних богов, известных лишь в легендах. Её мотивы непостижимы для смертных, а знания столь велики и древни, что перед ними меркнут даже величайшие библиотеки."
+        },
+        "source": "srd",
+        "spellList": [
+          { "classLevel": 1, "spells": ["dissonant_whispers", "tashas_hideous_laughter"] },
+          { "classLevel": 3, "spells": ["detect_thoughts", "phantasmal_force"] },
+          { "classLevel": 5, "spells": ["clairvoyance", "sending"] },
+          { "classLevel": 7, "spells": ["dominate_beast", "evards_black_tentacles"] },
+          { "classLevel": 9, "spells": ["dominate_person", "telekinesis"] }
+        ],
+        "features": [
+          { "level": 1, "features": ["awakened_mind"] },
+          { "level": 6, "features": ["entropic_ward"] },
+          { "level": 10, "features": ["thought_shield"] },
+          { "level": 14, "features": ["create_thrall"] }
+        ]
       }
     ],
     "features": [

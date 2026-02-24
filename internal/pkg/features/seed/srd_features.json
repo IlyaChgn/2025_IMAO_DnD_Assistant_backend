@@ -979,6 +979,156 @@
     "tags": ["damage", "passive", "spellcasting"]
   },
   {
+    "engName": "dark_ones_blessing",
+    "name": { "eng": "Dark One's Blessing", "rus": "Благословение тёмного владыки" },
+    "description": {
+      "eng": "Starting at 1st level, when you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1).",
+      "rus": "Начиная с 1-го уровня, когда вы снижаете хиты враждебного существа до 0, вы получаете временные хиты, равные вашему модификатору Харизмы + уровень варлока (минимум 1)."
+    },
+    "source": "subclass",
+    "sourceDetail": "fiend",
+    "level": 1,
+    "tags": ["healing", "passive", "temp_hp"]
+  },
+  {
+    "engName": "dark_ones_own_luck",
+    "name": { "eng": "Dark One's Own Luck", "rus": "Удача тёмного владыки" },
+    "description": {
+      "eng": "Starting at 6th level, you can call on your patron to alter fate in your favor. When you make an ability check or a saving throw, you can use this feature to add a d10 to your roll. You can do so after seeing the initial roll but before any of the roll's effects occur. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "rus": "Начиная с 6-го уровня вы можете призвать покровителя изменить судьбу в вашу пользу. Когда вы совершаете проверку характеристики или спасбросок, вы можете добавить к10 к броску. Вы делаете это после броска, но до применения результата. После использования требуется короткий или продолжительный отдых."
+    },
+    "source": "subclass",
+    "sourceDetail": "fiend",
+    "level": 6,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["luck", "saving_throw"]
+  },
+  {
+    "engName": "fiendish_resilience",
+    "name": { "eng": "Fiendish Resilience", "rus": "Стойкость исчадия" },
+    "description": {
+      "eng": "Starting at 10th level, you can choose one damage type when you finish a short or long rest. You gain resistance to that damage type until you choose a different one with this feature. Damage from magical weapons or silver weapons ignores this resistance.",
+      "rus": "Начиная с 10-го уровня после короткого или продолжительного отдыха вы можете выбрать один тип урона. Вы получаете сопротивление этому типу урона до следующего выбора. Урон от магического или серебряного оружия игнорирует это сопротивление."
+    },
+    "source": "subclass",
+    "sourceDetail": "fiend",
+    "level": 10,
+    "tags": ["resistance", "passive", "choice"]
+  },
+  {
+    "engName": "hurl_through_hell",
+    "name": { "eng": "Hurl Through Hell", "rus": "Низвержение в Ад" },
+    "description": {
+      "eng": "Starting at 14th level, when you hit a creature with an attack, you can use this feature to instantly transport the target through the lower planes. The creature disappears and hurtles through a nightmare landscape. At the end of your next turn, the target returns. If the target is not a fiend, it takes 10d10 psychic damage. Once you use this feature, you can't use it again until you finish a long rest.",
+      "rus": "Начиная с 14-го уровня, когда вы попадаете по существу атакой, вы можете мгновенно перенести цель через нижние планы. Существо исчезает и несётся через кошмарный пейзаж. В конце вашего следующего хода оно возвращается. Если цель не является исчадием, она получает 10к10 урона психической энергией. Требуется продолжительный отдых."
+    },
+    "source": "subclass",
+    "sourceDetail": "fiend",
+    "level": 14,
+    "resource": { "maxUses": 1, "resetOn": "long_rest" },
+    "tags": ["combat", "teleport", "psychic"]
+  },
+  {
+    "engName": "fey_presence",
+    "name": { "eng": "Fey Presence", "rus": "Фейское присутствие" },
+    "description": {
+      "eng": "Starting at 1st level, your patron bestows upon you the ability to project the beguiling and fearsome might of the fey. As an action, you can cause each creature in a 10-foot cube originating from you to make a Wisdom saving throw against your warlock spell save DC. The creatures that fail their saving throws are all charmed or frightened by you (your choice) until the end of your next turn. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "rus": "Начиная с 1-го уровня ваш покровитель наделяет вас способностью излучать завораживающую и пугающую силу фей. Вы действием заставляете каждое существо в кубе 10 футов совершить спасбросок Мудрости. Провалившие очарованы или испуганы вами (на ваш выбор) до конца вашего следующего хода. Требуется короткий или продолжительный отдых."
+    },
+    "source": "subclass",
+    "sourceDetail": "archfey",
+    "level": 1,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["charm", "fear", "action", "fey"]
+  },
+  {
+    "engName": "misty_escape",
+    "name": { "eng": "Misty Escape", "rus": "Туманный побег" },
+    "description": {
+      "eng": "Starting at 6th level, when you take damage, you can use your reaction to turn invisible and teleport up to 60 feet to an unoccupied space you can see. You remain invisible until the start of your next turn or until you attack or cast a spell. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "rus": "Начиная с 6-го уровня, когда вы получаете урон, вы можете реакцией стать невидимым и телепортироваться на расстояние до 60 футов в видимое незанятое пространство. Вы остаётесь невидимым до начала вашего следующего хода или пока не атакуете/заклинаете. Требуется короткий или продолжительный отдых."
+    },
+    "source": "subclass",
+    "sourceDetail": "archfey",
+    "level": 6,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["teleport", "invisibility", "reaction", "defensive"]
+  },
+  {
+    "engName": "beguiling_defenses",
+    "name": { "eng": "Beguiling Defenses", "rus": "Завораживающая защита" },
+    "description": {
+      "eng": "Beginning at 10th level, you are immune to being charmed, and when another creature attempts to charm you, you can use your reaction to attempt to turn the charm back on that creature. The creature must succeed on a Wisdom saving throw against your warlock spell save DC or be charmed by you for 1 minute or until it takes any damage.",
+      "rus": "Начиная с 10-го уровня вы получаете иммунитет к очарованию. Когда существо пытается вас очаровать, вы можете реакцией переадресовать чары ему. Существо совершает спасбросок Мудрости или оказывается очарованным вами на 1 минуту или до получения урона."
+    },
+    "source": "subclass",
+    "sourceDetail": "archfey",
+    "level": 10,
+    "tags": ["charm", "immunity", "reaction", "defensive"]
+  },
+  {
+    "engName": "dark_delirium",
+    "name": { "eng": "Dark Delirium", "rus": "Тёмный морок" },
+    "description": {
+      "eng": "Starting at 14th level, as an action, choose a creature that you can see within 60 feet of you. It must make a Wisdom saving throw against your warlock spell save DC. On a failed save, it is charmed or frightened by you (your choice) for 1 minute or until your concentration is broken. This feature has no effect on undead or constructs. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "rus": "Начиная с 14-го уровня вы действием выбираете видимое существо в пределах 60 футов. Оно совершает спасбросок Мудрости. При провале очаровано или испугано вами (на ваш выбор) на 1 минуту или до потери концентрации. Не действует на нежить и конструкты. Требуется короткий или продолжительный отдых."
+    },
+    "source": "subclass",
+    "sourceDetail": "archfey",
+    "level": 14,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["charm", "fear", "concentration", "action", "illusion"]
+  },
+  {
+    "engName": "awakened_mind",
+    "name": { "eng": "Awakened Mind", "rus": "Пробуждённый разум" },
+    "description": {
+      "eng": "Starting at 1st level, your alien knowledge gives you the ability to touch the minds of other creatures. You can communicate telepathically with any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand your telepathic utterances, but the creature must be able to understand at least one language.",
+      "rus": "Начиная с 1-го уровня ваши чуждые знания позволяют вам касаться разумов других существ. Вы можете телепатически общаться с любым видимым существом в пределах 30 футов. Вам не нужно знать общий язык, но существо должно понимать хотя бы один язык."
+    },
+    "source": "subclass",
+    "sourceDetail": "great_old_one",
+    "level": 1,
+    "tags": ["telepathy", "passive", "communication"]
+  },
+  {
+    "engName": "entropic_ward",
+    "name": { "eng": "Entropic Ward", "rus": "Энтропийная защита" },
+    "description": {
+      "eng": "At 6th level, when a creature makes an attack roll against you, you can use your reaction to impose disadvantage on that roll. If the attack misses you, your next attack roll against the creature has advantage if you make it before the end of your next turn. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "rus": "На 6-м уровне, когда существо атакует вас, вы можете реакцией наложить на него помеху. Если атака промахивается, ваш следующий бросок атаки против этого существа до конца следующего хода имеет преимущество. Требуется короткий или продолжительный отдых."
+    },
+    "source": "subclass",
+    "sourceDetail": "great_old_one",
+    "level": 6,
+    "resource": { "maxUses": 1, "resetOn": "short_rest" },
+    "tags": ["defensive", "reaction", "attack"]
+  },
+  {
+    "engName": "thought_shield",
+    "name": { "eng": "Thought Shield", "rus": "Щит мысли" },
+    "description": {
+      "eng": "Starting at 10th level, your thoughts can't be read by telepathy or other means unless you allow it. Also, whenever a creature deals psychic damage to you, that creature takes the same amount of damage that you do.",
+      "rus": "Начиная с 10-го уровня ваши мысли нельзя прочитать телепатически без вашего ведома. Кроме того, когда существо наносит вам урон психической энергией, оно получает такое же количество урона."
+    },
+    "source": "subclass",
+    "sourceDetail": "great_old_one",
+    "level": 10,
+    "tags": ["mind", "psychic", "passive", "resistance"]
+  },
+  {
+    "engName": "create_thrall",
+    "name": { "eng": "Create Thrall", "rus": "Создание приспешника" },
+    "description": {
+      "eng": "At 14th level, you gain the ability to infect a humanoid's mind with the alien magic of your patron. You can use your action to touch an incapacitated humanoid. That creature is then charmed by you until a Remove Curse spell is cast on it, the charmed condition is removed from it, or you use this feature again. You can communicate telepathically with the charmed creature as long as you are on the same plane of existence.",
+      "rus": "На 14-м уровне вы действием прикасаетесь к обездвиженному гуманоиду. Существо очаровывается вами до снятия заклинанием Снятие проклятия или до следующего использования этой способности. Вы можете телепатически общаться с ним на одном плане существования."
+    },
+    "source": "subclass",
+    "sourceDetail": "great_old_one",
+    "level": 14,
+    "tags": ["charm", "telepathy", "action", "mind"]
+  },
+  {
     "engName": "visions_of_the_past",
     "name": { "eng": "Visions of the Past", "rus": "Видения прошлого" },
     "description": {
