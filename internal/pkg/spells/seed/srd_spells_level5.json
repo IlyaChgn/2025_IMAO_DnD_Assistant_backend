@@ -674,18 +674,29 @@
           "height": 40
         },
         "damage": {
-          "base": [
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "fire"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "radiant"
-            }
-          ]
+          "base": {
+            "diceCount": 4,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        }
+      },
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cylinder",
+          "size": 10,
+          "height": 40
+        },
+        "damage": {
+          "base": {
+            "diceCount": 4,
+            "diceType": "d6",
+            "damageType": "radiant"
+          }
         }
       }
     ],

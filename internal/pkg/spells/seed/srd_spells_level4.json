@@ -971,18 +971,29 @@
           "height": 40
         },
         "damage": {
-          "base": [
-            {
-              "diceCount": 2,
-              "diceType": "d8",
-              "damageType": "bludgeoning"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "cold"
-            }
-          ]
+          "base": {
+            "diceCount": 2,
+            "diceType": "d8",
+            "damageType": "bludgeoning"
+          }
+        }
+      },
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cylinder",
+          "size": 20,
+          "height": 40
+        },
+        "damage": {
+          "base": {
+            "diceCount": 4,
+            "diceType": "d6",
+            "damageType": "cold"
+          }
         }
       }
     ],
