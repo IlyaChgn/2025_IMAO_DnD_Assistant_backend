@@ -1005,78 +1005,43 @@
       "scaling": [
         {
           "level": 5,
-          "damage": [
-            {
-              "diceCount": 3,
-              "diceType": "d8",
-              "damageType": "bludgeoning"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "cold"
-            }
-          ]
+          "damage": {
+            "diceCount": 3,
+            "diceType": "d8",
+            "damageType": "bludgeoning"
+          }
         },
         {
           "level": 6,
-          "damage": [
-            {
-              "diceCount": 4,
-              "diceType": "d8",
-              "damageType": "bludgeoning"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "cold"
-            }
-          ]
+          "damage": {
+            "diceCount": 4,
+            "diceType": "d8",
+            "damageType": "bludgeoning"
+          }
         },
         {
           "level": 7,
-          "damage": [
-            {
-              "diceCount": 5,
-              "diceType": "d8",
-              "damageType": "bludgeoning"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "cold"
-            }
-          ]
+          "damage": {
+            "diceCount": 5,
+            "diceType": "d8",
+            "damageType": "bludgeoning"
+          }
         },
         {
           "level": 8,
-          "damage": [
-            {
-              "diceCount": 6,
-              "diceType": "d8",
-              "damageType": "bludgeoning"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "cold"
-            }
-          ]
+          "damage": {
+            "diceCount": 6,
+            "diceType": "d8",
+            "damageType": "bludgeoning"
+          }
         },
         {
           "level": 9,
-          "damage": [
-            {
-              "diceCount": 7,
-              "diceType": "d8",
-              "damageType": "bludgeoning"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "cold"
-            }
-          ]
+          "damage": {
+            "diceCount": 7,
+            "diceType": "d8",
+            "damageType": "bludgeoning"
+          }
         }
       ]
     },

@@ -708,63 +708,35 @@
       "scaling": [
         {
           "level": 6,
-          "damage": [
-            {
-              "diceCount": 5,
-              "diceType": "d6",
-              "damageType": "fire"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "radiant"
-            }
-          ]
+          "damage": {
+            "diceCount": 5,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
         },
         {
           "level": 7,
-          "damage": [
-            {
-              "diceCount": 6,
-              "diceType": "d6",
-              "damageType": "fire"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "radiant"
-            }
-          ]
+          "damage": {
+            "diceCount": 6,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
         },
         {
           "level": 8,
-          "damage": [
-            {
-              "diceCount": 7,
-              "diceType": "d6",
-              "damageType": "fire"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "radiant"
-            }
-          ]
+          "damage": {
+            "diceCount": 7,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
         },
         {
           "level": 9,
-          "damage": [
-            {
-              "diceCount": 8,
-              "diceType": "d6",
-              "damageType": "fire"
-            },
-            {
-              "diceCount": 4,
-              "diceType": "d6",
-              "damageType": "radiant"
-            }
-          ]
+          "damage": {
+            "diceCount": 8,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
         }
       ]
     },
