@@ -23,7 +23,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a chip of sunstone (homebrew)",
+      "reagentFormula": [
+        [
+          "sunstone-chip"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -101,7 +107,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a dried raven's claw (homebrew)",
+      "reagentFormula": [
+        [
+          "raven-claw"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -183,7 +195,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of silver dust (homebrew)",
+      "reagentFormula": [
+        [
+          "powdered-silver"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -251,7 +269,16 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a bit of fur and an iron nail (homebrew)",
+      "reagentFormula": [
+        [
+          "fur"
+        ],
+        [
+          "iron-nail"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -444,7 +471,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of powdered iron (homebrew)",
+      "reagentFormula": [
+        [
+          "powdered-iron"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -548,7 +581,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a white feather or the heart of a hen"
+      "materials": "a white feather or the heart of a hen",
+      "reagentFormula": [
+        [
+          "feather-white",
+          "hen-heart"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -631,7 +670,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a tiny ball of bat guano and sulfur"
+      "materials": "a tiny ball of bat guano and sulfur",
+      "reagentFormula": [
+        [
+          "bat-guano"
+        ],
+        [
+          "sulfur"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -764,7 +811,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a wing feather from any bird"
+      "materials": "a wing feather from any bird",
+      "reagentFormula": [
+        [
+          "bird-feather"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -871,7 +923,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a shaving of licorice root"
+      "materials": "a shaving of licorice root",
+      "reagentFormula": [
+        [
+          "licorice-root"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -956,7 +1013,13 @@
       "verbal": false,
       "somatic": true,
       "material": true,
-      "materials": "a glowing stick of incense or a crystal vial filled with phosphorescent material"
+      "materials": "a glowing stick of incense or a crystal vial filled with phosphorescent material",
+      "reagentFormula": [
+        [
+          "incense-stick",
+          "crystal-vial"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1036,7 +1099,17 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a bit of fur and a rod of amber, crystal, or glass"
+      "materials": "a bit of fur and a rod of amber, crystal, or glass",
+      "reagentFormula": [
+        [
+          "fur"
+        ],
+        [
+          "amber-rod",
+          "crystal-rod",
+          "glass-rod"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -1270,7 +1343,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a strip of elemental-touched cloth (homebrew)",
+      "reagentFormula": [
+        [
+          "elemental-cloth"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1345,7 +1424,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a sprig of dried sage (homebrew)",
+      "reagentFormula": [
+        [
+          "dried-sage"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -1416,7 +1501,12 @@
       "material": true,
       "materials": "diamonds worth 300 gp, which the spell consumes",
       "materialCost": 300,
-      "materialConsumed": true
+      "materialConsumed": true,
+      "gemCost": {
+        "gemType": "diamond",
+        "minValue": 300,
+        "multiPenalty": 1.5
+      }
     },
     "duration": {
       "type": "instantaneous",
@@ -1472,7 +1562,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pinch of dust and a few drops of water"
+      "materials": "a pinch of dust and a few drops of water",
+      "reagentFormula": [
+        [
+          "dust-pinch"
+        ],
+        [
+          "water-drops"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1551,7 +1649,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a drop of molasses"
+      "materials": "a drop of molasses",
+      "reagentFormula": [
+        [
+          "molasses"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1630,7 +1733,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a holy symbol"
+      "materials": "a holy symbol",
+      "reagentFormula": [
+        [
+          "holy-symbol"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1768,7 +1876,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a rotten egg or several skunk cabbage leaves"
+      "materials": "a rotten egg or several skunk cabbage leaves",
+      "reagentFormula": [
+        [
+          "rotten-egg",
+          "skunk-cabbage"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1845,7 +1959,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a drop of blood (homebrew)",
+      "reagentFormula": [
+        [
+          "blood-drop"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",

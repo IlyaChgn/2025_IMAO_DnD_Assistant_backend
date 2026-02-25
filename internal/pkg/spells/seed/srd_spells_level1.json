@@ -24,7 +24,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a drop of blood"
+      "materials": "a drop of blood",
+      "reagentFormula": [
+        [
+          "blood-drop"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -153,7 +158,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a sprinkling of holy water"
+      "materials": "a sprinkling of holy water",
+      "reagentFormula": [
+        [
+          "holy-water"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -275,7 +285,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of sulfur (homebrew)",
+      "reagentFormula": [
+        [
+          "sulfur"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -544,7 +560,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pinch of powder or sand that is colored red, yellow, and blue"
+      "materials": "a pinch of powder or sand that is colored red, yellow, and blue",
+      "reagentFormula": [
+        [
+          "colored-powder",
+          "colored-sand"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -624,7 +646,13 @@
     "components": {
       "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true,
+      "materials": "a brass whistle (homebrew)",
+      "reagentFormula": [
+        [
+          "brass-whistle"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -736,7 +764,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a sprig of dried yarrow (homebrew)",
+      "reagentFormula": [
+        [
+          "dried-yarrow"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -1090,7 +1124,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a twist of vine (homebrew)",
+      "reagentFormula": [
+        [
+          "vine-twist"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1235,7 +1275,13 @@
     "components": {
       "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true,
+      "materials": "a pinch of phosphorus (homebrew)",
+      "reagentFormula": [
+        [
+          "phosphorus"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1308,7 +1354,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small amount of alcohol or distilled spirits"
+      "materials": "a small amount of alcohol or distilled spirits",
+      "reagentFormula": [
+        [
+          "alcohol"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1420,7 +1471,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a bit of sponge soaked in water (homebrew)",
+      "reagentFormula": [
+        [
+          "wet-sponge"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1535,7 +1592,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a bit of pork rind or butter"
+      "materials": "a bit of pork rind or butter",
+      "reagentFormula": [
+        [
+          "pork-rind",
+          "butter"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1609,7 +1672,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a shard of quartz (homebrew)",
+      "reagentFormula": [
+        [
+          "quartz-shard"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2011,7 +2080,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a lion's whisker (homebrew)",
+      "reagentFormula": [
+        [
+          "lion-whisker"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2200,7 +2275,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a sliver of bone (homebrew)",
+      "reagentFormula": [
+        [
+          "bone-sliver"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -2345,7 +2426,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a piece of cured leather"
+      "materials": "a piece of cured leather",
+      "reagentFormula": [
+        [
+          "cured-leather"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2417,7 +2503,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a chip of quartz (homebrew)",
+      "reagentFormula": [
+        [
+          "quartz-shard"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -2529,7 +2621,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "holy water or powdered silver and iron, which the spell consumes"
+      "materials": "holy water or powdered silver and iron, which the spell consumes",
+      "reagentFormula": [
+        [
+          "holy-water",
+          "powdered-silver"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2611,7 +2709,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small silver mirror"
+      "materials": "a small silver mirror",
+      "reagentFormula": [
+        [
+          "silver-mirror"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2750,7 +2853,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small parchment with a bit of holy text written on it"
+      "materials": "a small parchment with a bit of holy text written on it",
+      "reagentFormula": [
+        [
+          "parchment-holy"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2823,7 +2931,14 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pinch of fine sand, rose petals, or a cricket"
+      "materials": "a pinch of fine sand, rose petals, or a cricket",
+      "reagentFormula": [
+        [
+          "fine-sand",
+          "rose-petals",
+          "cricket"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2901,7 +3016,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a small brass bell (homebrew)",
+      "reagentFormula": [
+        [
+          "brass-bell"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",

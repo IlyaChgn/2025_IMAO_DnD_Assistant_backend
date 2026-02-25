@@ -244,7 +244,19 @@ type SpellComponents struct {
 	Material         bool   `json:"material" bson:"material"`
 	Materials        string `json:"materials,omitempty" bson:"materials,omitempty"`       // description
 	MaterialCost     int    `json:"materialCost,omitempty" bson:"materialCost,omitempty"` // gp, if consumed
-	MaterialConsumed bool   `json:"materialConsumed,omitempty" bson:"materialConsumed,omitempty"`
+	MaterialConsumed bool       `json:"materialConsumed,omitempty" bson:"materialConsumed,omitempty"`
+	ReagentFormula   [][]string `json:"reagentFormula,omitempty" bson:"reagentFormula,omitempty"`
+	GemCost          *GemCost   `json:"gemCost,omitempty" bson:"gemCost,omitempty"`
+}
+
+// GemCost describes a costly gem requirement for a spell.
+// The caster needs gem(s) of the specified type worth at least MinValue gp.
+// Using multiple gems incurs a penalty: total value must be >= MinValue * MultiPenalty.
+type GemCost struct {
+	GemType      string  `json:"gemType" bson:"gemType"`                                 // "diamond", "ruby"
+	MinValue     int     `json:"minValue" bson:"minValue"`                               // minimum gp value
+	MultiPenalty float64 `json:"multiPenalty,omitempty" bson:"multiPenalty,omitempty"`    // multiplier for multiple gems (default 1.5)
+	Dust         bool    `json:"dust,omitempty" bson:"dust,omitempty"`                   // true if spell uses gem dust, not whole gems
 }
 
 // SpellDuration describes how long a spell lasts.

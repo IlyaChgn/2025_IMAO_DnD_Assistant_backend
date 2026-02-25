@@ -14,13 +14,23 @@ import (
 //go:embed srd_items.json
 var srdItemsJSON []byte
 
-// SeedItemDefinitions inserts SRD items into the database, skipping duplicates.
+//go:embed srd_reagents.json
+var srdReagentsJSON []byte
+
+// SeedItemDefinitions inserts SRD items and reagents into the database, skipping duplicates.
 // Returns the number of items successfully inserted.
 func SeedItemDefinitions(ctx context.Context, repo itemsinterfaces.ItemDefinitionRepository) (int, error) {
 	var items []models.ItemDefinition
 	if err := json.Unmarshal(srdItemsJSON, &items); err != nil {
 		return 0, err
 	}
+
+	var reagents []models.ItemDefinition
+	if err := json.Unmarshal(srdReagentsJSON, &reagents); err != nil {
+		return 0, err
+	}
+
+	items = append(items, reagents...)
 
 	inserted := 0
 

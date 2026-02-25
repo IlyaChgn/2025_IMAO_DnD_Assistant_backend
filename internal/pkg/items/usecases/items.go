@@ -15,6 +15,7 @@ var validCategories = map[models.ItemCategory]bool{
 	models.ItemCategoryAmmo:       true,
 	models.ItemCategoryUtility:    true,
 	models.ItemCategoryQuest:      true,
+	models.ItemCategoryReagent:    true,
 }
 
 var validRarities = map[models.ItemRarity]bool{

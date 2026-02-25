@@ -224,7 +224,16 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a bit of phosphorus or wychwood, or a glowworm"
+      "materials": "a bit of phosphorus or wychwood, or a glowworm",
+      "reagentFormula": [
+        [
+          "phosphorus",
+          "fleece"
+        ],
+        [
+          "firefly"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -526,7 +535,13 @@
       "verbal": true,
       "somatic": false,
       "material": true,
-      "materials": "a firefly or phosphorescent moss"
+      "materials": "a firefly or phosphorescent moss",
+      "reagentFormula": [
+        [
+          "firefly",
+          "phosphorus"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -643,7 +658,12 @@
       "verbal": false,
       "somatic": true,
       "material": true,
-      "materials": "a bit of fleece"
+      "materials": "a bit of fleece",
+      "reagentFormula": [
+        [
+          "fleece"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1061,7 +1081,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a miniature cloak"
+      "materials": "a miniature cloak",
+      "reagentFormula": [
+        [
+          "miniature-cloak"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1233,7 +1258,18 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "mistletoe, a shamrock leaf, and a club or quarterstaff"
+      "materials": "mistletoe, a shamrock leaf, and a club or quarterstaff",
+      "reagentFormula": [
+        [
+          "mistletoe"
+        ],
+        [
+          "shamrock-leaf"
+        ],
+        [
+          "club"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",

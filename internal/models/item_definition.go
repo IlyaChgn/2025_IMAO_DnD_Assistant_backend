@@ -11,6 +11,7 @@ const (
 	ItemCategoryAmmo       ItemCategory = "ammo"
 	ItemCategoryUtility    ItemCategory = "utility"
 	ItemCategoryQuest      ItemCategory = "quest"
+	ItemCategoryReagent    ItemCategory = "reagent"
 )
 
 // ItemRarity represents the rarity tier of an item.

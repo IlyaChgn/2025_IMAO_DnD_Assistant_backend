@@ -24,7 +24,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "powdered rhubarb leaf and an adder's stomach"
+      "materials": "powdered rhubarb leaf and an adder's stomach",
+      "reagentFormula": [
+        [
+          "rhubarb-leaf"
+        ],
+        [
+          "adder-stomach"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -177,7 +185,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a tiny strip of white cloth"
+      "materials": "a tiny strip of white cloth",
+      "reagentFormula": [
+        [
+          "cloth-strip"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -284,7 +297,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a handful of oak bark"
+      "materials": "a handful of oak bark",
+      "reagentFormula": [
+        [
+          "oak-bark"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -357,7 +375,13 @@
     "components": {
       "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true,
+      "materials": "a pinch of soot (homebrew)",
+      "reagentFormula": [
+        [
+          "soot"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -469,7 +493,13 @@
     "components": {
       "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true,
+      "materials": "a smear of translucent grease (homebrew)",
+      "reagentFormula": [
+        [
+          "translucent-grease"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -675,7 +705,16 @@
       "verbal": true,
       "somatic": false,
       "material": true,
-      "materials": "bat fur and a drop of pitch or piece of coal"
+      "materials": "bat fur and a drop of pitch or piece of coal",
+      "reagentFormula": [
+        [
+          "bat-fur"
+        ],
+        [
+          "pitch-drop",
+          "coal-piece"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -745,7 +784,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a copper piece"
+      "materials": "a copper piece",
+      "reagentFormula": [
+        [
+          "copper-piece"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -809,7 +853,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pinch of powdered iron"
+      "materials": "a pinch of powdered iron",
+      "reagentFormula": [
+        [
+          "powdered-iron"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -884,7 +933,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "leaf of sumac"
+      "materials": "leaf of sumac",
+      "reagentFormula": [
+        [
+          "sumac-leaf"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1018,7 +1072,18 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a bit of tallow, a pinch of brimstone, and a dusting of powdered iron"
+      "materials": "a bit of tallow, a pinch of brimstone, and a dusting of powdered iron",
+      "reagentFormula": [
+        [
+          "tallow"
+        ],
+        [
+          "brimstone"
+        ],
+        [
+          "powdered-iron"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1164,7 +1229,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a piece of iron and a flame"
+      "materials": "a piece of iron and a flame",
+      "reagentFormula": [
+        [
+          "iron-piece"
+        ],
+        [
+          "flame"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1304,7 +1377,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small, straight piece of iron"
+      "materials": "a small, straight piece of iron",
+      "reagentFormula": [
+        [
+          "iron-rod"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1422,7 +1500,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "an eyelash encased in gum arabic"
+      "materials": "an eyelash encased in gum arabic",
+      "reagentFormula": [
+        [
+          "eyelash-in-gum"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1530,7 +1613,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of powdered silver (homebrew)",
+      "reagentFormula": [
+        [
+          "powdered-silver"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -1590,7 +1679,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end"
+      "materials": "either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end",
+      "reagentFormula": [
+        [
+          "leather-loop",
+          "golden-wire"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1754,7 +1849,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a sliver of mirror glass (homebrew)",
+      "reagentFormula": [
+        [
+          "mirror-sliver"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1879,7 +1980,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "several seeds of any moonseed plant and a piece of opalescent feldspar"
+      "materials": "several seeds of any moonseed plant and a piece of opalescent feldspar",
+      "reagentFormula": [
+        [
+          "moonseed"
+        ],
+        [
+          "feldspar"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2024,7 +2133,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a withered twig (homebrew)",
+      "reagentFormula": [
+        [
+          "withered-twig"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2099,7 +2214,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a piece of flint (homebrew)",
+      "reagentFormula": [
+        [
+          "flint"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -2210,7 +2331,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a chip of mica"
+      "materials": "a chip of mica",
+      "reagentFormula": [
+        [
+          "mica-chip"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -2354,7 +2480,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a drop of thick wax (homebrew)",
+      "reagentFormula": [
+        [
+          "wax-drop"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2428,7 +2560,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "seven sharp thorns or seven small twigs, each sharpened to a point"
+      "materials": "seven sharp thorns or seven small twigs, each sharpened to a point",
+      "reagentFormula": [
+        [
+          "thorns",
+          "sharpened-twigs"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2614,7 +2752,16 @@
       "verbal": true,
       "somatic": false,
       "material": true,
-      "materials": "a snake's tongue and either a bit of honeycomb or a drop of sweet oil"
+      "materials": "a snake's tongue and either a bit of honeycomb or a drop of sweet oil",
+      "reagentFormula": [
+        [
+          "snake-tongue"
+        ],
+        [
+          "honeycomb",
+          "sweet-oil"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2691,7 +2838,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pair of platinum rings worth at least 50 gp each, which you and the target must wear for the duration"
+      "materials": "a pair of platinum rings worth at least 50 gp each, which you and the target must wear for the duration",
+      "reagentFormula": [
+        [
+          "platinum-rings-50gp"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -2775,7 +2927,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a bit of spiderweb"
+      "materials": "a bit of spiderweb",
+      "reagentFormula": [
+        [
+          "spider-web"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",

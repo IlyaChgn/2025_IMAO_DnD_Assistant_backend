@@ -22,7 +22,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a ring of iron filings (homebrew)",
+      "reagentFormula": [
+        [
+          "powdered-iron"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -95,7 +101,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "an eggshell and a snakeskin glove"
+      "materials": "an eggshell and a snakeskin glove",
+      "reagentFormula": [
+        [
+          "eggshell"
+        ],
+        [
+          "snakeskin-glove"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -211,7 +225,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a dried toadstool (homebrew)",
+      "reagentFormula": [
+        [
+          "dried-toadstool"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -333,7 +353,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small crystal or glass cone"
+      "materials": "a small crystal or glass cone",
+      "reagentFormula": [
+        [
+          "glass-cone",
+          "crystal-cone"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -450,7 +476,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of rot grub dust (homebrew)",
+      "reagentFormula": [
+        [
+          "rot-grub-dust"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -524,7 +556,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "holy water or powdered silver and iron"
+      "materials": "holy water or powdered silver and iron",
+      "reagentFormula": [
+        [
+          "holy-water",
+          "powdered-silver"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -600,7 +638,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "pinch of sulfur"
+      "materials": "pinch of sulfur",
+      "reagentFormula": [
+        [
+          "sulfur"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -754,7 +797,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "diamond dust worth at least 100 gp, which the spell consumes"
+      "materials": "diamond dust worth at least 100 gp, which the spell consumes",
+      "gemCost": {
+        "gemType": "diamond",
+        "minValue": 100,
+        "multiPenalty": 1.5,
+        "dust": true
+      }
     },
     "duration": {
       "type": "instantaneous",
@@ -823,7 +872,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small, straight piece of iron"
+      "materials": "a small, straight piece of iron",
+      "reagentFormula": [
+        [
+          "iron-rod"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -927,7 +981,18 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a few grains of sugar, some kernels of grain, and a smear of fat"
+      "materials": "a few grains of sugar, some kernels of grain, and a smear of fat",
+      "reagentFormula": [
+        [
+          "sugar"
+        ],
+        [
+          "grain-kernels"
+        ],
+        [
+          "fat-smear"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1050,7 +1115,16 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a handful of dried yarrow and a drop of holy water (homebrew)",
+      "reagentFormula": [
+        [
+          "dried-yarrow"
+        ],
+        [
+          "holy-water"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -1146,7 +1220,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a diamond worth at least 500 gp, which the spell consumes"
+      "materials": "a diamond worth at least 500 gp, which the spell consumes",
+      "gemCost": {
+        "gemType": "diamond",
+        "minValue": 500,
+        "multiPenalty": 1.5
+      }
     },
     "duration": {
       "type": "instantaneous",
@@ -1214,7 +1293,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a copper wire bent into a spiral (homebrew)",
+      "reagentFormula": [
+        [
+          "copper-wire"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1288,7 +1373,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pinch of powder made by crushing a clear gemstone"
+      "materials": "a pinch of powder made by crushing a clear gemstone",
+      "reagentFormula": [
+        [
+          "gemstone-powder"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1345,7 +1435,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small block of granite"
+      "materials": "a small block of granite",
+      "reagentFormula": [
+        [
+          "granite-block"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",

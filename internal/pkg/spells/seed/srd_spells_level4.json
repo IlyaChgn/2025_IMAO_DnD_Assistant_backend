@@ -24,7 +24,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "an item distasteful to the target"
+      "materials": "an item distasteful to the target",
+      "reagentFormula": [
+        [
+          "distasteful-item"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -131,7 +136,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a piece of tentacle from a giant octopus or a giant squid"
+      "materials": "a piece of tentacle from a giant octopus or a giant squid",
+      "reagentFormula": [
+        [
+          "octopus-tentacle"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -215,7 +225,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of ash from a dead tree (homebrew)",
+      "reagentFormula": [
+        [
+          "dead-ash"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -341,7 +357,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "three nut shells"
+      "materials": "three nut shells",
+      "reagentFormula": [
+        [
+          "nut-shells"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -448,7 +469,16 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a sliver of bone wrapped in white cloth (homebrew)",
+      "reagentFormula": [
+        [
+          "bone-sliver"
+        ],
+        [
+          "cloth-strip"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -519,7 +549,13 @@
     "components": {
       "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true,
+      "materials": "a copper key (homebrew)",
+      "reagentFormula": [
+        [
+          "copper-key"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -576,7 +612,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a bit of phosphorus or a firefly"
+      "materials": "a bit of phosphorus or a firefly",
+      "reagentFormula": [
+        [
+          "phosphorus",
+          "firefly"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -647,7 +689,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a leather strap, bound around the arm or a similar appendage"
+      "materials": "a leather strap, bound around the arm or a similar appendage",
+      "reagentFormula": [
+        [
+          "leather-strap"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -718,7 +765,13 @@
     "components": {
       "verbal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materials": "a pinch of powdered glass (homebrew)",
+      "reagentFormula": [
+        [
+          "powdered-glass"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -792,7 +845,13 @@
     "components": {
       "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true,
+      "materials": "a holy symbol etched on a silver coin (homebrew)",
+      "reagentFormula": [
+        [
+          "holy-symbol"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -871,7 +930,15 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a pinch of dust and a few drops of water"
+      "materials": "a pinch of dust and a few drops of water",
+      "reagentFormula": [
+        [
+          "dust-pinch"
+        ],
+        [
+          "water-drops"
+        ]
+      ]
     },
     "duration": {
       "type": "instantaneous",
@@ -1042,7 +1109,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a caterpillar cocoon"
+      "materials": "a caterpillar cocoon",
+      "reagentFormula": [
+        [
+          "caterpillar-cocoon"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
@@ -1120,7 +1192,13 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "diamond dust worth 100 gp, which the spell consumes"
+      "materials": "diamond dust worth 100 gp, which the spell consumes",
+      "gemCost": {
+        "gemType": "diamond",
+        "minValue": 100,
+        "multiPenalty": 1.5,
+        "dust": true
+      }
     },
     "duration": {
       "type": "timed",
@@ -1201,7 +1279,12 @@
       "verbal": true,
       "somatic": true,
       "material": true,
-      "materials": "a small piece of phosphorus"
+      "materials": "a small piece of phosphorus",
+      "reagentFormula": [
+        [
+          "phosphorus"
+        ]
+      ]
     },
     "duration": {
       "type": "timed",
