@@ -10,6 +10,7 @@
       "rus": "Персонаж, выпивший это зелье, восстанавливает 2к4 + 2 хита."
     },
     "category": "consumable",
+    "subcategory": "potion",
     "tags": [
       "potion",
       "healing"
@@ -39,6 +40,7 @@
       "rus": "Персонаж, выпивший это зелье, восстанавливает 4к4 + 4 хита."
     },
     "category": "consumable",
+    "subcategory": "potion",
     "tags": [
       "potion",
       "healing"
@@ -68,6 +70,7 @@
       "rus": "Персонаж, выпивший это зелье, восстанавливает 8к4 + 8 хитов."
     },
     "category": "consumable",
+    "subcategory": "potion",
     "tags": [
       "potion",
       "healing"
@@ -97,6 +100,7 @@
       "rus": "Персонаж, выпивший это зелье, восстанавливает 10к4 + 20 хитов."
     },
     "category": "consumable",
+    "subcategory": "potion",
     "tags": [
       "potion",
       "healing"

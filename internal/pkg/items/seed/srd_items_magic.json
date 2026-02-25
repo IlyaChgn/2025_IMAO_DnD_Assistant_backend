@@ -411,7 +411,7 @@
       "slot": "mainHand"
     },
     "weapon": {
-      "attackType": "ranged",
+      "attackType": "melee",
       "damageDice": "1d4",
       "damageType": "piercing",
       "properties": [
@@ -479,7 +479,7 @@
       "slot": "mainHand"
     },
     "weapon": {
-      "attackType": "ranged",
+      "attackType": "melee",
       "damageDice": "1d4",
       "damageType": "piercing",
       "properties": [
@@ -547,7 +547,7 @@
       "slot": "mainHand"
     },
     "weapon": {
-      "attackType": "ranged",
+      "attackType": "melee",
       "damageDice": "1d4",
       "damageType": "piercing",
       "properties": [
