@@ -1295,7 +1295,7 @@
         "statMod": {
           "target": "weapon_damage_die",
           "operation": "set",
-          "value": "d8"
+          "diceBonus": "d8"
         }
       }
     ],
