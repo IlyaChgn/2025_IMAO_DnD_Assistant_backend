@@ -16,6 +16,8 @@ func ServeCharacterBaseRouter(router *mux.Router, handler *characterdel.Characte
 	subrouter.HandleFunc("/{id}/computed", handler.GetComputed).Methods("GET")
 	subrouter.HandleFunc("/{id}/avatar", handler.UploadAvatar).Methods("POST")
 	subrouter.HandleFunc("/{id}/avatar", handler.DeleteAvatar).Methods("DELETE")
+	subrouter.HandleFunc("/{id}/hotbar-layout", handler.GetHotbarLayout).Methods("GET")
+	subrouter.HandleFunc("/{id}/hotbar-layout", handler.SetHotbarLayout).Methods("PUT")
 	subrouter.HandleFunc("/{id}", handler.GetByID).Methods("GET")
 	subrouter.HandleFunc("/{id}", handler.Update).Methods("PUT")
 	subrouter.HandleFunc("/{id}", handler.Delete).Methods("DELETE")

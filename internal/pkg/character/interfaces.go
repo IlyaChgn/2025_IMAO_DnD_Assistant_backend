@@ -32,6 +32,8 @@ type CharacterBaseRepository interface {
 	List(ctx context.Context, userID string, page, size int, search string) ([]*models.CharacterBase, int64, error)
 	UpdateAvatarURL(ctx context.Context, id string, userID string, avatarURL string) error
 	ClearAvatar(ctx context.Context, id string, userID string) error
+	GetHotbarLayout(ctx context.Context, id string, userID string) (*models.HotbarLayout, error)
+	SetHotbarLayout(ctx context.Context, id string, userID string, layout *models.HotbarLayout) error
 }
 
 // CharacterBaseUsecases provides business logic for CharacterBase operations.
@@ -45,6 +47,8 @@ type CharacterBaseUsecases interface {
 	ImportLSS(ctx context.Context, fileData []byte, userID int) (*models.CharacterBase, *models.ConversionReport, error)
 	UploadAvatar(ctx context.Context, id string, userID int, fileData []byte) (string, error)
 	DeleteAvatar(ctx context.Context, id string, userID int) error
+	GetHotbarLayout(ctx context.Context, id string, userID int) (*models.HotbarLayout, error)
+	SetHotbarLayout(ctx context.Context, id string, userID int, layout *models.HotbarLayout) error
 }
 
 // AvatarS3Manager handles avatar upload/delete operations in S3.
