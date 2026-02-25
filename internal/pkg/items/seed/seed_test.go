@@ -29,11 +29,11 @@ var validRarities = map[models.ItemRarity]bool{
 func loadSeedItems(t *testing.T) []models.ItemDefinition {
 	t.Helper()
 	var items []models.ItemDefinition
-	err := json.Unmarshal(srdItemsJSON, &items)
-	if !assert.NoError(t, err, "srd_items.json must be valid JSON") {
+	err := json.Unmarshal(combinedItemsJSON, &items)
+	if !assert.NoError(t, err, "combined item JSONs must be valid") {
 		t.FailNow()
 	}
-	if !assert.NotEmpty(t, items, "srd_items.json must contain at least one item") {
+	if !assert.NotEmpty(t, items, "combined item JSONs must contain at least one item") {
 		t.FailNow()
 	}
 	return items
@@ -135,5 +135,24 @@ func TestSeedItems_CategoryConsistency(t *testing.T) {
 
 func TestSeedItems_Count(t *testing.T) {
 	items := loadSeedItems(t)
-	assert.GreaterOrEqual(t, len(items), 50, "should have at least 50 SRD items")
+	assert.GreaterOrEqual(t, len(items), 200, "should have at least 200 SRD items")
+}
+
+func TestSeedItems_TierField(t *testing.T) {
+	items := loadSeedItems(t)
+
+	for _, item := range items {
+		switch {
+		case item.Category == models.ItemCategoryReagent:
+			t.Run("reagent/"+item.EngName, func(t *testing.T) {
+				assert.GreaterOrEqual(t, item.Tier, 1, "%s: reagent tier must be >= 1", item.EngName)
+				assert.LessOrEqual(t, item.Tier, 5, "%s: reagent tier must be <= 5", item.EngName)
+			})
+		case item.Tier > 0:
+			t.Run("tiered/"+item.EngName, func(t *testing.T) {
+				assert.GreaterOrEqual(t, item.Tier, 1, "%s: tier must be >= 1", item.EngName)
+				assert.LessOrEqual(t, item.Tier, 5, "%s: tier must be <= 5", item.EngName)
+			})
+		}
+	}
 }

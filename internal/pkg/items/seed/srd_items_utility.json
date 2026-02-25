@@ -1,0 +1,117 @@
+[
+  {
+    "engName": "rope_hempen",
+    "name": {
+      "eng": "Rope, Hempen (50 feet)",
+      "rus": "Верёвка пеньковая (50 футов)"
+    },
+    "description": {
+      "eng": "Rope has 2 hit points and can be burst with a DC 17 Strength check.",
+      "rus": "Верёвка имеет 2 хита и может быть разорвана проверкой Силы со Сл 17."
+    },
+    "category": "utility",
+    "tags": [
+      "adventuring_gear"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "gp"
+    },
+    "weight": 10,
+    "source": "SRD",
+    "requiresAttunement": false
+  },
+  {
+    "engName": "torch",
+    "name": {
+      "eng": "Torch",
+      "rus": "Факел"
+    },
+    "description": {
+      "eng": "A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet.",
+      "rus": "Факел горит 1 час, излучая яркий свет в радиусе 20 футов и тусклый свет ещё на 20 футов."
+    },
+    "category": "utility",
+    "tags": [
+      "adventuring_gear"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": false
+  },
+  {
+    "engName": "backpack",
+    "name": {
+      "eng": "Backpack",
+      "rus": "Рюкзак"
+    },
+    "description": {
+      "eng": "A backpack can hold one cubic foot or 30 pounds of gear.",
+      "rus": "Рюкзак может вместить один кубический фут или 30 фунтов снаряжения."
+    },
+    "category": "utility",
+    "tags": [
+      "adventuring_gear"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "gp"
+    },
+    "weight": 5,
+    "source": "SRD",
+    "requiresAttunement": false
+  },
+  {
+    "engName": "bedroll",
+    "name": {
+      "eng": "Bedroll",
+      "rus": "Спальник"
+    },
+    "description": {
+      "eng": "A bedroll consists of bedding and a blanket.",
+      "rus": "Спальник состоит из постельных принадлежностей и одеяла."
+    },
+    "category": "utility",
+    "tags": [
+      "adventuring_gear"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "gp"
+    },
+    "weight": 7,
+    "source": "SRD",
+    "requiresAttunement": false
+  },
+  {
+    "engName": "tinderbox",
+    "name": {
+      "eng": "Tinderbox",
+      "rus": "Трутница"
+    },
+    "description": {
+      "eng": "A tinderbox contains flint, fire steel, and tinder for lighting fires.",
+      "rus": "Трутница содержит кремень, огниво и трут для разведения огня."
+    },
+    "category": "utility",
+    "tags": [
+      "adventuring_gear"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "sp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": false
+  }
+]

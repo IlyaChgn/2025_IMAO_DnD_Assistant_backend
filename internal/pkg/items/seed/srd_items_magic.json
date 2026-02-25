@@ -1,0 +1,2353 @@
+[
+  {
+    "engName": "longsword-plus-1",
+    "name": {
+      "eng": "Longsword +1",
+      "rus": "Длинный меч +1"
+    },
+    "description": {
+      "eng": "A magical longsword that grants +1 bonus to attack and damage rolls.",
+      "rus": "Магический длинный меч, дающий бонус +1 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 3,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "1d8",
+      "damageType": "slashing",
+      "properties": [
+        "versatile"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "longsword-plus-1-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "longsword-plus-1-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "longsword-plus-2",
+    "name": {
+      "eng": "Longsword +2",
+      "rus": "Длинный меч +2"
+    },
+    "description": {
+      "eng": "A magical longsword that grants +2 bonus to attack and damage rolls.",
+      "rus": "Магический длинный меч, дающий бонус +2 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 3,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "1d8",
+      "damageType": "slashing",
+      "properties": [
+        "versatile"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "longsword-plus-2-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "longsword-plus-2-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "longsword-plus-3",
+    "name": {
+      "eng": "Longsword +3",
+      "rus": "Длинный меч +3"
+    },
+    "description": {
+      "eng": "A magical longsword that grants +3 bonus to attack and damage rolls.",
+      "rus": "Магический длинный меч, дающий бонус +3 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 3,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "1d8",
+      "damageType": "slashing",
+      "properties": [
+        "versatile"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "longsword-plus-3-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "longsword-plus-3-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "shortbow-plus-1",
+    "name": {
+      "eng": "Shortbow +1",
+      "rus": "Короткий лук +1"
+    },
+    "description": {
+      "eng": "A magical shortbow that grants +1 bonus to attack and damage rolls.",
+      "rus": "Магический короткий лук, дающий бонус +1 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "simple_ranged",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 80,
+        "long": 320
+      }
+    },
+    "modifiers": [
+      {
+        "id": "shortbow-plus-1-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "shortbow-plus-1-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "shortbow-plus-2",
+    "name": {
+      "eng": "Shortbow +2",
+      "rus": "Короткий лук +2"
+    },
+    "description": {
+      "eng": "A magical shortbow that grants +2 bonus to attack and damage rolls.",
+      "rus": "Магический короткий лук, дающий бонус +2 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "simple_ranged",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 80,
+        "long": 320
+      }
+    },
+    "modifiers": [
+      {
+        "id": "shortbow-plus-2-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "shortbow-plus-2-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "shortbow-plus-3",
+    "name": {
+      "eng": "Shortbow +3",
+      "rus": "Короткий лук +3"
+    },
+    "description": {
+      "eng": "A magical shortbow that grants +3 bonus to attack and damage rolls.",
+      "rus": "Магический короткий лук, дающий бонус +3 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "simple_ranged",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 80,
+        "long": 320
+      }
+    },
+    "modifiers": [
+      {
+        "id": "shortbow-plus-3-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "shortbow-plus-3-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "dagger-plus-1",
+    "name": {
+      "eng": "Dagger +1",
+      "rus": "Кинжал +1"
+    },
+    "description": {
+      "eng": "A magical dagger that grants +1 bonus to attack and damage rolls.",
+      "rus": "Магический кинжал, дающий бонус +1 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "simple_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d4",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "light",
+        "thrown"
+      ],
+      "reach": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    },
+    "modifiers": [
+      {
+        "id": "dagger-plus-1-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "dagger-plus-1-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "dagger-plus-2",
+    "name": {
+      "eng": "Dagger +2",
+      "rus": "Кинжал +2"
+    },
+    "description": {
+      "eng": "A magical dagger that grants +2 bonus to attack and damage rolls.",
+      "rus": "Магический кинжал, дающий бонус +2 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "simple_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d4",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "light",
+        "thrown"
+      ],
+      "reach": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    },
+    "modifiers": [
+      {
+        "id": "dagger-plus-2-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "dagger-plus-2-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "dagger-plus-3",
+    "name": {
+      "eng": "Dagger +3",
+      "rus": "Кинжал +3"
+    },
+    "description": {
+      "eng": "A magical dagger that grants +3 bonus to attack and damage rolls.",
+      "rus": "Магический кинжал, дающий бонус +3 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "simple_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d4",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "light",
+        "thrown"
+      ],
+      "reach": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    },
+    "modifiers": [
+      {
+        "id": "dagger-plus-3-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "dagger-plus-3-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "greatsword-plus-1",
+    "name": {
+      "eng": "Greatsword +1",
+      "rus": "Двуручный меч +1"
+    },
+    "description": {
+      "eng": "A magical greatsword that grants +1 bonus to attack and damage rolls.",
+      "rus": "Магический двуручный меч, дающий бонус +1 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 6,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "2d6",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "two-handed"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "greatsword-plus-1-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "greatsword-plus-1-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "greatsword-plus-2",
+    "name": {
+      "eng": "Greatsword +2",
+      "rus": "Двуручный меч +2"
+    },
+    "description": {
+      "eng": "A magical greatsword that grants +2 bonus to attack and damage rolls.",
+      "rus": "Магический двуручный меч, дающий бонус +2 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 6,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "2d6",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "two-handed"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "greatsword-plus-2-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "greatsword-plus-2-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "greatsword-plus-3",
+    "name": {
+      "eng": "Greatsword +3",
+      "rus": "Двуручный меч +3"
+    },
+    "description": {
+      "eng": "A magical greatsword that grants +3 bonus to attack and damage rolls.",
+      "rus": "Магический двуручный меч, дающий бонус +3 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 6,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "2d6",
+      "damageType": "slashing",
+      "properties": [
+        "heavy",
+        "two-handed"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "greatsword-plus-3-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "greatsword-plus-3-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "rapier-plus-1",
+    "name": {
+      "eng": "Rapier +1",
+      "rus": "Рапира +1"
+    },
+    "description": {
+      "eng": "A magical rapier that grants +1 bonus to attack and damage rolls.",
+      "rus": "Магический рапира, дающий бонус +1 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "finesse"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "rapier-plus-1-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "rapier-plus-1-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "rapier-plus-2",
+    "name": {
+      "eng": "Rapier +2",
+      "rus": "Рапира +2"
+    },
+    "description": {
+      "eng": "A magical rapier that grants +2 bonus to attack and damage rolls.",
+      "rus": "Магический рапира, дающий бонус +2 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "finesse"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "rapier-plus-2-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "rapier-plus-2-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "rapier-plus-3",
+    "name": {
+      "eng": "Rapier +3",
+      "rus": "Рапира +3"
+    },
+    "description": {
+      "eng": "A magical rapier that grants +3 bonus to attack and damage rolls.",
+      "rus": "Магический рапира, дающий бонус +3 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_melee",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "melee",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "finesse"
+      ],
+      "reach": 5
+    },
+    "modifiers": [
+      {
+        "id": "rapier-plus-3-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "rapier-plus-3-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "longbow-plus-1",
+    "name": {
+      "eng": "Longbow +1",
+      "rus": "Длинный лук +1"
+    },
+    "description": {
+      "eng": "A magical longbow that grants +1 bonus to attack and damage rolls.",
+      "rus": "Магический длинный лук, дающий бонус +1 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_ranged",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "heavy",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 150,
+        "long": 600
+      }
+    },
+    "modifiers": [
+      {
+        "id": "longbow-plus-1-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "longbow-plus-1-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "longbow-plus-2",
+    "name": {
+      "eng": "Longbow +2",
+      "rus": "Длинный лук +2"
+    },
+    "description": {
+      "eng": "A magical longbow that grants +2 bonus to attack and damage rolls.",
+      "rus": "Магический длинный лук, дающий бонус +2 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_ranged",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "heavy",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 150,
+        "long": 600
+      }
+    },
+    "modifiers": [
+      {
+        "id": "longbow-plus-2-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "longbow-plus-2-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "longbow-plus-3",
+    "name": {
+      "eng": "Longbow +3",
+      "rus": "Длинный лук +3"
+    },
+    "description": {
+      "eng": "A magical longbow that grants +3 bonus to attack and damage rolls.",
+      "rus": "Магический длинный лук, дающий бонус +3 к броскам атаки и урона."
+    },
+    "category": "equipment",
+    "subcategory": "martial_ranged",
+    "tags": [
+      "weapon",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "equipment": {
+      "slot": "mainHand"
+    },
+    "weapon": {
+      "attackType": "ranged",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "heavy",
+        "two-handed"
+      ],
+      "range": {
+        "normal": 150,
+        "long": 600
+      }
+    },
+    "modifiers": [
+      {
+        "id": "longbow-plus-3-atk",
+        "source": "item",
+        "target": {
+          "type": "attack_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      },
+      {
+        "id": "longbow-plus-3-dmg",
+        "source": "item",
+        "target": {
+          "type": "damage_roll"
+        },
+        "operation": "add",
+        "value": 3,
+        "priority": 10,
+        "condition": "while_equipped"
+      }
+    ],
+    "requiresAttunement": false
+  },
+  {
+    "engName": "chain-mail-plus-1",
+    "name": {
+      "eng": "Chain Mail +1",
+      "rus": "Кольчуга +1"
+    },
+    "description": {
+      "eng": "Magical chain mail that grants an additional +1 bonus to AC.",
+      "rus": "Магическая кольчуга, дающая дополнительный бонус +1 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "heavy_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 1500,
+      "currency": "gp"
+    },
+    "weight": 55,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest",
+      "properties": [
+        "stealth_disadvantage"
+      ]
+    },
+    "armor": {
+      "armorType": "heavy",
+      "baseAC": 17,
+      "dexCap": 0,
+      "strReq": 13,
+      "stealth": "disadvantage"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "chain-mail-plus-2",
+    "name": {
+      "eng": "Chain Mail +2",
+      "rus": "Кольчуга +2"
+    },
+    "description": {
+      "eng": "Magical chain mail that grants an additional +2 bonus to AC.",
+      "rus": "Магическая кольчуга, дающая дополнительный бонус +2 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "heavy_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 6000,
+      "currency": "gp"
+    },
+    "weight": 55,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest",
+      "properties": [
+        "stealth_disadvantage"
+      ]
+    },
+    "armor": {
+      "armorType": "heavy",
+      "baseAC": 18,
+      "dexCap": 0,
+      "strReq": 13,
+      "stealth": "disadvantage"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "chain-mail-plus-3",
+    "name": {
+      "eng": "Chain Mail +3",
+      "rus": "Кольчуга +3"
+    },
+    "description": {
+      "eng": "Magical chain mail that grants an additional +3 bonus to AC.",
+      "rus": "Магическая кольчуга, дающая дополнительный бонус +3 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "heavy_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "legendary",
+    "tier": 5,
+    "value": {
+      "amount": 24000,
+      "currency": "gp"
+    },
+    "weight": 55,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest",
+      "properties": [
+        "stealth_disadvantage"
+      ]
+    },
+    "armor": {
+      "armorType": "heavy",
+      "baseAC": 19,
+      "dexCap": 0,
+      "strReq": 13,
+      "stealth": "disadvantage"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "studded-leather-plus-1",
+    "name": {
+      "eng": "Studded Leather +1",
+      "rus": "Проклёпанная кожа +1"
+    },
+    "description": {
+      "eng": "Magical studded leather that grants an additional +1 bonus to AC.",
+      "rus": "Магическая проклёпанная кожа, дающая дополнительный бонус +1 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "light_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 1500,
+      "currency": "gp"
+    },
+    "weight": 13,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest"
+    },
+    "armor": {
+      "armorType": "light",
+      "baseAC": 13
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "studded-leather-plus-2",
+    "name": {
+      "eng": "Studded Leather +2",
+      "rus": "Проклёпанная кожа +2"
+    },
+    "description": {
+      "eng": "Magical studded leather that grants an additional +2 bonus to AC.",
+      "rus": "Магическая проклёпанная кожа, дающая дополнительный бонус +2 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "light_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 6000,
+      "currency": "gp"
+    },
+    "weight": 13,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest"
+    },
+    "armor": {
+      "armorType": "light",
+      "baseAC": 14
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "studded-leather-plus-3",
+    "name": {
+      "eng": "Studded Leather +3",
+      "rus": "Проклёпанная кожа +3"
+    },
+    "description": {
+      "eng": "Magical studded leather that grants an additional +3 bonus to AC.",
+      "rus": "Магическая проклёпанная кожа, дающая дополнительный бонус +3 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "light_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "legendary",
+    "tier": 5,
+    "value": {
+      "amount": 24000,
+      "currency": "gp"
+    },
+    "weight": 13,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest"
+    },
+    "armor": {
+      "armorType": "light",
+      "baseAC": 15
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "half-plate-plus-1",
+    "name": {
+      "eng": "Half Plate +1",
+      "rus": "Полулаты +1"
+    },
+    "description": {
+      "eng": "Magical half plate that grants an additional +1 bonus to AC.",
+      "rus": "Магическая полулаты, дающая дополнительный бонус +1 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "medium_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 1500,
+      "currency": "gp"
+    },
+    "weight": 40,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest",
+      "properties": [
+        "stealth_disadvantage"
+      ]
+    },
+    "armor": {
+      "armorType": "medium",
+      "baseAC": 16,
+      "dexCap": 2,
+      "stealth": "disadvantage"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "half-plate-plus-2",
+    "name": {
+      "eng": "Half Plate +2",
+      "rus": "Полулаты +2"
+    },
+    "description": {
+      "eng": "Magical half plate that grants an additional +2 bonus to AC.",
+      "rus": "Магическая полулаты, дающая дополнительный бонус +2 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "medium_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 6000,
+      "currency": "gp"
+    },
+    "weight": 40,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest",
+      "properties": [
+        "stealth_disadvantage"
+      ]
+    },
+    "armor": {
+      "armorType": "medium",
+      "baseAC": 17,
+      "dexCap": 2,
+      "stealth": "disadvantage"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "half-plate-plus-3",
+    "name": {
+      "eng": "Half Plate +3",
+      "rus": "Полулаты +3"
+    },
+    "description": {
+      "eng": "Magical half plate that grants an additional +3 bonus to AC.",
+      "rus": "Магическая полулаты, дающая дополнительный бонус +3 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "medium_armor",
+    "tags": [
+      "armor",
+      "magic"
+    ],
+    "rarity": "legendary",
+    "tier": 5,
+    "value": {
+      "amount": 24000,
+      "currency": "gp"
+    },
+    "weight": 40,
+    "source": "SRD",
+    "equipment": {
+      "slot": "chest",
+      "properties": [
+        "stealth_disadvantage"
+      ]
+    },
+    "armor": {
+      "armorType": "medium",
+      "baseAC": 18,
+      "dexCap": 2,
+      "stealth": "disadvantage"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "shield-plus-1",
+    "name": {
+      "eng": "Shield +1",
+      "rus": "Щит +1"
+    },
+    "description": {
+      "eng": "A magical shield that grants an additional +1 bonus to AC beyond the normal +2.",
+      "rus": "Магический щит, дающий дополнительный бонус +1 к КД помимо обычных +2."
+    },
+    "category": "equipment",
+    "subcategory": "shield",
+    "tags": [
+      "armor",
+      "shield",
+      "magic"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 6,
+    "source": "SRD",
+    "equipment": {
+      "slot": "offHand"
+    },
+    "armor": {
+      "armorType": "shield",
+      "baseAC": 3
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "shield-plus-2",
+    "name": {
+      "eng": "Shield +2",
+      "rus": "Щит +2"
+    },
+    "description": {
+      "eng": "A magical shield that grants an additional +2 bonus to AC beyond the normal +2.",
+      "rus": "Магический щит, дающий дополнительный бонус +2 к КД помимо обычных +2."
+    },
+    "category": "equipment",
+    "subcategory": "shield",
+    "tags": [
+      "armor",
+      "shield",
+      "magic"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2000,
+      "currency": "gp"
+    },
+    "weight": 6,
+    "source": "SRD",
+    "equipment": {
+      "slot": "offHand"
+    },
+    "armor": {
+      "armorType": "shield",
+      "baseAC": 4
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "shield-plus-3",
+    "name": {
+      "eng": "Shield +3",
+      "rus": "Щит +3"
+    },
+    "description": {
+      "eng": "A magical shield that grants an additional +3 bonus to AC beyond the normal +2.",
+      "rus": "Магический щит, дающий дополнительный бонус +3 к КД помимо обычных +2."
+    },
+    "category": "equipment",
+    "subcategory": "shield",
+    "tags": [
+      "armor",
+      "shield",
+      "magic"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 10000,
+      "currency": "gp"
+    },
+    "weight": 6,
+    "source": "SRD",
+    "equipment": {
+      "slot": "offHand"
+    },
+    "armor": {
+      "armorType": "shield",
+      "baseAC": 5
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "bag-of-holding",
+    "name": {
+      "eng": "Bag of Holding",
+      "rus": "Мешок хранения"
+    },
+    "description": {
+      "eng": "This bag has an interior space larger than its outside dimensions. It can hold up to 500 pounds and 64 cubic feet.",
+      "rus": "Этот мешок имеет внутреннее пространство больше внешних размеров. Он может вместить до 500 фунтов и 64 кубических футов."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 15,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "none",
+      "properties": []
+    }
+  },
+  {
+    "engName": "boots-of-elvenkind",
+    "name": {
+      "eng": "Boots of Elvenkind",
+      "rus": "Сапоги эльфийского рода"
+    },
+    "description": {
+      "eng": "While you wear these boots, your steps make no sound. You have advantage on Stealth checks that rely on moving silently.",
+      "rus": "Пока вы носите эти сапоги, ваши шаги не издают звука. Вы получаете преимущество на проверки Скрытности, связанные с бесшумным передвижением."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "stealth",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "feet"
+    }
+  },
+  {
+    "engName": "boots-of-speed",
+    "name": {
+      "eng": "Boots of Speed",
+      "rus": "Сапоги скорости"
+    },
+    "description": {
+      "eng": "As a bonus action, you can click the boots together to double your walking speed for 10 minutes.",
+      "rus": "Бонусным действием вы можете щёлкнуть каблуками, чтобы удвоить скорость ходьбы на 10 минут."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "speed",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2500,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "feet"
+    }
+  },
+  {
+    "engName": "bracers-of-defense",
+    "name": {
+      "eng": "Bracers of Defense",
+      "rus": "Наручи защиты"
+    },
+    "description": {
+      "eng": "While wearing these bracers with no armor or shield, you gain a +2 bonus to AC.",
+      "rus": "Пока вы носите эти наручи без доспехов и щита, вы получаете бонус +2 к КД."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "defense"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 3000,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "hands"
+    },
+    "modifiers": [
+      {
+        "id": "bracers-defense-ac",
+        "source": "item",
+        "target": {
+          "type": "armor_class"
+        },
+        "operation": "add",
+        "value": 2,
+        "priority": 10,
+        "condition": "wearing_no_armor"
+      }
+    ]
+  },
+  {
+    "engName": "brooch-of-shielding",
+    "name": {
+      "eng": "Brooch of Shielding",
+      "rus": "Брошь защиты"
+    },
+    "description": {
+      "eng": "While wearing this brooch, you have resistance to force damage, and immunity to magic missile.",
+      "rus": "Пока вы носите эту брошь, вы получаете сопротивление к урону силовым полем и иммунитет к волшебной стреле."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "defense",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "neck"
+    }
+  },
+  {
+    "engName": "cloak-of-displacement",
+    "name": {
+      "eng": "Cloak of Displacement",
+      "rus": "Плащ смещения"
+    },
+    "description": {
+      "eng": "Illusions make you appear to be standing near your actual location, causing attack rolls against you to have disadvantage.",
+      "rus": "Иллюзии заставляют вас казаться стоящим рядом с вашим настоящим местоположением. Броски атаки против вас совершаются с помехой."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "illusion",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 3000,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "shoulders"
+    }
+  },
+  {
+    "engName": "cloak-of-protection",
+    "name": {
+      "eng": "Cloak of Protection",
+      "rus": "Плащ защиты"
+    },
+    "description": {
+      "eng": "You gain a +1 bonus to AC and saving throws while you wear this cloak.",
+      "rus": "Вы получаете бонус +1 к КД и спасброскам, пока носите этот плащ."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "defense"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "shoulders"
+    },
+    "modifiers": [
+      {
+        "id": "cloak-prot-ac",
+        "source": "item",
+        "target": {
+          "type": "armor_class"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_attuned"
+      },
+      {
+        "id": "cloak-prot-save",
+        "source": "item",
+        "target": {
+          "type": "saving_throw"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  },
+  {
+    "engName": "gauntlets-of-ogre-power",
+    "name": {
+      "eng": "Gauntlets of Ogre Power",
+      "rus": "Рукавицы силы огра"
+    },
+    "description": {
+      "eng": "Your Strength score is 19 while you wear these gauntlets, unless your Strength is already 19 or higher.",
+      "rus": "Ваша Сила становится 19, пока вы носите эти рукавицы, если только ваша Сила уже не равна 19 или выше."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "strength"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 1000,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "hands"
+    },
+    "modifiers": [
+      {
+        "id": "gauntlets-ogre-str",
+        "source": "item",
+        "target": {
+          "type": "ability_score"
+        },
+        "operation": "set",
+        "value": 19,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  },
+  {
+    "engName": "headband-of-intellect",
+    "name": {
+      "eng": "Headband of Intellect",
+      "rus": "Повязка интеллекта"
+    },
+    "description": {
+      "eng": "Your Intelligence score is 19 while you wear this headband, unless your Intelligence is already 19 or higher.",
+      "rus": "Ваш Интеллект становится 19, пока вы носите эту повязку, если только ваш Интеллект уже не равен 19 или выше."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "intelligence"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 1000,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "head"
+    },
+    "modifiers": [
+      {
+        "id": "headband-int",
+        "source": "item",
+        "target": {
+          "type": "ability_score"
+        },
+        "operation": "set",
+        "value": 19,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  },
+  {
+    "engName": "immovable-rod",
+    "name": {
+      "eng": "Immovable Rod",
+      "rus": "Неподвижный жезл"
+    },
+    "description": {
+      "eng": "This flat iron rod has a button on one end. Pressing the button magically fixes the rod in place.",
+      "rus": "У этого плоского железного жезла есть кнопка на конце. Нажатие кнопки магически фиксирует жезл на месте."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "utility",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "none",
+      "properties": []
+    }
+  },
+  {
+    "engName": "lantern-of-revealing",
+    "name": {
+      "eng": "Lantern of Revealing",
+      "rus": "Фонарь разоблачения"
+    },
+    "description": {
+      "eng": "While lit, this hooded lantern burns for 6 hours and sheds bright light in a 30-foot radius. Invisible creatures in its light become visible.",
+      "rus": "Зажжённый закрытый фонарь горит 6 часов и излучает яркий свет в радиусе 30 футов. Невидимые существа в его свете становятся видимыми."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "utility",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "none",
+      "properties": []
+    }
+  },
+  {
+    "engName": "necklace-of-fireballs",
+    "name": {
+      "eng": "Necklace of Fireballs",
+      "rus": "Ожерелье огненных шаров"
+    },
+    "description": {
+      "eng": "This necklace has 1d6+3 beads. You can detach a bead and throw it up to 60 feet, casting Fireball (save DC 15).",
+      "rus": "На этом ожерелье 1к6+3 бусины. Вы можете отделить бусину и бросить её на расстояние до 60 футов, создав Огненный шар (Сл спасброска 15)."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "fire",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 2500,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "neck"
+    }
+  },
+  {
+    "engName": "pearl-of-power",
+    "name": {
+      "eng": "Pearl of Power",
+      "rus": "Жемчужина силы"
+    },
+    "description": {
+      "eng": "While attuned, you can use an action to regain one expended spell slot of 3rd level or lower.",
+      "rus": "Настроив предмет, вы можете действием восстановить одну потраченную ячейку заклинания 3-го уровня или ниже."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "none",
+      "properties": []
+    }
+  },
+  {
+    "engName": "periapt-of-health",
+    "name": {
+      "eng": "Periapt of Health",
+      "rus": "Амулет здоровья"
+    },
+    "description": {
+      "eng": "You are immune to contracting any disease while you wear this pendant.",
+      "rus": "Вы невосприимчивы к любым болезням, пока носите этот кулон."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "health",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "neck"
+    }
+  },
+  {
+    "engName": "ring-of-protection",
+    "name": {
+      "eng": "Ring of Protection",
+      "rus": "Кольцо защиты"
+    },
+    "description": {
+      "eng": "You gain a +1 bonus to AC and saving throws while wearing this ring.",
+      "rus": "Вы получаете бонус +1 к КД и спасброскам, пока носите это кольцо."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "defense"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 3500,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "ring1"
+    },
+    "modifiers": [
+      {
+        "id": "ring-prot-ac",
+        "source": "item",
+        "target": {
+          "type": "armor_class"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_attuned"
+      },
+      {
+        "id": "ring-prot-save",
+        "source": "item",
+        "target": {
+          "type": "saving_throw"
+        },
+        "operation": "add",
+        "value": 1,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  },
+  {
+    "engName": "ring-of-resistance",
+    "name": {
+      "eng": "Ring of Resistance",
+      "rus": "Кольцо сопротивления"
+    },
+    "description": {
+      "eng": "While wearing this ring, you have resistance to one damage type determined by the gem set into the ring.",
+      "rus": "Пока вы носите это кольцо, вы получаете сопротивление к одному типу урона, определяемому камнем в кольце."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "defense",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 3000,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "ring1"
+    }
+  },
+  {
+    "engName": "robe-of-the-archmagi",
+    "name": {
+      "eng": "Robe of the Archmagi",
+      "rus": "Мантия архимага"
+    },
+    "description": {
+      "eng": "This elegant robe offers base AC 15 + Dex modifier and grants advantage on saving throws against spells and magical effects.",
+      "rus": "Эта элегантная мантия даёт базовый КД 15 + модификатор Ловкости и преимущество на спасброски от заклинаний и магических эффектов."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "spellcasting",
+      "defense",
+      "mechanics_pending"
+    ],
+    "rarity": "legendary",
+    "tier": 5,
+    "value": {
+      "amount": 75000,
+      "currency": "gp"
+    },
+    "weight": 4,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "chest"
+    },
+    "modifiers": [
+      {
+        "id": "robe-archmagi-ac",
+        "source": "item",
+        "target": {
+          "type": "armor_class"
+        },
+        "operation": "set",
+        "value": 15,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  },
+  {
+    "engName": "wand-of-magic-missiles",
+    "name": {
+      "eng": "Wand of Magic Missiles",
+      "rus": "Жезл волшебных стрел"
+    },
+    "description": {
+      "eng": "This wand has 7 charges. You can expend 1 or more charges to cast Magic Missile. It regains 1d6+1 charges daily at dawn.",
+      "rus": "У этого жезла 7 зарядов. Вы можете потратить 1 или более зарядов для создания Волшебной стрелы. Он восстанавливает 1к6+1 зарядов ежедневно на рассвете."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "evocation",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "held",
+      "properties": []
+    }
+  },
+  {
+    "engName": "portable-hole",
+    "name": {
+      "eng": "Portable Hole",
+      "rus": "Переносная дыра"
+    },
+    "description": {
+      "eng": "This fine black cloth unfolds into a circular sheet 6 feet in diameter. Placing it on a surface creates an extradimensional hole 10 feet deep.",
+      "rus": "Эта тонкая чёрная ткань разворачивается в круглое полотно диаметром 6 футов. Размещение на поверхности создаёт экстрамерную яму глубиной 10 футов."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "utility",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 5000,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "equipment": {
+      "slot": "none",
+      "properties": []
+    }
+  },
+  {
+    "engName": "amulet-of-health",
+    "name": {
+      "eng": "Amulet of Health",
+      "rus": "Амулет здоровья"
+    },
+    "description": {
+      "eng": "Your Constitution score is 19 while you wear this amulet, unless your Constitution is already 19 or higher.",
+      "rus": "Ваше Телосложение становится 19, пока вы носите этот амулет, если только оно уже не равно 19 или выше."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "constitution"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 4000,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "neck"
+    },
+    "modifiers": [
+      {
+        "id": "amulet-health-con",
+        "source": "item",
+        "target": {
+          "type": "ability_score"
+        },
+        "operation": "set",
+        "value": 19,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  },
+  {
+    "engName": "belt-of-hill-giant-strength",
+    "name": {
+      "eng": "Belt of Hill Giant Strength",
+      "rus": "Пояс силы холмового великана"
+    },
+    "description": {
+      "eng": "While wearing this belt, your Strength score changes to 21, unless your Strength is already 21 or higher.",
+      "rus": "Пока вы носите этот пояс, ваша Сила становится 21, если только она уже не равна 21 или выше."
+    },
+    "category": "equipment",
+    "subcategory": "wondrous",
+    "tags": [
+      "wondrous",
+      "strength"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 4000,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "requiresAttunement": true,
+    "equipment": {
+      "slot": "waist"
+    },
+    "modifiers": [
+      {
+        "id": "belt-hill-str",
+        "source": "item",
+        "target": {
+          "type": "ability_score"
+        },
+        "operation": "set",
+        "value": 21,
+        "priority": 10,
+        "condition": "while_attuned"
+      }
+    ]
+  }
+]

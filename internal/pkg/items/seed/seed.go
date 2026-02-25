@@ -2,7 +2,7 @@ package seed
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"encoding/json"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
@@ -11,26 +11,53 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-//go:embed srd_items.json
-var srdItemsJSON []byte
+// Item data is split into per-category JSON files for easier maintenance.
+// The glob pattern matches: srd_items_equipment.json, srd_items_magic.json,
+// srd_items_consumable.json, srd_items_ammo.json, srd_items_utility.json,
+// srd_items_reagent.json.
+//
+//go:embed srd_items_*.json
+var itemFiles embed.FS
 
-//go:embed srd_reagents.json
-var srdReagentsJSON []byte
+// combinedItemsJSON holds the merged JSON array of all per-category files.
+// Built once at init; panics on malformed data (same guarantee as single-file embed).
+var combinedItemsJSON []byte
 
-// SeedItemDefinitions inserts SRD items and reagents into the database, skipping duplicates.
+func init() {
+	entries, err := itemFiles.ReadDir(".")
+	if err != nil {
+		panic("items/seed: failed to read embedded directory: " + err.Error())
+	}
+
+	var all []json.RawMessage
+
+	for _, entry := range entries {
+		data, err := itemFiles.ReadFile(entry.Name())
+		if err != nil {
+			panic("items/seed: failed to read " + entry.Name() + ": " + err.Error())
+		}
+
+		var batch []json.RawMessage
+		if err := json.Unmarshal(data, &batch); err != nil {
+			panic("items/seed: failed to parse " + entry.Name() + ": " + err.Error())
+		}
+
+		all = append(all, batch...)
+	}
+
+	combinedItemsJSON, err = json.Marshal(all)
+	if err != nil {
+		panic("items/seed: failed to marshal combined items: " + err.Error())
+	}
+}
+
+// SeedItemDefinitions inserts SRD items into the database, skipping duplicates.
 // Returns the number of items successfully inserted.
 func SeedItemDefinitions(ctx context.Context, repo itemsinterfaces.ItemDefinitionRepository) (int, error) {
 	var items []models.ItemDefinition
-	if err := json.Unmarshal(srdItemsJSON, &items); err != nil {
+	if err := json.Unmarshal(combinedItemsJSON, &items); err != nil {
 		return 0, err
 	}
-
-	var reagents []models.ItemDefinition
-	if err := json.Unmarshal(srdReagentsJSON, &reagents); err != nil {
-		return 0, err
-	}
-
-	items = append(items, reagents...)
 
 	inserted := 0
 

@@ -1,0 +1,744 @@
+[
+  {
+    "engName": "potion_of_healing",
+    "name": {
+      "eng": "Potion of Healing",
+      "rus": "Зелье лечения"
+    },
+    "description": {
+      "eng": "A character who drinks this potion regains 2d4 + 2 hit points.",
+      "rus": "Персонаж, выпивший это зелье, восстанавливает 2к4 + 2 хита."
+    },
+    "category": "consumable",
+    "tags": [
+      "potion",
+      "healing"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 50,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "potion_of_greater_healing",
+    "name": {
+      "eng": "Potion of Greater Healing",
+      "rus": "Зелье большого лечения"
+    },
+    "description": {
+      "eng": "A character who drinks this potion regains 4d4 + 4 hit points.",
+      "rus": "Персонаж, выпивший это зелье, восстанавливает 4к4 + 4 хита."
+    },
+    "category": "consumable",
+    "tags": [
+      "potion",
+      "healing"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 150,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "potion_of_superior_healing",
+    "name": {
+      "eng": "Potion of Superior Healing",
+      "rus": "Зелье превосходного лечения"
+    },
+    "description": {
+      "eng": "A character who drinks this potion regains 8d4 + 8 hit points.",
+      "rus": "Персонаж, выпивший это зелье, восстанавливает 8к4 + 8 хитов."
+    },
+    "category": "consumable",
+    "tags": [
+      "potion",
+      "healing"
+    ],
+    "rarity": "rare",
+    "value": {
+      "amount": 450,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "potion_of_supreme_healing",
+    "name": {
+      "eng": "Potion of Supreme Healing",
+      "rus": "Зелье высшего лечения"
+    },
+    "description": {
+      "eng": "A character who drinks this potion regains 10d4 + 20 hit points.",
+      "rus": "Персонаж, выпивший это зелье, восстанавливает 10к4 + 20 хитов."
+    },
+    "category": "consumable",
+    "tags": [
+      "potion",
+      "healing"
+    ],
+    "rarity": "very_rare",
+    "value": {
+      "amount": 1350,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "spell-scroll-cantrip",
+    "name": {
+      "eng": "Spell Scroll (Cantrip)",
+      "rus": "Свиток заклинания (заговор)"
+    },
+    "description": {
+      "eng": "A scroll bearing a single cantrip spell. Any spellcaster can use it.",
+      "rus": "Свиток с одним заговором. Любой заклинатель может его использовать."
+    },
+    "category": "consumable",
+    "subcategory": "scroll",
+    "tags": [
+      "consumable",
+      "scroll",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "common",
+    "tier": 1,
+    "value": {
+      "amount": 15,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "spell-scroll-1st",
+    "name": {
+      "eng": "Spell Scroll (1st Level)",
+      "rus": "Свиток заклинания (1-й уровень)"
+    },
+    "description": {
+      "eng": "A scroll bearing a single 1st-level spell. Save DC 13, attack +5.",
+      "rus": "Свиток с одним заклинанием 1-го уровня. Сл спасброска 13, атака +5."
+    },
+    "category": "consumable",
+    "subcategory": "scroll",
+    "tags": [
+      "consumable",
+      "scroll",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "common",
+    "tier": 1,
+    "value": {
+      "amount": 50,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "spell-scroll-2nd",
+    "name": {
+      "eng": "Spell Scroll (2nd Level)",
+      "rus": "Свиток заклинания (2-й уровень)"
+    },
+    "description": {
+      "eng": "A scroll bearing a single 2nd-level spell. Save DC 13, attack +5.",
+      "rus": "Свиток с одним заклинанием 2-го уровня. Сл спасброска 13, атака +5."
+    },
+    "category": "consumable",
+    "subcategory": "scroll",
+    "tags": [
+      "consumable",
+      "scroll",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 120,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "spell-scroll-3rd",
+    "name": {
+      "eng": "Spell Scroll (3rd Level)",
+      "rus": "Свиток заклинания (3-й уровень)"
+    },
+    "description": {
+      "eng": "A scroll bearing a single 3rd-level spell. Save DC 15, attack +7.",
+      "rus": "Свиток с одним заклинанием 3-го уровня. Сл спасброска 15, атака +7."
+    },
+    "category": "consumable",
+    "subcategory": "scroll",
+    "tags": [
+      "consumable",
+      "scroll",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 300,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "spell-scroll-4th",
+    "name": {
+      "eng": "Spell Scroll (4th Level)",
+      "rus": "Свиток заклинания (4-й уровень)"
+    },
+    "description": {
+      "eng": "A scroll bearing a single 4th-level spell. Save DC 15, attack +7.",
+      "rus": "Свиток с одним заклинанием 4-го уровня. Сл спасброска 15, атака +7."
+    },
+    "category": "consumable",
+    "subcategory": "scroll",
+    "tags": [
+      "consumable",
+      "scroll",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "spell-scroll-5th",
+    "name": {
+      "eng": "Spell Scroll (5th Level)",
+      "rus": "Свиток заклинания (5-й уровень)"
+    },
+    "description": {
+      "eng": "A scroll bearing a single 5th-level spell. Save DC 17, attack +9.",
+      "rus": "Свиток с одним заклинанием 5-го уровня. Сл спасброска 17, атака +9."
+    },
+    "category": "consumable",
+    "subcategory": "scroll",
+    "tags": [
+      "consumable",
+      "scroll",
+      "spellcasting",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 1000,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-climbing",
+    "name": {
+      "eng": "Potion of Climbing",
+      "rus": "Зелье лазания"
+    },
+    "description": {
+      "eng": "For 1 hour, you gain a climbing speed equal to your walking speed and advantage on Strength (Athletics) checks for climbing.",
+      "rus": "На 1 час вы получаете скорость лазания, равную вашей скорости ходьбы, и преимущество на проверки Силы (Атлетика) для лазания."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion"
+    ],
+    "rarity": "common",
+    "tier": 1,
+    "value": {
+      "amount": 50,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-fire-resistance",
+    "name": {
+      "eng": "Potion of Fire Resistance",
+      "rus": "Зелье сопротивления огню"
+    },
+    "description": {
+      "eng": "For 1 hour, you have resistance to fire damage.",
+      "rus": "На 1 час вы получаете сопротивление к урону огнём."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "fire",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 300,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-heroism",
+    "name": {
+      "eng": "Potion of Heroism",
+      "rus": "Зелье героизма"
+    },
+    "description": {
+      "eng": "For 1 hour, you gain 10 temporary hit points. You are also under the effect of Bless spell.",
+      "rus": "На 1 час вы получаете 10 временных хитов. Также вы находитесь под действием заклинания Благословение."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "mechanics_pending"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-invisibility",
+    "name": {
+      "eng": "Potion of Invisibility",
+      "rus": "Зелье невидимости"
+    },
+    "description": {
+      "eng": "You become invisible for 1 hour. The effect ends early if you attack or cast a spell.",
+      "rus": "Вы становитесь невидимым на 1 час. Эффект заканчивается досрочно, если вы атакуете или сотворите заклинание."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "illusion",
+      "mechanics_pending"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 2500,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-speed",
+    "name": {
+      "eng": "Potion of Speed",
+      "rus": "Зелье скорости"
+    },
+    "description": {
+      "eng": "For 1 minute, you gain the effects of the Haste spell (no concentration required).",
+      "rus": "На 1 минуту вы получаете эффекты заклинания Ускорение (концентрация не требуется)."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "speed",
+      "mechanics_pending"
+    ],
+    "rarity": "very_rare",
+    "tier": 4,
+    "value": {
+      "amount": 2500,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-giant-strength-hill",
+    "name": {
+      "eng": "Potion of Hill Giant Strength",
+      "rus": "Зелье силы холмового великана"
+    },
+    "description": {
+      "eng": "For 1 hour, your Strength score changes to 21.",
+      "rus": "На 1 час ваша Сила становится 21."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "strength"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 300,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-giant-strength-frost",
+    "name": {
+      "eng": "Potion of Frost Giant Strength",
+      "rus": "Зелье силы ледяного великана"
+    },
+    "description": {
+      "eng": "For 1 hour, your Strength score changes to 23.",
+      "rus": "На 1 час ваша Сила становится 23."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "strength"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "potion-of-giant-strength-fire",
+    "name": {
+      "eng": "Potion of Fire Giant Strength",
+      "rus": "Зелье силы огненного великана"
+    },
+    "description": {
+      "eng": "For 1 hour, your Strength score changes to 25.",
+      "rus": "На 1 час ваша Сила становится 25."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "strength"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 1000,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "basic-poison",
+    "name": {
+      "eng": "Basic Poison (vial)",
+      "rus": "Простой яд (флакон)"
+    },
+    "description": {
+      "eng": "You can coat one weapon or up to three pieces of ammunition with this poison. A creature hit takes an extra 1d4 poison damage.",
+      "rus": "Вы можете покрыть этим ядом одно оружие или до трёх единиц боеприпасов. Попавшее по существу наносит дополнительно 1к4 урона ядом."
+    },
+    "category": "consumable",
+    "subcategory": "poison",
+    "tags": [
+      "consumable",
+      "poison"
+    ],
+    "rarity": "common",
+    "tier": 1,
+    "value": {
+      "amount": 100,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "serpent-venom",
+    "name": {
+      "eng": "Serpent Venom",
+      "rus": "Змеиный яд"
+    },
+    "description": {
+      "eng": "A creature hit by the poisoned weapon must succeed on a DC 11 Constitution save or take 3d6 poison damage.",
+      "rus": "Существо, поражённое отравленным оружием, должно преуспеть в спасброске Телосложения Сл 11 или получить 3к6 урона ядом."
+    },
+    "category": "consumable",
+    "subcategory": "poison",
+    "tags": [
+      "consumable",
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 200,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "wyvern-poison",
+    "name": {
+      "eng": "Wyvern Poison",
+      "rus": "Яд виверны"
+    },
+    "description": {
+      "eng": "A creature hit must succeed on a DC 15 Constitution save or take 7d6 poison damage (half on success).",
+      "rus": "Поражённое существо должно преуспеть в спасброске Телосложения Сл 15 или получить 7к6 урона ядом (половину при успехе)."
+    },
+    "category": "consumable",
+    "subcategory": "poison",
+    "tags": [
+      "consumable",
+      "poison"
+    ],
+    "rarity": "rare",
+    "tier": 3,
+    "value": {
+      "amount": 1200,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "antitoxin",
+    "name": {
+      "eng": "Antitoxin",
+      "rus": "Противоядие"
+    },
+    "description": {
+      "eng": "A creature that drinks this vial of liquid gains advantage on saving throws against poison for 1 hour.",
+      "rus": "Существо, выпившее этот флакон, получает преимущество на спасброски от яда на 1 час."
+    },
+    "category": "consumable",
+    "subcategory": "potion",
+    "tags": [
+      "consumable",
+      "potion",
+      "healing"
+    ],
+    "rarity": "common",
+    "tier": 1,
+    "value": {
+      "amount": 50,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "oil-of-slipperiness",
+    "name": {
+      "eng": "Oil of Slipperiness",
+      "rus": "Масло скольжения"
+    },
+    "description": {
+      "eng": "This sticky black unguent can cover a creature, giving effects of Freedom of Movement for 8 hours.",
+      "rus": "Эта липкая чёрная мазь может покрыть существо, давая эффекты Свободы перемещения на 8 часов."
+    },
+    "category": "consumable",
+    "subcategory": "oil",
+    "tags": [
+      "consumable",
+      "oil",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 480,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "dust-of-disappearance",
+    "name": {
+      "eng": "Dust of Disappearance",
+      "rus": "Пыль исчезновения"
+    },
+    "description": {
+      "eng": "Throw this dust into the air. Each creature within 10 feet becomes invisible for 2d4 minutes.",
+      "rus": "Бросьте эту пыль в воздух. Каждое существо в пределах 10 футов становится невидимым на 2к4 минуты."
+    },
+    "category": "consumable",
+    "subcategory": "dust",
+    "tags": [
+      "consumable",
+      "dust",
+      "illusion",
+      "mechanics_pending"
+    ],
+    "rarity": "uncommon",
+    "tier": 2,
+    "value": {
+      "amount": 300,
+      "currency": "gp"
+    },
+    "weight": 0,
+    "source": "SRD",
+    "consumable": {
+      "maxCharges": 1,
+      "rechargeOn": ""
+    },
+    "requiresAttunement": false
+  }
+]
