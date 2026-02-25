@@ -4429,5 +4429,174 @@
       "reaction",
       "ultimate"
     ]
+  },
+  {
+    "engName": "spellcasting_bard",
+    "name": { "eng": "Spellcasting", "rus": "Использование заклинаний" },
+    "description": {
+      "eng": "You have learned to untangle and reshape the fabric of reality in harmony with your wishes and music. Your spells are part of your vast repertoire — magic that you can tune to different situations.",
+      "rus": "Вы научились изменять ткань реальности в согласии со своими желаниями и музыкой. Ваши заклинания — часть обширного репертуара, магия, которую вы можете подстроить под любую ситуацию."
+    },
+    "source": "class",
+    "sourceDetail": "bard",
+    "level": 1,
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "bardic_inspiration_d6",
+    "name": { "eng": "Bardic Inspiration", "rus": "Бардовское вдохновение" },
+    "description": {
+      "eng": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6, which it can add to one ability check, attack roll, or saving throw it makes within the next 10 minutes.",
+      "rus": "Вы способны вдохновлять других воодушевляющими словами или музыкой. Для этого вы бонусным действием выбираете одно существо, кроме себя, в пределах 60 футов, которое вас слышит. Это существо получает кость бардовского вдохновения (к6), которую может добавить к одной проверке характеристики, броску атаки или спасброску в течение следующих 10 минут."
+    },
+    "source": "class",
+    "sourceDetail": "bard",
+    "level": 1,
+    "resource": { "maxUses": 3, "resetOn": "long_rest" },
+    "tags": ["bonus_action", "support", "inspiration"]
+  },
+  {
+    "engName": "spellcasting_cleric",
+    "name": { "eng": "Spellcasting", "rus": "Использование заклинаний" },
+    "description": {
+      "eng": "As a conduit for divine power, you can cast cleric spells. You prepare the list of cleric spells that are available for you to cast, choosing from the cleric spell list.",
+      "rus": "Будучи проводником божественной силы, вы можете накладывать заклинания жреца. Вы подготавливаете список заклинаний жреца, доступных для сотворения, выбирая из списка заклинаний жреца."
+    },
+    "source": "class",
+    "sourceDetail": "cleric",
+    "level": 1,
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "divine_domain",
+    "name": { "eng": "Divine Domain", "rus": "Божественный домен" },
+    "description": {
+      "eng": "Choose one domain related to your deity. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+      "rus": "Выберите один домен, связанный с вашим божеством. Выбор домена даёт вам заклинания домена и другие особенности на 1 уровне. Он также предоставляет дополнительные способы использования Божественного канала на 2 уровне и дополнительные преимущества на 6, 8 и 17 уровнях."
+    },
+    "source": "class",
+    "sourceDetail": "cleric",
+    "level": 1,
+    "tags": ["subclass_choice"]
+  },
+  {
+    "engName": "druidic",
+    "name": { "eng": "Druidic", "rus": "Друидический язык" },
+    "description": {
+      "eng": "You know Druidic, the secret language of druids. You can speak the language and use it to leave hidden messages. You and others who know this language automatically spot such a message.",
+      "rus": "Вы знаете друидический — тайный язык друидов. Вы можете говорить на нём и оставлять скрытые послания. Вы и другие, знающие этот язык, автоматически замечаете такие послания."
+    },
+    "source": "class",
+    "sourceDetail": "druid",
+    "level": 1,
+    "tags": ["language", "utility"]
+  },
+  {
+    "engName": "spellcasting_druid",
+    "name": { "eng": "Spellcasting", "rus": "Использование заклинаний" },
+    "description": {
+      "eng": "Drawing on the divine essence of nature itself, you can cast spells to shape that essence to your will. You prepare the list of druid spells that are available for you to cast.",
+      "rus": "Черпая божественную сущность самой природы, вы можете накладывать заклинания, формируя эту сущность по своей воле. Вы подготавливаете список заклинаний друида, доступных для сотворения."
+    },
+    "source": "class",
+    "sourceDetail": "druid",
+    "level": 1,
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "unarmored_defense_monk",
+    "name": { "eng": "Unarmored Defense", "rus": "Защита без доспехов" },
+    "description": {
+      "eng": "Beginning at 1st level, while you are wearing no armor and not wielding a shield, your AC equals 10 + your Dexterity modifier + your Wisdom modifier.",
+      "rus": "Начиная с 1 уровня, когда вы не носите доспехи и не используете щит, ваш КД равен 10 + модификатор Ловкости + модификатор Мудрости."
+    },
+    "source": "class",
+    "sourceDetail": "monk",
+    "level": 1,
+    "tags": ["passive", "defense"]
+  },
+  {
+    "engName": "martial_arts",
+    "name": { "eng": "Martial Arts", "rus": "Боевые искусства" },
+    "description": {
+      "eng": "Your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons. You gain benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a shield.",
+      "rus": "Ваше владение боевыми искусствами даёт мастерство в стилях боя с безоружными ударами и монашеским оружием. Вы получаете преимущества, когда безоружны или используете только монашеское оружие и не носите доспехи и щит."
+    },
+    "source": "class",
+    "sourceDetail": "monk",
+    "level": 1,
+    "tags": ["combat", "unarmed"]
+  },
+  {
+    "engName": "expertise_rogue",
+    "name": { "eng": "Expertise", "rus": "Компетентность" },
+    "description": {
+      "eng": "At 1st level, choose two of your skill proficiencies, or one of your skill proficiencies and your proficiency with thieves' tools. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.",
+      "rus": "На 1 уровне выберите два владения навыками или одно владение навыком и владение воровскими инструментами. Ваш бонус мастерства удваивается для проверок характеристик с использованием выбранных владений."
+    },
+    "source": "class",
+    "sourceDetail": "rogue",
+    "level": 1,
+    "tags": ["skill", "proficiency"]
+  },
+  {
+    "engName": "spellcasting_sorcerer",
+    "name": { "eng": "Spellcasting", "rus": "Использование заклинаний" },
+    "description": {
+      "eng": "An event in your past, or in the life of a parent or ancestor, left an indelible mark on you, infusing you with arcane magic. This font of magic fuels your spells.",
+      "rus": "Событие в вашем прошлом или в жизни предка оставило неизгладимый след, наполнив вас тайной магией. Этот источник магии питает ваши заклинания."
+    },
+    "source": "class",
+    "sourceDetail": "sorcerer",
+    "level": 1,
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "sorcerous_origin",
+    "name": { "eng": "Sorcerous Origin", "rus": "Магическое происхождение" },
+    "description": {
+      "eng": "Choose a sorcerous origin, which describes the source of your innate magical power. Your choice grants you features at 1st level and again at 6th, 14th, and 18th level.",
+      "rus": "Выберите магическое происхождение, описывающее источник вашей врождённой магической силы. Выбор даёт вам особенности на 1 уровне, а также на 6, 14 и 18 уровнях."
+    },
+    "source": "class",
+    "sourceDetail": "sorcerer",
+    "level": 1,
+    "tags": ["subclass_choice"]
+  },
+  {
+    "engName": "otherworldly_patron",
+    "name": { "eng": "Otherworldly Patron", "rus": "Потусторонний покровитель" },
+    "description": {
+      "eng": "You have struck a bargain with an otherworldly being of your choice. Your choice grants you features at 1st level and again at 6th, 10th, and 14th level.",
+      "rus": "Вы заключили сделку с потусторонним существом по вашему выбору. Выбор покровителя даёт вам особенности на 1 уровне, а также на 6, 10 и 14 уровнях."
+    },
+    "source": "class",
+    "sourceDetail": "warlock",
+    "level": 1,
+    "tags": ["subclass_choice"]
+  },
+  {
+    "engName": "pact_magic",
+    "name": { "eng": "Pact Magic", "rus": "Магия договора" },
+    "description": {
+      "eng": "Your arcane research and the magic bestowed on you by your patron have given you facility with spells. You know two cantrips and have a limited number of spell slots that all recover on a short rest.",
+      "rus": "Ваши магические исследования и сила, дарованная покровителем, дали вам способность к заклинаниям. Вы знаете два заговора и обладаете ограниченным числом ячеек заклинаний, которые восстанавливаются после короткого отдыха."
+    },
+    "source": "class",
+    "sourceDetail": "warlock",
+    "level": 1,
+    "tags": ["spellcasting"]
+  },
+  {
+    "engName": "spellcasting_wizard",
+    "name": { "eng": "Spellcasting", "rus": "Использование заклинаний" },
+    "description": {
+      "eng": "As a student of arcane magic, you have a spellbook containing spells that show the first glimmerings of your true power. You prepare the list of wizard spells that are available for you to cast.",
+      "rus": "Будучи учеником тайной магии, вы обладаете книгой заклинаний, содержащей заклинания, демонстрирующие первые проблески вашей истинной силы. Вы подготавливаете список заклинаний волшебника, доступных для сотворения."
+    },
+    "source": "class",
+    "sourceDetail": "wizard",
+    "level": 1,
+    "tags": ["spellcasting"]
   }
 ]
