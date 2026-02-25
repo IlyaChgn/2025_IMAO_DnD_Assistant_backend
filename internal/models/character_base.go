@@ -1,6 +1,9 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 // CharacterBase is the domain-shaped persistent model for a player character.
 // Designed for automation: DC calculation, spell validation, attack resolution.
@@ -63,6 +66,9 @@ type CharacterBase struct {
 
 	// Equipment (placeholder until inventory system)
 	EquippedItems *EquippedSlots `json:"equippedItems,omitempty" bson:"equippedItems,omitempty"`
+
+	// Hotbar layout (persisted per-character, opaque to backend)
+	HotbarLayout *HotbarLayout `json:"hotbarLayout,omitempty" bson:"hotbarLayout,omitempty"`
 
 	// LSS import metadata (preserved for re-import / debugging)
 	ImportSource *ImportSource `json:"importSource,omitempty" bson:"importSource,omitempty"`
@@ -299,4 +305,21 @@ type ConversionWarning struct {
 	Field   string `json:"field"`   // "info.charClass"
 	Message string `json:"message"` // "Unknown class 'Литера', stored as custom"
 	Level   string `json:"level"`   // "info", "warning", "error"
+}
+
+// HotbarLayout stores a persisted hotbar layout for a character.
+// The backend treats this as opaque frontend data — it does not interpret
+// the SlotPlacement.Source discriminated union.
+type HotbarLayout struct {
+	RowCount       int                              `json:"rowCount" bson:"rowCount"`
+	ZoneColumns    map[string]int                   `json:"zoneColumns" bson:"zoneColumns"`
+	SlotPositions  map[string][]HotbarSlotPlacement `json:"slotPositions" bson:"slotPositions"`
+	HotkeyBindings map[string]string                `json:"hotkeyBindings,omitempty" bson:"hotkeyBindings,omitempty"` // sourceKey → KeyboardEvent.code
+}
+
+// HotbarSlotPlacement is a single action placement in a hotbar zone grid.
+type HotbarSlotPlacement struct {
+	Row    int    `json:"row" bson:"row"`
+	Col    int    `json:"col" bson:"col"`
+	Source bson.M `json:"source" bson:"source"` // opaque CustomSlotSource from frontend
 }

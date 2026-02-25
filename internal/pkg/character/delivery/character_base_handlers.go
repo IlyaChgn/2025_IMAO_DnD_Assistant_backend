@@ -343,6 +343,62 @@ func (h *CharacterBaseHandler) DeleteAvatar(w http.ResponseWriter, r *http.Reque
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func (h *CharacterBaseHandler) GetHotbarLayout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	id := mux.Vars(r)["id"]
+	if id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	layout, err := h.usecases.GetHotbarLayout(ctx, id, user.ID)
+	if err != nil {
+		h.handleError(w, r, err)
+		return
+	}
+
+	if layout == nil {
+		l.DeliveryError(ctx, responses.StatusNotFound, "Hotbar layout not found", nil, nil)
+		responses.SendErrResponse(w, responses.StatusNotFound, "Hotbar layout not found")
+		return
+	}
+
+	responses.SendOkResponse(w, layout)
+}
+
+func (h *CharacterBaseHandler) SetHotbarLayout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	l := logger.FromContext(ctx)
+
+	id := mux.Vars(r)["id"]
+	if id == "" {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrInvalidID, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrInvalidID)
+		return
+	}
+
+	var layout models.HotbarLayout
+	if err := json.NewDecoder(r.Body).Decode(&layout); err != nil {
+		l.DeliveryError(ctx, responses.StatusBadRequest, responses.ErrBadJSON, nil, nil)
+		responses.SendErrResponse(w, responses.StatusBadRequest, responses.ErrBadJSON)
+		return
+	}
+
+	user := ctx.Value(h.ctxUserKey).(*models.User)
+
+	if err := h.usecases.SetHotbarLayout(ctx, id, user.ID, &layout); err != nil {
+		h.handleError(w, r, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (h *CharacterBaseHandler) handleError(w http.ResponseWriter, r *http.Request, err error) {
 	ctx := r.Context()
 	l := logger.FromContext(ctx)

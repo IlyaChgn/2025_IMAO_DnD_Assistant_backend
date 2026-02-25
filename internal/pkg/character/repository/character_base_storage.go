@@ -290,3 +290,72 @@ func (s *characterBaseStorage) ClearAvatar(ctx context.Context, id string, userI
 
 	return nil
 }
+
+func (s *characterBaseStorage) GetHotbarLayout(ctx context.Context, id string, userID string) (*models.HotbarLayout, error) {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection(charactersV2Collection)
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		l.RepoWarn(err, map[string]any{"id": id})
+		return nil, apperrors.InvalidIDErr
+	}
+
+	filter := bson.M{"_id": objID, "userId": userID}
+	opts := options.FindOne().SetProjection(bson.M{"hotbarLayout": 1})
+
+	var res struct {
+		HotbarLayout *models.HotbarLayout `bson:"hotbarLayout"`
+	}
+
+	_, err = dbcall.DBCall[any](fnName, s.metrics, func() (any, error) {
+		err := collection.FindOne(ctx, filter, opts).Decode(&res)
+		return nil, err
+	})
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		return nil, apperrors.PermissionDeniedError
+	}
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return res.HotbarLayout, nil // may be nil (no layout saved yet)
+}
+
+func (s *characterBaseStorage) SetHotbarLayout(ctx context.Context, id string, userID string, layout *models.HotbarLayout) error {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	collection := s.db.Collection(charactersV2Collection)
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		l.RepoWarn(err, map[string]any{"id": id})
+		return apperrors.InvalidIDErr
+	}
+
+	hlFilter := bson.M{"_id": objID, "userId": userID}
+	hlUpdate := bson.M{
+		"$set": bson.M{
+			"hotbarLayout": layout,
+			"updatedAt":    time.Now().UTC().Format(time.RFC3339),
+		},
+	}
+
+	hlResult, err := dbcall.DBCall[*mongo.UpdateResult](fnName, s.metrics, func() (*mongo.UpdateResult, error) {
+		return collection.UpdateOne(ctx, hlFilter, hlUpdate)
+	})
+	if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
+		return apperrors.UpdateMongoDataErr
+	}
+
+	if hlResult.MatchedCount == 0 {
+		return apperrors.PermissionDeniedError
+	}
+
+	return nil
+}

@@ -189,3 +189,32 @@ func (uc *characterBaseUsecases) DeleteAvatar(ctx context.Context, id string, us
 	// Ownership is enforced atomically via userId in the MongoDB update filter.
 	return uc.repo.ClearAvatar(ctx, id, strconv.Itoa(userID))
 }
+
+func (uc *characterBaseUsecases) GetHotbarLayout(ctx context.Context, id string, userID int) (*models.HotbarLayout, error) {
+	l := logger.FromContext(ctx)
+
+	if id == "" {
+		l.UsecasesWarn(apperrors.InvalidInputError, userID, nil)
+		return nil, apperrors.InvalidInputError
+	}
+
+	// Ownership is enforced atomically via userId in the MongoDB query filter.
+	return uc.repo.GetHotbarLayout(ctx, id, strconv.Itoa(userID))
+}
+
+func (uc *characterBaseUsecases) SetHotbarLayout(ctx context.Context, id string, userID int, layout *models.HotbarLayout) error {
+	l := logger.FromContext(ctx)
+
+	if id == "" {
+		l.UsecasesWarn(apperrors.InvalidInputError, userID, nil)
+		return apperrors.InvalidInputError
+	}
+
+	if layout.RowCount < 2 || layout.RowCount > 5 {
+		l.UsecasesWarn(apperrors.InvalidInputError, userID, map[string]any{"rowCount": layout.RowCount})
+		return apperrors.InvalidInputError
+	}
+
+	// Ownership is enforced atomically via userId in the MongoDB update filter.
+	return uc.repo.SetHotbarLayout(ctx, id, strconv.Itoa(userID), layout)
+}
