@@ -680,6 +680,14 @@ PR-1 → PR-2 → PR-3 → PR-4 → PR-5 → PR-6 → PR-7
 
 ---
 
+## Known Gaps (from cross-plan consistency review, 2026-02-22)
+
+| # | Gap | Vision ref | Where to fix | Priority |
+|---|-----|-----------|--------------|----------|
+| I1 | **Finishing behavior** — добивание downed characters (HP=0, making death saves) по Intelligence: 0%/10%/30%/60%/90%. Phase 1 target selection не адресует downed PCs как отдельную категорию целей. Melee auto-crit → 2 failed death saves. | Vision § 10.5 | Phase 1 (PR-4 `target_selector.go`) или Phase 2 | HIGH — core gameplay mechanic |
+
+---
+
 ## Phase 2 Tasks (after Phase 1 stabilizes)
 
 | Task | Description | Status |

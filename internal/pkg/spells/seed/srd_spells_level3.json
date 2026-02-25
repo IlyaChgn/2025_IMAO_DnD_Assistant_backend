@@ -1,0 +1,1962 @@
+[
+  {
+    "engName": "beacon-of-hope",
+    "name": {
+      "rus": "Маяк надежды",
+      "eng": "Beacon of Hope"
+    },
+    "description": {
+      "rus": "Это заклинание дарует надежду и жизненную силу. Выберите любое количество существ в пределах дистанции. На время действия заклинания каждая цель совершает спасброски Мудрости и спасброски от смерти с преимуществом, и восстанавливает максимальное количество хитов от любого лечения.",
+      "eng": "This spell bestows hope and vitality. Choose any number of creatures within range. For the duration, each target has advantage on Wisdom saving throws and death saving throws, and regains the maximum number of hit points possible from any healing."
+    },
+    "level": 3,
+    "school": "abjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 30
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "cleric"
+    ],
+    "targeting": {
+      "type": "creatures",
+      "count": -1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creatures"
+        },
+        "statMod": {
+          "target": "wis_saves",
+          "operation": "advantage"
+        }
+      },
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creatures"
+        },
+        "statMod": {
+          "target": "healing_received",
+          "operation": "maximize"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "buff",
+      "healing"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "bestow-curse",
+    "name": {
+      "rus": "Проклятие",
+      "eng": "Bestow Curse"
+    },
+    "description": {
+      "rus": "Вы касаетесь существа, и оно должно преуспеть в спасброске Мудрости, иначе на него накладывается проклятие на время действия заклинания. Выберите одну из природ проклятия: помеха к проверкам и спасброскам одной характеристики; помеха к броскам атаки по вам; спасбросок Мудрости в начале каждого хода — при провале цель тратит действие впустую; ваши атаки и заклинания наносят цели дополнительный урон некротической энергией 1d8.",
+      "eng": "You touch a creature, and that creature must succeed on a Wisdom saving throw or become cursed for the duration. Choose the nature of the curse from the following options: disadvantage on checks and saves with one ability score; disadvantage on attack rolls against you; Wisdom save at start of each turn or waste its action; your attacks and spells deal an extra 1d8 necrotic damage to the target."
+    },
+    "level": 3,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "condition": {
+          "condition": "cursed",
+          "duration": "1 minute"
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Ячейка 4 уровня — длительность до 10 минут (концентрация). Ячейка 5 уровня — 8 часов (без концентрации). Ячейка 7 уровня — 24 часа. Ячейка 9 уровня — пока не будет снято рассеиванием магии или аналогичным эффектом.",
+        "eng": "4th level: concentration up to 10 minutes. 5th: 8 hours, no concentration. 7th: 24 hours. 9th: until dispelled."
+      },
+      "scaling": []
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "debuff",
+      "control"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "blink",
+    "name": {
+      "rus": "Мерцание",
+      "eng": "Blink"
+    },
+    "description": {
+      "rus": "Бросьте d20 в конце каждого своего хода на время действия заклинания. При результате 11 или выше вы исчезаете с текущего плана существования и появляетесь на Эфирном плане. В начале вашего следующего хода вы возвращаетесь в незанятое пространство по вашему выбору, которое видите, в пределах 10 футов от того места, где вы исчезли. Если свободного места нет, вы появляетесь в ближайшем незанятом пространстве.",
+      "eng": "Roll a d20 at the end of each of your turns for the duration. On a roll of 11 or higher, you vanish from your current plane of existence and appear in the Ethereal Plane. At the start of your next turn, you return to an unoccupied space of your choice that you can see within 10 feet of the space you vanished from."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": false
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "self"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "self"
+        },
+        "condition": {
+          "condition": "blinking",
+          "duration": "1 minute"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "buff",
+      "defense"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "call-lightning",
+    "name": {
+      "rus": "Призыв молнии",
+      "eng": "Call Lightning"
+    },
+    "description": {
+      "rus": "Грозовая туча появляется в форме цилиндра высотой 10 футов и радиусом 60 футов с центром в точке в воздухе над вами. Когда вы создаёте заклинание, выберите видимую точку под тучей. Молния ударяет в эту точку. Каждое существо в пределах 5 футов от точки должно совершить спасбросок Ловкости, получая урон электричеством 3d10 при провале или половину при успехе. В каждый последующий ход вы можете действием вызвать новую молнию в той же или другой точке.",
+      "eng": "A storm cloud appears in the shape of a cylinder that is 10 feet tall with a 60-foot radius, centered on a point you can see 100 feet directly above you. When you cast the spell, choose a point you can see under the cloud. A bolt of lightning flashes down. Each creature within 5 feet of that point must make a Dexterity saving throw, taking 3d10 lightning damage on a failed save, or half as much on a successful one. On each of your turns until the spell ends, you can use your action to call down lightning in this way again."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 120
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 10,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "druid"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 5
+        },
+        "damage": {
+          "base": {
+            "diceCount": 3,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, урон увеличивается на 1d10 за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d10 for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "damage": {
+            "diceCount": 4,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 5,
+          "damage": {
+            "diceCount": 5,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 6,
+          "damage": {
+            "diceCount": 6,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 7,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 8,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 9,
+            "diceType": "d10",
+            "damageType": "lightning"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "lightning",
+      "control"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "counterspell",
+    "name": {
+      "rus": "Контрзаклинание",
+      "eng": "Counterspell"
+    },
+    "description": {
+      "rus": "Вы пытаетесь прервать процесс накладывания заклинания существом. Если существо накладывает заклинание 3-го уровня или ниже, его заклинание проваливается и не оказывает никакого эффекта. Если оно накладывает заклинание 4-го уровня или выше, совершите проверку базовой характеристики (СЛ 10 + уровень заклинания). При успехе заклинание существа проваливается.",
+      "eng": "You attempt to interrupt a creature in the process of casting a spell. If the creature is casting a spell of 3rd level or lower, its spell fails and has no effect. If it is casting a spell of 4th level or higher, make an ability check using your spellcasting ability (DC 10 + the spell's level). On a success, the creature's spell fails and has no effect."
+    },
+    "level": 3,
+    "school": "abjuration",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "reaction",
+      "reaction": "which you take when you see a creature within 60 feet of you casting a spell"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": false,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "wizard",
+      "sorcerer",
+      "warlock"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "defense"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "dispel-magic",
+    "name": {
+      "rus": "Рассеивание магии",
+      "eng": "Dispel Magic"
+    },
+    "description": {
+      "rus": "Выберите одно существо, предмет или магический эффект в пределах дистанции. Любое заклинание 3-го уровня или ниже на цели оканчивается. Для каждого заклинания 4-го уровня или выше на цели совершите проверку базовой характеристики заклинаний (КС 10 + уровень заклинания). При успехе заклинание оканчивается.",
+      "eng": "Choose one creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability (DC 10 + the spell's level). On a successful check, the spell ends."
+    },
+    "level": 3,
+    "school": "abjuration",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 120
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature_or_object",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature_or_object",
+          "count": 1
+        },
+        "condition": {
+          "condition": "dispel",
+          "maxLevel": 3
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, вы автоматически оканчиваете действие заклинания, уровень которого не превышает уровень использованной ячейки.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "autoDispelLevel": 4
+        },
+        {
+          "level": 5,
+          "autoDispelLevel": 5
+        },
+        {
+          "level": 6,
+          "autoDispelLevel": 6
+        },
+        {
+          "level": 7,
+          "autoDispelLevel": 7
+        },
+        {
+          "level": 8,
+          "autoDispelLevel": 8
+        },
+        {
+          "level": 9,
+          "autoDispelLevel": 9
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "utility"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "fear",
+    "name": {
+      "rus": "Страх",
+      "eng": "Fear"
+    },
+    "description": {
+      "rus": "Вы создаёте фантомный образ худшего кошмара каждого существа в конусе с размером 30 футов. Все существа в этой области должны совершить спасбросок Мудрости. При провале существо бросает всё, что держит, и становится испуганным на время действия заклинания. Будучи испуганным этим заклинанием, существо должно в каждый свой ход совершать действие Рывок и перемещаться прочь от вас наиболее безопасным маршрутом, если только ему некуда двигаться. Если существо оканчивает свой ход в месте, откуда не видит вас, оно может совершить спасбросок Мудрости. При успехе заклинание оканчивается для этого существа.",
+      "eng": "You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a Wisdom saving throw or drop whatever it is holding and become frightened for the duration. While frightened by this spell, a creature must take the Dash action and move away from you by the safest available route on each of its turns, unless there is nowhere to move. If the creature ends its turn in a location where it doesn't have line of sight to you, the creature can make a Wisdom saving throw. On a successful save, the spell ends for that creature."
+    },
+    "level": 3,
+    "school": "illusion",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a white feather or the heart of a hen"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "wizard",
+      "sorcerer",
+      "bard",
+      "warlock"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cone",
+          "size": 30,
+          "origin": "self"
+        },
+        "condition": {
+          "condition": "frightened",
+          "duration": "1 minute",
+          "saveEnds": true,
+          "saveAbility": "WIS"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "debuff"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "fireball",
+    "name": {
+      "rus": "Огненный шар",
+      "eng": "Fireball"
+    },
+    "description": {
+      "rus": "Яркая полоска вылетает из вашего указующего пальца в точку, выбранную вами в пределах дистанции, где с гулким рёвом расцветает в огненный взрыв. Все существа в сфере с радиусом 20 футов с центром в этой точке должны совершить спасбросок Ловкости. Цель получает урон огнём 8d6 при провале или половину этого урона при успехе. Огонь огибает углы. Он воспламеняет горючие предметы, которые никто не несёт и не носит.",
+      "eng": "A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one. The fire spreads around corners. It ignites flammable objects in the area that aren't being worn or carried."
+    },
+    "level": 3,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 150
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a tiny ball of bat guano and sulfur"
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "wizard",
+      "sorcerer"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 20
+        },
+        "damage": {
+          "base": {
+            "diceCount": 8,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, урон увеличивается на 1d6 за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "damage": {
+            "diceCount": 9,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        },
+        {
+          "level": 5,
+          "damage": {
+            "diceCount": 10,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        },
+        {
+          "level": 6,
+          "damage": {
+            "diceCount": 11,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        },
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 12,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 13,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 14,
+            "diceType": "d6",
+            "damageType": "fire"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "fire"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "fly",
+    "name": {
+      "rus": "Полёт",
+      "eng": "Fly"
+    },
+    "description": {
+      "rus": "Вы касаетесь согласного существа. Цель получает скорость полёта 60 футов на время действия заклинания. Когда заклинание оканчивается, цель падает, если всё ещё находится в воздухе, за исключением случаев, когда она может предотвратить падение.",
+      "eng": "You touch a willing creature. The target gains a flying speed of 60 feet for the duration. When the spell ends, the target falls if it is still aloft, unless it can stop the fall."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a wing feather from any bird"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 10,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "willing",
+      "count": 1,
+      "filter": "creature"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "willing",
+          "count": 1
+        },
+        "statMod": {
+          "target": "flying_speed",
+          "operation": "set",
+          "value": 60
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, вы можете нацелиться на одно дополнительное существо за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, you can target one additional creature for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "targets": 2
+        },
+        {
+          "level": 5,
+          "targets": 3
+        },
+        {
+          "level": 6,
+          "targets": 4
+        },
+        {
+          "level": 7,
+          "targets": 5
+        },
+        {
+          "level": 8,
+          "targets": 6
+        },
+        {
+          "level": 9,
+          "targets": 7
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "buff",
+      "movement"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "haste",
+    "name": {
+      "rus": "Ускорение",
+      "eng": "Haste"
+    },
+    "description": {
+      "rus": "Выберите согласное существо, которое видите в пределах дистанции. Пока заклинание активно, скорость цели удваивается, она получает +2 к КД, преимущество на спасброски Ловкости и дополнительное действие в каждый ход. Это действие может быть использовано только для Атаки (одна атака оружием), Рывка, Отхода, Укрытия или Использования предмета. Когда заклинание оканчивается, цель не может двигаться и совершать действия до конца своего следующего хода, так как на неё накатывает волна вялости.",
+      "eng": "Choose a willing creature that you can see within range. Until the spell ends, the target's speed is doubled, it gains a +2 bonus to AC, it has advantage on Dexterity saving throws, and it gains an additional action on each of its turns. That action can be used only to take the Attack (one weapon attack only), Dash, Disengage, Hide, or Use an Object action. When the spell ends, the target can't move or take actions until after its next turn, as a wave of lethargy sweeps over it."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 30
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a shaving of licorice root"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "willing",
+      "count": 1,
+      "filter": "creature"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "willing",
+          "count": 1
+        },
+        "statMod": {
+          "target": "speed",
+          "operation": "multiply",
+          "value": 2
+        }
+      },
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "willing",
+          "count": 1
+        },
+        "statMod": {
+          "target": "ac",
+          "operation": "add",
+          "value": 2
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "buff"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "hypnotic-pattern",
+    "name": {
+      "rus": "Гипнотический узор",
+      "eng": "Hypnotic Pattern"
+    },
+    "description": {
+      "rus": "Вы создаёте завораживающий узор переплетающихся цветов в кубе с ребром 30 футов в пределах дистанции. Узор появляется на мгновение и исчезает. Каждое существо в области, видящее узор, должно совершить спасбросок Мудрости. При провале существо очаровано на время действия заклинания. Очарованное существо недееспособно и имеет скорость 0. Эффект оканчивается для существа, если оно получает урон или если другое существо действием потрясёт его.",
+      "eng": "You create a twisting pattern of colors that weaves through the air inside a 30-foot cube within range. The pattern appears for a moment and vanishes. Each creature in the area who sees the pattern must make a Wisdom saving throw. On a failed save, the creature becomes charmed for the duration. While charmed, the creature is incapacitated and has a speed of 0. The effect ends for an affected creature if it takes any damage or if someone else uses an action to shake the creature out of its stupor."
+    },
+    "level": 3,
+    "school": "illusion",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 120
+    },
+    "components": {
+      "verbal": false,
+      "somatic": true,
+      "material": true,
+      "materials": "a glowing stick of incense or a crystal vial filled with phosphorescent material"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cube",
+          "size": 30
+        },
+        "condition": {
+          "condition": "charmed",
+          "subCondition": "incapacitated",
+          "duration": "1 minute"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "area"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "lightning-bolt",
+    "name": {
+      "rus": "Молния",
+      "eng": "Lightning Bolt"
+    },
+    "description": {
+      "rus": "Молния длиной 100 футов и шириной 5 футов вылетает от вас в выбранном вами направлении. Все существа на линии должны совершить спасбросок Ловкости. Существо получает урон электричеством 8d6 при провале или половину этого урона при успехе. Молния поджигает горючие предметы в области, которые никто не несёт и не носит.",
+      "eng": "A stroke of lightning forming a line 100 feet long and 5 feet wide blasts out from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes 8d6 lightning damage on a failed save, or half as much damage on a successful one. The lightning ignites flammable objects in the area that aren't being worn or carried."
+    },
+    "level": 3,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a bit of fur and a rod of amber, crystal, or glass"
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "wizard",
+      "sorcerer"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "line",
+          "size": 100,
+          "width": 5,
+          "origin": "self"
+        },
+        "damage": {
+          "base": {
+            "diceCount": 8,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, урон увеличивается на 1d6 за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "damage": {
+            "diceCount": 9,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 5,
+          "damage": {
+            "diceCount": 10,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 6,
+          "damage": {
+            "diceCount": 11,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 12,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 13,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 14,
+            "diceType": "d6",
+            "damageType": "lightning"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "lightning"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "mass-healing-word",
+    "name": {
+      "rus": "Множественное целебное слово",
+      "eng": "Mass Healing Word"
+    },
+    "description": {
+      "rus": "Вы произносите слова восстановления, и до шести существ по вашему выбору в пределах дистанции, которых вы видите, восстанавливают количество хитов, равное 1d4 + ваш модификатор базовой характеристики заклинаний. Это заклинание не действует на нежить и конструктов.",
+      "eng": "As you call out words of restoration, up to six creatures of your choice that you can see within range regain hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs."
+    },
+    "level": 3,
+    "school": "evocation",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "bonus_action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 60
+    },
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric"
+    ],
+    "targeting": {
+      "type": "creatures",
+      "count": 6
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creatures",
+          "count": 6
+        },
+        "healing": {
+          "base": {
+            "diceCount": 1,
+            "diceType": "d4"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, лечение увеличивается на 1d4 за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, the healing increases by 1d4 for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "healingAdd": 1
+        },
+        {
+          "level": 5,
+          "healingAdd": 2
+        },
+        {
+          "level": 6,
+          "healingAdd": 3
+        },
+        {
+          "level": 7,
+          "healingAdd": 4
+        },
+        {
+          "level": 8,
+          "healingAdd": 5
+        },
+        {
+          "level": 9,
+          "healingAdd": 6
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "healing"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "protection-from-energy",
+    "name": {
+      "rus": "Защита от энергии",
+      "eng": "Protection from Energy"
+    },
+    "description": {
+      "rus": "На время действия заклинания согласное существо, которого вы касаетесь, получает сопротивление к одному типу урона по вашему выбору: кислоте, холоду, огню, электричеству или звуку.",
+      "eng": "For the duration, the willing creature you touch has resistance to one damage type of your choice: acid, cold, fire, lightning, or thunder."
+    },
+    "level": 3,
+    "school": "abjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "hours",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "cleric",
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "willing",
+      "count": 1,
+      "filter": "creature"
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "willing",
+          "count": 1
+        },
+        "statMod": {
+          "target": "damage_resistance",
+          "operation": "add",
+          "damageType": "choice"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "buff",
+      "defense"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "remove-curse",
+    "name": {
+      "rus": "Снятие проклятия",
+      "eng": "Remove Curse"
+    },
+    "description": {
+      "rus": "При вашем касании все проклятия, действующие на одно существо или предмет, оканчиваются. Если предмет является проклятым магическим предметом, проклятие остаётся, но заклинание разрывает настройку владельца на предмет, позволяя снять или выбросить его.",
+      "eng": "At your touch, all curses affecting one creature or object end. If the object is a cursed magic item, its curse remains, but the spell breaks its owner's attunement to the object so it can be removed or discarded."
+    },
+    "level": 3,
+    "school": "abjuration",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric",
+      "paladin",
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature_or_object",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "effects": [
+      {
+        "trigger": "on_cast",
+        "target": {
+          "type": "creature_or_object",
+          "count": 1
+        },
+        "condition": {
+          "condition": "remove_curse"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "utility",
+      "healing"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "revivify",
+    "name": {
+      "rus": "Оживление",
+      "eng": "Revivify"
+    },
+    "description": {
+      "rus": "Вы касаетесь существа, умершего не более минуты назад. Это существо возвращается к жизни с 1 хитом. Это заклинание не может оживить существо, умершее от старости, и не может восстановить отсутствующие части тела.",
+      "eng": "You touch a creature that has died within the last minute. That creature returns to life with 1 hit point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts."
+    },
+    "level": 3,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": false,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "touch"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "diamonds worth 300 gp, which the spell consumes",
+      "materialCost": 300,
+      "materialConsumed": true
+    },
+    "duration": {
+      "type": "instantaneous",
+      "concentration": false
+    },
+    "classes": [
+      "cleric",
+      "paladin",
+      "artificer"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "auto"
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "healing"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "sleet-storm",
+    "name": {
+      "rus": "Метель",
+      "eng": "Sleet Storm"
+    },
+    "description": {
+      "rus": "Ледяной дождь и слякоть обрушиваются в цилиндре высотой 20 футов и радиусом 40 футов с центром в точке в пределах дистанции. Область сильно заслонена и является труднопроходимой местностью. Когда существо впервые за ход входит в область или начинает в ней ход, оно должно совершить спасбросок Ловкости, падая ничком при провале. Существо, концентрирующееся в области заклинания, должно совершить спасбросок Телосложения, иначе теряет концентрацию.",
+      "eng": "Until the spell ends, freezing rain and sleet fall in a 20-foot-tall cylinder with a 40-foot radius centered on a point you choose within range. The area is heavily obscured, and exposed flames in the area are doused. When a creature enters the spell's area for the first time on a turn or starts its turn there, it must make a Dexterity saving throw. On a failed save, it falls prone. A creature that is concentrating in the spell's area must make a Constitution saving throw or lose concentration."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 150
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a pinch of dust and a few drops of water"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "DEX",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_enter",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cylinder",
+          "size": 40,
+          "height": 20
+        },
+        "condition": {
+          "condition": "prone"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "area"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "slow",
+    "name": {
+      "rus": "Замедление",
+      "eng": "Slow"
+    },
+    "description": {
+      "rus": "Вы изменяете время вокруг до шести существ по вашему выбору в кубе с ребром 40 футов в пределах дистанции. Каждая цель должна совершить спасбросок Мудрости. При провале цель подвергается эффекту заклинания. Скорость уменьшается вдвое, −2 к КД и спасброскам Ловкости, нельзя совершать реакции. В свой ход цель может совершить либо действие, либо бонусное действие, но не оба. В конце каждого хода цель может повторить спасбросок.",
+      "eng": "You alter time around up to six creatures of your choice in a 40-foot cube within range. Each target must succeed on a Wisdom saving throw or be affected. An affected target's speed is halved, it takes a -2 penalty to AC and Dexterity saving throws, and it can't use reactions. On its turn, it can use either an action or a bonus action, not both. At the end of each of its turns, an affected target can make another Wisdom saving throw."
+    },
+    "level": 3,
+    "school": "transmutation",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 120
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a drop of molasses"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creatures",
+      "count": 6
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_failed_save",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "cube",
+          "size": 40
+        },
+        "condition": {
+          "condition": "slowed",
+          "duration": "1 minute",
+          "saveEnds": true
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "debuff",
+      "control"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "spirit-guardians",
+    "name": {
+      "rus": "Духовные стражи",
+      "eng": "Spirit Guardians"
+    },
+    "description": {
+      "rus": "Вы вызываете духов для защиты. Они летают вокруг вас на расстоянии 15 футов на время действия заклинания. Когда существо впервые за ход входит в область или начинает в ней ход, оно должно совершить спасбросок Мудрости. При провале существо получает урон излучением 3d8 (или урон некротической энергией, если вы злой). При успехе существо получает половину этого урона. Скорость существа в этой области уменьшается вдвое.",
+      "eng": "You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration. When a creature first enters the area on a turn or starts its turn there, it must make a Wisdom saving throw. On a failed save, the creature takes 3d8 radiant damage (or necrotic if you are evil). On a successful save, the creature takes half as much damage. A creature's speed is halved in the area."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a holy symbol"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 10,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "cleric"
+    ],
+    "targeting": {
+      "type": "area"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "WIS",
+        "onSuccess": "half"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_enter",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 15,
+          "origin": "self"
+        },
+        "damage": {
+          "base": {
+            "diceCount": 3,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, урон увеличивается на 1d8 за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "damage": {
+            "diceCount": 4,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        },
+        {
+          "level": 5,
+          "damage": {
+            "diceCount": 5,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        },
+        {
+          "level": 6,
+          "damage": {
+            "diceCount": 6,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        },
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 7,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 8,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 9,
+            "diceType": "d8",
+            "damageType": "radiant"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "radiant",
+      "control"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "stinking-cloud",
+    "name": {
+      "rus": "Зловонное облако",
+      "eng": "Stinking Cloud"
+    },
+    "description": {
+      "rus": "Вы создаёте сферу жёлтого отвратительного газа с радиусом 20 футов с центром в точке в пределах дистанции. Облако огибает углы, и его область сильно заслонена. Облако держится в воздухе на время действия заклинания. Каждое существо, полностью находящееся в облаке в начале своего хода, должно совершить спасбросок Телосложения. При провале существо тратит своё действие на рвоту и шатание (недееспособно). Существа, которым не нужно дышать или которые имеют иммунитет к яду, автоматически преуспевают.",
+      "eng": "You create a 20-foot-radius sphere of yellow, nauseating gas centered on a point within range. The cloud spreads around corners, and its area is heavily obscured. Each creature that is completely within the cloud at the start of its turn must make a Constitution saving throw. On a failed save, the creature spends its action retching and reeling (incapacitated). Creatures that don't need to breathe or are immune to poison automatically succeed."
+    },
+    "level": 3,
+    "school": "conjuration",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "distance",
+      "distance": 90
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true,
+      "materials": "a rotten egg or several skunk cabbage leaves"
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "point"
+    },
+    "resolution": {
+      "type": "save",
+      "save": {
+        "ability": "CON",
+        "onSuccess": "none"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_start_turn",
+        "target": {
+          "type": "area"
+        },
+        "area": {
+          "shape": "sphere",
+          "size": 20
+        },
+        "condition": {
+          "condition": "incapacitated",
+          "duration": "1 round"
+        }
+      }
+    ],
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "control",
+      "area"
+    ],
+    "enabled": true
+  },
+  {
+    "engName": "vampiric-touch",
+    "name": {
+      "rus": "Прикосновение вампира",
+      "eng": "Vampiric Touch"
+    },
+    "description": {
+      "rus": "Прикосновение вашей затенённой тенями руки может высосать жизненную силу из других, чтобы исцелить ваши раны. Совершите рукопашную атаку заклинанием по существу в пределах досягаемости. При попадании цель получает урон некротической энергией 3d6, а вы восстанавливаете хиты в количестве, равном половине нанесённого урона некротической энергией. Пока заклинание активно, вы можете повторять атаку действием в каждый свой ход.",
+      "eng": "The touch of your shadow-wreathed hand can siphon life force from others to heal your wounds. Make a melee spell attack against a creature within your reach. On a hit, the target takes 3d6 necrotic damage, and you regain hit points equal to half the amount of necrotic damage dealt. Until the spell ends, you can make the attack again on each of your turns as an action."
+    },
+    "level": 3,
+    "school": "necromancy",
+    "ritual": false,
+    "concentration": true,
+    "castingTime": {
+      "type": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "duration": {
+      "type": "timed",
+      "amount": 1,
+      "unit": "minutes",
+      "concentration": true,
+      "upTo": true
+    },
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "targeting": {
+      "type": "creature",
+      "count": 1
+    },
+    "resolution": {
+      "type": "attack",
+      "attack": {
+        "type": "melee_spell"
+      }
+    },
+    "effects": [
+      {
+        "trigger": "on_hit",
+        "target": {
+          "type": "creature",
+          "count": 1
+        },
+        "damage": {
+          "base": {
+            "diceCount": 3,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        },
+        "healing": {
+          "type": "lifesteal",
+          "fraction": 0.5
+        }
+      }
+    ],
+    "upcast": {
+      "description": {
+        "rus": "Если вы используете ячейку 4-го уровня или выше, урон увеличивается на 1d6 за каждый уровень ячейки выше 3-го.",
+        "eng": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd."
+      },
+      "scaling": [
+        {
+          "level": 4,
+          "damage": {
+            "diceCount": 4,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        },
+        {
+          "level": 5,
+          "damage": {
+            "diceCount": 5,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        },
+        {
+          "level": 6,
+          "damage": {
+            "diceCount": 6,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        },
+        {
+          "level": 7,
+          "damage": {
+            "diceCount": 7,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        },
+        {
+          "level": 8,
+          "damage": {
+            "diceCount": 8,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        },
+        {
+          "level": 9,
+          "damage": {
+            "diceCount": 9,
+            "diceType": "d6",
+            "damageType": "necrotic"
+          }
+        }
+      ]
+    },
+    "source": {
+      "shortName": "PHB",
+      "name": "Player's Handbook",
+      "group": {
+        "name": "Core Rules",
+        "shortName": "Core"
+      }
+    },
+    "tags": [
+      "damage",
+      "necrotic",
+      "healing"
+    ],
+    "enabled": true
+  }
+]
