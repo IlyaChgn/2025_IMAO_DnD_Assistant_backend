@@ -81,6 +81,7 @@ type ItemDefinition struct {
 	Tags        []string     `json:"tags,omitempty" bson:"tags,omitempty"`
 
 	Rarity ItemRarity `json:"rarity" bson:"rarity"`
+	Tier   int        `json:"tier,omitempty" bson:"tier,omitempty"`
 	Value  *ItemValue `json:"value,omitempty" bson:"value,omitempty"`
 	Weight float64    `json:"weight,omitempty" bson:"weight,omitempty"`
 

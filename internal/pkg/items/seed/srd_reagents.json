@@ -22,7 +22,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "alcohol",
@@ -47,7 +48,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "amber-rod",
@@ -72,7 +74,8 @@
     },
     "weight": 0.2,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "bat-fur",
@@ -97,7 +100,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "bat-guano",
@@ -122,7 +126,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "bird-feather",
@@ -147,7 +152,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "blood-drop",
@@ -172,7 +178,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "bone-sliver",
@@ -197,7 +204,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "brass-bell",
@@ -222,7 +230,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "brass-whistle",
@@ -247,7 +256,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "brimstone",
@@ -272,7 +282,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "butter",
@@ -297,7 +308,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "caterpillar-cocoon",
@@ -322,7 +334,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "cloth-strip",
@@ -347,7 +360,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "club",
@@ -373,7 +387,8 @@
     },
     "weight": 2,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "coal-piece",
@@ -398,7 +413,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "colored-powder",
@@ -423,7 +439,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "colored-sand",
@@ -448,7 +465,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "copper-key",
@@ -473,7 +491,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "copper-piece",
@@ -498,7 +517,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "copper-wire",
@@ -523,7 +543,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "cricket",
@@ -548,7 +569,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "crystal-cone",
@@ -573,7 +595,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "crystal-rod",
@@ -598,7 +621,8 @@
     },
     "weight": 0.2,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "crystal-vial",
@@ -623,7 +647,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "cured-leather",
@@ -648,7 +673,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "dead-ash",
@@ -673,7 +699,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "diamond-chip",
@@ -699,7 +726,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-dust",
@@ -725,7 +753,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-flawless",
@@ -751,7 +780,8 @@
     },
     "weight": 0.03,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-large",
@@ -777,7 +807,8 @@
     },
     "weight": 0.02,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-medium",
@@ -803,7 +834,8 @@
     },
     "weight": 0.02,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-perfect",
@@ -829,7 +861,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-shard",
@@ -855,7 +888,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "diamond-small",
@@ -881,7 +915,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "distasteful-item",
@@ -906,7 +941,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "dried-sage",
@@ -931,7 +967,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "dried-toadstool",
@@ -956,7 +993,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "dried-yarrow",
@@ -981,7 +1019,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "dust-pinch",
@@ -1006,7 +1045,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "eggshell",
@@ -1031,7 +1071,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "elemental-cloth",
@@ -1056,7 +1097,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "eyelash-in-gum",
@@ -1081,7 +1123,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "fat-smear",
@@ -1106,7 +1149,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "feather-white",
@@ -1131,7 +1175,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "feldspar",
@@ -1156,7 +1201,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "fine-sand",
@@ -1181,7 +1227,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "firefly",
@@ -1206,7 +1253,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "flame",
@@ -1231,7 +1279,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "fleece",
@@ -1256,7 +1305,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "flint",
@@ -1281,7 +1331,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "fur",
@@ -1306,7 +1357,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "gemstone-powder",
@@ -1331,7 +1383,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "glass-cone",
@@ -1356,7 +1409,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "glass-rod",
@@ -1381,7 +1435,8 @@
     },
     "weight": 0.2,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "golden-wire",
@@ -1406,7 +1461,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "grain-kernels",
@@ -1431,7 +1487,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "granite-block",
@@ -1456,7 +1513,8 @@
     },
     "weight": 0.5,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "hen-heart",
@@ -1481,7 +1539,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "holy-symbol",
@@ -1507,7 +1566,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "holy-water",
@@ -1533,7 +1593,8 @@
     },
     "weight": 0.5,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "honeycomb",
@@ -1558,7 +1619,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "incense-stick",
@@ -1583,7 +1645,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "iron-nail",
@@ -1608,7 +1671,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "iron-piece",
@@ -1633,7 +1697,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "iron-rod",
@@ -1658,7 +1723,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "leather-loop",
@@ -1683,7 +1749,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "leather-strap",
@@ -1708,7 +1775,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "licorice-root",
@@ -1733,7 +1801,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "lion-whisker",
@@ -1758,7 +1827,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "mica-chip",
@@ -1783,7 +1853,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "miniature-cloak",
@@ -1808,7 +1879,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "mirror-sliver",
@@ -1833,7 +1905,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "mistletoe",
@@ -1858,7 +1931,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "molasses",
@@ -1883,7 +1957,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "moonseed",
@@ -1908,7 +1983,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "nut-shells",
@@ -1933,7 +2009,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "oak-bark",
@@ -1958,7 +2035,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "octopus-tentacle",
@@ -1983,7 +2061,8 @@
     },
     "weight": 0.5,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "parchment-holy",
@@ -2009,7 +2088,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "phosphorus",
@@ -2034,7 +2114,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "pitch-drop",
@@ -2059,7 +2140,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "platinum-rings-50gp",
@@ -2086,7 +2168,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "pork-rind",
@@ -2111,7 +2194,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "powdered-glass",
@@ -2136,7 +2220,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 4
   },
   {
     "engName": "powdered-iron",
@@ -2161,7 +2246,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "powdered-silver",
@@ -2187,7 +2273,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "quartz-shard",
@@ -2213,7 +2300,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "raven-claw",
@@ -2238,7 +2326,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "rhubarb-leaf",
@@ -2263,7 +2352,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "rose-petals",
@@ -2288,7 +2378,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "rot-grub-dust",
@@ -2313,7 +2404,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "rotten-egg",
@@ -2338,7 +2430,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "shamrock-leaf",
@@ -2363,7 +2456,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "sharpened-twigs",
@@ -2388,7 +2482,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "silver-mirror",
@@ -2413,7 +2508,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "skunk-cabbage",
@@ -2438,7 +2534,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "snake-tongue",
@@ -2463,7 +2560,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "snakeskin-glove",
@@ -2488,7 +2586,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "soot",
@@ -2513,7 +2612,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "spider-web",
@@ -2538,7 +2638,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "sugar",
@@ -2563,7 +2664,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 5
   },
   {
     "engName": "sulfur",
@@ -2588,7 +2690,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "sumac-leaf",
@@ -2613,7 +2716,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "sunstone-chip",
@@ -2639,7 +2743,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "sweet-oil",
@@ -2664,7 +2769,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "tallow",
@@ -2689,7 +2795,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "thorns",
@@ -2714,7 +2821,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "translucent-grease",
@@ -2739,7 +2847,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "vine-twist",
@@ -2764,7 +2873,8 @@
     },
     "weight": 0.05,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "water-drops",
@@ -2789,7 +2899,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 3
   },
   {
     "engName": "wax-drop",
@@ -2814,7 +2925,8 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   },
   {
     "engName": "wet-sponge",
@@ -2839,7 +2951,8 @@
     },
     "weight": 0.1,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 1
   },
   {
     "engName": "withered-twig",
@@ -2864,6 +2977,7 @@
     },
     "weight": 0.01,
     "source": "SRD",
-    "requiresAttunement": false
+    "requiresAttunement": false,
+    "tier": 2
   }
 ]
