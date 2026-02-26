@@ -72,6 +72,9 @@ import (
 	actionsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai"
 	combataiuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai/usecases"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen"
+	dungeongenrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen/repository"
+	dungeongenuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen/usecases"
 	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
 	itemsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/seed"
 	itemsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/usecases"
@@ -375,6 +378,20 @@ func (srv *Server) Run() error {
 		log.Printf("Warning: failed to ensure audit log indexes: %v", err)
 	}
 
+	tileMetadataRepository := dungeongenrepo.NewTileMetadataStorage(mongoDatabase, mongoMetrics)
+	if err := tileMetadataRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure tile metadata indexes: %v", err)
+	}
+	if n, err := dungeongen.BatchClassifyTiles(context.Background(), maptileRepository, tileMetadataRepository); err != nil {
+		log.Printf("Warning: failed to batch-classify tiles: %v", err)
+	} else if n > 0 {
+		log.Printf("Classified %d tiles into tile_metadata", n)
+	}
+
+	dungeonGenUsecases := dungeongenuc.NewDungeonGenUsecases(
+		tileMetadataRepository, maptileRepository, bestiaryRepository, "default",
+	)
+
 	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository, bestiaryRepository, auditLogRepository)
 
 	combatAIEngine := combatai.NewRuleBasedAI()
@@ -421,6 +438,7 @@ func (srv *Server) Run() error {
 		backgroundsUsecases,
 		featsUsecases,
 		combatAIUsecases,
+		dungeonGenUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 

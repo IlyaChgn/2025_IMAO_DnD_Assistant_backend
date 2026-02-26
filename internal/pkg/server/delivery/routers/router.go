@@ -6,6 +6,8 @@ import (
 	actionsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai"
 	combataideliv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai/delivery"
+	dungeongeninterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen"
+	dungeongendel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen/delivery"
 	authdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth/delivery"
 	backgroundsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds"
 	backgroundsdel "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/delivery"
@@ -71,7 +73,8 @@ func NewRouter(cfg *config.Config,
 	racesInterface racesinterfaces.RacesUsecases,
 	backgroundsInterface backgroundsinterfaces.BackgroundsUsecases,
 	featsInterface featsinterfaces.FeatsUsecases,
-	combatAIInterface combatai.CombatAIUsecases) *mux.Router {
+	combatAIInterface combatai.CombatAIUsecases,
+	dungeonGenInterface dungeongeninterfaces.DungeonGenUsecases) *mux.Router {
 
 	bestiaryHandler := bestiarydel.NewBestiaryHandler(bestiaryInterface, cfg.CtxUserKey)
 	descriptionHandler := descriptiondel.NewDescriptionHandler(descriptionInterface)
@@ -94,6 +97,7 @@ func NewRouter(cfg *config.Config,
 	backgroundsHandler := backgroundsdel.NewBackgroundsHandler(backgroundsInterface)
 	featsHandler := featsdel.NewFeatsHandler(featsInterface)
 	combatAIHandler := combataideliv.NewCombatAIHandler(combatAIInterface, cfg.CtxUserKey)
+	dungeonGenHandler := dungeongendel.NewDungeonGenHandler(dungeonGenInterface)
 
 	loginRequiredMiddleware := myauth.LoginRequiredMiddleware(authInterface, cfg.CtxUserKey)
 
@@ -132,6 +136,7 @@ func NewRouter(cfg *config.Config,
 	ServeBackgroundsRouter(rootRouter, backgroundsHandler)
 	ServeFeatsRouter(rootRouter, featsHandler)
 	ServeCombatAIRouter(rootRouter, combatAIHandler, loginRequiredMiddleware)
+	ServeDungeonsRouter(rootRouter, dungeonGenHandler, loginRequiredMiddleware)
 
 	return router
 }
