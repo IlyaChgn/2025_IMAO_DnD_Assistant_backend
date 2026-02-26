@@ -1,6 +1,9 @@
 package dungeongen
 
-import "math/rand"
+import (
+	"math/rand"
+	"strconv"
+)
 
 // DungeonDifficulty describes the overall difficulty of a dungeon or room.
 type DungeonDifficulty string
@@ -82,12 +85,9 @@ func crToNumeric(cr string) float64 {
 	case "1/2":
 		return 0.5
 	default:
-		// Try integer
-		val := 0
-		for _, c := range cr {
-			if c >= '0' && c <= '9' {
-				val = val*10 + int(c-'0')
-			}
+		val, err := strconv.Atoi(cr)
+		if err != nil {
+			return 0
 		}
 		return float64(val)
 	}
@@ -165,8 +165,8 @@ func BudgetEncounters(
 		}
 
 		// Calculate XP budget
-		thresholds := xpThresholds[partyLevel]
-		if partyLevel < 1 || partyLevel > 10 {
+		thresholds, ok := xpThresholds[partyLevel]
+		if !ok {
 			thresholds = xpThresholds[1]
 		}
 		budget := partySize * thresholds[difficultyIndex[roomDiff]]
