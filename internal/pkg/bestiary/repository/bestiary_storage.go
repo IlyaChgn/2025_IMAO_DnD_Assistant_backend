@@ -12,6 +12,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/repository/dbcall"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/utils"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"strconv"
@@ -112,6 +113,48 @@ func (s *bestiaryStorage) GetCreatureByEngName(ctx context.Context, url string,
 		return nil, nil
 	} else if err != nil {
 		l.RepoError(err, map[string]any{"url": url})
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	return &creature, nil
+}
+
+func (s *bestiaryStorage) GetCreatureByID(ctx context.Context, id string) (*models.Creature, error) {
+	l := logger.FromContext(ctx)
+	fnName := utils.GetFunctionName()
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		l.RepoWarn(err, map[string]any{"id": id})
+		return nil, apperrors.InvalidIDErr
+	}
+
+	filter := bson.M{"_id": objID}
+	var creature models.Creature
+
+	// Try creatures collection first
+	_, err = dbcall.DBCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
+		err := s.db.Collection("creatures").FindOne(ctx, filter).Decode(&creature)
+		return &creature, err
+	})
+	if err == nil {
+		return &creature, nil
+	}
+
+	if !errors.Is(err, mongo.ErrNoDocuments) {
+		l.RepoError(err, map[string]any{"id": id})
+		return nil, apperrors.FindMongoDataErr
+	}
+
+	// Fallback to generated_creatures collection
+	_, err = dbcall.DBCall[*models.Creature](fnName, s.metrics, func() (*models.Creature, error) {
+		err := s.db.Collection("generated_creatures").FindOne(ctx, filter).Decode(&creature)
+		return &creature, err
+	})
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		return nil, apperrors.NoDocsErr
+	} else if err != nil {
+		l.RepoError(err, map[string]any{"id": id})
 		return nil, apperrors.FindMongoDataErr
 	}
 

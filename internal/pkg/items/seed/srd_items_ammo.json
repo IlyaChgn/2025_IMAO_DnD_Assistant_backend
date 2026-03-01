@@ -1,0 +1,80 @@
+[
+  {
+    "engName": "arrows",
+    "name": {
+      "eng": "Arrows (20)",
+      "rus": "Стрелы (20)"
+    },
+    "description": {
+      "eng": "A quiver of twenty arrows for use with bows.",
+      "rus": "Колчан с двадцатью стрелами для использования с луками."
+    },
+    "category": "ammo",
+    "tags": [
+      "ammunition"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "gp"
+    },
+    "weight": 1,
+    "source": "SRD",
+    "ammo": {
+      "ammoType": "arrow"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "crossbow_bolts",
+    "name": {
+      "eng": "Crossbow Bolts (20)",
+      "rus": "Арбалетные болты (20)"
+    },
+    "description": {
+      "eng": "A case of twenty bolts for use with crossbows.",
+      "rus": "Футляр с двадцатью болтами для использования с арбалетами."
+    },
+    "category": "ammo",
+    "tags": [
+      "ammunition"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "gp"
+    },
+    "weight": 1.5,
+    "source": "SRD",
+    "ammo": {
+      "ammoType": "bolt"
+    },
+    "requiresAttunement": false
+  },
+  {
+    "engName": "sling_bullets",
+    "name": {
+      "eng": "Sling Bullets (20)",
+      "rus": "Снаряды для пращи (20)"
+    },
+    "description": {
+      "eng": "A pouch of twenty lead balls for use with slings.",
+      "rus": "Мешочек с двадцатью свинцовыми шариками для использования с пращой."
+    },
+    "category": "ammo",
+    "tags": [
+      "ammunition"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 4,
+      "currency": "cp"
+    },
+    "weight": 1.5,
+    "source": "SRD",
+    "ammo": {
+      "ammoType": "bullet"
+    },
+    "requiresAttunement": false
+  }
+]

@@ -17,6 +17,7 @@ const maxPlayersNum = 4
 
 type tableManager struct {
 	sessions       map[string]*session
+	encounterIndex map[string]string // encounterID → sessionID
 	mu             sync.RWMutex
 	metrics        metrics.WSMetrics
 	sessionMetrics metrics.WSSessionMetrics
@@ -25,13 +26,14 @@ type tableManager struct {
 func NewTableManager(metrics metrics.WSMetrics, sessionMetrics metrics.WSSessionMetrics) tableinterfaces.TableManager {
 	return &tableManager{
 		sessions:       make(map[string]*session),
+		encounterIndex: make(map[string]string),
 		metrics:        metrics,
 		sessionMetrics: sessionMetrics,
 	}
 }
 
 func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, encounter *models.Encounter,
-	sessionID string, callback func(sessionID string)) {
+	sessionID string, callback func(sessionID string), opts tableinterfaces.SessionOptions) {
 	l := logger.FromContext(ctx)
 	newSession := &session{
 		encounterID:     encounter.UUID,
@@ -40,14 +42,17 @@ func (tm *tableManager) CreateSession(ctx context.Context, admin *models.User, e
 		adminID:         admin.ID,
 		adminName:       admin.DisplayName,
 		participants:    make(map[int]*participant),
-		broadcast:       make(chan []byte),
+		broadcast:       make(chan broadcastMessage),
 		refreshCallback: callback,
+		aiAutoPlay:      opts.AIAutoPlay,
+		aiDifficultyMod: opts.AIDifficultyMod,
 		start:           time.Now(),
 		metrics:         tm.sessionMetrics,
 	}
 
 	tm.mu.Lock()
 	tm.sessions[sessionID] = newSession
+	tm.encounterIndex[encounter.UUID] = sessionID
 	tm.metrics.IncSessions()
 	tm.mu.Unlock()
 
@@ -75,6 +80,7 @@ func (tm *tableManager) RemoveSession(ctx context.Context, sessionID string) {
 
 	tm.mu.Lock()
 	tm.metrics.IncreaseDuration(time.Since(activeSession.start))
+	delete(tm.encounterIndex, activeSession.encounterID)
 	delete(tm.sessions, sessionID)
 	tm.mu.Unlock()
 
@@ -174,7 +180,7 @@ func (tm *tableManager) AddNewConnection(ctx context.Context, user *models.User,
 			}
 
 			activeSession.refreshCallback(sessionID)
-			activeSession.broadcast <- msg
+			activeSession.broadcast <- broadcastMessage{senderID: user.ID, data: msg}
 			activeSession.metrics.IncReceivedMsgs()
 		}
 	}()
@@ -193,4 +199,21 @@ func (tm *tableManager) HasActiveUsers(ctx context.Context, sessionID string) bo
 	}
 
 	return activeSession.hasActiveUsers()
+}
+
+func (tm *tableManager) BroadcastToEncounter(ctx context.Context, encounterID string, senderUserID int, msg []byte) {
+	tm.mu.RLock()
+	sessionID, ok := tm.encounterIndex[encounterID]
+	if !ok {
+		tm.mu.RUnlock()
+		return
+	}
+	activeSession := tm.sessions[sessionID]
+	tm.mu.RUnlock()
+
+	l := logger.FromContext(ctx)
+
+	activeSession.mu.Lock()
+	activeSession.relayPatchMessage(l, senderUserID, msg)
+	activeSession.mu.Unlock()
 }

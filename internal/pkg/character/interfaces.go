@@ -22,3 +22,37 @@ type CharacterUsecases interface {
 	GetCharacterByMongoId(ctx context.Context, id string, userID int) (*models.Character, error)
 	AddCharacter(ctx context.Context, file multipart.File, userID int) error
 }
+
+// CharacterBaseRepository provides CRUD for CharacterBase documents in characters_v2 collection.
+type CharacterBaseRepository interface {
+	Create(ctx context.Context, char *models.CharacterBase) error
+	GetByID(ctx context.Context, id string) (*models.CharacterBase, error)
+	Update(ctx context.Context, char *models.CharacterBase, expectedVersion int) error
+	Delete(ctx context.Context, id string, userID string) error
+	List(ctx context.Context, userID string, page, size int, search string) ([]*models.CharacterBase, int64, error)
+	UpdateAvatarURL(ctx context.Context, id string, userID string, avatarURL string) error
+	ClearAvatar(ctx context.Context, id string, userID string) error
+	GetHotbarLayout(ctx context.Context, id string, userID string) (*models.HotbarLayout, error)
+	SetHotbarLayout(ctx context.Context, id string, userID string, layout *models.HotbarLayout) error
+}
+
+// CharacterBaseUsecases provides business logic for CharacterBase operations.
+type CharacterBaseUsecases interface {
+	Create(ctx context.Context, char *models.CharacterBase) error
+	GetByID(ctx context.Context, id string, userID int) (*models.CharacterBase, error)
+	GetComputed(ctx context.Context, id string, userID int) (*models.CharacterBase, *models.DerivedStats, error)
+	Update(ctx context.Context, char *models.CharacterBase, expectedVersion int, userID int) error
+	Delete(ctx context.Context, id string, userID int) error
+	List(ctx context.Context, userID int, page, size int, search string) ([]*models.CharacterBase, int64, error)
+	ImportLSS(ctx context.Context, fileData []byte, userID int) (*models.CharacterBase, *models.ConversionReport, error)
+	UploadAvatar(ctx context.Context, id string, userID int, fileData []byte) (string, error)
+	DeleteAvatar(ctx context.Context, id string, userID int) error
+	GetHotbarLayout(ctx context.Context, id string, userID int) (*models.HotbarLayout, error)
+	SetHotbarLayout(ctx context.Context, id string, userID int, layout *models.HotbarLayout) error
+}
+
+// AvatarS3Manager handles avatar upload/delete operations in S3.
+type AvatarS3Manager interface {
+	UploadAvatar(ctx context.Context, data []byte, objectName string) (string, error)
+	DeleteAvatar(ctx context.Context, objectName string) error
+}

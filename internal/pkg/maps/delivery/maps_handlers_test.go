@@ -14,6 +14,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/delivery"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/usecases"
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +28,7 @@ type fakeMapsUsecases struct {
 	updateResult *models.MapFull
 	updateErr    error
 	deleteErr    error
-	listResult   *models.MapsList
+	listResult   []models.MapMetadata
 	listErr      error
 }
 
@@ -47,7 +48,7 @@ func (f *fakeMapsUsecases) DeleteMap(_ context.Context, _ int, _ string) error {
 	return f.deleteErr
 }
 
-func (f *fakeMapsUsecases) ListMaps(_ context.Context, _ int, _, _ int) (*models.MapsList, error) {
+func (f *fakeMapsUsecases) ListMaps(_ context.Context, _ int, _, _ int) ([]models.MapMetadata, error) {
 	return f.listResult, f.listErr
 }
 
@@ -117,7 +118,7 @@ func TestCreateMap_ValidationError_Returns422(t *testing.T) {
 	handler.CreateMap(rr, req)
 
 	assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
-	assert.Equal(t, "BAD_REQUEST", decodeMapsError(t, rr.Body))
+	assert.Equal(t, "INVALID_NAME", decodeMapsError(t, rr.Body))
 }
 
 func TestCreateMap_InternalError_Returns500(t *testing.T) {
@@ -143,6 +144,52 @@ func TestCreateMap_InternalError_Returns500(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Code)
 	assert.Equal(t, "INTERNAL_ERROR", decodeMapsError(t, rr.Body))
 }
+
+// F.1 #8
+func TestListMaps_EmptySlice_NotNull(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewMapsHandler(
+		&fakeMapsUsecases{listResult: []models.MapMetadata{}},
+		ctxUserKey,
+	)
+
+	req := httptest.NewRequest(http.MethodGet, "/api/maps?start=0&size=10", nil)
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
+
+	rr := httptest.NewRecorder()
+	handler.ListMaps(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Equal(t, "application/json", rr.Header().Get("Content-Type"))
+	// Body should be "[]" + newline (json.Encoder adds newline), not "null"
+	body := rr.Body.String()
+	assert.Equal(t, "[]\n", body)
+}
+
+// F.1 #9
+func TestDeleteMap_204_NoBody_NoContentType(t *testing.T) {
+	t.Parallel()
+
+	handler := delivery.NewMapsHandler(
+		&fakeMapsUsecases{deleteErr: nil},
+		ctxUserKey,
+	)
+
+	req := httptest.NewRequest(http.MethodDelete, "/api/maps/550e8400-e29b-41d4-a716-446655440000", nil)
+	req = withUser(req, ctxUserKey, &models.User{ID: 1, DisplayName: "Tester"})
+	// Simulate mux vars
+	req = mux.SetURLVars(req, map[string]string{"id": "550e8400-e29b-41d4-a716-446655440000"})
+
+	rr := httptest.NewRecorder()
+	handler.DeleteMap(rr, req)
+
+	assert.Equal(t, http.StatusNoContent, rr.Code)
+	assert.Empty(t, rr.Body.String())
+	assert.Empty(t, rr.Header().Get("Content-Type"))
+}
+
+// F.1 #10: TestCreateMap_BadJSON_400 — already covered by TestCreateMap_BadJSON_Returns400 above
 
 func TestListMaps_InternalError_Returns500(t *testing.T) {
 	t.Parallel()

@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 )
@@ -12,7 +13,6 @@ const (
 	RequiredSchemaV = 1
 	MinRotation     = 0
 	MaxRotation     = 3
-	MapUnitsPerTile = 6 // Each tile occupies 6x6 units
 )
 
 // ValidateMapRequest validates a map creation/update request and returns validation errors
@@ -41,22 +41,12 @@ func ValidateMapRequest(name string, data *models.MapData) []models.ValidationEr
 			Field:   "data.widthUnits",
 			Message: "widthUnits must be a positive integer",
 		})
-	} else if data.WidthUnits%MapUnitsPerTile != 0 {
-		errors = append(errors, models.ValidationError{
-			Field:   "data.widthUnits",
-			Message: fmt.Sprintf("widthUnits must be a multiple of %d", MapUnitsPerTile),
-		})
 	}
 
 	if data.HeightUnits <= 0 {
 		errors = append(errors, models.ValidationError{
 			Field:   "data.heightUnits",
 			Message: "heightUnits must be a positive integer",
-		})
-	} else if data.HeightUnits%MapUnitsPerTile != 0 {
-		errors = append(errors, models.ValidationError{
-			Field:   "data.heightUnits",
-			Message: fmt.Sprintf("heightUnits must be a multiple of %d", MapUnitsPerTile),
 		})
 	}
 
@@ -92,22 +82,12 @@ func validatePlacement(index int, p *models.Placement) []models.ValidationError 
 			Field:   prefix + ".x",
 			Message: "placement x must be >= 0",
 		})
-	} else if p.X%MapUnitsPerTile != 0 {
-		errors = append(errors, models.ValidationError{
-			Field:   prefix + ".x",
-			Message: fmt.Sprintf("placement x must be a multiple of %d", MapUnitsPerTile),
-		})
 	}
 
 	if p.Y < 0 {
 		errors = append(errors, models.ValidationError{
 			Field:   prefix + ".y",
 			Message: "placement y must be >= 0",
-		})
-	} else if p.Y%MapUnitsPerTile != 0 {
-		errors = append(errors, models.ValidationError{
-			Field:   prefix + ".y",
-			Message: fmt.Sprintf("placement y must be a multiple of %d", MapUnitsPerTile),
 		})
 	}
 
@@ -118,6 +98,59 @@ func validatePlacement(index int, p *models.Placement) []models.ValidationError 
 		})
 	}
 
+	if p.Layer < 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   prefix + ".layer",
+			Message: "placement layer must be >= 0",
+		})
+	}
+
+	return errors
+}
+
+// ValidateUpdateMapRequest validates an update map request where name is optional
+func ValidateUpdateMapRequest(name *string, data *models.MapData) []models.ValidationError {
+	var errors []models.ValidationError
+
+	// Validate name only if provided
+	if name != nil {
+		if len(*name) < MinNameLength || len(*name) > MaxNameLength {
+			errors = append(errors, models.ValidationError{
+				Field:   "name",
+				Message: fmt.Sprintf("name must be between %d and %d characters", MinNameLength, MaxNameLength),
+			})
+		}
+	}
+
+	// Validate schema version
+	if data.SchemaVersion != RequiredSchemaV {
+		errors = append(errors, models.ValidationError{
+			Field:   "data.schemaVersion",
+			Message: fmt.Sprintf("schemaVersion must be %d", RequiredSchemaV),
+		})
+	}
+
+	// Validate dimensions
+	if data.WidthUnits <= 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   "data.widthUnits",
+			Message: "widthUnits must be a positive integer",
+		})
+	}
+
+	if data.HeightUnits <= 0 {
+		errors = append(errors, models.ValidationError{
+			Field:   "data.heightUnits",
+			Message: "heightUnits must be a positive integer",
+		})
+	}
+
+	// Validate placements
+	for i, placement := range data.Placements {
+		placementErrors := validatePlacement(i, &placement)
+		errors = append(errors, placementErrors...)
+	}
+
 	return errors
 }
 
@@ -125,13 +158,15 @@ func validatePlacement(index int, p *models.Placement) []models.ValidationError 
 func CategorizeValidationErrors(errors []models.ValidationError) string {
 	for _, err := range errors {
 		switch err.Field {
+		case "name":
+			return "INVALID_NAME"
 		case "data.schemaVersion":
 			return "INVALID_SCHEMA_VERSION"
 		case "data.widthUnits", "data.heightUnits":
 			return "INVALID_DIMENSIONS"
 		}
 		// Check for placement errors
-		if len(err.Field) > 15 && err.Field[:15] == "data.placements" {
+		if strings.HasPrefix(err.Field, "data.placements") {
 			return "INVALID_PLACEMENT"
 		}
 	}

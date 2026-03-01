@@ -48,8 +48,8 @@ func (uc *mapsUsecases) GetMapByID(ctx context.Context, userID int, id string) (
 	// Check permission first
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
-		l.UsecasesWarn(apperrors.MapPermissionDenied, userID, map[string]any{"id": id})
-		return nil, apperrors.MapPermissionDenied
+		l.UsecasesWarn(apperrors.MapNotFoundError, userID, map[string]any{"id": id})
+		return nil, apperrors.MapNotFoundError
 	}
 
 	return uc.repo.GetMapByID(ctx, userID, id)
@@ -61,12 +61,12 @@ func (uc *mapsUsecases) UpdateMap(ctx context.Context, userID int, id string, re
 	// Check permission first
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
-		l.UsecasesWarn(apperrors.MapPermissionDenied, userID, map[string]any{"id": id})
-		return nil, apperrors.MapPermissionDenied
+		l.UsecasesWarn(apperrors.MapNotFoundError, userID, map[string]any{"id": id})
+		return nil, apperrors.MapNotFoundError
 	}
 
 	// Validate request
-	validationErrors := ValidateMapRequest(req.Name, &req.Data)
+	validationErrors := ValidateUpdateMapRequest(req.Name, &req.Data)
 	if len(validationErrors) > 0 {
 		l.UsecasesWarn(apperrors.MapValidationError, userID, map[string]any{
 			"errors": validationErrors,
@@ -91,14 +91,14 @@ func (uc *mapsUsecases) DeleteMap(ctx context.Context, userID int, id string) er
 	// Check permission first
 	hasPermission := uc.repo.CheckPermission(ctx, id, userID)
 	if !hasPermission {
-		l.UsecasesWarn(apperrors.MapPermissionDenied, userID, map[string]any{"id": id})
-		return apperrors.MapPermissionDenied
+		l.UsecasesWarn(apperrors.MapNotFoundError, userID, map[string]any{"id": id})
+		return apperrors.MapNotFoundError
 	}
 
 	return uc.repo.DeleteMap(ctx, userID, id)
 }
 
-func (uc *mapsUsecases) ListMaps(ctx context.Context, userID int, start, size int) (*models.MapsList, error) {
+func (uc *mapsUsecases) ListMaps(ctx context.Context, userID int, start, size int) ([]models.MapMetadata, error) {
 	l := logger.FromContext(ctx)
 
 	if start < 0 || size <= 0 {

@@ -24,6 +24,7 @@ go.work
 .idea
 
 prod.env
+test.env
 console.env
 console.prod.env
 logs.json
@@ -34,6 +35,9 @@ internal/pkg/bestiary/repository/filter.json
 internal/pkg/**/mocks/
 
 .claude/settings.local.json
-CLAUDE.md
 docs/TESTING.local.md
-/my_docs
+
+# Database backups (contain production data)
+backups/
+
+/long_story_short_jsons

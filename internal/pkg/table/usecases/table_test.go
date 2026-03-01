@@ -9,6 +9,7 @@ import (
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	encmocks "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/mocks"
+	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table/mocks"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
@@ -58,7 +59,7 @@ func TestCreateSession(t *testing.T) {
 				repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
 					Return(&models.Encounter{UserID: 1, UUID: "enc-1", Name: "Battle"}, nil)
 				idGen.EXPECT().NewSessionID().Return("test-session-abc")
-				mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "test-session-abc", gomock.Any())
+				mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "test-session-abc", gomock.Any(), gomock.Any())
 				tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer)
 			},
 			wantID: "test-session-abc",
@@ -78,7 +79,7 @@ func TestCreateSession(t *testing.T) {
 			tt.setup(repo, mgr, idGen, tf, timer)
 
 			uc := NewTableUsecases(repo, mgr, idGen, tf)
-			id, err := uc.CreateSession(context.Background(), tt.admin, tt.encID)
+			id, err := uc.CreateSession(context.Background(), tt.admin, tt.encID, tableinterfaces.SessionOptions{})
 
 			if tt.wantErr != nil {
 				assert.True(t, errors.Is(err, tt.wantErr), "expected %v, got %v", tt.wantErr, err)
@@ -105,11 +106,11 @@ func TestCreateSession_TimerIsRegistered(t *testing.T) {
 	repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
 		Return(&models.Encounter{UserID: 1, UUID: "enc-1", Name: "Battle"}, nil)
 	idGen.EXPECT().NewSessionID().Return("sid-1")
-	mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "sid-1", gomock.Any())
+	mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "sid-1", gomock.Any(), gomock.Any())
 	tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer)
 
 	uc := NewTableUsecases(repo, mgr, idGen, tf)
-	id, err := uc.CreateSession(context.Background(), &models.User{ID: 1, DisplayName: "Admin"}, "enc-1")
+	id, err := uc.CreateSession(context.Background(), &models.User{ID: 1, DisplayName: "Admin"}, "enc-1", tableinterfaces.SessionOptions{})
 	assert.NoError(t, err)
 	assert.Equal(t, "sid-1", id)
 }
@@ -184,11 +185,11 @@ func TestCreateSession_MultipleSessionsGetUniqueIDs(t *testing.T) {
 
 	repo1.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(encounter, nil)
 	idGen1.EXPECT().NewSessionID().Return("session-A")
-	mgr1.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "session-A", gomock.Any())
+	mgr1.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "session-A", gomock.Any(), gomock.Any())
 	tf1.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer1)
 
 	uc1 := NewTableUsecases(repo1, mgr1, idGen1, tf1)
-	id1, err1 := uc1.CreateSession(context.Background(), admin, "enc-1")
+	id1, err1 := uc1.CreateSession(context.Background(), admin, "enc-1", tableinterfaces.SessionOptions{})
 	assert.NoError(t, err1)
 	assert.Equal(t, "session-A", id1)
 
@@ -202,11 +203,11 @@ func TestCreateSession_MultipleSessionsGetUniqueIDs(t *testing.T) {
 
 	repo2.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").Return(encounter, nil)
 	idGen2.EXPECT().NewSessionID().Return("session-B")
-	mgr2.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "session-B", gomock.Any())
+	mgr2.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "session-B", gomock.Any(), gomock.Any())
 	tf2.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).Return(timer2)
 
 	uc2 := NewTableUsecases(repo2, mgr2, idGen2, tf2)
-	id2, err2 := uc2.CreateSession(context.Background(), admin, "enc-1")
+	id2, err2 := uc2.CreateSession(context.Background(), admin, "enc-1", tableinterfaces.SessionOptions{})
 	assert.NoError(t, err2)
 	assert.Equal(t, "session-B", id2)
 	assert.NotEqual(t, id1, id2)
@@ -226,7 +227,7 @@ func TestCreateSession_TimerDuration(t *testing.T) {
 	repo.EXPECT().GetEncounterByID(gomock.Any(), "enc-1").
 		Return(&models.Encounter{UserID: 1, UUID: "enc-1"}, nil)
 	idGen.EXPECT().NewSessionID().Return("sid-dur")
-	mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "sid-dur", gomock.Any())
+	mgr.EXPECT().CreateSession(gomock.Any(), gomock.Any(), gomock.Any(), "sid-dur", gomock.Any(), gomock.Any())
 
 	var capturedDuration time.Duration
 	tf.EXPECT().AfterFunc(gomock.Any(), gomock.Any()).DoAndReturn(
@@ -236,7 +237,7 @@ func TestCreateSession_TimerDuration(t *testing.T) {
 		})
 
 	uc := NewTableUsecases(repo, mgr, idGen, tf)
-	_, err := uc.CreateSession(context.Background(), &models.User{ID: 1}, "enc-1")
+	_, err := uc.CreateSession(context.Background(), &models.User{ID: 1}, "enc-1", tableinterfaces.SessionOptions{})
 	assert.NoError(t, err)
 	assert.True(t, capturedDuration > 0, "timer duration should be positive")
 }

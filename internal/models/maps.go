@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 // Placement represents a tile placement on the map
 type Placement struct {
@@ -14,10 +17,11 @@ type Placement struct {
 
 // MapData represents the map content stored as JSONB
 type MapData struct {
-	SchemaVersion int         `json:"schemaVersion"`
-	WidthUnits    int         `json:"widthUnits"`
-	HeightUnits   int         `json:"heightUnits"`
-	Placements    []Placement `json:"placements"`
+	SchemaVersion int             `json:"schemaVersion"`
+	WidthUnits    int             `json:"widthUnits"`
+	HeightUnits   int             `json:"heightUnits"`
+	Placements    []Placement     `json:"placements"`
+	Composition   json.RawMessage `json:"composition,omitempty"`
 }
 
 // MapFull represents the complete map with all data
@@ -51,9 +55,11 @@ type CreateMapRequest struct {
 	Data MapData `json:"data"`
 }
 
-// UpdateMapRequest represents the request to update a map
+// UpdateMapRequest represents the request to update a map.
+// Name is a pointer to support partial updates: nil means "keep current name",
+// non-nil value will be validated and applied (SQL uses COALESCE).
 type UpdateMapRequest struct {
-	Name string  `json:"name"`
+	Name *string `json:"name,omitempty"`
 	Data MapData `json:"data"`
 }
 

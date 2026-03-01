@@ -3,8 +3,7 @@ package repository
 const (
 	CheckMapPermissionQuery = `
 		SELECT EXISTS(
-			SELECT 1
-			FROM public.maps
+			SELECT 1 FROM public.maps
 			WHERE id = $1 AND user_id = $2
 		);
 	`
@@ -23,7 +22,7 @@ const (
 
 	UpdateMapQuery = `
 		UPDATE public.maps
-		SET name = $3, data = $4
+		SET name = COALESCE($3, name), data = $4
 		WHERE id = $1 AND user_id = $2
 		RETURNING id, user_id, name, data, created_at, updated_at;
 	`
@@ -39,11 +38,5 @@ const (
 		WHERE user_id = $1
 		ORDER BY updated_at DESC
 		LIMIT $2 OFFSET $3;
-	`
-
-	CountMapsQuery = `
-		SELECT COUNT(*)
-		FROM public.maps
-		WHERE user_id = $1;
 	`
 )

@@ -31,6 +31,7 @@ type CharacterRace struct {
 type CharacterAvatar struct {
 	Jpeg string `json:"jpeg" bson:"jpeg"`
 	Webp string `json:"webp" bson:"webp"`
+	Url  string `json:"url,omitempty" bson:"url,omitempty"`
 }
 
 type CharacterData struct {

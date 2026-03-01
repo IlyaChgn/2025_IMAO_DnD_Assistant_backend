@@ -1,0 +1,1221 @@
+[
+  {
+    "engName": "grappler",
+    "name": {
+      "eng": "Grappler",
+      "rus": "Борец"
+    },
+    "description": {
+      "eng": "You have developed the skills necessary to hold your own in close-quarters grappling. You gain advantages when grappling creatures and can pin them in place.",
+      "rus": "Вы развили навыки, необходимые для ведения ближнего боя в захвате. Вы получаете преимущества при захвате существ и можете удерживать их на месте."
+    },
+    "prerequisites": {
+      "abilities": {
+        "str": 13
+      }
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "grappling_advantage",
+          "name": {
+            "eng": "Grappling Advantage",
+            "rus": "Преимущество захвата"
+          },
+          "description": {
+            "eng": "You have advantage on attack rolls against a creature you are grappling.",
+            "rus": "Вы совершаете с преимуществом броски атаки против существа, которое вы держите в захвате."
+          },
+          "mechanics": {
+            "type": "advantage",
+            "on": "attack rolls against grappled target"
+          }
+        },
+        {
+          "engName": "pin",
+          "name": {
+            "eng": "Pin",
+            "rus": "Удержание"
+          },
+          "description": {
+            "eng": "You can use your action to try to pin a creature grappled by you. Both you and the creature are restrained until the grapple ends.",
+            "rus": "Вы можете действием попытаться придавить существо, удерживаемое вами в захвате. И вы, и существо становитесь опутанными до окончания захвата."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Action to pin grappled creature; both you and target become restrained until grapple ends"
+          }
+        }
+      ]
+    },
+    "source": "srd",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "alert",
+    "name": {
+      "eng": "Alert",
+      "rus": "Бдительный"
+    },
+    "description": {
+      "eng": "Always on the lookout for danger, you gain a significant bonus to initiative and cannot be surprised. Creatures do not gain advantage on attack rolls against you from being hidden.",
+      "rus": "Вы всегда начеку и получаете значительный бонус к инициативе, а также не можете быть застигнуты врасплох. Скрытые существа не получают преимущество к броскам атаки против вас."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "initiative_bonus",
+          "name": {
+            "eng": "Initiative Bonus",
+            "rus": "Бонус к инициативе"
+          },
+          "description": {
+            "eng": "You gain a +5 bonus to initiative.",
+            "rus": "Вы получаете бонус +5 к инициативе."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "+5 bonus to initiative rolls"
+          }
+        },
+        {
+          "engName": "no_surprise",
+          "name": {
+            "eng": "Cannot Be Surprised",
+            "rus": "Невозможно застать врасплох"
+          },
+          "description": {
+            "eng": "You can't be surprised while you are conscious.",
+            "rus": "Вы не можете быть застигнуты врасплох, пока находитесь в сознании."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Immune to surprised condition while conscious"
+          }
+        },
+        {
+          "engName": "hidden_attackers",
+          "name": {
+            "eng": "Hidden Attackers",
+            "rus": "Скрытые атакующие"
+          },
+          "description": {
+            "eng": "Other creatures don't gain advantage on attack rolls against you as a result of being unseen by you.",
+            "rus": "Другие существа не получают преимущество к броскам атаки против вас из-за того, что вы их не видите."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Unseen attackers do not gain advantage on attack rolls against you"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat",
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "crossbow_expert",
+    "name": {
+      "eng": "Crossbow Expert",
+      "rus": "Эксперт по арбалетам"
+    },
+    "description": {
+      "eng": "You have extensive practice with crossbows, gaining several benefits. You ignore the loading property, don't suffer disadvantage at close range, and can make a bonus action attack with a hand crossbow.",
+      "rus": "Вы обширно практиковались с арбалетами и получаете несколько преимуществ. Вы игнорируете свойство перезарядки, не получаете помеху в ближнем бою и можете атаковать ручным арбалетом бонусным действием."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "ignore_loading",
+          "name": {
+            "eng": "Ignore Loading",
+            "rus": "Игнорирование перезарядки"
+          },
+          "description": {
+            "eng": "You ignore the loading quality of crossbows with which you are proficient.",
+            "rus": "Вы игнорируете свойство «перезарядка» арбалетов, которыми владеете."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Ignore loading property on proficient crossbows"
+          }
+        },
+        {
+          "engName": "no_close_range_disadvantage",
+          "name": {
+            "eng": "No Close Range Disadvantage",
+            "rus": "Без помехи в ближнем бою"
+          },
+          "description": {
+            "eng": "Being within 5 feet of a hostile creature doesn't impose disadvantage on your ranged attack rolls.",
+            "rus": "Нахождение в пределах 5 футов от враждебного существа не накладывает помеху на ваши дальнобойные броски атаки."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "No disadvantage on ranged attack rolls when within 5 ft of hostile creature"
+          }
+        },
+        {
+          "engName": "bonus_action_hand_crossbow",
+          "name": {
+            "eng": "Bonus Action Hand Crossbow",
+            "rus": "Атака ручным арбалетом бонусным действием"
+          },
+          "description": {
+            "eng": "When you use the Attack action and attack with a one-handed weapon, you can use a bonus action to attack with a hand crossbow you are holding.",
+            "rus": "Когда вы совершаете действие Атака одноручным оружием, вы можете бонусным действием атаковать ручным арбалетом, который держите."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Bonus action attack with hand crossbow after one-handed weapon Attack action"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "defensive_duelist",
+    "name": {
+      "eng": "Defensive Duelist",
+      "rus": "Защитный дуэлянт"
+    },
+    "description": {
+      "eng": "When you are wielding a finesse weapon and another creature hits you with a melee attack, you can use your reaction to add your proficiency bonus to your AC. This can potentially cause the attack to miss.",
+      "rus": "Когда вы держите фехтовальное оружие и другое существо попадает по вам рукопашной атакой, вы можете реакцией добавить бонус мастерства к КД, что может привести к промаху атаки."
+    },
+    "prerequisites": {
+      "abilities": {
+        "dex": 13
+      }
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "parry",
+          "name": {
+            "eng": "Parry",
+            "rus": "Парирование"
+          },
+          "description": {
+            "eng": "When another creature hits you with a melee attack, you can use your reaction to add your proficiency bonus to your AC for that attack, potentially causing the attack to miss you.",
+            "rus": "Когда другое существо попадает по вам рукопашной атакой, вы можете реакцией добавить свой бонус мастерства к КД против этой атаки, что может привести к промаху."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Reaction: add proficiency bonus to AC against one melee attack (requires finesse weapon)"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat",
+      "defensive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "dual_wielder",
+    "name": {
+      "eng": "Dual Wielder",
+      "rus": "Двуоружный боец"
+    },
+    "description": {
+      "eng": "You master fighting with two weapons, gaining benefits when dual wielding. You can use non-light weapons, gain an AC bonus, and can draw or stow two weapons at once.",
+      "rus": "Вы овладели сражением двумя оружиями. Вы можете использовать не лёгкое оружие, получаете бонус к КД и можете доставать или убирать два оружия одновременно."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "dual_wield_ac_bonus",
+          "name": {
+            "eng": "Dual Wield AC Bonus",
+            "rus": "Бонус КД при двуоружном бое"
+          },
+          "description": {
+            "eng": "You gain a +1 bonus to AC while you are wielding a separate melee weapon in each hand.",
+            "rus": "Вы получаете бонус +1 к КД, пока держите по рукопашному оружию в каждой руке."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "+1 AC while wielding a melee weapon in each hand"
+          }
+        },
+        {
+          "engName": "non_light_dual_wield",
+          "name": {
+            "eng": "Non-Light Dual Wielding",
+            "rus": "Двуоружный бой без лёгкого оружия"
+          },
+          "description": {
+            "eng": "You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren't light.",
+            "rus": "Вы можете сражаться двумя оружиями, даже если одноручное рукопашное оружие не является лёгким."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Two-weapon fighting allowed with non-light one-handed melee weapons"
+          }
+        },
+        {
+          "engName": "quick_draw",
+          "name": {
+            "eng": "Quick Draw",
+            "rus": "Быстрое извлечение"
+          },
+          "description": {
+            "eng": "You can draw or stow two one-handed weapons when you would normally be able to draw or stow only one.",
+            "rus": "Вы можете достать или убрать два одноручных оружия, когда обычно можно достать или убрать лишь одно."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Draw or stow two one-handed weapons instead of one"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "great_weapon_master",
+    "name": {
+      "eng": "Great Weapon Master",
+      "rus": "Мастер тяжёлого оружия"
+    },
+    "description": {
+      "eng": "You have learned to put the weight of a weapon to your advantage. You can make a bonus action attack on a critical hit or kill, and take a -5 penalty to hit for +10 damage.",
+      "rus": "Вы научились использовать вес оружия в свою пользу. Вы можете атаковать бонусным действием при критическом попадании или убийстве и принять штраф -5 к попаданию ради +10 к урону."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "cleave",
+          "name": {
+            "eng": "Cleave",
+            "rus": "Размашистый удар"
+          },
+          "description": {
+            "eng": "On your turn, when you score a critical hit with a melee weapon or reduce a creature to 0 hit points with one, you can make one melee weapon attack as a bonus action.",
+            "rus": "В свой ход, когда вы наносите критическое попадание рукопашным оружием или опускаете хиты существа до 0, вы можете бонусным действием совершить одну атаку рукопашным оружием."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Bonus action melee attack on critical hit or reducing creature to 0 HP"
+          }
+        },
+        {
+          "engName": "power_attack",
+          "name": {
+            "eng": "Power Attack",
+            "rus": "Мощная атака"
+          },
+          "description": {
+            "eng": "Before you make a melee attack with a heavy weapon that you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage.",
+            "rus": "Перед совершением рукопашной атаки тяжёлым оружием, которым вы владеете, вы можете принять штраф -5 к броску атаки. При попадании вы добавляете +10 к урону атаки."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "-5 to attack roll, +10 to damage with heavy melee weapon"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "lucky",
+    "name": {
+      "eng": "Lucky",
+      "rus": "Везунчик"
+    },
+    "description": {
+      "eng": "You have inexplicable luck that seems to kick in at just the right moment. You have 3 luck points per long rest that you can spend to reroll attack rolls, ability checks, or saving throws.",
+      "rus": "У вас есть необъяснимая удача, которая проявляется в нужный момент. У вас есть 3 очка удачи за длинный отдых, которые можно тратить на переброс атак, проверок характеристик или спасбросков."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "luck_points",
+          "name": {
+            "eng": "Luck Points",
+            "rus": "Очки удачи"
+          },
+          "description": {
+            "eng": "You have 3 luck points. Whenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20 and choose which to use. You regain expended luck points on a long rest.",
+            "rus": "У вас есть 3 очка удачи. Когда вы совершаете бросок атаки, проверку характеристики или спасбросок, вы можете потратить одно очко удачи, чтобы бросить дополнительную к20 и выбрать, какой результат использовать. Очки восстанавливаются после длинного отдыха."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "3 luck points per long rest; spend to roll additional d20 on attack, check, or save and choose result"
+          }
+        },
+        {
+          "engName": "luck_defense",
+          "name": {
+            "eng": "Luck Defense",
+            "rus": "Удачная защита"
+          },
+          "description": {
+            "eng": "You can also spend one luck point when an attack roll is made against you, roll a d20, and then choose whether the attack uses the attacker's roll or yours.",
+            "rus": "Вы также можете потратить одно очко удачи, когда по вам совершают бросок атаки, бросить к20 и выбрать, какой результат использовать — атакующего или ваш."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Spend luck point when attacked; roll d20 and choose attacker's or your roll"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "mage_slayer",
+    "name": {
+      "eng": "Mage Slayer",
+      "rus": "Убийца магов"
+    },
+    "description": {
+      "eng": "You have practiced techniques useful for melee combat against spellcasters. You can react to spells being cast nearby, impose disadvantage on concentration saves, and have advantage on saves against adjacent casters.",
+      "rus": "Вы отработали приёмы, полезные для ближнего боя против заклинателей. Вы можете реагировать на заклинания, накладываемые рядом, налагать помеху на спасброски концентрации и получать преимущество на спасброски против соседних заклинателей."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "reactive_strike",
+          "name": {
+            "eng": "Reactive Strike",
+            "rus": "Ответная атака"
+          },
+          "description": {
+            "eng": "When a creature within 5 feet of you casts a spell, you can use your reaction to make a melee weapon attack against that creature.",
+            "rus": "Когда существо в пределах 5 футов от вас произносит заклинание, вы можете реакцией совершить рукопашную атаку против этого существа."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Reaction: melee weapon attack when creature within 5 ft casts a spell"
+          }
+        },
+        {
+          "engName": "concentration_breaker",
+          "name": {
+            "eng": "Concentration Breaker",
+            "rus": "Нарушитель концентрации"
+          },
+          "description": {
+            "eng": "When you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration.",
+            "rus": "Когда вы наносите урон существу, которое концентрируется на заклинании, это существо совершает спасбросок для поддержания концентрации с помехой."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Target has disadvantage on concentration saves when you deal damage"
+          }
+        },
+        {
+          "engName": "spell_resistance_adjacent",
+          "name": {
+            "eng": "Adjacent Spell Resistance",
+            "rus": "Устойчивость к заклинаниям вблизи"
+          },
+          "description": {
+            "eng": "You have advantage on saving throws against spells cast by creatures within 5 feet of you.",
+            "rus": "Вы совершаете с преимуществом спасброски от заклинаний, произнесённых существами в пределах 5 футов от вас."
+          },
+          "mechanics": {
+            "type": "advantage",
+            "on": "saving throws against spells cast by creatures within 5 ft"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat",
+      "defensive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "magic_initiate",
+    "name": {
+      "eng": "Magic Initiate",
+      "rus": "Посвящённый в магию"
+    },
+    "description": {
+      "eng": "Choose a class: bard, cleric, druid, sorcerer, warlock, or wizard. You learn two cantrips and one 1st-level spell from that class's spell list, which you can cast once per long rest.",
+      "rus": "Выберите класс: бард, жрец, друид, чародей, колдун или волшебник. Вы изучаете два заговора и одно заклинание 1-го уровня из списка этого класса, которое можете произнести раз за длинный отдых."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "initiate_cantrip_1",
+          "name": {
+            "eng": "Learned Cantrip (1st)",
+            "rus": "Изученный заговор (1-й)"
+          },
+          "description": {
+            "eng": "You learn one cantrip of your choice from the chosen class's spell list.",
+            "rus": "Вы изучаете один заговор по вашему выбору из списка заклинаний выбранного класса."
+          },
+          "mechanics": {
+            "type": "cantrip",
+            "spellEngName": "chosen_cantrip_1",
+            "ability": "chosen_class_ability"
+          }
+        },
+        {
+          "engName": "initiate_cantrip_2",
+          "name": {
+            "eng": "Learned Cantrip (2nd)",
+            "rus": "Изученный заговор (2-й)"
+          },
+          "description": {
+            "eng": "You learn a second cantrip of your choice from the chosen class's spell list.",
+            "rus": "Вы изучаете второй заговор по вашему выбору из списка заклинаний выбранного класса."
+          },
+          "mechanics": {
+            "type": "cantrip",
+            "spellEngName": "chosen_cantrip_2",
+            "ability": "chosen_class_ability"
+          }
+        },
+        {
+          "engName": "initiate_spell",
+          "name": {
+            "eng": "Learned 1st-Level Spell",
+            "rus": "Изученное заклинание 1-го уровня"
+          },
+          "description": {
+            "eng": "You learn one 1st-level spell of your choice from the chosen class's spell list. You can cast it once at its lowest level without expending a spell slot, regaining the ability after a long rest.",
+            "rus": "Вы изучаете одно заклинание 1-го уровня по вашему выбору из списка выбранного класса. Вы можете произнести его один раз на минимальном уровне без траты ячейки заклинания, восстанавливая способность после длинного отдыха."
+          },
+          "mechanics": {
+            "type": "spell",
+            "spellEngName": "chosen_1st_level_spell",
+            "ability": "chosen_class_ability",
+            "minLevel": 1,
+            "usesPerDay": 1
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "magical"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "mobile",
+    "name": {
+      "eng": "Mobile",
+      "rus": "Мобильный"
+    },
+    "description": {
+      "eng": "You are exceptionally speedy and agile. Your speed increases, you can Dash over difficult terrain without penalty, and melee attacks prevent opportunity attacks from that target.",
+      "rus": "Вы исключительно быстры и ловки. Ваша скорость увеличивается, вы можете Рывком игнорировать труднопроходимую местность, а рукопашные атаки не провоцируют атаки возможности от цели."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "speed_increase",
+          "name": {
+            "eng": "Speed Increase",
+            "rus": "Увеличение скорости"
+          },
+          "description": {
+            "eng": "Your speed increases by 10 feet.",
+            "rus": "Ваша скорость увеличивается на 10 футов."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "+10 ft movement speed"
+          }
+        },
+        {
+          "engName": "dash_over_difficult_terrain",
+          "name": {
+            "eng": "Dash Over Difficult Terrain",
+            "rus": "Рывок по труднопроходимой местности"
+          },
+          "description": {
+            "eng": "When you use the Dash action, difficult terrain doesn't cost you extra movement on that turn.",
+            "rus": "Когда вы используете действие Рывок, труднопроходимая местность не требует дополнительного перемещения в этот ход."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Dash action ignores difficult terrain movement penalty"
+          }
+        },
+        {
+          "engName": "hit_and_run",
+          "name": {
+            "eng": "Hit and Run",
+            "rus": "Бей и беги"
+          },
+          "description": {
+            "eng": "When you make a melee attack against a creature, you don't provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not.",
+            "rus": "Когда вы совершаете рукопашную атаку по существу, это существо не может совершать против вас атаки возможности до конца хода, независимо от того, попали вы или нет."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "No opportunity attacks from creature you melee attacked this turn"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat",
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "observant",
+    "name": {
+      "eng": "Observant",
+      "rus": "Наблюдательный"
+    },
+    "description": {
+      "eng": "Quick to notice details of your environment, you gain a bonus to passive Perception and Investigation. You can also read lips if you understand the spoken language.",
+      "rus": "Вы быстро замечаете детали окружения и получаете бонус к пассивному Восприятию и Расследованию. Вы также можете читать по губам, если понимаете язык говорящего."
+    },
+    "benefits": {
+      "abilityChoice": {
+        "pick": 1,
+        "from": [
+          "int",
+          "wis"
+        ],
+        "amount": 1
+      },
+      "features": [
+        {
+          "engName": "passive_bonus",
+          "name": {
+            "eng": "Passive Bonus",
+            "rus": "Пассивный бонус"
+          },
+          "description": {
+            "eng": "You have a +5 bonus to your passive Wisdom (Perception) and passive Intelligence (Investigation) scores.",
+            "rus": "Вы получаете бонус +5 к пассивной Мудрости (Восприятие) и пассивному Интеллекту (Расследование)."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "+5 to passive Perception and passive Investigation"
+          }
+        },
+        {
+          "engName": "lip_reading",
+          "name": {
+            "eng": "Lip Reading",
+            "rus": "Чтение по губам"
+          },
+          "description": {
+            "eng": "If you can see a creature's mouth while it is speaking a language you understand, you can interpret what it's saying by reading its lips.",
+            "rus": "Если вы видите рот существа, когда оно говорит на языке, который вы понимаете, вы можете понять, что оно говорит, читая по губам."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Can read lips of creatures speaking a language you understand"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "polearm_master",
+    "name": {
+      "eng": "Polearm Master",
+      "rus": "Мастер древкового оружия"
+    },
+    "description": {
+      "eng": "You have mastered techniques to take full advantage of reach weapons. You can make a bonus action butt-end attack and creatures provoke opportunity attacks when they enter your reach.",
+      "rus": "Вы овладели техниками максимального использования древкового оружия. Вы можете бонусным действием атаковать тупым концом, и существа провоцируют атаки возможности, входя в вашу зону досягаемости."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "butt_end_attack",
+          "name": {
+            "eng": "Butt End Attack",
+            "rus": "Атака тупым концом"
+          },
+          "description": {
+            "eng": "When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon. This attack uses a d4 for damage.",
+            "rus": "Когда вы совершаете действие Атака глефой, алебардой, боевым посохом или копьём, вы можете бонусным действием атаковать противоположным концом оружия. Эта атака использует к4 для урона."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Bonus action melee attack (1d4 bludgeoning) with glaive, halberd, quarterstaff, or spear"
+          }
+        },
+        {
+          "engName": "entering_reach_opportunity",
+          "name": {
+            "eng": "Entering Reach Opportunity Attack",
+            "rus": "Атака возможности при входе в зону"
+          },
+          "description": {
+            "eng": "While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach.",
+            "rus": "Пока вы держите глефу, алебарду, пику, боевой посох или копьё, другие существа провоцируют атаку возможности, когда входят в вашу зону досягаемости."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Opportunity attack when creature enters your reach with polearm weapons"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "resilient",
+    "name": {
+      "eng": "Resilient",
+      "rus": "Стойкий"
+    },
+    "description": {
+      "eng": "Choose one ability score. You increase that score by 1 and gain proficiency in saving throws using that ability. This feat is commonly used to shore up weak saving throws.",
+      "rus": "Выберите одну характеристику. Вы увеличиваете её на 1 и получаете владение спасбросками этой характеристики. Эта черта часто используется для усиления слабых спасбросков."
+    },
+    "benefits": {
+      "abilityChoice": {
+        "pick": 1,
+        "from": [
+          "str",
+          "dex",
+          "con",
+          "int",
+          "wis",
+          "cha"
+        ],
+        "amount": 1
+      },
+      "features": [
+        {
+          "engName": "saving_throw_proficiency",
+          "name": {
+            "eng": "Saving Throw Proficiency",
+            "rus": "Владение спасброском"
+          },
+          "description": {
+            "eng": "You gain proficiency in saving throws using the chosen ability.",
+            "rus": "Вы получаете владение спасбросками выбранной характеристики."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Gain proficiency in saving throws of chosen ability score"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "defensive",
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sentinel",
+    "name": {
+      "eng": "Sentinel",
+      "rus": "Страж"
+    },
+    "description": {
+      "eng": "You have mastered techniques to take advantage of every drop in any enemy's guard. You gain powerful reactions against creatures that attack your allies or try to disengage.",
+      "rus": "Вы овладели техниками использования каждой бреши в защите врага. Вы получаете мощные реакции против существ, атакующих ваших союзников или пытающихся отступить."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "opportunity_attack_stops_movement",
+          "name": {
+            "eng": "Stop Movement",
+            "rus": "Остановка движения"
+          },
+          "description": {
+            "eng": "When you hit a creature with an opportunity attack, the creature's speed becomes 0 for the rest of the turn.",
+            "rus": "Когда вы попадаете атакой возможности, скорость существа становится 0 до конца хода."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Opportunity attack hit reduces target speed to 0 for the turn"
+          }
+        },
+        {
+          "engName": "ignore_disengage",
+          "name": {
+            "eng": "Ignore Disengage",
+            "rus": "Игнорирование Отхода"
+          },
+          "description": {
+            "eng": "Creatures provoke opportunity attacks from you even if they take the Disengage action before leaving your reach.",
+            "rus": "Существа провоцируют атаки возможности от вас, даже если они совершают действие Отход перед выходом из вашей зоны досягаемости."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Disengage action does not prevent your opportunity attacks"
+          }
+        },
+        {
+          "engName": "guardian_strike",
+          "name": {
+            "eng": "Guardian Strike",
+            "rus": "Удар стража"
+          },
+          "description": {
+            "eng": "When a creature within 5 feet of you makes an attack against a target other than you, you can use your reaction to make a melee weapon attack against the attacking creature.",
+            "rus": "Когда существо в пределах 5 футов от вас атакует цель, отличную от вас, вы можете реакцией совершить рукопашную атаку против атакующего существа."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Reaction: melee attack against creature within 5 ft that attacks target other than you"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat",
+      "defensive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "sharpshooter",
+    "name": {
+      "eng": "Sharpshooter",
+      "rus": "Меткий стрелок"
+    },
+    "description": {
+      "eng": "You have mastered ranged weapons and can make shots that others find impossible. You ignore cover, long range disadvantage, and can trade accuracy for devastating damage.",
+      "rus": "Вы овладели дальнобойным оружием и можете совершать выстрелы, невозможные для других. Вы игнорируете укрытие, помеху дальней дистанции и можете жертвовать точностью ради разрушительного урона."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "ignore_long_range",
+          "name": {
+            "eng": "Ignore Long Range",
+            "rus": "Игнорирование дальней дистанции"
+          },
+          "description": {
+            "eng": "Attacking at long range doesn't impose disadvantage on your ranged weapon attack rolls.",
+            "rus": "Атака на дальней дистанции не накладывает помеху на ваши дальнобойные броски атаки."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "No disadvantage on ranged weapon attacks at long range"
+          }
+        },
+        {
+          "engName": "ignore_cover",
+          "name": {
+            "eng": "Ignore Cover",
+            "rus": "Игнорирование укрытия"
+          },
+          "description": {
+            "eng": "Your ranged weapon attacks ignore half cover and three-quarters cover.",
+            "rus": "Ваши атаки дальнобойным оружием игнорируют укрытие на половину и на три четверти."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Ranged weapon attacks ignore half and three-quarters cover"
+          }
+        },
+        {
+          "engName": "precise_shot",
+          "name": {
+            "eng": "Precise Shot",
+            "rus": "Точный выстрел"
+          },
+          "description": {
+            "eng": "Before you make an attack with a ranged weapon that you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage.",
+            "rus": "Перед совершением атаки дальнобойным оружием, которым вы владеете, вы можете принять штраф -5 к броску атаки. При попадании вы добавляете +10 к урону атаки."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "-5 to attack roll, +10 to damage with ranged weapon"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "shield_master",
+    "name": {
+      "eng": "Shield Master",
+      "rus": "Мастер щита"
+    },
+    "description": {
+      "eng": "You use shields not just for protection but also for offense. You can shove with a bonus action, add your shield's AC bonus to Dexterity saves, and take no damage on successful saves.",
+      "rus": "Вы используете щиты не только для защиты, но и для атаки. Вы можете толкать бонусным действием, добавлять бонус КД щита к спасброскам Ловкости и не получать урон при успешных спасбросках."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "shield_bash",
+          "name": {
+            "eng": "Shield Bash",
+            "rus": "Удар щитом"
+          },
+          "description": {
+            "eng": "If you take the Attack action on your turn, you can use a bonus action to try to shove a creature within 5 feet of you with your shield.",
+            "rus": "Если вы совершаете действие Атака в свой ход, вы можете бонусным действием попытаться оттолкнуть щитом существо в пределах 5 футов от вас."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Bonus action shove with shield after Attack action"
+          }
+        },
+        {
+          "engName": "shield_dex_save_bonus",
+          "name": {
+            "eng": "Shield Dex Save Bonus",
+            "rus": "Бонус щита к спасброску Ловкости"
+          },
+          "description": {
+            "eng": "If you aren't incapacitated, you can add your shield's AC bonus to any Dexterity saving throw you make against a spell or other harmful effect that targets only you.",
+            "rus": "Если вы не недееспособны, вы можете добавить бонус КД щита к любому спасброску Ловкости против заклинания или эффекта, нацеленного только на вас."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Add shield AC bonus to Dexterity saves against effects targeting only you"
+          }
+        },
+        {
+          "engName": "evasion_with_shield",
+          "name": {
+            "eng": "Evasion with Shield",
+            "rus": "Уклонение с щитом"
+          },
+          "description": {
+            "eng": "If you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you can use your reaction to take no damage if you succeed on the saving throw, interposing your shield between yourself and the source of the effect.",
+            "rus": "Если вы подвергаетесь эффекту, позволяющему совершить спасбросок Ловкости для получения половины урона, вы можете реакцией не получить урон при успехе, заслоняясь щитом от источника эффекта."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Reaction: take no damage on successful Dexterity save (instead of half)"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat",
+      "defensive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "skilled",
+    "name": {
+      "eng": "Skilled",
+      "rus": "Умелый"
+    },
+    "description": {
+      "eng": "You gain proficiency in any combination of three skills or tools of your choice. This feat can be taken multiple times, each time choosing new proficiencies.",
+      "rus": "Вы получаете владение любой комбинацией из трёх навыков или инструментов по вашему выбору. Эту черту можно брать несколько раз, каждый раз выбирая новые владения."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "three_proficiencies",
+          "name": {
+            "eng": "Three Proficiencies",
+            "rus": "Три владения"
+          },
+          "description": {
+            "eng": "You gain proficiency in any combination of three skills or tools of your choice.",
+            "rus": "Вы получаете владение любой комбинацией из трёх навыков или инструментов по вашему выбору."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Gain proficiency in 3 skills or tools of your choice"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "utility"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "spell_sniper",
+    "name": {
+      "eng": "Spell Sniper",
+      "rus": "Снайпер заклинаний"
+    },
+    "description": {
+      "eng": "You have learned techniques to enhance your attacks with certain kinds of spells. Your spell attack range is doubled, you ignore cover, and you learn one additional attack cantrip.",
+      "rus": "Вы изучили техники усиления атак определёнными заклинаниями. Дальность ваших атакующих заклинаний удваивается, вы игнорируете укрытие и изучаете один дополнительный атакующий заговор."
+    },
+    "prerequisites": {
+      "spellcasting": true
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "doubled_spell_range",
+          "name": {
+            "eng": "Doubled Spell Range",
+            "rus": "Удвоенная дальность заклинаний"
+          },
+          "description": {
+            "eng": "When you cast a spell that requires you to make an attack roll, the spell's range is doubled.",
+            "rus": "Когда вы произносите заклинание, требующее броска атаки, его дальность удваивается."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Double range of spells requiring attack rolls"
+          }
+        },
+        {
+          "engName": "ignore_spell_cover",
+          "name": {
+            "eng": "Ignore Spell Cover",
+            "rus": "Игнорирование укрытия заклинаниями"
+          },
+          "description": {
+            "eng": "Your ranged spell attacks ignore half cover and three-quarters cover.",
+            "rus": "Ваши дальнобойные атаки заклинаниями игнорируют укрытие на половину и на три четверти."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Ranged spell attacks ignore half and three-quarters cover"
+          }
+        },
+        {
+          "engName": "bonus_attack_cantrip",
+          "name": {
+            "eng": "Bonus Attack Cantrip",
+            "rus": "Дополнительный атакующий заговор"
+          },
+          "description": {
+            "eng": "You learn one cantrip that requires an attack roll from any class's spell list. Your spellcasting ability for this cantrip depends on the class you chose.",
+            "rus": "Вы изучаете один заговор, требующий броска атаки, из списка заклинаний любого класса. Базовая характеристика для этого заговора зависит от выбранного класса."
+          },
+          "mechanics": {
+            "type": "cantrip",
+            "spellEngName": "chosen_attack_cantrip",
+            "ability": "chosen_class_ability"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "magical",
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "tavern_brawler",
+    "name": {
+      "eng": "Tavern Brawler",
+      "rus": "Кабацкий боец"
+    },
+    "description": {
+      "eng": "Accustomed to rough-and-tumble fighting using whatever is at hand, you gain benefits to unarmed strikes, improvised weapons, and grappling in combat.",
+      "rus": "Привыкшие к грубым потасовкам с использованием всего, что под рукой, вы получаете преимущества в безоружных ударах, импровизированном оружии и захвате в бою."
+    },
+    "benefits": {
+      "abilityChoice": {
+        "pick": 1,
+        "from": [
+          "str",
+          "con"
+        ],
+        "amount": 1
+      },
+      "proficiencies": [
+        "improvised_weapons",
+        "unarmed_strikes"
+      ],
+      "features": [
+        {
+          "engName": "unarmed_damage",
+          "name": {
+            "eng": "Unarmed Damage",
+            "rus": "Безоружный урон"
+          },
+          "description": {
+            "eng": "Your unarmed strike uses a d4 for damage.",
+            "rus": "Ваш безоружный удар использует к4 для урона."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Unarmed strike damage die becomes 1d4"
+          }
+        },
+        {
+          "engName": "bonus_action_grapple",
+          "name": {
+            "eng": "Bonus Action Grapple",
+            "rus": "Захват бонусным действием"
+          },
+          "description": {
+            "eng": "When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target.",
+            "rus": "Когда вы попадаете по существу безоружным ударом или импровизированным оружием в свой ход, вы можете бонусным действием попытаться захватить цель."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Bonus action grapple after hitting with unarmed strike or improvised weapon"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "combat"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "tough",
+    "name": {
+      "eng": "Tough",
+      "rus": "Крепкий"
+    },
+    "description": {
+      "eng": "Your hit point maximum increases by an amount equal to twice your level when you gain this feat, and by 2 additional hit points every time you gain a level thereafter.",
+      "rus": "Ваш максимум хитов увеличивается на величину, равную удвоенному уровню, когда вы получаете эту черту, и на 2 дополнительных хита при каждом повышении уровня."
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "hp_increase",
+          "name": {
+            "eng": "HP Increase",
+            "rus": "Увеличение хитов"
+          },
+          "description": {
+            "eng": "Your hit point maximum increases by 2 for every level you have and gain.",
+            "rus": "Ваш максимум хитов увеличивается на 2 за каждый имеющийся и получаемый уровень."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "HP increases by 2 per level (current and future)"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "defensive"
+    ],
+    "schemaVersion": 1
+  },
+  {
+    "engName": "war_caster",
+    "name": {
+      "eng": "War Caster",
+      "rus": "Боевой заклинатель"
+    },
+    "description": {
+      "eng": "You have practiced casting spells in the midst of combat. You gain advantage on concentration saves, can perform somatic components with weapons in hand, and can cast spells as opportunity attacks.",
+      "rus": "Вы отработали произнесение заклинаний в гуще боя. Вы получаете преимущество на спасброски концентрации, можете выполнять соматические компоненты с оружием в руках и использовать заклинания как атаки возможности."
+    },
+    "prerequisites": {
+      "spellcasting": true
+    },
+    "benefits": {
+      "features": [
+        {
+          "engName": "concentration_advantage",
+          "name": {
+            "eng": "Concentration Advantage",
+            "rus": "Преимущество концентрации"
+          },
+          "description": {
+            "eng": "You have advantage on Constitution saving throws that you make to maintain your concentration on a spell when you take damage.",
+            "rus": "Вы совершаете с преимуществом спасброски Телосложения для поддержания концентрации на заклинании при получении урона."
+          },
+          "mechanics": {
+            "type": "advantage",
+            "on": "Constitution saving throws to maintain concentration"
+          }
+        },
+        {
+          "engName": "somatic_with_weapons",
+          "name": {
+            "eng": "Somatic Components with Weapons",
+            "rus": "Соматические компоненты с оружием"
+          },
+          "description": {
+            "eng": "You can perform the somatic components of spells even when you have weapons or a shield in one or both hands.",
+            "rus": "Вы можете выполнять соматические компоненты заклинаний, даже если держите оружие или щит в одной или обеих руках."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Can perform somatic components with weapons or shield in hands"
+          }
+        },
+        {
+          "engName": "spell_opportunity_attack",
+          "name": {
+            "eng": "Spell Opportunity Attack",
+            "rus": "Заклинание как атака возможности"
+          },
+          "description": {
+            "eng": "When a hostile creature's movement provokes an opportunity attack from you, you can use your reaction to cast a spell at the creature, rather than making an opportunity attack. The spell must have a casting time of 1 action and must target only that creature.",
+            "rus": "Когда перемещение враждебного существа провоцирует атаку возможности от вас, вы можете реакцией произнести заклинание вместо атаки возможности. Заклинание должно иметь время произнесения 1 действие и нацеливаться только на это существо."
+          },
+          "mechanics": {
+            "type": "custom",
+            "effect": "Reaction: cast a spell (1 action, single target) instead of opportunity attack"
+          }
+        }
+      ]
+    },
+    "source": "phb",
+    "tags": [
+      "magical",
+      "combat",
+      "defensive"
+    ],
+    "schemaVersion": 1
+  }
+]

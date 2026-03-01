@@ -127,9 +127,6 @@ func (h *MapsHandler) GetMapByID(w http.ResponseWriter, r *http.Request) {
 	mapFull, err := h.usecases.GetMapByID(ctx, userID, id)
 	if err != nil {
 		switch {
-		case errors.Is(err, apperrors.MapPermissionDenied):
-			l.DeliveryError(ctx, http.StatusForbidden, "FORBIDDEN", err, map[string]any{"id": id})
-			sendMapsError(w, http.StatusForbidden, "FORBIDDEN", "Access denied to this map", nil)
 		case errors.Is(err, apperrors.MapNotFoundError):
 			l.DeliveryError(ctx, http.StatusNotFound, "NOT_FOUND", err, map[string]any{"id": id})
 			sendMapsError(w, http.StatusNotFound, "NOT_FOUND", "Map not found", nil)
@@ -223,9 +220,6 @@ func (h *MapsHandler) UpdateMap(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch {
-		case errors.Is(err, apperrors.MapPermissionDenied):
-			l.DeliveryError(ctx, http.StatusForbidden, "FORBIDDEN", err, map[string]any{"id": id})
-			sendMapsError(w, http.StatusForbidden, "FORBIDDEN", "Access denied to this map", nil)
 		case errors.Is(err, apperrors.MapNotFoundError):
 			l.DeliveryError(ctx, http.StatusNotFound, "NOT_FOUND", err, map[string]any{"id": id})
 			sendMapsError(w, http.StatusNotFound, "NOT_FOUND", "Map not found", nil)
@@ -264,9 +258,6 @@ func (h *MapsHandler) DeleteMap(w http.ResponseWriter, r *http.Request) {
 	err := h.usecases.DeleteMap(ctx, userID, id)
 	if err != nil {
 		switch {
-		case errors.Is(err, apperrors.MapPermissionDenied):
-			l.DeliveryError(ctx, http.StatusForbidden, "FORBIDDEN", err, map[string]any{"id": id})
-			sendMapsError(w, http.StatusForbidden, "FORBIDDEN", "Access denied to this map", nil)
 		case errors.Is(err, apperrors.MapNotFoundError):
 			l.DeliveryError(ctx, http.StatusNotFound, "NOT_FOUND", err, map[string]any{"id": id})
 			sendMapsError(w, http.StatusNotFound, "NOT_FOUND", "Map not found", nil)

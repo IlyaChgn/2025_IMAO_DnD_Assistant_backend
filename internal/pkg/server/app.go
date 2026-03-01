@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	authinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/auth"
@@ -28,6 +30,10 @@ import (
 	myrouter "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/routers"
 	"github.com/gorilla/handlers"
 
+	backgroundsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/repository"
+	backgroundsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/seed"
+	backgroundsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds/usecases"
+	bestiaryinterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary"
 	bestiarydlv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery"
 	bestiaryproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/delivery/protobuf"
 	bestiaryext "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/external"
@@ -35,15 +41,43 @@ import (
 	bestiaryuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/bestiary/usecases"
 	characterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/repository"
 	characteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/character/usecases"
+	classesrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/repository"
+	classesseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/seed"
+	classesuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/classes/usecases"
+	descriptioninterface "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description"
 	descriptiondlv "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery"
 	descriptionproto "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/delivery/protobuf"
 	descriptionuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/description/usecases"
 	encounterrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/repository"
 	encounteruc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/encounter/usecases"
+	featsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/repository"
+	featsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/seed"
+	featsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats/usecases"
+	featuresrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/repository"
+	featuresseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/seed"
+	featuresuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/features/usecases"
 	mapsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/repository"
 	mapsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maps/usecases"
 	maptilerepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/repository"
 	maptileuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/maptiles/usecases"
+	racesrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/repository"
+	racesseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/seed"
+	racesuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/races/usecases"
+	spellsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/repository"
+	spellsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/seed"
+	spellsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/spells/usecases"
+
+	actionsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions"
+	auditlogrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/repository"
+	actionsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/actions/usecases"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai"
+	combataiuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/combatai/usecases"
+	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen"
+	dungeongenrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen/repository"
+	dungeongenuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/dungeongen/usecases"
+	itemsrepo "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/repository"
+	itemsseed "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/seed"
+	itemsuc "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/items/usecases"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/server/delivery/socks5proxy"
 )
 
@@ -77,11 +111,9 @@ func createServer(config serverConfig) *http.Server {
 func (srv *Server) Run() error {
 	cfgPath := os.Getenv("CONFIG_PATH")
 
-	var isProduction bool
-
-	if os.Getenv("SERVER_MODE") == "production" {
-		isProduction = true
-	}
+	serverMode := os.Getenv("SERVER_MODE")
+	isProduction := serverMode == "production"
+	isTestMode := serverMode == "test"
 
 	cfg := config.ReadConfig(cfgPath)
 	if cfg == nil {
@@ -101,45 +133,57 @@ func (srv *Server) Run() error {
 		log.Fatal("Something went wrong initializing prometheus app metrics, ", err)
 	}
 
-	descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
+	var descriptionGateway descriptioninterface.DescriptionGateway
+	var actionProcessorGateway bestiaryinterface.ActionProcessorGateway
+	var geminiAPI bestiaryinterface.GeminiAPI
 
-	grpcConnDescription, err := grpc.NewClient(
-		descriptionAddr,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatalf("Error occurred while starting grpc connection on description service, %v", err)
+	if isTestMode {
+		descriptionGateway = stubDescriptionGateway{}
+		actionProcessorGateway = stubActionProcessorGateway{}
+		geminiAPI = stubGeminiAPI{}
+	} else {
+		descriptionAddr := fmt.Sprintf("%s:%s", cfg.Services.Description.Host, cfg.Services.Description.Port)
+
+		grpcConnDescription, grpcErr := grpc.NewClient(
+			descriptionAddr,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
+		if grpcErr != nil {
+			log.Fatalf("Error occurred while starting grpc connection on description service, %v", grpcErr)
+		}
+		defer grpcConnDescription.Close()
+
+		descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
+		descriptionGateway = descriptiondlv.NewDescriptionGatewayAdapter(descriptionClient)
+
+		grpcConnActionProcessor, grpcErr := grpcconnection.CreateGRPCConn(
+			cfg.Services.ActionProcessor.Host,
+			cfg.Services.ActionProcessor.Port,
+		)
+		if grpcErr != nil {
+			log.Fatalf("Failed to connect to ActionProcessorService: %v", grpcErr)
+		}
+		defer grpcConnActionProcessor.Close()
+
+		actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
+		actionProcessorGateway = bestiarydlv.NewActionProcessorAdapter(actionProcessorClient)
+
+		proxieAddr := fmt.Sprintf("%s:%s", cfg.Proxies.Socks5Proxie.IP, cfg.Proxies.Socks5Proxie.Port)
+
+		proxyClient, proxyErr := socks5proxy.NewProxiedHttpClient(proxieAddr)
+		if proxyErr != nil {
+			log.Fatalf("failed to create proxy client: %v", proxyErr)
+		}
+
+		geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
+		geminiAPI = bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 	}
-	defer grpcConnDescription.Close()
-
-	descriptionClient := descriptionproto.NewDescriptionServiceClient(grpcConnDescription)
-
-	grpcConnActionProcessor, err := grpcconnection.CreateGRPCConn(
-		cfg.Services.ActionProcessor.Host,
-		cfg.Services.ActionProcessor.Port,
-	)
-	if err != nil {
-		log.Fatalf("Failed to connect to ActionProcessorService: %v", err)
-	}
-	defer grpcConnActionProcessor.Close()
-
-	actionProcessorClient := bestiaryproto.NewActionProcessorServiceClient(grpcConnActionProcessor)
-
-	proxieAddr := fmt.Sprintf("%s:%s", cfg.Proxies.Socks5Proxie.IP, cfg.Proxies.Socks5Proxie.Port)
-
-	proxyClient, err := socks5proxy.NewProxiedHttpClient(proxieAddr)
-	if err != nil {
-		log.Fatalf("failed to create proxy client: %v", err)
-	}
-
-	geminiURL := fmt.Sprintf("%s:%s", cfg.Gemini.Host, cfg.Gemini.Port)
-	geminiClient := bestiaryext.NewGeminiClient(geminiURL, cfg.Gemini.ExternalVM1, proxyClient)
 
 	vkClient := authext.NewVKApi(cfg.VKApi.RedirectURI, cfg.VKApi.ClientID, cfg.VKApi.SecretKey, cfg.VKApi.ServiceKey,
 		cfg.VKApi.Exchange, cfg.VKApi.PublicInfo)
 
 	mongoURI := dbinit.NewMongoConnectionURI(cfg.Mongo.Username, cfg.Mongo.Password, cfg.Mongo.Host,
-		cfg.Mongo.Port, !isProduction)
+		cfg.Mongo.Port, !isProduction && !isTestMode)
 	mongoDatabase := dbinit.ConnectToMongoDatabase(context.Background(), mongoURI, cfg.Mongo.DBName)
 	logger.DBInfo(cfg.Mongo.Host, cfg.Mongo.Port, "mongodb", cfg.Mongo.DBName, !isProduction)
 
@@ -149,7 +193,10 @@ func (srv *Server) Run() error {
 	}
 
 	minioURI := dbinit.NewMinioEndpoint(cfg.Minio.Host)
-	minioClient, err := dbinit.ConnectToMinio(minioURI, cfg.Minio.AccessKey, cfg.Minio.SecretKey, true)
+	if isTestMode && cfg.Minio.Port != "" {
+		minioURI = dbinit.NewMinioEndpoint(cfg.Minio.Host, cfg.Minio.Port)
+	}
+	minioClient, err := dbinit.ConnectToMinio(minioURI, cfg.Minio.AccessKey, cfg.Minio.SecretKey, !isTestMode)
 	if err != nil {
 		logger.DBFatal(cfg.Minio.Host, cfg.Minio.Port, "minio", "", true,
 			"Failed to initialize MinIO client", err)
@@ -210,6 +257,8 @@ func (srv *Server) Run() error {
 	bestiaryS3Manager := bestiaryrepo.NewMinioManager(minioClient, "creature-images")
 	llmInmemoryStorage := bestiaryrepo.NewInMemoryLLMRepo()
 	characterRepository := characterrepo.NewCharacterStorage(mongoDatabase, mongoMetrics)
+	characterBaseRepository := characterrepo.NewCharacterBaseStorage(mongoDatabase, mongoMetrics)
+	characterAvatarS3Manager := characterrepo.NewAvatarS3Manager(minioClient, "character-avatars")
 	encounterRepository := encounterrepo.NewEncounterStorage(postgresPool, postgresMetrics)
 	maptileRepository := maptilerepo.NewMapTilesStorage(mongoDatabase, mongoMetrics)
 	mapsRepository := mapsrepo.NewMapsStorage(postgresPool, postgresMetrics)
@@ -218,15 +267,14 @@ func (srv *Server) Run() error {
 	sessionManager := authrepo.NewSessionManager(redisClient, redisMetrics)
 	tableManager := tablerepo.NewTableManager(wsMetrics, wsSessionMetrics)
 
-	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiClient)
-	actionProcessorGateway := bestiarydlv.NewActionProcessorAdapter(actionProcessorClient)
+	bestiaryUsecases := bestiaryuc.NewBestiaryUsecases(bestiaryRepository, bestiaryS3Manager, geminiAPI)
 	actionProcessorUsecase := bestiaryuc.NewActionProcessorUsecase(actionProcessorGateway)
 	generatedCreatureProcessor := bestiaryuc.NewGeneratedCreatureProcessor(actionProcessorUsecase)
-	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiClient, generatedCreatureProcessor,
+	llmUsecases := bestiaryuc.NewLLMUsecase(llmInmemoryStorage, geminiAPI, generatedCreatureProcessor,
 		bestiaryuc.NewGoRunner(), bestiaryuc.NewUUIDGenerator())
-	descriptionGateway := descriptiondlv.NewDescriptionGatewayAdapter(descriptionClient)
 	descriptionUsecases := descriptionuc.NewDescriptionUsecase(descriptionGateway)
 	characterUsecases := characteruc.NewCharacterUsecases(characterRepository)
+	characterBaseUsecases := characteruc.NewCharacterBaseUsecases(characterBaseRepository, characterAvatarS3Manager)
 	encounterUsecases := encounteruc.NewEncounterUsecases(encounterRepository)
 	googleClient := authext.NewGoogleOAuth(cfg.GoogleOAuth.ClientID, cfg.GoogleOAuth.ClientSecret,
 		cfg.GoogleOAuth.RedirectURI)
@@ -243,6 +291,123 @@ func (srv *Server) Run() error {
 	maptilesUsecases := maptileuc.NewMapTilesUsecases(maptileRepository)
 	mapsUsecases := mapsuc.NewMapsUsecases(mapsRepository)
 
+	spellsRepository := spellsrepo.NewSpellsStorage(mongoDatabase, mongoMetrics)
+	if err := spellsRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure spell indexes: %v", err)
+	}
+	if n, err := spellsseed.SeedSpellDefinitions(context.Background(), spellsRepository); err != nil {
+		log.Printf("Warning: failed to seed spell definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d spell definitions", n)
+	}
+	spellsUsecases := spellsuc.NewSpellsUsecases(spellsRepository)
+
+	featuresRepository := featuresrepo.NewFeaturesStorage(mongoDatabase, mongoMetrics)
+	if err := featuresRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure feature indexes: %v", err)
+	}
+	if n, err := featuresseed.SeedFeatureDefinitions(context.Background(), featuresRepository); err != nil {
+		log.Printf("Warning: failed to seed feature definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d feature definitions", n)
+	}
+	featuresUsecases := featuresuc.NewFeaturesUsecases(featuresRepository)
+
+	classesRepository := classesrepo.NewClassesStorage(mongoDatabase, mongoMetrics)
+	if err := classesRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure class indexes: %v", err)
+	}
+	if n, err := classesseed.SeedClassDefinitions(context.Background(), classesRepository); err != nil {
+		log.Printf("Warning: failed to seed class definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d class definitions", n)
+	}
+	classesUsecases := classesuc.NewClassesUsecases(classesRepository)
+
+	racesRepository := racesrepo.NewRacesStorage(mongoDatabase, mongoMetrics)
+	if err := racesRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure race indexes: %v", err)
+	}
+	if n, err := racesseed.SeedRaceDefinitions(context.Background(), racesRepository); err != nil {
+		log.Printf("Warning: failed to seed race definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d race definitions", n)
+	}
+	racesUsecases := racesuc.NewRacesUsecases(racesRepository)
+
+	backgroundsRepository := backgroundsrepo.NewBackgroundsStorage(mongoDatabase, mongoMetrics)
+	if err := backgroundsRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure background indexes: %v", err)
+	}
+	if n, err := backgroundsseed.SeedBackgroundDefinitions(context.Background(), backgroundsRepository); err != nil {
+		log.Printf("Warning: failed to seed background definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d background definitions", n)
+	}
+	backgroundsUsecases := backgroundsuc.NewBackgroundsUsecases(backgroundsRepository)
+
+	featsRepository := featsrepo.NewFeatsStorage(mongoDatabase, mongoMetrics)
+	if err := featsRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure feat indexes: %v", err)
+	}
+	if n, err := featsseed.SeedFeatDefinitions(context.Background(), featsRepository); err != nil {
+		log.Printf("Warning: failed to seed feat definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d feat definitions", n)
+	}
+	featsUsecases := featsuc.NewFeatsUsecases(featsRepository)
+
+	itemsRepository := itemsrepo.NewItemsStorage(mongoDatabase, mongoMetrics)
+	if err := itemsRepository.EnsureItemDefinitionIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure item definition indexes: %v", err)
+	}
+	if n, err := itemsseed.SeedItemDefinitions(context.Background(), itemsRepository); err != nil {
+		log.Printf("Warning: failed to seed item definitions: %v", err)
+	} else if n > 0 {
+		log.Printf("Seeded %d item definitions", n)
+	}
+	inventoryRepository := itemsrepo.NewInventoryStorage(mongoDatabase, mongoMetrics)
+	if err := inventoryRepository.EnsureInventoryContainerIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure inventory container indexes: %v", err)
+	}
+	itemsUsecases := itemsuc.NewItemUsecases(itemsRepository)
+	inventoryUsecases := itemsuc.NewInventoryUsecases(inventoryRepository, itemsRepository)
+
+	auditLogRepository := auditlogrepo.NewAuditLogStorage(mongoDatabase, mongoMetrics)
+	if err := auditLogRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure audit log indexes: %v", err)
+	}
+
+	tileMetadataRepository := dungeongenrepo.NewTileMetadataStorage(mongoDatabase, mongoMetrics)
+	if err := tileMetadataRepository.EnsureIndexes(context.Background()); err != nil {
+		log.Printf("Warning: failed to ensure tile metadata indexes: %v", err)
+	}
+	if n, err := dungeongen.BatchClassifyTiles(context.Background(), maptileRepository, tileMetadataRepository); err != nil {
+		log.Printf("Warning: failed to batch-classify tiles: %v", err)
+	} else if n > 0 {
+		log.Printf("Classified %d tiles into tile_metadata", n)
+	}
+
+	dungeonGenUsecases := dungeongenuc.NewDungeonGenUsecases(
+		tileMetadataRepository, maptileRepository, bestiaryRepository, "default",
+	)
+
+	actionsUsecases := actionsuc.NewActionsUsecases(encounterRepository, characterBaseRepository, spellsRepository, bestiaryRepository, auditLogRepository)
+
+	combatAIEngine := combatai.NewRuleBasedAI()
+	combatAIUsecases := combataiuc.NewCombatAIUsecases(
+		combatAIEngine, encounterRepository, bestiaryRepository,
+		characterBaseRepository, actionsUsecases, auditLogRepository, tableManager,
+	)
+
+	// Inject reaction evaluator into actions usecases (breaks circular DI).
+	reactionEval := combataiuc.NewReactionEvaluator(bestiaryRepository)
+	if setter, ok := actionsUsecases.(actionsinterfaces.ReactionEvaluatorSetter); ok {
+		setter.SetReactionEvaluator(reactionEval)
+	} else {
+		log.Fatal("actionsUsecases does not implement ReactionEvaluatorSetter — DI wiring is broken")
+	}
+
 	credentials := handlers.AllowCredentials()
 	headersOk := handlers.AllowedHeaders(cfg.Server.Headers)
 	originsOk := handlers.AllowedOrigins(cfg.Server.Origins)
@@ -255,12 +420,25 @@ func (srv *Server) Run() error {
 		bestiaryUsecases,
 		descriptionUsecases,
 		characterUsecases,
+		characterBaseUsecases,
 		encounterUsecases,
 		authUsecases,
 		tableUsecases,
 		llmUsecases,
 		maptilesUsecases,
 		mapsUsecases,
+		spellsUsecases,
+		featuresUsecases,
+		itemsUsecases,
+		inventoryUsecases,
+		tableManager,
+		actionsUsecases,
+		classesUsecases,
+		racesUsecases,
+		backgroundsUsecases,
+		featsUsecases,
+		combatAIUsecases,
+		dungeonGenUsecases,
 	)
 	muxWithCORS := handlers.CORS(credentials, originsOk, headersOk, methodsOk)(router)
 
@@ -271,5 +449,38 @@ func (srv *Server) Run() error {
 
 	logger.ServerInfo(cfg.Server.Host, cfg.Server.Port, isProduction)
 
-	return srv.server.ListenAndServe()
+	// Graceful shutdown: listen for SIGINT/SIGTERM.
+	sigCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	errCh := make(chan error, 1)
+	go func() { errCh <- srv.server.ListenAndServe() }()
+
+	select {
+	case <-sigCtx.Done():
+		log.Println("Shutting down server...")
+
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+
+		if err := srv.server.Shutdown(shutdownCtx); err != nil {
+			log.Printf("HTTP server shutdown error: %v", err)
+		}
+	case err := <-errCh:
+		if err != nil && err != http.ErrServerClosed {
+			return err
+		}
+	}
+
+	// Close database connections.
+	postgresPool.Close()
+	if err := redisClient.Close(); err != nil {
+		log.Printf("Redis close error: %v", err)
+	}
+	if err := mongoDatabase.Client().Disconnect(context.Background()); err != nil {
+		log.Printf("MongoDB disconnect error: %v", err)
+	}
+
+	log.Println("Server stopped gracefully")
+	return nil
 }

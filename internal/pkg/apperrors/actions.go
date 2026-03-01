@@ -1,0 +1,30 @@
+package apperrors
+
+import "errors"
+
+var (
+	InvalidActionTypeErr     = errors.New("invalid action type")
+	MissingAbilityErr        = errors.New("ability field is required")
+	MissingDiceExprErr       = errors.New("dice field is required for custom roll")
+	InvalidDiceExprErr       = errors.New("invalid dice expression")
+	MissingCharacterIDErr    = errors.New("characterId is required")
+	ParticipantNotFoundErr   = errors.New("participant not found in encounter")
+	MissingWeaponIDErr       = errors.New("weaponId is required for weapon attack")
+	InsufficientSlotsErr     = errors.New("insufficient spell slots")
+	WeaponNotFoundErr        = errors.New("weapon not found on character")
+	SpellNotKnownErr         = errors.New("spell not known or prepared")
+	FeatureUsesExhaustedErr  = errors.New("feature uses exhausted")
+	MissingSpellIDErr        = errors.New("spellId is required for spell cast")
+	MissingFeatureIDErr      = errors.New("featureId is required for use feature")
+	InvalidUpcastLevelErr    = errors.New("slot level must be >= spell level")
+	SpellNotRitualErr        = errors.New("spell cannot be cast as a ritual")
+	InsufficientPactSlotsErr = errors.New("insufficient pact magic slots")
+
+	// NPC action errors
+	ActionNotFoundErr            = errors.New("action not found on creature")
+	NpcSpellNotKnownErr          = errors.New("spell not known by creature")
+	RechargeNotReadyErr          = errors.New("recharge ability not ready")
+	NpcSpellSlotsExhaustedErr    = errors.New("NPC spell slots exhausted")
+	LegendaryActionsExhaustedErr = errors.New("legendary actions exhausted")
+	InnateUsesExhaustedErr       = errors.New("innate spellcasting uses exhausted")
+)

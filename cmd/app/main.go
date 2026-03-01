@@ -11,6 +11,7 @@ import (
 )
 
 var productionFlag = flag.Bool("prod", false, "Run in production mode")
+var testFlag = flag.Bool("test", false, "Run in e2e-test mode")
 var migrationsFlag = flag.String("migrate", "", "Run in migrations mode")
 
 func main() {
@@ -18,7 +19,11 @@ func main() {
 
 	flag.Parse()
 
-	if *productionFlag {
+	if *testFlag {
+		log.Println("Running in e2e-test mode")
+		err = godotenv.Load("test.env")
+		os.Setenv("SERVER_MODE", "test")
+	} else if *productionFlag {
 		log.Println("Running in production mode")
 		err = godotenv.Load("prod.env")
 		os.Setenv("SERVER_MODE", "production")

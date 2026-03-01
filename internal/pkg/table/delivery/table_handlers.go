@@ -3,6 +3,8 @@ package delivery
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/apperrors"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/logger"
@@ -10,7 +12,6 @@ import (
 	tableinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/table"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
-	"net/http"
 )
 
 type TableHandler struct {
@@ -49,7 +50,12 @@ func (h *TableHandler) CreateSession(w http.ResponseWriter, r *http.Request) {
 
 	user := ctx.Value(h.ctxUserKey).(*models.User)
 
-	id, err := h.usecases.CreateSession(ctx, user, reqData.EncounterID)
+	opts := tableinterfaces.SessionOptions{
+		AIAutoPlay:      reqData.AIAutoPlay,
+		AIDifficultyMod: reqData.AIDifficultyMod,
+	}
+
+	id, err := h.usecases.CreateSession(ctx, user, reqData.EncounterID, opts)
 	if err != nil {
 		switch {
 		case errors.Is(err, apperrors.PermissionDeniedError) || errors.Is(err, apperrors.ScanError):

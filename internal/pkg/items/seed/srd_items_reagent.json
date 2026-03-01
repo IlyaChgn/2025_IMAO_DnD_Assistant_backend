@@ -1,0 +1,2983 @@
+[
+  {
+    "engName": "adder-stomach",
+    "name": {
+      "eng": "Adder's Stomach",
+      "rus": "Желудок гадюки"
+    },
+    "description": {
+      "eng": "The preserved stomach of an adder, used in acid arrow conjuration.",
+      "rus": "Засоленный желудок гадюки для заклинания кислотной стрелы."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "acid"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "alcohol",
+    "name": {
+      "eng": "Alcohol",
+      "rus": "Спиртовой раствор"
+    },
+    "description": {
+      "eng": "A small amount of alcohol or distilled spirits, used in false life necromancy.",
+      "rus": "Небольшое количество спирта или дистиллята для некромантии ложной жизни."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "amber-rod",
+    "name": {
+      "eng": "Amber Rod",
+      "rus": "Янтарный жезл"
+    },
+    "description": {
+      "eng": "A small rod of amber, conducting lightning evocation.",
+      "rus": "Небольшой жезл из янтаря, проводящий эвокацию молний."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "lightning"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.2,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "bat-fur",
+    "name": {
+      "eng": "Bat Fur",
+      "rus": "Мех летучей мыши"
+    },
+    "description": {
+      "eng": "Soft fur from a bat, used in darkness and shadow magic.",
+      "rus": "Мягкий мех летучей мыши для магии тьмы и теней."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "darkness"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "bat-guano",
+    "name": {
+      "eng": "Bat Guano",
+      "rus": "Гуано летучей мыши"
+    },
+    "description": {
+      "eng": "A tiny ball of dried bat droppings, a key ingredient in fire evocation.",
+      "rus": "Шарик сушёного помёта летучей мыши — ключевой ингредиент огненной эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "bird-feather",
+    "name": {
+      "eng": "Bird Feather",
+      "rus": "Птичье перо"
+    },
+    "description": {
+      "eng": "A wing feather from any bird, enabling flight transmutation.",
+      "rus": "Маховое перо любой птицы для трансмутации полёта."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "blood-drop",
+    "name": {
+      "eng": "Drop of Blood",
+      "rus": "Капля крови"
+    },
+    "description": {
+      "eng": "A single drop of blood, catalyst for cursing enchantments.",
+      "rus": "Одна капля крови — катализатор проклинающих заклинаний."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "bone-sliver",
+    "name": {
+      "eng": "Bone Sliver",
+      "rus": "Костяная щепка"
+    },
+    "description": {
+      "eng": "A thin sliver of bone, channeling necrotic energy for harm or warding against death.",
+      "rus": "Тонкая костяная щепка, проводящая некротическую энергию для вреда или защиты от смерти."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "brass-bell",
+    "name": {
+      "eng": "Small Brass Bell",
+      "rus": "Маленький латунный колокольчик"
+    },
+    "description": {
+      "eng": "A tiny brass bell whose ring resonates with thunder energy.",
+      "rus": "Крошечный латунный колокольчик, звон которого резонирует с энергией грома."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "thunder"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "brass-whistle",
+    "name": {
+      "eng": "Brass Whistle",
+      "rus": "Латунный свисток"
+    },
+    "description": {
+      "eng": "A tiny brass whistle that produces a commanding tone, catalyst for enchantment magic.",
+      "rus": "Крошечный латунный свисток, издающий повелительный тон — катализатор для магии очарования."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "brimstone",
+    "name": {
+      "eng": "Brimstone",
+      "rus": "Серный камень"
+    },
+    "description": {
+      "eng": "A rough piece of sulfurous rock, reeking of hellfire.",
+      "rus": "Грубый кусок серного камня с запахом адского пламени."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "butter",
+    "name": {
+      "eng": "Butter",
+      "rus": "Масло"
+    },
+    "description": {
+      "eng": "A bit of butter, alternative slippery catalyst for grease conjuration.",
+      "rus": "Кусочек масла — альтернативный скользкий катализатор для заклинания жира."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "caterpillar-cocoon",
+    "name": {
+      "eng": "Caterpillar Cocoon",
+      "rus": "Кокон гусеницы"
+    },
+    "description": {
+      "eng": "An intact caterpillar cocoon, symbolizing transformation for polymorph magic.",
+      "rus": "Целый кокон гусеницы, символизирующий превращение для магии полиморфа."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "cloth-strip",
+    "name": {
+      "eng": "White Cloth Strip",
+      "rus": "Полоска белой ткани"
+    },
+    "description": {
+      "eng": "A tiny strip of white cloth, used in aid abjuration.",
+      "rus": "Тонкая полоска белой ткани для абджурации помощи."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "club-or-quarterstaff",
+    "name": {
+      "eng": "Club or Quarterstaff",
+      "rus": "Дубинка или посох"
+    },
+    "description": {
+      "eng": "A wooden club or quarterstaff, focus for the shillelagh enchantment.",
+      "rus": "Деревянная дубинка или посох — фокус для зачарования дубинки."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "druid",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 2,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "coal-piece",
+    "name": {
+      "eng": "Piece of Coal",
+      "rus": "Кусочек угля"
+    },
+    "description": {
+      "eng": "A small piece of coal, used to channel darkness magic.",
+      "rus": "Маленький кусочек угля для канализации магии тьмы."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "darkness"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "colored-powder",
+    "name": {
+      "eng": "Colored Powder",
+      "rus": "Цветной порошок"
+    },
+    "description": {
+      "eng": "A pinch of powder colored red, yellow, and blue — prismatic reagent for illusion magic.",
+      "rus": "Щепотка порошка красного, жёлтого и синего цвета — призматический реагент для магии иллюзий."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "colored-sand",
+    "name": {
+      "eng": "Colored Sand",
+      "rus": "Цветной песок"
+    },
+    "description": {
+      "eng": "Fine sand colored red, yellow, and blue. Alternative to colored powder for prismatic magic.",
+      "rus": "Мелкий песок красного, жёлтого и синего цвета. Альтернатива цветному порошку для призматической магии."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "copper-key",
+    "name": {
+      "eng": "Copper Key",
+      "rus": "Медный ключ"
+    },
+    "description": {
+      "eng": "A small copper key, symbolic focus for opening dimensional doorways.",
+      "rus": "Маленький медный ключ — символический фокус для открытия межпространственных проходов."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "copper-piece",
+    "name": {
+      "eng": "Copper Piece",
+      "rus": "Медная монета"
+    },
+    "description": {
+      "eng": "A single copper coin, focus for thought detection.",
+      "rus": "Одна медная монета — фокус для обнаружения мыслей."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "divination"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "copper-wire",
+    "name": {
+      "eng": "Copper Wire Spiral",
+      "rus": "Спираль из медной проволоки"
+    },
+    "description": {
+      "eng": "A piece of copper wire bent into a spiral, conducting telekinetic force.",
+      "rus": "Кусок медной проволоки, согнутый в спираль — проводник телекинетической силы."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "cricket",
+    "name": {
+      "eng": "Cricket",
+      "rus": "Сверчок"
+    },
+    "description": {
+      "eng": "A live or preserved cricket, alternative focus for sleep enchantment.",
+      "rus": "Живой или засушенный сверчок — альтернативный фокус для сонного очарования."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "crystal-cone",
+    "name": {
+      "eng": "Crystal Cone",
+      "rus": "Кристаллический конус"
+    },
+    "description": {
+      "eng": "A small cone of crystal, alternative to glass for cold evocation.",
+      "rus": "Маленький конус из кристалла — альтернатива стеклу для холодной эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "cold"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "gp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "crystal-rod",
+    "name": {
+      "eng": "Crystal Rod",
+      "rus": "Кристаллический жезл"
+    },
+    "description": {
+      "eng": "A small rod of clear crystal, conducts lightning energy.",
+      "rus": "Небольшой жезл из прозрачного кристалла, проводящий энергию молний."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "lightning"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.2,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "crystal-vial",
+    "name": {
+      "eng": "Crystal Vial of Phosphorescent Material",
+      "rus": "Хрустальный флакон с фосфоресцирующим веществом"
+    },
+    "description": {
+      "eng": "A crystal vial filled with glowing phosphorescent material, for enchantment illusions.",
+      "rus": "Хрустальный флакон с фосфоресцирующим веществом для иллюзорных очарований."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "cured-leather",
+    "name": {
+      "eng": "Cured Leather",
+      "rus": "Дублёная кожа"
+    },
+    "description": {
+      "eng": "A piece of cured leather, base component for mage armor conjuration.",
+      "rus": "Кусок дублёной кожи — базовый компонент для заклинания доспехов мага."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "dead-ash",
+    "name": {
+      "eng": "Ash of Dead Wood",
+      "rus": "Пепел мёртвого дерева"
+    },
+    "description": {
+      "eng": "A pinch of ash from a dead tree, channeling withering necromancy.",
+      "rus": "Щепотка пепла мёртвого дерева, проводящая иссушающую некромантию."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "diamond-chip",
+    "name": {
+      "eng": "Diamond Chip",
+      "rus": "Алмазная крошка"
+    },
+    "description": {
+      "eng": "A tiny chip of diamond, barely glinting. The smallest usable form of the precious stone.",
+      "rus": "Крошечный осколок алмаза, едва поблёскивающий. Наименьшая пригодная форма драгоценного камня."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 10,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-dust",
+    "name": {
+      "eng": "Diamond Dust",
+      "rus": "Алмазная пыль"
+    },
+    "description": {
+      "eng": "A measure of finely ground diamond dust, shimmering with residual magic. Used in protective and restorative spells.",
+      "rus": "Порция мелко молотой алмазной пыли, мерцающей остаточной магией. Используется в защитных и восстановительных заклинаниях."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 100,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-flawless",
+    "name": {
+      "eng": "Flawless Diamond",
+      "rus": "Безупречный алмаз"
+    },
+    "description": {
+      "eng": "A flawless diamond of exceptional clarity, pulsing with arcane potential. Required for the most powerful resurrection rites.",
+      "rus": "Безупречный алмаз исключительной чистоты, пульсирующий магическим потенциалом. Необходим для самых мощных обрядов воскрешения."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "very_rare",
+    "value": {
+      "amount": 1000,
+      "currency": "gp"
+    },
+    "weight": 0.03,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-large",
+    "name": {
+      "eng": "Large Diamond",
+      "rus": "Крупный алмаз"
+    },
+    "description": {
+      "eng": "A large, brilliant diamond that commands attention. Prized by both jewelers and spellcasters.",
+      "rus": "Крупный сверкающий алмаз, привлекающий внимание. Ценится и ювелирами, и заклинателями."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "rare",
+    "value": {
+      "amount": 500,
+      "currency": "gp"
+    },
+    "weight": 0.02,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-medium",
+    "name": {
+      "eng": "Diamond",
+      "rus": "Алмаз"
+    },
+    "description": {
+      "eng": "A fine diamond of respectable size, radiating inner fire. Suitable for resurrection magic.",
+      "rus": "Прекрасный алмаз приличного размера, излучающий внутренний огонь. Пригоден для магии воскрешения."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "rare",
+    "value": {
+      "amount": 300,
+      "currency": "gp"
+    },
+    "weight": 0.02,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-perfect",
+    "name": {
+      "eng": "Perfect Diamond",
+      "rus": "Совершенный алмаз"
+    },
+    "description": {
+      "eng": "A perfect diamond of legendary quality, blazing with inner light. Only the rarest hoards contain such a treasure.",
+      "rus": "Совершенный алмаз легендарного качества, пылающий внутренним светом. Лишь редчайшие сокровищницы содержат такое сокровище."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "legendary",
+    "value": {
+      "amount": 5000,
+      "currency": "gp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-shard",
+    "name": {
+      "eng": "Diamond Shard",
+      "rus": "Алмазный осколок"
+    },
+    "description": {
+      "eng": "A small shard of diamond with visible facets. Worth a modest sum.",
+      "rus": "Небольшой осколок алмаза с видимыми гранями. Стоит скромную сумму."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 50,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "diamond-small",
+    "name": {
+      "eng": "Small Diamond",
+      "rus": "Малый алмаз"
+    },
+    "description": {
+      "eng": "A small but well-formed diamond, bright enough to catch the eye.",
+      "rus": "Маленький, но хорошо сформированный алмаз, достаточно яркий, чтобы привлечь внимание."
+    },
+    "category": "reagent",
+    "subcategory": "gem",
+    "tags": [
+      "spell_component",
+      "precious",
+      "diamond"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 100,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "distasteful-item",
+    "name": {
+      "eng": "Item Distasteful to Target",
+      "rus": "Предмет, отвратительный для цели"
+    },
+    "description": {
+      "eng": "An item that the target finds distasteful — varies per creature. Used in banishment abjuration.",
+      "rus": "Предмет, отвратительный для цели — зависит от существа. Используется в изгоняющей абджурации."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "sp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "dried-sage",
+    "name": {
+      "eng": "Dried Sage",
+      "rus": "Сушёный шалфей"
+    },
+    "description": {
+      "eng": "A sprig of dried sage, an ancient herb of purification used to lift curses.",
+      "rus": "Веточка сушёного шалфея — древняя очищающая трава для снятия проклятий."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "dried-toadstool",
+    "name": {
+      "eng": "Dried Toadstool",
+      "rus": "Сушёная поганка"
+    },
+    "description": {
+      "eng": "A dried toadstool cap, releasing toxic spores for poison conjuration.",
+      "rus": "Сушёная шляпка поганки, выпускающая токсичные споры для ядовитой конъюрации."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "poison"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "dried-yarrow",
+    "name": {
+      "eng": "Dried Yarrow",
+      "rus": "Сушёный тысячелистник"
+    },
+    "description": {
+      "eng": "A sprig of dried yarrow, an ancient healing herb used in restorative magic.",
+      "rus": "Веточка сушёного тысячелистника — древняя целебная трава для восстановительной магии."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "healing"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "dust-pinch",
+    "name": {
+      "eng": "Pinch of Dust",
+      "rus": "Щепотка пыли"
+    },
+    "description": {
+      "eng": "A pinch of common dust, catalyst for weather and cold magic.",
+      "rus": "Щепотка обычной пыли — катализатор магии погоды и холода."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "cold"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "eggshell",
+    "name": {
+      "eng": "Eggshell",
+      "rus": "Яичная скорлупа"
+    },
+    "description": {
+      "eng": "A hollow eggshell, used in force-shaping evocation.",
+      "rus": "Пустая яичная скорлупа для формирования силовой эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "force"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "elemental-cloth",
+    "name": {
+      "eng": "Elemental-Touched Cloth",
+      "rus": "Стихийная ткань"
+    },
+    "description": {
+      "eng": "A strip of cloth exposed to elemental forces, warding against energy damage.",
+      "rus": "Полоска ткани, подвергнутой воздействию стихийных сил — защита от энергетического урона."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 2,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "eyelash-in-gum",
+    "name": {
+      "eng": "Eyelash in Gum Arabic",
+      "rus": "Ресница в гуммиарабике"
+    },
+    "description": {
+      "eng": "An eyelash encased in gum arabic, focus for invisibility illusion.",
+      "rus": "Ресница, заключённая в гуммиарабик — фокус для иллюзии невидимости."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "fat-smear",
+    "name": {
+      "eng": "Smear of Fat",
+      "rus": "Мазок жира"
+    },
+    "description": {
+      "eng": "A smear of animal fat, part of the insect plague conjuration formula.",
+      "rus": "Мазок животного жира — часть формулы заклинания нашествия насекомых."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "feather-white",
+    "name": {
+      "eng": "White Feather",
+      "rus": "Белое перо"
+    },
+    "description": {
+      "eng": "A white feather, channeling fear or courage through illusion.",
+      "rus": "Белое перо, канализирующее страх или отвагу через иллюзию."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "feldspar",
+    "name": {
+      "eng": "Opalescent Feldspar",
+      "rus": "Опалесцирующий полевой шпат"
+    },
+    "description": {
+      "eng": "A piece of shimmering feldspar that glows faintly in moonlight.",
+      "rus": "Кусок мерцающего полевого шпата, слабо светящийся в лунном свете."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "radiant"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "fine-sand",
+    "name": {
+      "eng": "Fine Sand",
+      "rus": "Мелкий песок"
+    },
+    "description": {
+      "eng": "A pinch of fine sand, used in sleep enchantment.",
+      "rus": "Щепотка мелкого песка для сонного очарования."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "firefly",
+    "name": {
+      "eng": "Firefly",
+      "rus": "Светлячок"
+    },
+    "description": {
+      "eng": "A preserved firefly, glowing with residual bioluminescence.",
+      "rus": "Засушенный светлячок, мерцающий остаточной биолюминесценцией."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "flame",
+    "name": {
+      "eng": "Flame Source",
+      "rus": "Источник огня"
+    },
+    "description": {
+      "eng": "An open flame — a candle, torch, or tinder. Required for heat transmutation.",
+      "rus": "Открытое пламя — свеча, факел или трут. Необходим для трансмутации жара."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "fleece",
+    "name": {
+      "eng": "Fleece",
+      "rus": "Клочок шерсти"
+    },
+    "description": {
+      "eng": "A bit of fleece, catalyst for minor illusion magic.",
+      "rus": "Клочок шерсти — катализатор для малых иллюзий."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "flint",
+    "name": {
+      "eng": "Piece of Flint",
+      "rus": "Кусочек кремня"
+    },
+    "description": {
+      "eng": "A sharp piece of flint that sparks when struck, catalyst for fire evocation.",
+      "rus": "Острый кусочек кремня, высекающий искры — катализатор для огненной эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "fur",
+    "name": {
+      "eng": "Fur",
+      "rus": "Мех"
+    },
+    "description": {
+      "eng": "A bit of animal fur, used to generate static electricity for lightning magic.",
+      "rus": "Клочок меха животного для генерации статического электричества в магии молний."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "lightning"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "gemstone-powder",
+    "name": {
+      "eng": "Crushed Gemstone Powder",
+      "rus": "Порошок из дроблёного самоцвета"
+    },
+    "description": {
+      "eng": "Powder made by crushing a clear gemstone, channeling force energy.",
+      "rus": "Порошок из толчёного прозрачного самоцвета, канализирующий энергию силы."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "force"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 10,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "glass-cone",
+    "name": {
+      "eng": "Glass Cone",
+      "rus": "Стеклянный конус"
+    },
+    "description": {
+      "eng": "A small cone of glass or crystal, focusing cold evocation energy.",
+      "rus": "Маленький конус из стекла или кристалла, фокусирующий энергию холодной эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "cold"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "gp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "glass-rod",
+    "name": {
+      "eng": "Glass Rod",
+      "rus": "Стеклянный жезл"
+    },
+    "description": {
+      "eng": "A small rod of glass, channels static electricity for lightning evocation.",
+      "rus": "Небольшой стеклянный жезл, канализирующий статическое электричество для эвокации молний."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "lightning"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "gp"
+    },
+    "weight": 0.2,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "golden-wire",
+    "name": {
+      "eng": "Golden Wire",
+      "rus": "Золотая проволока"
+    },
+    "description": {
+      "eng": "A piece of golden wire bent into a cup shape, alternative focus for levitation.",
+      "rus": "Золотая проволока, согнутая в форме чашки — альтернативный фокус для левитации."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 2,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "grain-kernels",
+    "name": {
+      "eng": "Grain Kernels",
+      "rus": "Зёрна злаков"
+    },
+    "description": {
+      "eng": "A handful of grain kernels, part of the insect plague conjuration formula.",
+      "rus": "Горсть зёрен злаков — часть формулы заклинания нашествия насекомых."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "granite-block",
+    "name": {
+      "eng": "Granite Block",
+      "rus": "Гранитный блок"
+    },
+    "description": {
+      "eng": "A small block of solid granite, imbued with earth elemental resonance.",
+      "rus": "Маленький блок прочного гранита, пропитанный элементальным резонансом земли."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "hen-heart",
+    "name": {
+      "eng": "Heart of a Hen",
+      "rus": "Сердце курицы"
+    },
+    "description": {
+      "eng": "The dried heart of a hen, an alternative focus for fear magic.",
+      "rus": "Засушенное сердце курицы — альтернативный фокус для магии страха."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "holy-symbol",
+    "name": {
+      "eng": "Holy Symbol",
+      "rus": "Священный символ"
+    },
+    "description": {
+      "eng": "A holy symbol of a deity, channeling divine conjuration.",
+      "rus": "Священный символ божества, канализирующий божественную конъюрацию."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "holy",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "holy-water",
+    "name": {
+      "eng": "Holy Water",
+      "rus": "Святая вода"
+    },
+    "description": {
+      "eng": "A vial of consecrated water, sacred to protective and restorative rites.",
+      "rus": "Флакон освящённой воды, священной для защитных и восстановительных обрядов."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "holy",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 25,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "honeycomb",
+    "name": {
+      "eng": "Honeycomb",
+      "rus": "Медовые соты"
+    },
+    "description": {
+      "eng": "A bit of honeycomb, sweet catalyst for suggestion enchantment.",
+      "rus": "Кусочек медовых сот — сладкий катализатор для заклинания внушения."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "incense-stick",
+    "name": {
+      "eng": "Incense Stick",
+      "rus": "Палочка благовоний"
+    },
+    "description": {
+      "eng": "A glowing stick of incense, used in enchantment and illusion magic.",
+      "rus": "Горящая палочка благовоний для магии очарования и иллюзий."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "iron-nail",
+    "name": {
+      "eng": "Iron Nail",
+      "rus": "Железный гвоздь"
+    },
+    "description": {
+      "eng": "A short iron nail, conducting electrical energy for lightning conjuration.",
+      "rus": "Короткий железный гвоздь, проводящий электрическую энергию для конъюрации молний."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "lightning"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "iron-piece",
+    "name": {
+      "eng": "Iron Piece",
+      "rus": "Кусочек железа"
+    },
+    "description": {
+      "eng": "A rough piece of iron, used in heat-based transmutation.",
+      "rus": "Грубый кусочек железа для трансмутации, связанной с жаром."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "iron-rod",
+    "name": {
+      "eng": "Iron Rod",
+      "rus": "Железный прут"
+    },
+    "description": {
+      "eng": "A small, straight piece of iron, used to channel binding enchantments.",
+      "rus": "Маленький прямой железный прутик для канализации сковывающих чар."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "leather-loop",
+    "name": {
+      "eng": "Leather Loop",
+      "rus": "Кожаная петля"
+    },
+    "description": {
+      "eng": "A small leather loop, focus for levitation transmutation.",
+      "rus": "Маленькая кожаная петля — фокус для левитационной трансмутации."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "leather-strap",
+    "name": {
+      "eng": "Leather Strap",
+      "rus": "Кожаный ремешок"
+    },
+    "description": {
+      "eng": "A leather strap bound around the arm, focus for freedom of movement.",
+      "rus": "Кожаный ремешок, обвязанный вокруг руки — фокус для свободы перемещения."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "licorice-root",
+    "name": {
+      "eng": "Licorice Root Shaving",
+      "rus": "Стружка корня солодки"
+    },
+    "description": {
+      "eng": "A thin shaving of licorice root, used to accelerate time in transmutation magic.",
+      "rus": "Тонкая стружка корня солодки для ускорения времени в трансмутационной магии."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "lion-whisker",
+    "name": {
+      "eng": "Lion's Whisker",
+      "rus": "Ус льва"
+    },
+    "description": {
+      "eng": "A single lion's whisker, imbuing the recipient with courage and heroism.",
+      "rus": "Один ус льва, наделяющий получателя храбростью и героизмом."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "mica-chip",
+    "name": {
+      "eng": "Mica Chip",
+      "rus": "Осколок слюды"
+    },
+    "description": {
+      "eng": "A thin, translucent chip of mica that resonates with sonic energy.",
+      "rus": "Тонкий прозрачный осколок слюды, резонирующий со звуковой энергией."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "thunder"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "miniature-cloak",
+    "name": {
+      "eng": "Miniature Cloak",
+      "rus": "Миниатюрный плащ"
+    },
+    "description": {
+      "eng": "A tiny cloak, symbolic focus for resistance abjuration.",
+      "rus": "Крошечный плащ — символический фокус для абджурации сопротивления."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "mirror-sliver",
+    "name": {
+      "eng": "Mirror Sliver",
+      "rus": "Осколок зеркала"
+    },
+    "description": {
+      "eng": "A thin sliver of mirror glass, multiplying reflections for illusory duplicates.",
+      "rus": "Тонкий осколок зеркального стекла, множащий отражения для иллюзорных двойников."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "mistletoe",
+    "name": {
+      "eng": "Mistletoe",
+      "rus": "Омела"
+    },
+    "description": {
+      "eng": "A sprig of sacred mistletoe, a druidic focus component.",
+      "rus": "Веточка священной омелы — друидический фокусирующий компонент."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "druid"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "molasses",
+    "name": {
+      "eng": "Drop of Molasses",
+      "rus": "Капля патоки"
+    },
+    "description": {
+      "eng": "A thick drop of molasses, used to slow targets through transmutation.",
+      "rus": "Густая капля патоки для замедления целей с помощью трансмутации."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "moonseed",
+    "name": {
+      "eng": "Moonseed",
+      "rus": "Семена лунносемянника"
+    },
+    "description": {
+      "eng": "Several seeds of a moonseed plant, glowing faintly in darkness.",
+      "rus": "Несколько семян лунносемянника, слабо светящихся в темноте."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "radiant"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 3,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "nut-shells",
+    "name": {
+      "eng": "Nut Shells",
+      "rus": "Ореховые скорлупки"
+    },
+    "description": {
+      "eng": "Three nut shells, catalyst for confusion enchantment.",
+      "rus": "Три ореховые скорлупки — катализатор для заклинания замешательства."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "oak-bark",
+    "name": {
+      "eng": "Oak Bark",
+      "rus": "Дубовая кора"
+    },
+    "description": {
+      "eng": "A handful of tough oak bark, used in protective transmutation.",
+      "rus": "Горсть прочной дубовой коры для защитной трансмутации."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "octopus-tentacle",
+    "name": {
+      "eng": "Giant Tentacle",
+      "rus": "Щупальце гиганта"
+    },
+    "description": {
+      "eng": "A piece of tentacle from a giant octopus or squid, for conjuring black tentacles.",
+      "rus": "Кусок щупальца гигантского осьминога или кальмара для заклинания чёрных щупалец."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.5,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "parchment-holy",
+    "name": {
+      "eng": "Holy Parchment",
+      "rus": "Священный пергамент"
+    },
+    "description": {
+      "eng": "A small parchment with a bit of holy text, focus for shield of faith.",
+      "rus": "Маленький пергамент с фрагментом священного текста — фокус для щита веры."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "holy",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "phosphorus",
+    "name": {
+      "eng": "Phosphorus",
+      "rus": "Фосфор"
+    },
+    "description": {
+      "eng": "A small piece of phosphorus, glowing faintly. Used in fire evocation.",
+      "rus": "Небольшой кусочек фосфора, слабо светящийся. Используется в огненной эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "pitch-drop",
+    "name": {
+      "eng": "Drop of Pitch",
+      "rus": "Капля смолы"
+    },
+    "description": {
+      "eng": "A drop of dark pitch, used in darkness and shadow evocation.",
+      "rus": "Капля тёмной смолы для магии тьмы и теневой эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "darkness"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "platinum-rings-50gp",
+    "name": {
+      "eng": "Pair of Platinum Rings (50 gp each)",
+      "rus": "Пара платиновых колец (50 зм каждое)"
+    },
+    "description": {
+      "eng": "A matched pair of platinum rings worth at least 50 gp each, worn by caster and target for the duration of the ward.",
+      "rus": "Пара одинаковых платиновых колец стоимостью не менее 50 зм каждое, носимых заклинателем и целью на время действия защиты."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "precious",
+      "costly",
+      "abjuration"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 100,
+      "currency": "gp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "pork-rind",
+    "name": {
+      "eng": "Pork Rind",
+      "rus": "Свиная шкварка"
+    },
+    "description": {
+      "eng": "A bit of pork rind, slippery catalyst for grease conjuration.",
+      "rus": "Кусочек свиной шкварки — скользкий катализатор для заклинания жира."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "powdered-glass",
+    "name": {
+      "eng": "Powdered Glass",
+      "rus": "Стеклянный порошок"
+    },
+    "description": {
+      "eng": "A pinch of finely powdered glass, refracting light to conceal the invisible.",
+      "rus": "Щепотка мелко молотого стекла, преломляющего свет для сокрытия невидимого."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 4
+  },
+  {
+    "engName": "powdered-iron",
+    "name": {
+      "eng": "Powdered Iron",
+      "rus": "Железный порошок"
+    },
+    "description": {
+      "eng": "Fine iron filings, cold to the touch. Used in transmutation and fire magic.",
+      "rus": "Мелкие железные опилки, холодные на ощупь. Применяются в трансмутации и огненной магии."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "sp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "powdered-silver",
+    "name": {
+      "eng": "Powdered Silver",
+      "rus": "Серебряный порошок"
+    },
+    "description": {
+      "eng": "Fine silver dust, sacred to protective rites against fiends and undead.",
+      "rus": "Мелкая серебряная пыль, священная для защитных обрядов от исчадий и нежити."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "abjuration",
+      "holy"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "quartz-shard",
+    "name": {
+      "eng": "Quartz Shard",
+      "rus": "Осколок кварца"
+    },
+    "description": {
+      "eng": "A small shard of clear quartz, focusing radiant and force energy.",
+      "rus": "Маленький осколок прозрачного кварца, фокусирующий лучистую и силовую энергию."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "radiant",
+      "force"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "raven-claw",
+    "name": {
+      "eng": "Dried Raven's Claw",
+      "rus": "Сушёный коготь ворона"
+    },
+    "description": {
+      "eng": "A dried raven's claw, a traditional catalyst for curses and hexes.",
+      "rus": "Сушёный коготь ворона — традиционный катализатор для проклятий и порчи."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 3,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "rhubarb-leaf",
+    "name": {
+      "eng": "Powdered Rhubarb Leaf",
+      "rus": "Порошок из листа ревеня"
+    },
+    "description": {
+      "eng": "Powdered rhubarb leaf, a catalyst for acid conjuration.",
+      "rus": "Порошок из листа ревеня — катализатор кислотной конъюрации."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "acid"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "rose-petals",
+    "name": {
+      "eng": "Rose Petals",
+      "rus": "Лепестки розы"
+    },
+    "description": {
+      "eng": "Soft, fragrant petals of a rose, used in enchantment sleep magic.",
+      "rus": "Мягкие ароматные лепестки розы для магии очарующего сна."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "rot-grub-dust",
+    "name": {
+      "eng": "Rot Grub Dust",
+      "rus": "Порошок гнильца"
+    },
+    "description": {
+      "eng": "Dried and powdered rot grub remains, spreading magical contagion.",
+      "rus": "Высушенные и растёртые останки гнильца, распространяющие магическую заразу."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 2,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "rotten-egg",
+    "name": {
+      "eng": "Rotten Egg",
+      "rus": "Тухлое яйцо"
+    },
+    "description": {
+      "eng": "A thoroughly rotten egg, reeking of sulfur. Alternative catalyst for noxious conjuration.",
+      "rus": "Основательно протухшее яйцо с запахом серы. Альтернативный катализатор для ядовитых заклинаний."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "poison"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "shamrock-leaf",
+    "name": {
+      "eng": "Shamrock Leaf",
+      "rus": "Лист клевера"
+    },
+    "description": {
+      "eng": "A fresh shamrock leaf, part of druidic enchantment rituals.",
+      "rus": "Свежий лист клевера, часть друидических ритуалов зачарования."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "druid"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "sharpened-twigs",
+    "name": {
+      "eng": "Sharpened Twigs",
+      "rus": "Заострённые веточки"
+    },
+    "description": {
+      "eng": "Seven small twigs sharpened to points. Alternative to thorns for terrain transmutation.",
+      "rus": "Семь маленьких заострённых веточек. Альтернатива шипам для трансмутации местности."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "silver-mirror",
+    "name": {
+      "eng": "Small Silver Mirror",
+      "rus": "Маленькое серебряное зеркало"
+    },
+    "description": {
+      "eng": "A small silver mirror, reflecting protective abjuration.",
+      "rus": "Маленькое серебряное зеркало, отражающее защитную абджурацию."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "abjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "gp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "skunk-cabbage",
+    "name": {
+      "eng": "Skunk Cabbage Leaves",
+      "rus": "Листья скунсовой капусты"
+    },
+    "description": {
+      "eng": "Several pungent leaves of skunk cabbage, used in noxious conjurations.",
+      "rus": "Несколько зловонных листьев скунсовой капусты для ядовитых заклинаний."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "poison"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "snake-tongue",
+    "name": {
+      "eng": "Snake's Tongue",
+      "rus": "Змеиный язык"
+    },
+    "description": {
+      "eng": "A snake's tongue, part of the suggestion enchantment formula.",
+      "rus": "Змеиный язык — часть формулы заклинания внушения."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "snakeskin-glove",
+    "name": {
+      "eng": "Snakeskin Glove",
+      "rus": "Перчатка из змеиной кожи"
+    },
+    "description": {
+      "eng": "A glove made of snakeskin, enabling force-shaping evocation.",
+      "rus": "Перчатка из змеиной кожи для формирования силовой эвокации."
+    },
+    "category": "reagent",
+    "subcategory": "arcane",
+    "tags": [
+      "spell_component",
+      "force"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "gp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "soot",
+    "name": {
+      "eng": "Pinch of Soot",
+      "rus": "Щепотка сажи"
+    },
+    "description": {
+      "eng": "A pinch of black soot, used in necromantic curses of blindness.",
+      "rus": "Щепотка чёрной сажи для некромантических проклятий слепоты."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "spider-web",
+    "name": {
+      "eng": "Spider Web",
+      "rus": "Паутина"
+    },
+    "description": {
+      "eng": "A bit of sticky spiderweb, catalyst for web conjuration.",
+      "rus": "Клочок клейкой паутины — катализатор для заклинания паутины."
+    },
+    "category": "reagent",
+    "subcategory": "animal",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "sugar",
+    "name": {
+      "eng": "Grains of Sugar",
+      "rus": "Крупинки сахара"
+    },
+    "description": {
+      "eng": "A few grains of sugar, attractant for conjured swarm magic.",
+      "rus": "Несколько крупинок сахара — приманка для магии призванных роёв."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 5
+  },
+  {
+    "engName": "sulfur",
+    "name": {
+      "eng": "Sulfur",
+      "rus": "Сера"
+    },
+    "description": {
+      "eng": "A small chunk of yellow sulfite mineral, pungent and flammable. Used in fire magic.",
+      "rus": "Небольшой кусок жёлтого минерала серы, едкий и горючий. Используется в огненной магии."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 5,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "sumac-leaf",
+    "name": {
+      "eng": "Sumac Leaf",
+      "rus": "Лист сумаха"
+    },
+    "description": {
+      "eng": "A dry leaf of sumac, used to conjure elemental flame blades.",
+      "rus": "Сухой лист сумаха для создания элементальных огненных клинков."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "sunstone-chip",
+    "name": {
+      "eng": "Sunstone Chip",
+      "rus": "Осколок солнечного камня"
+    },
+    "description": {
+      "eng": "A warm chip of sunstone, radiating hope and maximizing healing potential.",
+      "rus": "Тёплый осколок солнечного камня, излучающий надежду и усиливающий исцеляющий потенциал."
+    },
+    "category": "reagent",
+    "subcategory": "mineral",
+    "tags": [
+      "spell_component",
+      "radiant",
+      "healing"
+    ],
+    "rarity": "uncommon",
+    "value": {
+      "amount": 3,
+      "currency": "gp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "sweet-oil",
+    "name": {
+      "eng": "Sweet Oil",
+      "rus": "Сладкое масло"
+    },
+    "description": {
+      "eng": "A drop of sweet oil, alternative to honeycomb for suggestion.",
+      "rus": "Капля сладкого масла — альтернатива медовым сотам для внушения."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "enchantment"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "tallow",
+    "name": {
+      "eng": "Tallow",
+      "rus": "Сало"
+    },
+    "description": {
+      "eng": "A bit of rendered animal fat, used in fire conjuration.",
+      "rus": "Кусочек топлёного животного жира для огненной конъюрации."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "fire"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "thorns",
+    "name": {
+      "eng": "Sharp Thorns",
+      "rus": "Острые шипы"
+    },
+    "description": {
+      "eng": "Seven sharpened thorns, used in transmutation magic that shapes terrain.",
+      "rus": "Семь заострённых шипов для трансмутации, формирующей рельеф местности."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "transmutation"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "translucent-grease",
+    "name": {
+      "eng": "Translucent Grease",
+      "rus": "Прозрачная мазь"
+    },
+    "description": {
+      "eng": "A smear of translucent grease that refracts light, blurring the outline of the caster.",
+      "rus": "Мазок прозрачной мази, преломляющей свет и размывающей очертания заклинателя."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 2,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "vine-twist",
+    "name": {
+      "eng": "Vine Twist",
+      "rus": "Витая лоза"
+    },
+    "description": {
+      "eng": "A short twist of living vine, catalyst for plant conjuration.",
+      "rus": "Короткая витая живая лоза — катализатор для растительной конъюрации."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "sp"
+    },
+    "weight": 0.05,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "water-drops",
+    "name": {
+      "eng": "Drops of Water",
+      "rus": "Капли воды"
+    },
+    "description": {
+      "eng": "A few drops of water, paired with dust for cold and weather conjuration.",
+      "rus": "Несколько капель воды в паре с пылью для магии холода и погодной конъюрации."
+    },
+    "category": "reagent",
+    "subcategory": "liquid",
+    "tags": [
+      "spell_component",
+      "cold"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 3
+  },
+  {
+    "engName": "wax-drop",
+    "name": {
+      "eng": "Drop of Wax",
+      "rus": "Капля воска"
+    },
+    "description": {
+      "eng": "A thick drop of wax, sealing sound within an area of magical silence.",
+      "rus": "Густая капля воска, запечатывающая звук в зоне магической тишины."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "illusion"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  },
+  {
+    "engName": "wet-sponge",
+    "name": {
+      "eng": "Wet Sponge",
+      "rus": "Мокрая губка"
+    },
+    "description": {
+      "eng": "A bit of sponge soaked in water, used to conjure fog and mist.",
+      "rus": "Кусочек губки, смоченной водой — для создания тумана и дымки."
+    },
+    "category": "reagent",
+    "subcategory": "mundane",
+    "tags": [
+      "spell_component",
+      "conjuration"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.1,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 1
+  },
+  {
+    "engName": "withered-twig",
+    "name": {
+      "eng": "Withered Twig",
+      "rus": "Засохшая веточка"
+    },
+    "description": {
+      "eng": "A brittle twig from a dead plant, channeling life-draining necromancy.",
+      "rus": "Хрупкая веточка мёртвого растения, проводящая жизнеиссушающую некромантию."
+    },
+    "category": "reagent",
+    "subcategory": "plant",
+    "tags": [
+      "spell_component",
+      "necromancy"
+    ],
+    "rarity": "common",
+    "value": {
+      "amount": 1,
+      "currency": "cp"
+    },
+    "weight": 0.01,
+    "source": "SRD",
+    "requiresAttunement": false,
+    "tier": 2
+  }
+]

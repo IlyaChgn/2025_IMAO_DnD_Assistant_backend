@@ -3,7 +3,9 @@ package models
 import "encoding/json"
 
 type CreateTableRequest struct {
-	EncounterID string `json:"encounterID"`
+	EncounterID     string  `json:"encounterID"`
+	AIAutoPlay      bool    `json:"aiAutoPlay,omitempty"`
+	AIDifficultyMod float64 `json:"aiDifficultyMod,omitempty"`
 }
 
 type CreateTableResponse struct {
