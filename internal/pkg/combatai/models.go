@@ -125,12 +125,12 @@ type AIRoundResult struct {
 
 // AIRoundTurn is one NPC's turn within an ai-round execution.
 type AIRoundTurn struct {
-	NpcID         string                  `json:"npcID"`
-	NpcName       string                  `json:"npcName"`
-	Decision      *TurnDecision           `json:"decision"`
+	NpcID         string                   `json:"npcID"`
+	NpcName       string                   `json:"npcName"`
+	Decision      *TurnDecision            `json:"decision"`
 	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
-	Skipped       bool                    `json:"skipped"`
-	SkipReason    string                  `json:"skipReason,omitempty"`
+	Skipped       bool                     `json:"skipped"`
+	SkipReason    string                   `json:"skipReason,omitempty"`
 
 	// Legendary actions taken by OTHER NPCs after this turn (D&D 5e between-turn).
 	LegendaryActionResults []*LegendaryActionResult `json:"legendaryActionResults,omitempty"`
@@ -138,9 +138,9 @@ type AIRoundTurn struct {
 
 // LegendaryActionResult describes a legendary action taken between turns.
 type LegendaryActionResult struct {
-	NpcID         string                  `json:"npcID"`
-	NpcName       string                  `json:"npcName"`
-	Decision      *ActionDecision         `json:"decision"`
+	NpcID         string                   `json:"npcID"`
+	NpcName       string                   `json:"npcName"`
+	Decision      *ActionDecision          `json:"decision"`
 	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
 }
 
@@ -161,13 +161,13 @@ type MoveResult struct {
 
 // OpportunityAttackResult describes one NPC's opportunity attack during movement.
 type OpportunityAttackResult struct {
-	NpcID         string                  `json:"npcID"`
-	NpcName       string                  `json:"npcName"`
-	ActionID      string                  `json:"actionID,omitempty"`
-	ActionName    string                  `json:"actionName,omitempty"`
+	NpcID         string                   `json:"npcID"`
+	NpcName       string                   `json:"npcName"`
+	ActionID      string                   `json:"actionID,omitempty"`
+	ActionName    string                   `json:"actionName,omitempty"`
 	ActionResults []*models.ActionResponse `json:"actionResults,omitempty"`
-	Skipped       bool                    `json:"skipped"`
-	SkipReason    string                  `json:"skipReason,omitempty"`
+	Skipped       bool                     `json:"skipped"`
+	SkipReason    string                   `json:"skipReason,omitempty"`
 }
 
 // OpportunityAttackCandidate holds an NPC eligible for an opportunity attack.
@@ -183,9 +183,9 @@ type CreatureRole string
 
 const (
 	RoleBrute      CreatureRole = "brute"      // melee-oriented, high STR/HP
-	RoleRanged     CreatureRole = "ranged"      // ranged attacks, keeps distance
-	RoleCaster     CreatureRole = "caster"      // has Spellcasting, prioritizes spells
-	RoleSkirmisher CreatureRole = "skirmisher"  // high DEX, hit-and-run
-	RoleController CreatureRole = "controller"  // AoE/conditions, battlefield control
-	RoleTank       CreatureRole = "tank"        // high AC/HP, protects allies
+	RoleRanged     CreatureRole = "ranged"     // ranged attacks, keeps distance
+	RoleCaster     CreatureRole = "caster"     // has Spellcasting, prioritizes spells
+	RoleSkirmisher CreatureRole = "skirmisher" // high DEX, hit-and-run
+	RoleController CreatureRole = "controller" // AoE/conditions, battlefield control
+	RoleTank       CreatureRole = "tank"       // high AC/HP, protects allies
 )

@@ -7,9 +7,9 @@ type FeatureDefinition struct {
 	EngName          string              `json:"engName" bson:"engName"`
 	Name             Name                `json:"name" bson:"name"`
 	Description      Name                `json:"description" bson:"description"`
-	Source           string              `json:"source" bson:"source"`                                   // "class", "race", "feat", "background"
-	SourceDetail     string              `json:"sourceDetail,omitempty" bson:"sourceDetail,omitempty"`   // "fighter", "paladin:oath_of_devotion"
-	Level            int                 `json:"level,omitempty" bson:"level,omitempty"`                 // class level requirement (0 = always available)
+	Source           string              `json:"source" bson:"source"`                                 // "class", "race", "feat", "background"
+	SourceDetail     string              `json:"sourceDetail,omitempty" bson:"sourceDetail,omitempty"` // "fighter", "paladin:oath_of_devotion"
+	Level            int                 `json:"level,omitempty" bson:"level,omitempty"`               // class level requirement (0 = always available)
 	Resource         *FeatureResource    `json:"resource,omitempty" bson:"resource,omitempty"`
 	PassiveModifiers []ModifierEffect    `json:"passiveModifiers,omitempty" bson:"passiveModifiers,omitempty"`
 	ActiveAction     *CharacterActionDef `json:"activeAction,omitempty" bson:"activeAction,omitempty"`

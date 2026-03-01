@@ -35,8 +35,8 @@ type Effect struct {
 // TriggerEffect pairs a game event with an effect and optional gating.
 type TriggerEffect struct {
 	Trigger   TriggerEvent `json:"trigger" bson:"trigger"`
-	Chance    float32      `json:"chance" bson:"chance"`                           // 0.0-1.0; 0 treated as 1.0 (always fires)
-	Cooldown  string       `json:"cooldown,omitempty" bson:"cooldown,omitempty"`   // e.g. "1/turn", "1/short_rest"
+	Chance    float32      `json:"chance" bson:"chance"`                         // 0.0-1.0; 0 treated as 1.0 (always fires)
+	Cooldown  string       `json:"cooldown,omitempty" bson:"cooldown,omitempty"` // e.g. "1/turn", "1/short_rest"
 	Effect    Effect       `json:"effect" bson:"effect"`
 	Condition string       `json:"condition,omitempty" bson:"condition,omitempty"` // future: pre-condition expression
 }
@@ -47,11 +47,11 @@ type CooldownState map[string]bool
 
 // TriggerResult is returned from the engine for each evaluated trigger.
 type TriggerResult struct {
-	Event      TriggerEvent `json:"triggerEvent"`
-	EffectType EffectType   `json:"effectType"`
-	Description string      `json:"description"`
-	Skipped    bool         `json:"skipped,omitempty"`
-	SkipReason string       `json:"skipReason,omitempty"` // "chance" or "cooldown"
+	Event       TriggerEvent `json:"triggerEvent"`
+	EffectType  EffectType   `json:"effectType"`
+	Description string       `json:"description"`
+	Skipped     bool         `json:"skipped,omitempty"`
+	SkipReason  string       `json:"skipReason,omitempty"` // "chance" or "cooldown"
 
 	// Exactly one of these is set (based on EffectType):
 	DamageResult    *TriggerDamageResult    `json:"damageResult,omitempty"`
@@ -77,7 +77,7 @@ type TriggerHealResult struct {
 
 // TriggerConditionResult holds condition application/removal info.
 type TriggerConditionResult struct {
-	Action     string   `json:"action"`              // "apply" or "remove"
+	Action     string   `json:"action"`               // "apply" or "remove"
 	Condition  string   `json:"condition,omitempty"`  // for apply_condition
 	Conditions []string `json:"conditions,omitempty"` // for remove_condition
 	Duration   string   `json:"duration,omitempty"`   // for apply_condition

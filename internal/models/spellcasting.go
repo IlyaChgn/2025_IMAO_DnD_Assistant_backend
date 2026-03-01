@@ -164,10 +164,10 @@ type UpcastData struct {
 
 // UpcastScaling describes a specific scaling effect per spell level.
 type UpcastScaling struct {
-	Level          int         `json:"level" bson:"level"`                                     // spell level threshold
-	Damage         *DamageRoll `json:"damage,omitempty" bson:"damage,omitempty"`               // additional damage dice
-	Targets        int         `json:"targets,omitempty" bson:"targets,omitempty"`              // additional targets
-	HealingAdd     int         `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`        // additional healing dice per level
+	Level          int         `json:"level" bson:"level"`                                       // spell level threshold
+	Damage         *DamageRoll `json:"damage,omitempty" bson:"damage,omitempty"`                 // additional damage dice
+	Targets        int         `json:"targets,omitempty" bson:"targets,omitempty"`               // additional targets
+	HealingAdd     int         `json:"healingAdd,omitempty" bson:"healingAdd,omitempty"`         // additional healing dice per level
 	HealingAddFlat int         `json:"healingAddFlat,omitempty" bson:"healingAddFlat,omitempty"` // flat HP bonus per level (e.g., Heal: +10)
 }
 
@@ -239,11 +239,11 @@ const (
 
 // SpellComponents describes the components required to cast a spell.
 type SpellComponents struct {
-	Verbal           bool   `json:"verbal" bson:"verbal"`
-	Somatic          bool   `json:"somatic" bson:"somatic"`
-	Material         bool   `json:"material" bson:"material"`
-	Materials        string `json:"materials,omitempty" bson:"materials,omitempty"`       // description
-	MaterialCost     int    `json:"materialCost,omitempty" bson:"materialCost,omitempty"` // gp, if consumed
+	Verbal           bool       `json:"verbal" bson:"verbal"`
+	Somatic          bool       `json:"somatic" bson:"somatic"`
+	Material         bool       `json:"material" bson:"material"`
+	Materials        string     `json:"materials,omitempty" bson:"materials,omitempty"`       // description
+	MaterialCost     int        `json:"materialCost,omitempty" bson:"materialCost,omitempty"` // gp, if consumed
 	MaterialConsumed bool       `json:"materialConsumed,omitempty" bson:"materialConsumed,omitempty"`
 	ReagentFormula   [][]string `json:"reagentFormula,omitempty" bson:"reagentFormula,omitempty"`
 	GemCost          *GemCost   `json:"gemCost,omitempty" bson:"gemCost,omitempty"`
@@ -253,10 +253,10 @@ type SpellComponents struct {
 // The caster needs gem(s) of the specified type worth at least MinValue gp.
 // Using multiple gems incurs a penalty: total value must be >= MinValue * MultiPenalty.
 type GemCost struct {
-	GemType      string  `json:"gemType" bson:"gemType"`                                 // "diamond", "ruby"
-	MinValue     int     `json:"minValue" bson:"minValue"`                               // minimum gp value
-	MultiPenalty float64 `json:"multiPenalty,omitempty" bson:"multiPenalty,omitempty"`    // multiplier for multiple gems (default 1.5)
-	Dust         bool    `json:"dust,omitempty" bson:"dust,omitempty"`                   // true if spell uses gem dust, not whole gems
+	GemType      string  `json:"gemType" bson:"gemType"`                               // "diamond", "ruby"
+	MinValue     int     `json:"minValue" bson:"minValue"`                             // minimum gp value
+	MultiPenalty float64 `json:"multiPenalty,omitempty" bson:"multiPenalty,omitempty"` // multiplier for multiple gems (default 1.5)
+	Dust         bool    `json:"dust,omitempty" bson:"dust,omitempty"`                 // true if spell uses gem dust, not whole gems
 }
 
 // SpellDuration describes how long a spell lasts.

@@ -2,10 +2,10 @@ package models
 
 // FeatPrerequisites holds the requirements for taking a feat.
 type FeatPrerequisites struct {
-	Abilities    map[string]int `json:"abilities,omitempty" bson:"abilities,omitempty"`
-	Proficiencies []string      `json:"proficiencies,omitempty" bson:"proficiencies,omitempty"`
-	Spellcasting *bool          `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`
-	Race         []string       `json:"race,omitempty" bson:"race,omitempty"`
+	Abilities     map[string]int `json:"abilities,omitempty" bson:"abilities,omitempty"`
+	Proficiencies []string       `json:"proficiencies,omitempty" bson:"proficiencies,omitempty"`
+	Spellcasting  *bool          `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`
+	Race          []string       `json:"race,omitempty" bson:"race,omitempty"`
 }
 
 // AbilityChoice represents a pick-N ability score increase choice.

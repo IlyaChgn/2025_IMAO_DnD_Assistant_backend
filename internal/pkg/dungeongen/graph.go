@@ -223,7 +223,7 @@ type distribution struct {
 func computeDistribution(rng *rand.Rand, remaining int, size DungeonSize) distribution {
 	r := float64(remaining)
 
-	combat := int(math.Round(r * (0.4 + rng.Float64()*0.1)))    // 40-50%
+	combat := int(math.Round(r * (0.4 + rng.Float64()*0.1)))     // 40-50%
 	treasure := int(math.Round(r * (0.15 + rng.Float64()*0.05))) // 15-20%
 	trap := int(math.Round(r * (0.1 + rng.Float64()*0.05)))      // 10-15%
 

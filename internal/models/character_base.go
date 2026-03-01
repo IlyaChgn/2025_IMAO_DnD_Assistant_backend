@@ -125,14 +125,14 @@ type HitPointsBase struct {
 // WeaponDef describes a weapon in the character's inventory.
 // Range reuses RangeData from action_structured.go (same package).
 type WeaponDef struct {
-	ID              string     `json:"id" bson:"id"`
-	Name            string     `json:"name" bson:"name"`
-	AttackType      string     `json:"attackType" bson:"attackType"`                               // "melee", "ranged", "melee_or_ranged"
-	AbilityOverride string     `json:"abilityOverride,omitempty" bson:"abilityOverride,omitempty"` // "dex" for finesse
-	DamageDice      string     `json:"damageDice" bson:"damageDice"`                               // "1d8"
-	DamageType      string     `json:"damageType" bson:"damageType"`                               // "slashing"
-	Properties      []string   `json:"properties,omitempty" bson:"properties,omitempty"`
-	MagicBonus      int        `json:"magicBonus,omitempty" bson:"magicBonus,omitempty"`
+	ID              string          `json:"id" bson:"id"`
+	Name            string          `json:"name" bson:"name"`
+	AttackType      string          `json:"attackType" bson:"attackType"`                               // "melee", "ranged", "melee_or_ranged"
+	AbilityOverride string          `json:"abilityOverride,omitempty" bson:"abilityOverride,omitempty"` // "dex" for finesse
+	DamageDice      string          `json:"damageDice" bson:"damageDice"`                               // "1d8"
+	DamageType      string          `json:"damageType" bson:"damageType"`                               // "slashing"
+	Properties      []string        `json:"properties,omitempty" bson:"properties,omitempty"`
+	MagicBonus      int             `json:"magicBonus,omitempty" bson:"magicBonus,omitempty"`
 	Range           *RangeData      `json:"range,omitempty" bson:"range,omitempty"` // reuses existing RangeData
 	Reach           int             `json:"reach,omitempty" bson:"reach,omitempty"`
 	Triggers        []TriggerEffect `json:"triggers,omitempty" bson:"triggers,omitempty"`

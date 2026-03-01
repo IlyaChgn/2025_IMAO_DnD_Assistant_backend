@@ -44,10 +44,10 @@ func Evaluate(
 		// Cooldown gate
 		if cooldowns != nil && ti.CooldownKey != "" && cooldowns[ti.CooldownKey] {
 			results = append(results, models.TriggerResult{
-				Event:      ctx.Event,
-				EffectType: ti.Trigger.Effect.Type,
-				Skipped:    true,
-				SkipReason: "cooldown",
+				Event:       ctx.Event,
+				EffectType:  ti.Trigger.Effect.Type,
+				Skipped:     true,
+				SkipReason:  "cooldown",
 				Description: fmt.Sprintf("%s: on cooldown", ctx.SourceName),
 			})
 			continue
@@ -58,10 +58,10 @@ func Evaluate(
 		chance := clampChance(ti.Trigger.Chance)
 		if chance > 0 && chance < 1.0 && randFloat() >= chance {
 			results = append(results, models.TriggerResult{
-				Event:      ctx.Event,
-				EffectType: ti.Trigger.Effect.Type,
-				Skipped:    true,
-				SkipReason: "chance",
+				Event:       ctx.Event,
+				EffectType:  ti.Trigger.Effect.Type,
+				Skipped:     true,
+				SkipReason:  "chance",
 				Description: fmt.Sprintf("%s: chance check failed", ctx.SourceName),
 			})
 			continue

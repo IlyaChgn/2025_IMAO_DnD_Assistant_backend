@@ -180,10 +180,10 @@ func (uc *combatAIUsecases) executeOneNPCTurn(
 	// Handle nil decision (dead — shouldn't happen since we checked HP above).
 	if decision == nil {
 		return &combatai.AIRoundTurn{
-			NpcID:   npcInstanceID,
-			NpcName: npcActorName(npc, creature),
+			NpcID:    npcInstanceID,
+			NpcName:  npcActorName(npc, creature),
 			Decision: &combatai.TurnDecision{Reasoning: "NPC is dead"},
-			Skipped: true, SkipReason: "Dead",
+			Skipped:  true, SkipReason: "Dead",
 		}, false, "", nil
 	}
 

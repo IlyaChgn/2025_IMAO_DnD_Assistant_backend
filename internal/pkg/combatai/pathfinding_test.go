@@ -464,10 +464,10 @@ func TestFindPath_OptimalPathLength(t *testing.T) {
 
 	// Verify A* produces optimal (shortest) paths.
 	tests := []struct {
-		name     string
-		start    models.CellsCoordinates
-		goal     models.CellsCoordinates
-		wantLen  int
+		name    string
+		start   models.CellsCoordinates
+		goal    models.CellsCoordinates
+		wantLen int
 	}{
 		{"adjacent horizontal", cell(0, 0), cell(1, 0), 1},
 		{"adjacent vertical", cell(0, 0), cell(0, 1), 1},
@@ -503,9 +503,9 @@ func TestChebyshevCells(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name string
+		name           string
 		ax, ay, bx, by int
-		want int
+		want           int
 	}{
 		{"same point", 0, 0, 0, 0, 0},
 		{"horizontal", 0, 0, 5, 0, 5},

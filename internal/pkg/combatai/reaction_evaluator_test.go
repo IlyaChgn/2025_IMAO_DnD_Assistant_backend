@@ -274,11 +274,11 @@ func TestParryReduction(t *testing.T) {
 		dex      int
 		expected int
 	}{
-		{"prof 3 dex 14", "+3", 14, 5},  // prof=3, dexMod=(14-10)/2=2, total=5
-		{"prof 2 dex 10", "+2", 10, 2},  // prof=2, dexMod=0, total=2
-		{"prof 4 dex 16", "+4", 16, 7},  // prof=4, dexMod=3, total=7
-		{"prof 2 dex 8", "+2", 8, 1},    // prof=2, dexMod=-1, total=1
-		{"prof 0 dex 6", "", 6, 0},      // prof=0, dexMod=-2, total=0 (clamped)
+		{"prof 3 dex 14", "+3", 14, 5}, // prof=3, dexMod=(14-10)/2=2, total=5
+		{"prof 2 dex 10", "+2", 10, 2}, // prof=2, dexMod=0, total=2
+		{"prof 4 dex 16", "+4", 16, 7}, // prof=4, dexMod=3, total=7
+		{"prof 2 dex 8", "+2", 8, 1},   // prof=2, dexMod=-1, total=1
+		{"prof 0 dex 6", "", 6, 0},     // prof=0, dexMod=-2, total=0 (clamped)
 	}
 
 	for _, tt := range tests {

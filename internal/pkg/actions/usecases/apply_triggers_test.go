@@ -10,7 +10,7 @@ import (
 // --- helpers ---
 
 func alwaysSucceed() float32 { return 0.0 }
-func alwaysFail() float32   { return 1.0 }
+func alwaysFail() float32    { return 1.0 }
 
 func makeTarget(hp, tempHP int) *models.ParticipantFull {
 	return &models.ParticipantFull{

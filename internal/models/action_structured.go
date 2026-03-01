@@ -51,12 +51,12 @@ type AttackRollData struct {
 type AttackRollType string
 
 const (
-	AttackRollMeleeWeapon          AttackRollType = "melee_weapon"
-	AttackRollRangedWeapon         AttackRollType = "ranged_weapon"
-	AttackRollMeleeSpell           AttackRollType = "melee_spell"
-	AttackRollRangedSpell          AttackRollType = "ranged_spell"
-	AttackRollMeleeOrRangedWeapon  AttackRollType = "melee_or_ranged_weapon"
-	AttackRollMeleeOrRangedSpell   AttackRollType = "melee_or_ranged_spell"
+	AttackRollMeleeWeapon         AttackRollType = "melee_weapon"
+	AttackRollRangedWeapon        AttackRollType = "ranged_weapon"
+	AttackRollMeleeSpell          AttackRollType = "melee_spell"
+	AttackRollRangedSpell         AttackRollType = "ranged_spell"
+	AttackRollMeleeOrRangedWeapon AttackRollType = "melee_or_ranged_weapon"
+	AttackRollMeleeOrRangedSpell  AttackRollType = "melee_or_ranged_spell"
 )
 
 // RangeData describes normal and long range for ranged attacks.
@@ -160,11 +160,11 @@ type ActionEffect struct {
 // ConditionEffect applies a D&D condition to a target.
 type ConditionEffect struct {
 	Condition   ConditionType `json:"condition" bson:"condition"`
-	Duration    string        `json:"duration" bson:"duration"`                             // "1 minute", "until end of next turn", "until saved"
-	SaveEnds    bool          `json:"saveEnds,omitempty" bson:"saveEnds,omitempty"`         // can repeat save at end of turn
-	SaveAbility AbilityType   `json:"saveAbility,omitempty" bson:"saveAbility,omitempty"`   // ability for repeated save (when saveEnds=true)
-	EscapeDC    int           `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`         // for grapple/restrain
-	EscapeType  string        `json:"escapeType,omitempty" bson:"escapeType,omitempty"`     // "STR", "DEX", "STR_or_DEX"
+	Duration    string        `json:"duration" bson:"duration"`                           // "1 minute", "until end of next turn", "until saved"
+	SaveEnds    bool          `json:"saveEnds,omitempty" bson:"saveEnds,omitempty"`       // can repeat save at end of turn
+	SaveAbility AbilityType   `json:"saveAbility,omitempty" bson:"saveAbility,omitempty"` // ability for repeated save (when saveEnds=true)
+	EscapeDC    int           `json:"escapeDC,omitempty" bson:"escapeDC,omitempty"`       // for grapple/restrain
+	EscapeType  string        `json:"escapeType,omitempty" bson:"escapeType,omitempty"`   // "STR", "DEX", "STR_or_DEX"
 }
 
 // ConditionType represents standard D&D 5e conditions.

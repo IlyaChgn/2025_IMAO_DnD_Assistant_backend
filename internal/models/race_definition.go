@@ -37,13 +37,13 @@ type AbilityBonusChoice struct {
 
 // SubraceDefinition represents a subrace (e.g., High Elf, Hill Dwarf).
 type SubraceDefinition struct {
-	EngName        string            `json:"engName" bson:"engName"`
-	Name           Name              `json:"name" bson:"name"`
-	Description    Name              `json:"description" bson:"description"`
-	AbilityBonuses map[string]int    `json:"abilityBonuses" bson:"abilityBonuses"`
-	Features       []TraitDefinition `json:"features" bson:"features"`
+	EngName        string             `json:"engName" bson:"engName"`
+	Name           Name               `json:"name" bson:"name"`
+	Description    Name               `json:"description" bson:"description"`
+	AbilityBonuses map[string]int     `json:"abilityBonuses" bson:"abilityBonuses"`
+	Features       []TraitDefinition  `json:"features" bson:"features"`
 	Proficiencies  *RaceProficiencies `json:"proficiencies,omitempty" bson:"proficiencies,omitempty"`
-	Source         string            `json:"source" bson:"source"`
+	Source         string             `json:"source" bson:"source"`
 }
 
 // RaceDefinition represents a D&D race (e.g., Elf, Human).

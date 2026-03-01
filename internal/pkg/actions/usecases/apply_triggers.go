@@ -10,10 +10,10 @@ import (
 
 // triggerOpts carries contextual data for trigger evaluation.
 type triggerOpts struct {
-	SourceID    string                // stable ID for cooldown keys (e.g. weapon.ID)
-	SourceName  string                // display name for descriptions
-	TargetStats *TargetStats          // resistance/immunity/vulnerability lookup (nil = no resistance check)
-	RandFloat   func() float32        // injected RNG for testability
+	SourceID    string                  // stable ID for cooldown keys (e.g. weapon.ID)
+	SourceName  string                  // display name for descriptions
+	TargetStats *TargetStats            // resistance/immunity/vulnerability lookup (nil = no resistance check)
+	RandFloat   func() float32          // injected RNG for testability
 	Owner       *models.ParticipantFull // for charge tracking (nil = no cooldowns)
 }
 

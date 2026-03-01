@@ -442,7 +442,7 @@ func extractSpells(sectionHTML string, spellMap map[string]SpellDefInfo) []Spell
 	linkWithBrackets := spellLinkRe.FindAllStringSubmatch(sectionHTML, -1)
 	if len(linkWithBrackets) > 0 {
 		for _, m := range linkWithBrackets {
-			urlSlug := m[1] // e.g. "Detect_magic"
+			urlSlug := m[1]                      // e.g. "Detect_magic"
 			engName := html.UnescapeString(m[2]) // e.g. "detect magic"
 
 			spellID := urlSlugToEngName(urlSlug)

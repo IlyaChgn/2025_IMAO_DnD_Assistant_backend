@@ -59,7 +59,7 @@ var allConditions = []models.ConditionDefinition{
 		Name:        models.Name{Rus: "Недееспособен", Eng: "Incapacitated"},
 		Description: models.Name{Rus: "Не может совершать действия и реакции.", Eng: "Can't take actions or reactions."},
 		Effects: models.ConditionEffects{
-			CanAct:  boolPtr(false),
+			CanAct:   boolPtr(false),
 			CanReact: boolPtr(false),
 		},
 	},

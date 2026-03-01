@@ -39,9 +39,9 @@ type ClassProficiencies struct {
 // RefSpellcastingConfig holds spellcasting data for a class or subclass.
 type RefSpellcastingConfig struct {
 	Ability              string  `json:"ability" bson:"ability"`
-	CasterType           string  `json:"casterType" bson:"casterType"`                                       // "full", "half", "third", "pact"
-	PreparationType      string  `json:"preparationType" bson:"preparationType"`                              // "known", "prepared", "spellbook"
-	RitualCasting        string  `json:"ritualCasting" bson:"ritualCasting"`                                  // "from_prepared", "from_spellbook", "none"
+	CasterType           string  `json:"casterType" bson:"casterType"`                                         // "full", "half", "third", "pact"
+	PreparationType      string  `json:"preparationType" bson:"preparationType"`                               // "known", "prepared", "spellbook"
+	RitualCasting        string  `json:"ritualCasting" bson:"ritualCasting"`                                   // "from_prepared", "from_spellbook", "none"
 	PreparedCountFormula *string `json:"preparedCountFormula,omitempty" bson:"preparedCountFormula,omitempty"` // "ability_mod_plus_level", etc.
 	CastingStartLevel    int     `json:"castingStartLevel" bson:"castingStartLevel"`
 	UsesFocus            bool    `json:"usesFocus" bson:"usesFocus"`
@@ -63,38 +63,38 @@ type SubclassSpellEntry struct {
 
 // SubclassDefinition represents a class subclass (e.g., Evocation, Berserker).
 type SubclassDefinition struct {
-	EngName      string                  `json:"engName" bson:"engName"`
-	Name         Name                    `json:"name" bson:"name"`
-	Description  Name                    `json:"description" bson:"description"`
+	EngName      string                    `json:"engName" bson:"engName"`
+	Name         Name                      `json:"name" bson:"name"`
+	Description  Name                      `json:"description" bson:"description"`
 	Features     []ClassFeatureProgression `json:"features" bson:"features"`
-	Spellcasting *RefSpellcastingConfig  `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`
-	SpellList    []SubclassSpellEntry    `json:"spellList,omitempty" bson:"spellList,omitempty"`
-	Source       string                  `json:"source" bson:"source"`
+	Spellcasting *RefSpellcastingConfig    `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`
+	SpellList    []SubclassSpellEntry      `json:"spellList,omitempty" bson:"spellList,omitempty"`
+	Source       string                    `json:"source" bson:"source"`
 }
 
 // MulticlassRequirements holds the ability requirements and proficiencies gained.
 type MulticlassRequirements struct {
-	Abilities          map[string]int `json:"abilities" bson:"abilities"`
-	ProficienciesGained []string      `json:"proficienciesGained" bson:"proficienciesGained"`
+	Abilities           map[string]int `json:"abilities" bson:"abilities"`
+	ProficienciesGained []string       `json:"proficienciesGained" bson:"proficienciesGained"`
 }
 
 // ClassDefinition represents a D&D class (e.g., Wizard, Fighter).
 type ClassDefinition struct {
-	EngName                string                  `json:"engName" bson:"engName"`
-	Name                   Name                    `json:"name" bson:"name"`
-	Description            Name                    `json:"description" bson:"description"`
-	HitDie                 string                  `json:"hitDie" bson:"hitDie"`
-	Proficiencies          ClassProficiencies      `json:"proficiencies" bson:"proficiencies"`
-	StartingEquipment      []EquipmentChoice       `json:"startingEquipment" bson:"startingEquipment"`
-	Spellcasting           *RefSpellcastingConfig  `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`
-	SubclassLevel          int                     `json:"subclassLevel" bson:"subclassLevel"`
-	SubclassName           Name                    `json:"subclassName" bson:"subclassName"`
-	Subclasses             []SubclassDefinition    `json:"subclasses" bson:"subclasses"`
+	EngName                string                    `json:"engName" bson:"engName"`
+	Name                   Name                      `json:"name" bson:"name"`
+	Description            Name                      `json:"description" bson:"description"`
+	HitDie                 string                    `json:"hitDie" bson:"hitDie"`
+	Proficiencies          ClassProficiencies        `json:"proficiencies" bson:"proficiencies"`
+	StartingEquipment      []EquipmentChoice         `json:"startingEquipment" bson:"startingEquipment"`
+	Spellcasting           *RefSpellcastingConfig    `json:"spellcasting,omitempty" bson:"spellcasting,omitempty"`
+	SubclassLevel          int                       `json:"subclassLevel" bson:"subclassLevel"`
+	SubclassName           Name                      `json:"subclassName" bson:"subclassName"`
+	Subclasses             []SubclassDefinition      `json:"subclasses" bson:"subclasses"`
 	Features               []ClassFeatureProgression `json:"features" bson:"features"`
-	MulticlassRequirements *MulticlassRequirements `json:"multiclassRequirements,omitempty" bson:"multiclassRequirements,omitempty"`
-	Source                 string                  `json:"source" bson:"source"`
-	Tags                   []string                `json:"tags" bson:"tags"`
-	SchemaVersion          int                     `json:"schemaVersion" bson:"schemaVersion"`
+	MulticlassRequirements *MulticlassRequirements   `json:"multiclassRequirements,omitempty" bson:"multiclassRequirements,omitempty"`
+	Source                 string                    `json:"source" bson:"source"`
+	Tags                   []string                  `json:"tags" bson:"tags"`
+	SchemaVersion          int                       `json:"schemaVersion" bson:"schemaVersion"`
 }
 
 // ClassFilterParams holds query parameters for listing class definitions.

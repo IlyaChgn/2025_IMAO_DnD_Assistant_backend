@@ -232,7 +232,7 @@ func TestDecideTurn_SkeletonArcherRanged(t *testing.T) {
 		ID: "shortbow", Name: "Shortbow", Category: models.ActionCategoryAction,
 		Attack: &models.AttackRollData{
 			Type: models.AttackRollRangedWeapon, Bonus: 4,
-			Range: &models.RangeData{Normal: 80, Long: 320},
+			Range:  &models.RangeData{Normal: 80, Long: 320},
 			Damage: []models.DamageRoll{{DiceCount: 1, DiceType: "d6", Bonus: 2, DamageType: "piercing"}},
 		},
 	}

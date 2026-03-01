@@ -268,7 +268,7 @@ func TestFindOACandidates_NPCNoMeleeAttack(t *testing.T) {
 func TestFindOACandidates_MultipleNPCs(t *testing.T) {
 	t.Parallel()
 
-	npc1 := makeNPCWithCoords("goblin-1", 30, 0, 0)  // in reach
+	npc1 := makeNPCWithCoords("goblin-1", 30, 0, 0)   // in reach
 	npc2 := makeNPCWithCoords("goblin-2", 30, 0, 1)   // in reach (Chebyshev: dist to (1,0) = 1 cell = 5ft)
 	npc3 := makeNPCWithCoords("goblin-3", 30, 10, 10) // out of reach
 	pc := makePCWithCoords("fighter-1", 50, 1, 0)

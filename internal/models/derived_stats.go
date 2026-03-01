@@ -17,7 +17,7 @@ type DerivedStats struct {
 	Resistances          []string                  `json:"resistances"`
 	Immunities           []string                  `json:"immunities"`
 	Vulnerabilities      []string                  `json:"vulnerabilities"`
-	Spellcasting         *SpellcastingDerived       `json:"spellcasting,omitempty"`
+	Spellcasting         *SpellcastingDerived      `json:"spellcasting,omitempty"`
 }
 
 // BonusBreakdown shows how a skill or save bonus is computed.

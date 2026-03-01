@@ -324,12 +324,12 @@ func TestBuildActiveCondition_EndOfNextTurn(t *testing.T) {
 
 func TestBuildActiveCondition_WithEscapeDC(t *testing.T) {
 	cond := &models.ConditionEffect{
-		Condition:  models.ConditionRestrained,
-		Duration:   "until saved",
-		SaveEnds:   true,
+		Condition:   models.ConditionRestrained,
+		Duration:    "until saved",
+		SaveEnds:    true,
 		SaveAbility: "STR",
-		EscapeDC:   15,
-		EscapeType: "STR_or_DEX",
+		EscapeDC:    15,
+		EscapeType:  "STR_or_DEX",
 	}
 	ac := buildActiveCondition(cond, "druid-1", "Entangle", 13, "target-1")
 	if ac.EscapeDC != 15 {
@@ -386,9 +386,9 @@ func TestParseDurationRounds_Unparseable(t *testing.T) {
 
 func TestSumDamageRolls_MixedFinalDamage(t *testing.T) {
 	rolls := []models.ActionRollResult{
-		{Total: 10, FinalDamage: intPtr(5)},  // resistance halved
-		{Total: 8},                            // no FinalDamage → use Total
-		{Total: 12, FinalDamage: intPtr(0)},   // immunity
+		{Total: 10, FinalDamage: intPtr(5)}, // resistance halved
+		{Total: 8},                          // no FinalDamage → use Total
+		{Total: 12, FinalDamage: intPtr(0)}, // immunity
 	}
 	if got := sumDamageRolls(rolls); got != 13 { // 5 + 8 + 0
 		t.Errorf("expected 13, got %d", got)

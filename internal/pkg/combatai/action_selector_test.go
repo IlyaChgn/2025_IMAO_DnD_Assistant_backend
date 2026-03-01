@@ -821,8 +821,8 @@ func TestSelectAction_AoE_CountMultiplier(t *testing.T) {
 		ActiveNPC:        makeParticipant("npc1", false, 100, 0, 0),
 		CreatureTemplate: models.Creature{StructuredActions: []models.StructuredAction{multiCube}},
 		Participants: []models.ParticipantFull{
-			makeParticipant("pc1", true, 50, 5, 5), // cluster
-			makeParticipant("pc2", true, 50, 6, 5), // cluster
+			makeParticipant("pc1", true, 50, 5, 5),   // cluster
+			makeParticipant("pc2", true, 50, 6, 5),   // cluster
 			makeParticipant("pc3", true, 50, 30, 30), // far away
 			makeParticipant("pc4", true, 50, 31, 30), // far away
 		},

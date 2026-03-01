@@ -12,11 +12,11 @@ import (
 // BakedTerrain is the flattened terrain data produced by stamping all tile
 // placements into global walkability/occlusion grids and merging edges.
 type BakedTerrain struct {
-	Rows        int                      `json:"rows"`
-	Cols        int                      `json:"cols"`
-	Walkability [][]int                  `json:"walkability"`
-	Occlusion   [][]int                  `json:"occlusion"`
-	Edges       []models.SerializedEdge  `json:"edges"`
+	Rows        int                     `json:"rows"`
+	Cols        int                     `json:"cols"`
+	Walkability [][]int                 `json:"walkability"`
+	Occlusion   [][]int                 `json:"occlusion"`
+	Edges       []models.SerializedEdge `json:"edges"`
 }
 
 // BakeTerrain stamps all tile placements from a MapComposition into flat
@@ -146,4 +146,3 @@ func translateEdgeKey(key string, originRow, originCol int) string {
 
 	return normalizedEdgeKey(r1, c1, r2, c2)
 }
-

@@ -75,9 +75,9 @@ type ExtractionPoint struct {
 
 // DungeonGraph is the complete abstract dungeon structure.
 type DungeonGraph struct {
-	Rooms            []DungeonRoom    `json:"rooms"`
-	Connections      []RoomConnection `json:"connections"`
-	MainPathLength   int              `json:"mainPathLength"`
+	Rooms            []DungeonRoom     `json:"rooms"`
+	Connections      []RoomConnection  `json:"connections"`
+	MainPathLength   int               `json:"mainPathLength"`
 	ExtractionPoints []ExtractionPoint `json:"extractionPoints"`
 }
 
@@ -102,7 +102,7 @@ const TileSize = 6
 // MacroTilePlacement describes one tile placed on the final map grid.
 type MacroTilePlacement struct {
 	TileID    string `json:"tileId"`
-	NodeID    string `json:"nodeId"`    // room ID or connection ID
+	NodeID    string `json:"nodeId"` // room ID or connection ID
 	OriginRow int    `json:"originRow"`
 	OriginCol int    `json:"originCol"`
 	Rotation  int    `json:"rotation"`
@@ -114,4 +114,3 @@ type MapComposition struct {
 	Cols       int                  `json:"cols"`
 	Placements []MacroTilePlacement `json:"placements"`
 }
-

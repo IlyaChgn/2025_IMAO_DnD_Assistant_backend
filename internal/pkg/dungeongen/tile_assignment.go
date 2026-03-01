@@ -274,15 +274,15 @@ func assignCorridor(
 	if isHorizontal {
 		if fromRoom.GraphPosition.X < toRoom.GraphPosition.X {
 			fromSide = SideRight // corridor's left faces fromRoom's right
-			toSide = SideLeft   // corridor's right faces toRoom's left
+			toSide = SideLeft    // corridor's right faces toRoom's left
 		} else {
 			fromSide = SideLeft
 			toSide = SideRight
 		}
 	} else {
 		if fromRoom.GraphPosition.Y < toRoom.GraphPosition.Y {
-			fromSide = SideTop   // fromRoom is below, corridor faces up
-			toSide = SideBottom  // toRoom is above, corridor faces down
+			fromSide = SideTop  // fromRoom is below, corridor faces up
+			toSide = SideBottom // toRoom is above, corridor faces down
 		} else {
 			fromSide = SideBottom
 			toSide = SideTop

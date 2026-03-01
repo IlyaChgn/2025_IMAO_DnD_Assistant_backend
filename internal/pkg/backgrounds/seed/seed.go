@@ -5,8 +5,8 @@ import (
 	_ "embed"
 	"encoding/json"
 
-	backgroundsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	backgroundsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/backgrounds"
 )
 
 //go:embed srd_backgrounds.json

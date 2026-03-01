@@ -139,9 +139,9 @@ func TestBuildCooldownState_PartialCharges(t *testing.T) {
 
 func TestBuildCooldownState_MultipleTriggers(t *testing.T) {
 	defs := []models.TriggerEffect{
-		{Trigger: models.ItemTriggerOnHit, Cooldown: "1/turn"},       // idx 0
-		{Trigger: models.ItemTriggerOnHit, Chance: 1.0},              // idx 1, no cooldown
-		{Trigger: models.ItemTriggerOnCritical, Cooldown: "1/turn"},  // idx 2
+		{Trigger: models.ItemTriggerOnHit, Cooldown: "1/turn"},      // idx 0
+		{Trigger: models.ItemTriggerOnHit, Chance: 1.0},             // idx 1, no cooldown
+		{Trigger: models.ItemTriggerOnCritical, Cooldown: "1/turn"}, // idx 2
 	}
 	charges := map[string]int{
 		"wpn-1:0": 1, // exhausted

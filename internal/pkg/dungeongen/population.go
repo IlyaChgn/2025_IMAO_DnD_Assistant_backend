@@ -60,11 +60,11 @@ type PopulationResult struct {
 
 // ThemeDefinition describes a dungeon theme with creature types, traps, and narratives.
 type ThemeDefinition struct {
-	Theme                  string              `json:"theme"`
-	PrimaryCreatureTypes   []string            `json:"primaryCreatureTypes"`
-	SecondaryCreatureTypes []string            `json:"secondaryCreatureTypes"`
-	TrapTypes              []TrapType          `json:"trapTypes"`
-	TrapDCRange            [2]int              `json:"trapDCRange"` // [min, max]
+	Theme                  string                         `json:"theme"`
+	PrimaryCreatureTypes   []string                       `json:"primaryCreatureTypes"`
+	SecondaryCreatureTypes []string                       `json:"secondaryCreatureTypes"`
+	TrapTypes              []TrapType                     `json:"trapTypes"`
+	TrapDCRange            [2]int                         `json:"trapDCRange"` // [min, max]
 	Narratives             map[RoomType][]LocalizedString `json:"narratives"`
 }
 

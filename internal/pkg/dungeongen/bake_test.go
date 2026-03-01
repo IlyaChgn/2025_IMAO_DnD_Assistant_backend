@@ -373,9 +373,9 @@ func TestBakeTerrain_MissingTileSkipped(t *testing.T) {
 
 func TestTranslateEdgeKey(t *testing.T) {
 	tests := []struct {
-		key       string
-		row, col  int
-		want      string
+		key      string
+		row, col int
+		want     string
 	}{
 		{"0,0-0,1", 0, 0, "0,0-0,1"},
 		{"0,0-0,1", 6, 12, "6,12-6,13"},

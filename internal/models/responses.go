@@ -25,7 +25,7 @@ const (
 	FogHistoryPatch  WSMsgType = "fog_history_patch"
 	WalkabilityPatch WSMsgType = "walkability_patch"
 	OcclusionPatch   WSMsgType = "occlusion_patch"
-	EdgesPatch     WSMsgType = "edges_patch"
+	EdgesPatch       WSMsgType = "edges_patch"
 	// InventoryPatch is injected server-side (HTTP→WS bridge), not sent by WS clients.
 	// Listed here so IsPatchMessage returns true: if a client accidentally sends this type,
 	// it gets relayed harmlessly instead of corrupting encounter state via merger.Merge.
@@ -33,8 +33,8 @@ const (
 	VisionPatch    WSMsgType = "vision_patch"
 
 	// Combat AI message types - relayed directly
-	YourTurn        WSMsgType = "your_turn"
-	CombatEnd       WSMsgType = "combat_end"
+	YourTurn             WSMsgType = "your_turn"
+	CombatEnd            WSMsgType = "combat_end"
 	AITurnResultMsg      WSMsgType = "ai_turn_result"
 	AILegendaryResultMsg WSMsgType = "ai_legendary_result"
 	MoveResultMsg        WSMsgType = "move_result"

@@ -5,8 +5,8 @@ import (
 	_ "embed"
 	"encoding/json"
 
-	featsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats"
 	"github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/models"
+	featsinterfaces "github.com/IlyaChgn/2025_IMAO_DnD_Assistant_backend/internal/pkg/feats"
 )
 
 //go:embed srd_feats.json
